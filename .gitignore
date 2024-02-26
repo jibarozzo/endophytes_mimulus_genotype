@@ -1,0 +1,28 @@
+
+# History files
+.Rhistory
+.Rapp.history
+
+# Session Data files
+.RData
+.RDataTmp
+
+# User-specific files
+.Ruserdata
+
+# Example code in package build process
+*-Ex.R
+
+# Output files from R CMD check
+/*.Rcheck/
+
+# RStudio files
+.Rproj.user/
+
+# Directories with big files
+preprocess/pre_8859/derepFs_8859.rds
+preprocess/pre_8859/derepRs_8859.rds
+filtered/
+clean_data/taxonomy/sh_general_release_dynamic_s_25.07.2023_dev.fasta
+clean_data/taxonomy/sh_general_release_dynamic_s_25.07.2023.fasta
+/.quarto/
