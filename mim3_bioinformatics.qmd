@@ -64,20 +64,20 @@ How to submit this as a SLURM job.]**
 # Activate commands as needed.
 # change the ref argument to get other versions
 # DADA2 package and associated
-# if (!require("BiocManager", quietly = TRUE)){
-#     install.packages("BiocManager", repo="http://cran.rstudio.com/")
-#   }
-# BiocManager::install(version = "3.17")
-# BiocManager::install(c("dada2","ShortRead", "Biostrings"))
-# 
-# install.packages("usethis")
-# install.packages("devtools")
-# install.packages("Rcpp")
-# devtools::install_github("benjjneb/dada2")
+ # if (!require("BiocManager", quietly = TRUE)){
+ #     install.packages("BiocManager", repo="http://cran.rstudio.com/")
+ #   }
+ # BiocManager::install(version = "3.17")
+ # BiocManager::install(c("dada2","ShortRead", "Biostrings"))
+ # 
+ # install.packages("usethis")
+ # install.packages("devtools")
+ # install.packages("Rcpp")
+ # devtools::install_github("benjjneb/dada2")
 
 # if (!require("BiocManager", quietly = TRUE)){ #Another way of installing the latest version of dada2
 #     install.packages("BiocManager")}
-# 
+#
 #The following initializes usage of Bioconductor devel version
 #BiocManager::install(version='devel', ask = FALSE) #BiocManager 3.17 (dada2 1.28.0) or developer version (dada2 1.29.0)
 #BiocManager::install(c("dada2", "ShortRead", "BioStrings"))
@@ -122,7 +122,7 @@ done
 for file in *.fastq
 do
  echo "Renaming"
- newname=$(echo $file | cut -d_ -f1,2,5).fastq
+ newname=$(echo $file | cut -d_ -f1,2,5).fastq.gz
  echo "Renaming $file as $newname"
  mv $file $newname
 done
@@ -202,13 +202,12 @@ their respective directories.
 path <- "../mim3_bioinformatics/Aponte_8859_240202A8"
 out_dir <- "../mim3_bioinformatics"
 
-
 list.files(path)
 fnFs <- sort(list.files(path, pattern = "R1.fastq.gz", full.names = TRUE))
 fnRs <- sort(list.files(path, pattern = "R2.fastq.gz", full.names = TRUE))
 ```
 
-# Aponte_8859_v2_23052601
+# Aponte_8859_240202A8 NextSeq 150 bp PE platform
 
 Software and package versions used as of 03/FEB/2024: - FastQC
 (v0.12.1-4) -\> installed through [BioArchLinux
@@ -266,7 +265,7 @@ tutorial](https://github.com/edamame-course/FastQC/blob/master/for_review/2016-0
 
 In the Van Bael lab we produce 16S and ITS amplicon sequence data, for
 the most part. Amplicon sequences are considered "low" diversity due
-thei enriched proportion of nucleotides (per base sequence). Hence, when
+their enriched proportion of nucleotides (per base sequence). Hence, when
 the sequence platform calls nucleotides it tends to be poor in the
 intiall base pairs.
 
@@ -344,10 +343,10 @@ primer sequences. No other filtering is performed.
 #| tidy: true
 
 fnFs_filtN <- file.path(path, "filtN", basename(fnFs)) # Put N-filtered forward read files in filtN/ subdirectory
-fnRs_filtN <- file.path(path, "filtN", basename(fnRs)) #Reverse reads
+fnRs_filtN <- file.path(path, "filtN", basename(fnRs)) # Reverse reads
 
-# filterAndTrim(fnFs, fnFs_filtN, 
-#               fnRs, fnRs_filtN, 
+# filterAndTrim(fnFs, fnFs_filtN,
+#               fnRs, fnRs_filtN,
 #               maxN = 0, multithread = TRUE)
 ```
 
@@ -424,15 +423,15 @@ R2.flags <- paste("-G", REV, "-A", FWD.RC)
 # Run Cutadapt
 #Once this has been completed there is no need to run again when working on the script.
 # 
-#  for(i in seq_along(fnFs)) {
-#    system2(cutadapt, args = c(R1.flags, R2.flags, 
-#                               "-n", 2, # -n 2 removes FWD and REV from reads
-#                               "-m", 20, # -m 20 removes reads shorter than 20 bp
-#                               "-o", fnFs_cut[i], 
-#                               "-p", fnRs_cut[i], # output files
-#                               fnFs_filtN[i], 
-#                               fnRs_filtN[i])) #input files
-#  }
+ # for(i in seq_along(fnFs)) {
+ #   system2(cutadapt, args = c(R1.flags, R2.flags,
+ #                              "-n", 2, # -n 2 removes FWD and REV from reads
+ #                              "-m", 10, # -m 10 removes reads shorter than 10 bp. This is important in order to avoid errors in DADA2 pipeline. It won't plot quality profile. 
+ #                              "-o", fnFs_cut[i],
+ #                              "-p", fnRs_cut[i], # output files
+ #                              fnFs_filtN[i],
+ #                              fnRs_filtN[i])) #input files
+ # }
 
 # String for changing file extension (i.e. .fastq > .fa)
 # new_extension <- ".fa"
@@ -491,8 +490,8 @@ Linux environment](https://www.youtube.com/watch?v=5nth7o_-f0Q)
 ```{r}
 #| eval: true
 #| echo: false
-plotQualityProfile(cutFs[6:2])
-plotQualityProfile(cutRs[6:2])
+plotQualityProfile(cutFs[1:2])
+plotQualityProfile(cutRs[1:2])
 ```
 
 The quality of the reads improves after removal of N calls and adapter
@@ -548,17 +547,14 @@ trimming and truncating.
 
 Results from MultiQC and FIGARO inform parameter selection.
 
-For Aponte_8859_v2_23052601 we see that the forwards reads have a decent
-quality up to 200-230 bp.
-<!-- The reverse reads are of lower quality. We will use a `truncLen` of 210 and 200 for forward and reverse reads, respectively. -->
-With further thought, we believe that the best parameters for the
+For Aponte_8859_v2_240202A8 we see that the forwards and reverse reads are of great quality. 
+We will use a `maxEE` and `trunQ` of 2 for both forward and reverse reads. This is a little relaxed but most certainly all reads will pass this filter.
+We believe that the best parameters for the
 truncation of the reads will be with the use of `maxEE`. These serves as
 a primary quality filter as opposed to a size selection filter. See in
 this [post](https://github.com/benjjneb/dada2/issues/232) and in [Edgar
 and Flyvberg 2015](https://doi.org/10.1093/bioinformatics/btv401). We
 will use a `maxEE` and `trunQ` of 2 for both forward and reverse reads.
-This is a little relaxed but we are working with poor quality reads. We
-will also use a `minLen` of 50 bp and maxN of 0.
 
 The previous parameters where a quality of 2 (Phred score 20) in
 arguments `trunQ` and `minQ`, which translates to a read length of about
@@ -584,27 +580,26 @@ head(filtRs, 10)
 #| eval: true
 #| echo: false
 #| tidy: true
-# Truncating Forward and Reverse reads to ~ 230 bp based on trunQ = 2. 
 # The reverse maxEE is relaxed due to overall low quality of reads
-out <- filterAndTrim(cutFs, filtFs, 
-                          cutRs, filtRs,
-                          #truncLen=c(210,200), #Truncate reads after truncLen bases. Reads shorter than this are discarded.
-                          truncQ = 2,
-                          #minQ = 2,
-                          maxN = 0,
-                          maxEE = c(2,2),
-                          minLen = 50, #Not necessary when using truncLen
-                          rm.phix = TRUE,
-                          compress = TRUE,
-                          multithread = TRUE) # minLen: Remove reads with length less than minLen. minLen is enforced after trimming and truncation. #enforce min length of 50 bp
+# out <- filterAndTrim(cutFs, filtFs, 
+#                           cutRs, filtRs,
+#                           #truncLen=c(210,200), #Truncate reads after truncLen bases. Reads shorter than this are discarded.
+#                           truncQ = 2,
+#                           minQ = 2,
+#                           maxN = 0,
+#                           maxEE = c(2,2),
+#                           minLen = 50, #Not necessary when using truncLen
+#                           rm.phix = TRUE,
+#                           compress = TRUE,
+#                           multithread = TRUE) # minLen: Remove reads with length less than minLen. minLen is enforced after trimming and truncation. #enforce min length of 50 bp
 
 #Once it is completed there is no need to run again unless you are changing parameters.
 
 #Saving file
-#saveRDS(out, file.path(out_dir, "preprocess/pre_8859_v2/out_8859_v2.rds"))
+#saveRDS(out, file.path(out_dir, "preprocess/out_8859_v2.rds"))
 
 #Loading file
-out <- readRDS(file.path(out_dir, "preprocess/pre_8859_v2/out_8859_v2.rds"))
+out <- readRDS(file.path(out_dir, "preprocess/out_8859_v2.rds"))
 ```
 
 ### Dereplication
@@ -622,12 +617,12 @@ derepFs <- derepFastq(filtFs, n = 1000, verbose = TRUE) #n prevents it from read
 derepRs <- derepFastq(filtRs, n = 1000, verbose = TRUE)
 
 #Save file
-#saveRDS(derepFs, file.path(out_dir, "preprocess/pre_8859_v2/derepFs_8859_v2.rds"))
-#saveRDS(derepRs, file.path(out_dir, "preprocess/pre_8859_v2/derepRs_8859_v2.rds"))
+#saveRDS(derepFs, file.path(out_dir, "preprocess/derepFs_8859_v2.rds"))
+#saveRDS(derepRs, file.path(out_dir, "preprocess/derepRs_8859_v2.rds"))
 
 #Load file
-derepFs <- readRDS(file.path(out_dir, "preprocess/pre_8859_v2/derepFs_8859_v2.rds"))
-derepRs <- readRDS(file.path(out_dir, "preprocess/pre_8859_v2/derepRs_8859_v2.rds"))
+derepFs <- readRDS(file.path(out_dir, "preprocess/derepFs_8859_v2.rds"))
+derepRs <- readRDS(file.path(out_dir, "preprocess/derepRs_8859_v2.rds"))
 
 #name the dereplicated reads by the sample names
 names(derepFs) <- sample.namesF
@@ -648,8 +643,8 @@ errF <- learnErrors(derepFs, randomize = TRUE, multithread = TRUE) #multithread 
 errR <- learnErrors(derepRs, randomize = TRUE, multithread = TRUE)
 
 # Save file
-#saveRDS(errF, file.path(out_dir, "preprocess/pre_8859_v2/errF_8859_v2.rds"))
-#saveRDS(errR, file.path(out_dir, "preprocess/pre_8859_v2/errR_8859_v2.rds"))
+#saveRDS(errF, file.path(out_dir, "preprocess/errF_8859_v2.rds"))
+#saveRDS(errR, file.path(out_dir, "preprocess/errR_8859_v2.rds"))
 
 # Load file
 #errF <- readRDS(file.path(out_dir, "preprocess/pre_8859_v2/errF_8859_v2.rds"))
@@ -658,7 +653,6 @@ errR <- learnErrors(derepRs, randomize = TRUE, multithread = TRUE)
 # Plot errors
 plotErrors(errF, nominalQ = TRUE)
 plotErrors(errR, nominalQ = TRUE)
-
 ```
 
 ### Sample Inference
@@ -672,12 +666,12 @@ dadaFs <- dada(derepFs, err = errF, multithread = TRUE)
 dadaRs <- dada(derepRs, err = errR, multithread = TRUE)
 
 # Save file
-#saveRDS(dadaFs, file.path(out_dir, "preprocess/pre_8859_v2/dadaFs_8859_v2.rds"))
-#saveRDS(dadaRs, file.path(out_dir, "preprocess/pre_8859_v2/dadaRs_8859_v2.rds"))
+saveRDS(dadaFs, file.path(out_dir, "preprocess/dadaFs_8859_v2.rds"))
+saveRDS(dadaRs, file.path(out_dir, "preprocess/dadaRs_8859_v2.rds"))
 
 # Load file
-#dadaFs <- readRDS(file.path(out_dir, "preprocess/pre_8859_v2/dadaFs_8859_v2.rds"))
-#dadaRs <- readRDS(file.path(out_dir, "preprocess/pre_8859_v2/dadaRs_8859_v2.rds"))
+#dadaFs <- readRDS(file.path(out_dir, "preprocess/dadaFs_8859_v2.rds"))
+#dadaRs <- readRDS(file.path(out_dir, "preprocess/dadaRs_8859_v2.rds"))
 ```
 
 ### Merge paired reads
@@ -688,12 +682,12 @@ dadaRs <- dada(derepRs, err = errR, multithread = TRUE)
 #| tidy: true
 mergers <- mergePairs(dadaFs, filtFs, 
                            dadaRs, filtRs, 
-                           minOverlap = 20, 
+                           minOverlap = 12, #Default is 12 
                            maxMismatch = 0,
                            verbose = TRUE)
 
 # Save file
-#saveRDS(mergers, file.path(out_dir, "preprocess/pre_8859_v2/mergers_8859_v2.rds"))
+#saveRDS(mergers, file.path(out_dir, "preprocess/mergers_8859_v2.rds"))
 
 # Load file
 mergers <- readRDS(file.path(out_dir, "preprocess/pre_8859_v2/mergers_8859_v2.rds"))
@@ -749,7 +743,7 @@ sum(seqtab_nochim)/sum(seqtab)
 #saveRDS(seqtab_nochim, file.path(out_dir, "clean_data/ASV_tables/ASV_8859_v2_seqtable_nochim_denoise.rds"))
 #write.csv(seqtab_nochim, file.path(out_dir, "clean_data/ASV_tables/ASV_8859_v2_seqtable_nochim_denoise.csv")) # Long file name but it indicates this file has gone through all the steps in the pipeline.
 
-seqtab_nochim <- readRDS(file.path(out_dir,"ASV_tables/ASV_8859_v2_seqtable_nochim_denoise.rds"))
+seqtab <- readRDS(file.path(out_dir,"ASV_tables/ASV_8859_v2_seqtable_nochim_denoise.rds"))
 ```
 
 Inspect distribution of sequence lengths
@@ -782,12 +776,25 @@ colnames(track) <- c("input", "filtered", "denoisedF", "denoisedR", "merged", "n
 rownames(track) <- sample.namesF
 head(track)
 
+# Percent recovered
+track <- as.data.frame(track)
+track$recovered <- track$nonchim/track$input
+
+# Basic summary statistics
+min(track$recovered)
+max(track$recovered)
+mean(track$recovered)
+median(track$recovered)
+sd(track$recovered)
+
 # Save file
-#saveRDS(track, file.path(out_dir, "preprocess/pre_8859_v2/track_8859_v2.rds"))
+#saveRDS(track, file.path(out_dir, "preprocess/track_8859_v2.rds"))
 
 # Load file
 #track <- readRDS(file.path(out_dir, "preprocess/pre_8859_v2/track_8859_v2.rds"))
 ```
+
+The base summary statistics show that we have recovered a good amount of sequences after the pipeline. The minimum is 0.5, the maximum is 0.9, which is great. The mean and the median are about the same, mean = 0.63 and median is 0.68, which is good.
 
 #### Tracking summary
 ::: callout-warning
