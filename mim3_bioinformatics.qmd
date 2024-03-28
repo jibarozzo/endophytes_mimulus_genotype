@@ -956,6 +956,174 @@ used to remove contaminant from the whole plate. Another way of doing it
 is removing the contamination found in each control and matching it to
 the samples it was extracted with.
 
+
+
+```{r, PQ_objects}
+#| echo: false
+#| eval: true
+#| tidy: true
+
+#ASV table
+asv_tab_raw <- asv_tab_raw |>
+  as.matrix()
+ASV <- otu_table(asv_tab_raw, taxa_are_rows = TRUE)
+
+class(asv_tab_raw) #Should be matrix
+taxa_names(ASV) #Should be ASV_#
+
+#Taxonomixc table
+taxa <- taxa |>
+  column_to_rownames(var = "ASV_ID") |>
+  as.matrix()
+TAX <- tax_table(taxa) #1291 ASVs (raw)
+
+#Sample data
+#DNA concentration and sample and control information
+#From MIM_CH3_v1_PCR2_maps_barcodes.xlsx
+dna_data <- read.csv(file.path(out_dir, "field_data/mim3_dna_pcr.csv"))
+
+dna_data <- dna_data |>
+  distinct(Sample_ID, type, .keep_all = T) |> #Remove duplicates ‘C09022023’, ‘OPN_7_4_F2WY’. Samples were merged in DADA2 pipeline
+  dplyr::select(c(2:4))
+
+#Some samples and controls had zero or "too low" concentration. We will code them as 0.001.
+dna_data$concentration[dna_data$concentration == 0] <- 0.001
+
+dna_data <- dna_data |>
+  filter(Sample_ID %in% samples) |>
+  column_to_rownames(var = "Sample_ID")
+
+
+SAMP <- sample_data(dna_data)
+class(SAMP)
+sample_names(SAMP)
+
+
+#Phyloseq main object
+psraw <- phyloseq(ASV, TAX, SAMP)
+
+#Save file
+#saveRDS(psraw, file.path(out_dir, "clean_data/taxonomy/phyloseq_8859_v2_raw.rds"))
+
+# Read
+psraw <- readRDS(file.path(out_dir, "clean_data/taxonomy/phyloseq_8859_v2_raw.rds"))
+```
+
+#### Phyloseq RAW summary statistics
+```{r, Phyloseq_summary}
+
+#How many ASVs per Phyla are there before decontamination? Represent by percentage
+phyloseq_summary(psraw, more_stats = F, long = F) #Overall summary
+
+## This summary does not include the relative abundance of phyla represented in the total reads. We will calculate this below. ###
+
+# Relative abundance of Phyla based on the total reads
+raw_relabundance_phyla <- tax_glom(psraw, 
+                 taxrank = "Phylum", 
+                 NArm = FALSE, bad_empty=c(NA, "", " ", "\t")) |>
+  phyloseq_to_df() |>
+  dplyr::select(-OTU) |> #Remove OTU column. It represents the first ASV of Phylum
+  mutate(total_reads_phy = rowSums(across(where(is.numeric))),
+         relabun_reads_phy = total_reads_phy/sum(total_reads_phy)*100) |> #Relative abundance of phyla
+  dplyr::select(Kingdom, Phylum, total_reads_phy, relabun_reads_phy) #Select columns of interest)
+
+
+# How many samples with ASVs per phyla are there before decontamination?
+percent_phyla_raw <- phyloseq_ntaxa_by_tax(
+  psraw,
+  TaxRank = "Phylum",
+  relative = F,
+  add_meta_data = F
+) |>
+  as.data.frame() |>
+  mutate(sum = sum(N.OTU)) |>
+  group_by(Phylum) |>
+  summarise(occurance_in_samples = n())# Count the number of ASV per phylum
+
+# Micorobiome packge summary
+summarize_phyloseq(psraw) #Microbiome package summary
+```
+
+**Check which sample are actually lost in the cleaning and
+decontaminating process. Some samples don't have enough reads. It's
+worth knowing which samples are those.**
+
+
+### Identifying contaminants by frequency in samples
+
+```{r}
+# Inspecting library sizes
+df <- as.data.frame(sample_data(psraw)) # Put sample_data into a ggplot-friendly data.frame
+df$LibrarySize <- sample_sums(psraw)
+df <- df[order(df$LibrarySize),]
+df$Index <- seq(nrow(df))
+
+# Plot
+ggplot(data=df, aes(x=Index, y=LibrarySize, color=type)) + geom_point()
+```
+
+The library sizes of Aponte_8859_v2_23052601 are quite large. Samples and controls are different sizes. Controls are at the start of the graph and do not increase more than a copuple of hundred reads per sample. 
+
+```{r contaminant_frequency}
+#| echo: false
+#| eval: true
+#| tidy: true
+
+contamdf.freq <- isContaminant(psraw, method="auto", conc="concentration")
+head(contamdf.freq)
+
+table(contamdf.freq$contaminant)
+
+head(which(contamdf.freq$contaminant))
+
+# Plotting contaminant frequency
+plot_frequency(psraw, taxa_names(psraw)[c(353,809, 1010, 1108)], conc="concentration") +
+  xlab("DNA Concentration")
+#Contaminants are ASV 353, 809, 1010, 1108
+```
+
+
+
+We can decontaminate via the `decontam` and `phyloseq` packages
+following the instructions from the [Introductions to
+decontam](https://benjjneb.github.io/decontam/vignettes/decontam_intro.html).
+The problem is that we can't then remove contaminants the "in-house"
+way. The "in-house" way assumes that there is "contanminant" reads in samples and it contributes to the read count of each ASV per sample. 
+
+```{r}
+#| echo: false
+#| eval: true
+#| tidy: true
+
+# Remove contaminants the decontam way
+ps.noncontam <- prune_taxa(!contamdf.freq$contaminant, psraw)
+ps.noncontam
+
+# Remove contaminants in-house way
+#Now that we know which ASVs are likely contaminants, we can remove them from the dataset. Then make "clean" phyloseq object
+
+# Remove contaminants from ASV table
+asv_tab_raw <- asv_tab_raw |>
+  data.frame() |>
+  slice(-c(353, 809, 1010, 1108)) |>
+  as.matrix()
+
+class(asv_tab_raw) #Should be matrix
+taxa_names(ASV) #Should be ASV_#
+```
+
+## In-house decontamination pipeline
+
+*Adapted from Marie and Shuzo Oita fron the Arnold Lab, U.of Arizona*
+
+Now that we removed the frequent ASVs that are likely contaminants, we
+will remove accumulated cross-contamination in samples during the DNA
+extraction and PCR process. This method works by substracting the MEAN of
+contaminants (ASVs found in controls and PCR blanks) from each ASV cell.
+If the value is negative it replaces it with 0. It substracts the sum of
+the average of the DNA controls and PCR negative controls per plate,
+then removes control rows.
+
 ```{r, DNA_PCR_controls}
 #| echo: false
 #| eval: true
@@ -1017,195 +1185,6 @@ filter_filter4 <- anti_join( filter_table4, plate4, by = c("Sample_ID" = "Sample
 
 ```
 
-```{r, PQ_objects}
-#| echo: false
-#| eval: true
-#| tidy: true
-
-#ASV table
-asv_tab_raw <- asv_tab_raw |>
-  as.matrix()
-ASV <- otu_table(asv_tab_raw, taxa_are_rows = TRUE)
-
-class(asv_tab_raw) #Should be matrix
-taxa_names(ASV) #Should be ASV_#
-
-#Taxonomixc table
-taxa <- taxa |>
-  column_to_rownames(var = "ASV_ID") |>
-  as.matrix()
-TAX <- tax_table(taxa) #726 ASVs (raw)
-
-#Sample data
-#DNA concentration and sample and control information
-#From Mim2_stat_analyses.Rmd
-dna_data <- read.csv(file.path(out_dir, "field_data/mim2_dna_pcr.csv"))
-
-dna_data <- dna_data |>
-  dplyr::select(c(7, 15, 22)) |>
-  filter(!Unique_ID == c("S1", "S2", "#NAME?")) |>
-  distinct() |>
-  slice(-197) |> #Removes one sneaky sample.
-  mutate(concentration = as.numeric(DNA_conc._ng.µl)) |>
-  as.data.frame()
-
-#Some samples and controls had zero or "too low" concentration. We will code them as 0.001.
-dna_data$concentration[is.na(dna_data$concentration)] <- 0.001#Replace NA with 0
-dna_data$concentration[dna_data$concentration == 0] <- 0.001
-
-# #Sample data. Only keeping samples that have sequence data for ASV analyses.
-#getting rownmes to filter
-plates <- bind_rows(plate1, plate2)
-names <- column_to_rownames(plates, var = "Sample_ID")
-samples <- rownames(names) #Using the colname to filter out
-
-dna_data <- dna_data |>
-  filter(Unique_ID %in% samples) |>
-  column_to_rownames(var = "Unique_ID")
-  #slice(-c(29,105:106)) #Some control that are still there.
-#saveRDS(ftraits, file.path(out_dir, "Statistics", "/ftraits.rds"))
-
-SAMP <- sample_data(dna_data)
-class(SAMP)
-sample_names(SAMP)
-
-
-#Phyloseq main object
-ps <- phyloseq(ASV, TAX, SAMP)
-```
-
-#### Phyloseq RAW summary statistics
-```{r, Phyloseq_summary}
-dna_data2 <- dna_data |>
-  slice(-c(1:11)) |> #Removes one sneaky sample.
-  mutate(concentration = as.numeric(DNA_conc._ng.µl)) |>
-  as.data.frame()
-
-SAMP2 <- sample_data(dna_data2)
-
-ps2 <- phyloseq(ASV, TAX, SAMP2) #Just SAMP2 as the new phyloseq object
-
-#How many ASVs per Phyla are there before decontamination? Represent by percentage
-phyloseq_summary(ps2, more_stats = F, long = F) #Overall summary
-
-## This summary does not include the relative abundance of phyla represented in the total reads. We will calculate this below. ###
-
-# Relative abundance of Phyla based on the total reads
-raw_relabundance_phyla <- tax_glom(ps2, 
-                 taxrank = "Phylum", 
-                 NArm = FALSE, bad_empty=c(NA, "", " ", "\t")) |>
-  phyloseq_to_df() |>
-  dplyr::select(-OTU) |> #Remove OTU column. It represents the first ASV of Phylum
-  mutate(total_reads_phy = rowSums(across(where(is.numeric))),
-         relabun_reads_phy = total_reads_phy/sum(total_reads_phy)*100) |> #Relative abundance of phyla
-  dplyr::select(Kingdom, Phylum, total_reads_phy, relabun_reads_phy) #Select columns of interest)
-
-
-# How many samples with ASVs per phyla are there before decontamination?
-percent_phyla_raw <- phyloseq_ntaxa_by_tax(
-  ps2,
-  TaxRank = "Phylum",
-  relative = F,
-  add_meta_data = F
-) |>
-  as.data.frame() |>
-  mutate(sum = sum(N.OTU)) |>
-  group_by(Phylum) |>
-  summarise(occurance_in_samples = n())# Count the number of ASV per phylum
-
-# Micorobiome packge summary
-summarize_phyloseq(ps2) #Microbiome package summary
-```
-
-**Check which sample are actually lost in the cleaning and
-decontaminating process. Some samples don't have enough reads. It's
-worth knowing which samples are those.**
-
-
-### Identifying contaminants by frequency in samples
-
-```{r}
-ps
-head(sample_data(ps))
-
-# Inspecting library sizes
-df <- as.data.frame(sample_data(ps)) # Put sample_data into a ggplot-friendly data.frame
-df$LibrarySize <- sample_sums(ps)
-df <- df[order(df$LibrarySize),]
-df$Index <- seq(nrow(df))
-ggplot(data=df, aes(x=Index, y=LibrarySize, color=sample_control)) + geom_point()
-```
-
-The library sizes of Aponte_8859_v2_23052601 are very small. Many samples
-have low read counts, just as much as negative controls. This is not
-great. It potentially means that there is not a lost of endophytes in
-the tissue in the first place.
-
-```{r contaminant_frequency}
-#| echo: false
-#| eval: true
-#| tidy: true
-
-contamdf.freq <- isContaminant(ps, method="auto", conc="concentration")
-head(contamdf.freq)
-
-table(contamdf.freq$contaminant)
-
-head(which(contamdf.freq$contaminant))
-
-# Plotting contaminant frequency
-plot_frequency(ps, taxa_names(ps)[c(1,396)], conc="concentration") +
-  xlab("DNA Concentration")
-# I cannot get it to plot correctly. It is not plotting the frequency of contaminants due to:
-# Warning: Removed 2 samples with zero total counts (or frequency).Error in data.frame(..., check.names = FALSE) : 
-#   arguments imply differing number of rows: 183, 185
-```
-
-Regardless of the error, we can see that there are four contaminant ASVs
-that are present in the samples. We will remove these from the dataset.
-and proceed with "in-house" decontamination.
-
-We can approach this via the `decontam` and `phyloseq` packages
-following the instructions from the [Introductions to
-decontam](https://benjjneb.github.io/decontam/vignettes/decontam_intro.html).
-The problem is that we can't then remove contaminants the "in-house"
-way.
-
-```{r}
-#| echo: false
-#| eval: true
-#| tidy: true
-
-# Remove contaminants decontam way
-ps.noncontam <- prune_taxa(!contamdf.freq$contaminant, ps)
-ps.noncontam
-
-# Remove contaminants in-house way
-#Now that we know which ASVs are likely contaminants, we can remove them from the dataset.
-
-# Remove contaminants from ASV table
-asv_tab_raw <- asv_tab_raw |>
-  data.frame() |>
-  slice(-c(85, 309, 352, 396)) |>
-  as.matrix()
-
-class(asv_tab_raw) #Should be matrix
-taxa_names(ASV) #Should be ASV_#
-```
-
-## In-house decontamination pipeline
-
-*Adapted from Marie and Shuzo Oita fron the Arnold Lab, U.of Arizona*
-
-Now that we removed the frequent ASVs that are likely contaminants, we
-will remove accumulated cross-contamination in samples during the DNA
-extraction and PCR process. This method works by substracting the SUM of
-contaminants (ASVs found in controls and PCR blanks) from each ASV cell.
-If the value is negative it replaces it with 0. It substracts the sum of
-the average of the DNA controls and PCR negative controls per plate,
-then removes control rows.
-
-
 ### Contaminant removal using DNA and PCR controls
 
 ```{r, Plate1}
@@ -1214,18 +1193,17 @@ then removes control rows.
 #| tidy: true
 
 # PLATE 1
-as.data.frame(plate1)
 plate1 <- column_to_rownames(plate1, var = "Sample_ID")
 
 # Add column with sums for each OTU
 cont <- row.names(plate1)
-cont <- cont[c(15:19,56:57)] #change accordingly to your data - these are the negative controls
+cont <- cont[c(1:8,95:96)] #change accordingly to your data - these are the negative controls
 contamination <- c()
 for(c in 1:ncol(plate1)){
   contamination[c]<- mean(plate1[rownames(plate1) %in% cont, c], na.rm = TRUE)#uses data.table syntax
 }
 plate1 <-rbind(plate1, contamination)
-row.names(plate1)[96] <- "contamination" #change the name of row 104
+row.names(plate1)[97] <- "contamination" #change the name of row 104
 
 # Subtract total contaminants from each ASV, if it is a negative number make it 0
 cont2 <- c(cont, "contamination")
@@ -1241,7 +1219,7 @@ for(r in row){
 
 # Remove controls from dataframe and makes a text file to paste into existing excel sheet
 decontaminated_p1 <- plate1[!rownames(plate1) %in% cont2, ]
-#write.table(decontaminated_p1, file.path(out_dir,"clean_data/ASV_tables/P1_Mim8859_v2_negsblanks.tsv"), sep="\t") 
+write.table(decontaminated_p1, file.path(out_dir,"clean_data/ASV_tables/P1_Mim8859_v2_negsblanks.tsv"), sep="\t") 
 ```
 
 ```{r, Plate2}
@@ -1250,14 +1228,11 @@ decontaminated_p1 <- plate1[!rownames(plate1) %in% cont2, ]
 #| tidy: true
 
 # PLATE 2
-
-as.data.frame(plate2)
 plate2 <- column_to_rownames(plate2, var = "Sample_ID")
 
 #add column with sums for each OTU
-
 cont <- row.names(plate2)
-cont <- cont[c(17:22, 65:66)] #change accordingly to your data - these are the negative controls
+cont <- cont[c(1:6, 95:96)] #change accordingly to your data - these are the negative controls
 contamination <- c()
 for(c in 1:ncol(plate2)){
   contamination[c]<- mean(plate2[rownames(plate2) %in% cont, c], na.rm = TRUE)
@@ -1281,8 +1256,85 @@ for(r in row){
 
 # Remove controls from dataframe and makes a text file to paste into exisitng excel sheet
 decontaminated_p2 <- plate2[!rownames(plate2) %in% cont2, ]
-#write.table(decontaminated_p2, file.path(out_dir,"clean_data/ASV_tables/P2_Mim8859_v2_negsblanks.tsv"), sep="\t")
+write.table(decontaminated_p2, file.path(out_dir,"clean_data/ASV_tables/P2_Mim8859_v2_negsblanks.tsv"), sep="\t")
 ```
+
+
+```{r, Plate3}
+#| echo: false
+#| eval: true
+#| tidy: true
+
+# PLATE 3
+plate3 <- column_to_rownames(plate3, var = "Sample_ID")
+
+#add column with sums for each OTU
+cont <- row.names(plate3)
+cont <- cont[c(1:6, 95:96)] #change accordingly to your data - these are the negative controls
+contamination <- c()
+for(c in 1:ncol(plate3)){
+  contamination[c]<- mean(plate3[rownames(plate3) %in% cont, c], na.rm = TRUE)
+}
+plate3 <-rbind(plate3, contamination)
+row.names(plate3)[97] <- "contamination" #change the name of row
+
+###subtract total contaminants from each ASV, if it is a negative number make it 0
+
+cont2 <- c(cont, "contamination")
+row <- which(!rownames(plate3) %in% cont2)
+for(r in row){
+  for(c in 1:ncol(plate3)){
+    if(plate3[r,c] > plate3["contamination",c]) {
+      new_reads <- plate3[r,c] - plate3["contamination",c]
+      plate3[r,c] <- new_reads
+    } else {plate3[r,c] <- 0}
+  }
+}
+
+
+# Remove controls from dataframe and makes a text file to paste into exisitng excel sheet
+decontaminated_p3 <- plate3[!rownames(plate3) %in% cont2, ]
+write.table(decontaminated_p3, file.path(out_dir,"clean_data/ASV_tables/P3_Mim8859_v2_negsblanks.tsv"), sep="\t")
+```
+
+```{r, Plate4}
+#| echo: false
+#| eval: true
+#| tidy: true
+
+# PLATE 3
+plate4 <- column_to_rownames(plate4, var = "Sample_ID")
+
+#add column with sums for each OTU
+cont <- row.names(plate4)
+cont <- cont[c(1:4, 31:32)] #change accordingly to your data - these are the negative controls
+contamination <- c()
+for(c in 1:ncol(plate4)){
+  contamination[c]<- mean(plate4[rownames(plate4) %in% cont, c], na.rm = TRUE)
+}
+plate4 <-rbind(plate4, contamination)
+row.names(plate4)[33] <- "contamination" #change the name of row
+
+###subtract total contaminants from each ASV, if it is a negative number make it 0
+
+cont2 <- c(cont, "contamination")
+row <- which(!rownames(plate4) %in% cont2)
+for(r in row){
+  for(c in 1:ncol(plate4)){
+    if(plate4[r,c] > plate4["contamination",c]) {
+      new_reads <- plate4[r,c] - plate4["contamination",c]
+      plate4[r,c] <- new_reads
+    } else {plate4[r,c] <- 0}
+  }
+}
+
+
+# Remove controls from dataframe and makes a text file to paste into exisitng excel sheet
+decontaminated_p4 <- plate4[!rownames(plate4) %in% cont2, ]
+write.table(decontaminated_p4, file.path(out_dir,"clean_data/ASV_tables/P4_Mim8859_v2_negsblanks.tsv"), sep="\t")
+```
+
+
 
 ### Removal ASV sequences that represent less than 0.1% of the read in samples.
 
@@ -1293,12 +1345,12 @@ decontaminated_p2 <- plate2[!rownames(plate2) %in% cont2, ]
 
 ##Saving decontaminated files as one.
 
-all_decontaminated <- bind_rows(decontaminated_p1, decontaminated_p2)
-#write.csv(all_decontaminated,file.path(out_dir , "clean_data/ASV_tables/ASVs_8859_v2_decont_blankandnegs.csv"))
+all_decontaminated <- bind_rows(decontaminated_p1, decontaminated_p2, decontaminated_p3, decontaminated_p4)
+write.csv(all_decontaminated,file.path(out_dir , "clean_data/ASV_tables/ASVs_8859_v2_decont_blankandnegs.csv"))
 
 asv.decon <- t(all_decontaminated)
 asv.decon <- as.data.frame(asv.decon)
-#write.csv(asv.decon, file.path(out_dir , "clean_data/ASV_tables/ASVs_8859_v2_toFilt_10_percent.csv")) ## in the format to remove <10% OTUs -- see below
+write.csv(asv.decon, file.path(out_dir , "clean_data/ASV_tables/ASVs_8859_v2_toFilt_10_percent.csv")) ## in the format to remove <10% OTUs -- see below
 
 #### Script to remove < 0.10% abundance per sample #### From Shuzo Oita
 ####################################################
