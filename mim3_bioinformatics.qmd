@@ -1134,8 +1134,6 @@ then removes control rows.
 
 ## Plate1 ##
 filter_table1<- read.csv(file.path(out_dir, "clean_data/ASV_tables/P1_Mim_8859_v2_filter.csv"))
-names(filter_table1)
-str(filter_table1)
 
 tasv_tab_raw <- t(asv_tab_raw) #Transposing ASV table
 
@@ -1154,8 +1152,6 @@ filter_filter <- anti_join(filter_table1, plate1, by = c("Sample_ID" = "Sample_I
 ## Plate2 ##
 
 filter_table2<- read.csv(file.path(out_dir, "clean_data/ASV_tables/P2_Mim_8859_v2_filter.csv"))
-
-names(filter_table2)
 
 plate2 <- semi_join(tasv_tab_raw, filter_table2, by= c("Sample_ID" = "Sample_ID"))
 
@@ -1177,7 +1173,6 @@ filter_filter3 <- anti_join( filter_table3, plate3, by = c("Sample_ID" = "Sample
 
 # Plate 4
 filter_table4 <- read.csv(file.path(out_dir, "clean_data/ASV_tables/P4_Mim_8859_v2_filter.csv"))
-names(filter_table4)
 plate4 <- semi_join(tasv_tab_raw, filter_table4, by= c("Sample_ID" = "Sample_ID"))
 plate4 <- plate4 |>
   mutate(across(!Sample_ID, as.numeric))
@@ -1371,7 +1366,7 @@ asv_10[ , i] <- apply(asv_10[ , i],2,
                     function(x) round(x, digits = 0))
 
 #write.csv(asv_10, file.path(out_dir, "clean_data/ASV_tables/ASVs_8859_v2_cleaned_10_percent.csv"))
-#saveRDS(asv_10, file.path(out_dir, "clean_data/ASV_tables/ASVs_8859_v2_cleaned_10_percent.rds"))
+saveRDS(asv_10, file.path(out_dir, "clean_data/ASV_tables/ASVs_8859_v2_cleaned_10_percent.rds"))
 asv_10 <- readRDS(file.path(out_dir, "clean_data/ASV_tables/ASVs_8859_v2_cleaned_10_percent.rds"))
 ```
 
@@ -1397,7 +1392,7 @@ taxa <- taxa |>
   filter(ASV_ID %in% asv_filter) |>
   column_to_rownames(var = "ASV_ID") |>
   as.matrix()
-TAX <- tax_table(taxa) #688 ASVs (cleaned)
+TAX <- tax_table(taxa) #1179 ASVs (cleaned)
 
 #Sample data
 # The sample data here is the leaf traits measurements collected from the field. The file can be found in the statistics folder.

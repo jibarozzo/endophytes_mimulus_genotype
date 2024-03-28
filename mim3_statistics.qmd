@@ -21,6 +21,7 @@ library("ggpmisc")
 library("broom")
 library("MetBrewer")
 library("rstatix")
+library("readxl")
 
 # Models
 library("car")
@@ -54,7 +55,7 @@ conflict_prefer("alpha", "ggplot2")
 #| echo: false
 #| eval: true
 #| tidy: true
-path <- "../mim2_bioinformatics" # Change accordingly
+path <- "../mim3_bioinformatics" # Change accordingly
 ```
 
 # Objective of the notebook
@@ -79,8 +80,8 @@ This section cleans and shapes the raw data into two main data frames: `leaf_tra
 ########## RAW data sets #######
 ################################
 
-traits <- read.csv(file.path(path, "field_data/mim2_leaf_traits_field_survey.csv")) # Main raw data set
-
+traits <- read_excel(file.path(path, "field_data/Mimulus_CH3_Endophytes_ReciprocalTransplant_2023.xlsx"), sheet = "CH3_Leaf_traits") # Main raw data set
+imagej <- read_excel(file.path(path, "field_data/Mimulus_CH3_ImageJ_Data.xlsx"), sheet = "All_Site_ImageJ_Preliminary") # ImageJ data set
 #Elevation_m categories (meters)
 breaks <- c(-Inf, 1219.2, 1828.495, Inf)
 labels <- c("LOW", "MID", "HIGH")
