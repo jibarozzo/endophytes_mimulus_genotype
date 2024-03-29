@@ -82,61 +82,33 @@ This section cleans and shapes the raw data into two main data frames: `leaf_tra
 
 traits <- read_excel(file.path(path, "field_data/Mimulus_CH3_Endophytes_ReciprocalTransplant_2023.xlsx"), sheet = "CH3_Leaf_traits") # Main raw data set
 imagej <- read_excel(file.path(path, "field_data/Mimulus_CH3_ImageJ_Data.xlsx"), sheet = "All_Site_ImageJ_Preliminary") # ImageJ data set
-#Elevation_m categories (meters)
-breaks <- c(-Inf, 1219.2, 1828.495, Inf)
-labels <- c("LOW", "MID", "HIGH")
 
-#Leaf level data set
-leaf_traits <-  traits |>
-  slice(-c(959:973))|> #Removing control samples
-  filter(!Unique_ID == "TRTB_L001") |>#Removing misidentified sample
-  rename(LMA = LMA.mg., 
-         LBI = Leaf_lobe_index,
-         LPS = Leaf_toughness,
-         LT = Leaf_thickness) |> 
-  select(!c(5,13:15, 23:25)) |>
-  group_by(Site, Species, Unique_ID) |>
-  fill(ImageJ_1, ImageJ_2, LBI, .direction = 'down') |>
-  mutate(Species = as.factor(Species), 
-         Site = as.factor(Site),
-         Elevation_cat = cut(Elevation_m, 
-                             breaks = breaks,
-                             labels = labels)) |>
-  relocate(Elevation_cat, .before = Elevation_m)|>
-  as_tibble()
+
+# Cleaning and transfoming data
+# I suspect variables are not-normally distributed given work on Mim2. I proceed with a log transformation of the data.
+# Leaf traits transformed
+# Leaf level data set
+leaf_traits <-  left_join(traits, select(imagej, Unique_ID, ImageJ_1, ImageJ_2, Leaf_Lobe_Index), join_by(Unique_ID)) |>
+  select(-Notes) |>
+  mutate(logLBI = log10(Leaf_Lobe_Index),
+         logACI = log10(ACI),
+         logLT = log10(Leaf_thickness),
+         logLPS = log10(Leaf_toughness),
+         logLMA = log10(LMA))
+
 
 #Plant level for ASV analyses
+# Log transformed
 plant_traits <- leaf_traits |>
-  relocate(Unique_ID, .before = Site) |>
-  group_by(Unique_ID, Site, Species, Sample_Date, Elevation_m, Elevation_cat, Longitude, Latitude)|>
+  group_by(Unique_ID, Site, Block, Position, Genotype)|>
+  filter(!is.na(Genotype)) |>
   summarise(ACI = mean(ACI, na.rm = TRUE),
-            LT = mean(LT, na.rm = TRUE),
-            LPS= mean(LPS, na.rm =TRUE),
+            LT = mean(Leaf_thickness, na.rm = TRUE),
+            LPS= mean(Leaf_toughness, na.rm =TRUE),
             LMA = mean(LMA, na.rm = TRUE),
             ImageJ_1 = mean(ImageJ_1, na.rm = TRUE),
             ImageJ_2 = mean(ImageJ_2, na.rm = TRUE),
-            LBI = mean(LBI, na.rm = TRUE))
-
-
-#### Log transformation ####
-
-# All variables are non-normal. I proceed with a log transformation of the data.
-# See Descriptive Statistics section for reference on this decision. Leaf_trait_transformation block.
-# Leaft traits transformed
-leaf_traits <- leaf_traits |>
-  mutate(logLBI = log10(LBI),
-         logACI = log10(ACI),
-         logLT = log10(LT),
-         logLPS = log10(LPS),
-         logLMA = log10(LMA))
-
-#Removing species B
-# I have 3 samples for species B to remove from the data set.
-leaf_traits_noB <- leaf_traits |>
-  filter(!Species == "M. bicolor")
-
-# Plant traits transformed
-plant_traits <- plant_traits |>
+            LBI = mean(Leaf_Lobe_Index, na.rm = TRUE)) |>
   mutate(logLBI = log10(LBI),
          logACI = log10(ACI),
          logLT = log10(LT),

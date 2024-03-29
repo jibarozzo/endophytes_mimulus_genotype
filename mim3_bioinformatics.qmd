@@ -1133,7 +1133,8 @@ then removes control rows.
 #This way we check if all our samples are in the dataset and remove contamination according to PCR plate. The filter tables are the names of each sample in long format exactly as they were sent off for sequencing. Thes must match in order to remove contamination from the samples.
 
 ## Plate1 ##
-filter_table1<- read.csv(file.path(out_dir, "clean_data/ASV_tables/P1_Mim_8859_v2_filter.csv"))
+filter_table1 <-
+  read.csv(file.path(out_dir, "clean_data/ASV_tables/P1_Mim_8859_v2_filter.csv"))
 
 tasv_tab_raw <- t(asv_tab_raw) #Transposing ASV table
 
@@ -1151,17 +1152,21 @@ filter_filter <- anti_join(filter_table1, plate1, by = c("Sample_ID" = "Sample_I
 
 ## Plate2 ##
 
-filter_table2<- read.csv(file.path(out_dir, "clean_data/ASV_tables/P2_Mim_8859_v2_filter.csv"))
+filter_table2 <-
+  read.csv(file.path(out_dir, "clean_data/ASV_tables/P2_Mim_8859_v2_filter.csv"))
 
-plate2 <- semi_join(tasv_tab_raw, filter_table2, by= c("Sample_ID" = "Sample_ID"))
+plate2 <-
+  semi_join(tasv_tab_raw, filter_table2, by = c("Sample_ID" = "Sample_ID"))
 
 plate2 <- plate2 |>
   mutate(across(!Sample_ID, as.numeric))
 
-filter_filter2 <- anti_join( filter_table2, plate2, by = c("Sample_ID" = "Sample_ID")) #Corroborating if indeed all match.
+filter_filter2 <-
+  anti_join(filter_table2, plate2, by = c("Sample_ID" = "Sample_ID")) #Corroborating if indeed all match.
 
 # Plate 3
-filter_table3 <- read.csv(file.path(out_dir, "clean_data/ASV_tables/P3_Mim_8859_v2_filter.csv"))
+filter_table3 <-
+  read.csv(file.path(out_dir, "clean_data/ASV_tables/P3_Mim_8859_v2_filter.csv"))
 names(filter_table3)
 
 plate3 <- semi_join(tasv_tab_raw, filter_table3, by= c("Sample_ID" = "Sample_ID"))
@@ -1169,14 +1174,18 @@ plate3 <- semi_join(tasv_tab_raw, filter_table3, by= c("Sample_ID" = "Sample_ID"
 plate3 <- plate3 |>
   mutate(across(!Sample_ID, as.numeric))
 
-filter_filter3 <- anti_join( filter_table3, plate3, by = c("Sample_ID" = "Sample_ID")) #Corroborating if indeed all match.
+filter_filter3 <-
+  anti_join(filter_table3, plate3, by = c("Sample_ID" = "Sample_ID")) #Corroborating if indeed all match.
 
 # Plate 4
-filter_table4 <- read.csv(file.path(out_dir, "clean_data/ASV_tables/P4_Mim_8859_v2_filter.csv"))
-plate4 <- semi_join(tasv_tab_raw, filter_table4, by= c("Sample_ID" = "Sample_ID"))
+filter_table4 <-
+  read.csv(file.path(out_dir, "clean_data/ASV_tables/P4_Mim_8859_v2_filter.csv"))
+plate4 <-
+  semi_join(tasv_tab_raw, filter_table4, by = c("Sample_ID" = "Sample_ID"))
 plate4 <- plate4 |>
   mutate(across(!Sample_ID, as.numeric))
-filter_filter4 <- anti_join( filter_table4, plate4, by = c("Sample_ID" = "Sample_ID")) #Corroborating if indeed all match.
+filter_filter4 <-
+  anti_join(filter_table4, plate4, by = c("Sample_ID" = "Sample_ID")) #Corroborating if indeed all match.
 
 ```
 
@@ -1197,18 +1206,20 @@ contamination <- c()
 for(c in 1:ncol(plate1)){
   contamination[c]<- mean(plate1[rownames(plate1) %in% cont, c], na.rm = TRUE)#uses data.table syntax
 }
-plate1 <-rbind(plate1, contamination)
+plate1 <- rbind(plate1, contamination)
 row.names(plate1)[97] <- "contamination" #change the name of row 104
 
 # Subtract total contaminants from each ASV, if it is a negative number make it 0
 cont2 <- c(cont, "contamination")
 row <- which(!rownames(plate1) %in% cont2)
-for(r in row){
-  for(c in 1:ncol(plate1)){
-    if(plate1[r,c] > plate1["contamination",c]) {
-      new_reads <- plate1[r,c] - plate1["contamination",c]
-      plate1[r,c] <- new_reads
-    } else {plate1[r,c] <- 0}
+for (r in row) {
+  for (c in 1:ncol(plate1)) {
+    if (plate1[r, c] > plate1["contamination", c]) {
+      new_reads <- plate1[r, c] - plate1["contamination", c]
+      plate1[r, c] <- new_reads
+    } else {
+      plate1[r, c] <- 0
+    }
   }
 }
 
@@ -1229,22 +1240,25 @@ plate2 <- column_to_rownames(plate2, var = "Sample_ID")
 cont <- row.names(plate2)
 cont <- cont[c(1:6, 95:96)] #change accordingly to your data - these are the negative controls
 contamination <- c()
-for(c in 1:ncol(plate2)){
-  contamination[c]<- mean(plate2[rownames(plate2) %in% cont, c], na.rm = TRUE)
+for (c in 1:ncol(plate2)) {
+  contamination[c] <-
+    mean(plate2[rownames(plate2) %in% cont, c], na.rm = TRUE)
 }
-plate2 <-rbind(plate2, contamination)
+plate2 <- rbind(plate2, contamination)
 row.names(plate2)[97] <- "contamination" #change the name of row
 
 ###subtract total contaminants from each ASV, if it is a negative number make it 0
 
 cont2 <- c(cont, "contamination")
 row <- which(!rownames(plate2) %in% cont2)
-for(r in row){
-  for(c in 1:ncol(plate2)){
-    if(plate2[r,c] > plate2["contamination",c]) {
-      new_reads <- plate2[r,c] - plate2["contamination",c]
-      plate2[r,c] <- new_reads
-    } else {plate2[r,c] <- 0}
+for (r in row) {
+  for (c in 1:ncol(plate2)) {
+    if (plate2[r, c] > plate2["contamination", c]) {
+      new_reads <- plate2[r, c] - plate2["contamination", c]
+      plate2[r, c] <- new_reads
+    } else {
+      plate2[r, c] <- 0
+    }
   }
 }
 
@@ -1267,22 +1281,25 @@ plate3 <- column_to_rownames(plate3, var = "Sample_ID")
 cont <- row.names(plate3)
 cont <- cont[c(1:6, 95:96)] #change accordingly to your data - these are the negative controls
 contamination <- c()
-for(c in 1:ncol(plate3)){
-  contamination[c]<- mean(plate3[rownames(plate3) %in% cont, c], na.rm = TRUE)
+for (c in 1:ncol(plate3)) {
+  contamination[c] <-
+    mean(plate3[rownames(plate3) %in% cont, c], na.rm = TRUE)
 }
-plate3 <-rbind(plate3, contamination)
+plate3 <- rbind(plate3, contamination)
 row.names(plate3)[97] <- "contamination" #change the name of row
 
 ###subtract total contaminants from each ASV, if it is a negative number make it 0
 
 cont2 <- c(cont, "contamination")
 row <- which(!rownames(plate3) %in% cont2)
-for(r in row){
-  for(c in 1:ncol(plate3)){
-    if(plate3[r,c] > plate3["contamination",c]) {
-      new_reads <- plate3[r,c] - plate3["contamination",c]
-      plate3[r,c] <- new_reads
-    } else {plate3[r,c] <- 0}
+for (r in row) {
+  for (c in 1:ncol(plate3)) {
+    if (plate3[r, c] > plate3["contamination", c]) {
+      new_reads <- plate3[r, c] - plate3["contamination", c]
+      plate3[r, c] <- new_reads
+    } else {
+      plate3[r, c] <- 0
+    }
   }
 }
 
