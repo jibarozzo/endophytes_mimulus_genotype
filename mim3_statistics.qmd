@@ -84,7 +84,7 @@ traits <- read_excel(file.path(path, "field_data/Mimulus_CH3_Endophytes_Reciproc
 imagej <- read_excel(file.path(path, "field_data/Mimulus_CH3_ImageJ_Data.xlsx"), sheet = "All_Site_ImageJ_Preliminary") # ImageJ data set
 
 
-# Cleaning and transfoming data
+# Cleaning and transforming data
 # I suspect variables are not-normally distributed given work on Mim2. I proceed with a log transformation of the data.
 # Leaf traits transformed
 # Leaf level data set
@@ -103,9 +103,7 @@ pooled_parental <- leaf_traits |>
   filter(Genotype == c("L", "G")) |>
   group_by(Site, Block, Genotype) |>
   unite(Unique_ID, c(Site, Block, Genotype), sep = "_", remove = FALSE) |>
-  mutate(Unique_ID = paste(Unique_ID, "_POOL"))
-  
-
+  mutate(Unique_ID = paste(Unique_ID, "_POOL", sep = ""))
 
 #Plant level for ASV analyses
 # Bind parental pools to F2 hybrids
@@ -130,7 +128,6 @@ plant_traits <- leaf_traits |>
          logLT = log10(LT),
          logLPS = log10(LPS),
          logLMA = log10(LMA)) 
-
 
 
 # Save file
