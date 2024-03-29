@@ -96,12 +96,25 @@ leaf_traits <-  left_join(traits, select(imagej, Unique_ID, ImageJ_1, ImageJ_2, 
          logLPS = log10(Leaf_toughness),
          logLMA = log10(LMA))
 
+# Matching pooled samples (e.g., CF_23_L_POOL) with original name
+# M. guttatus and M. laciniatus parentals
+
+pooled_parental <- leaf_traits |>
+  filter(Genotype == c("L", "G")) |>
+  group_by(Site, Block, Genotype) |>
+  unite(Unique_ID, c(Site, Block, Genotype), sep = "_", remove = FALSE) |>
+  mutate(Unique_ID = paste(Unique_ID, "_POOL"))
+  
+
 
 #Plant level for ASV analyses
+# Bind parental pools to F2 hybrids
 # Log transformed
 plant_traits <- leaf_traits |>
-  group_by(Unique_ID, Site, Block, Position, Genotype)|>
-  filter(!is.na(Genotype)) |>
+  filter(!is.na(Genotype), 
+         Genotype == c("F2WY", "F2YW")) |>
+    bind_rows(pooled_parental) |>
+  group_by(Unique_ID, Site, Block, Genotype)|>
   summarise(ACI = mean(ACI, na.rm = TRUE),
             LT = mean(Leaf_thickness, na.rm = TRUE),
             LPS= mean(Leaf_toughness, na.rm =TRUE),
@@ -109,11 +122,23 @@ plant_traits <- leaf_traits |>
             ImageJ_1 = mean(ImageJ_1, na.rm = TRUE),
             ImageJ_2 = mean(ImageJ_2, na.rm = TRUE),
             LBI = mean(Leaf_Lobe_Index, na.rm = TRUE)) |>
-  mutate(logLBI = log10(LBI),
+  mutate(Site = as.factor(Site),
+         Block = as.factor(Block), 
+         Genotype = as.factor(Genotype),
+         logLBI = log10(LBI),
          logACI = log10(ACI),
          logLT = log10(LT),
          logLPS = log10(LPS),
-         logLMA = log10(LMA))
+         logLMA = log10(LMA)) 
+
+
+
+# Save file
+# Leaf traits
+ saveRDS(leaf_traits, file.path(path, "clean_data/statistics/leaf_traits.rds"))
+
+# Plant traits WITHOUT community data
+ saveRDS(plant_traits, file.path(path, "clean_data/statistics/plant_traits.rds"))
 ```
 
 ### Phyloseq, mirl, and meco objects
@@ -172,12 +197,12 @@ ps_melt <- ps_clean_3 |>
 ##########################################################
 # Save file
 # Leaf traits
-# saveRDS(leaf_traits, file.path(path, "clean_data/statistics/leaf_traits.rds"))
-# write.csv(leaf_traits, file.path(path, "clean_data/statistics/leaf_traits.csv"))
+ saveRDS(leaf_traits, file.path(path, "clean_data/statistics/leaf_traits.rds"))
+ write.csv(leaf_traits, file.path(path, "clean_data/statistics/leaf_traits.csv"))
 # 
 # # Plant traits with community data
-# saveRDS(plant_traits, file.path(path, "clean_data/statistics/plant_traits.rds"))
-# write.csv(plant_traits, file.path(path, "clean_data/statistics/plant_traits.csv"))
+ saveRDS(plant_traits, file.path(path, "clean_data/statistics/plant_traits.rds"))
+ write.csv(plant_traits, file.path(path, "clean_data/statistics/plant_traits.csv"))
 # 
 # # Save ps_melt
 # saveRDS(ps_melt, file.path(path, "clean_data/statistics/ps_melt.rds"))

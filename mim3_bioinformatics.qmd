@@ -1415,10 +1415,13 @@ TAX <- tax_table(taxa) #1179 ASVs (cleaned)
 # The sample data here is the leaf traits measurements collected from the field. The file can be found in the statistics folder.
 plant_traits <- readRDS(file.path(out_dir, "clean_data/statistics/plant_traits.rds"))
 
-plant_traits <- plant_traits |>
-  column_to_rownames(var = "Unique_ID") #Making sure that the Unique_ID is the rowname
+sample_ids <- colnames(asv_10) #Names of samples that have ASV and passed decontamination 288 samples
 
-SAMP <- sample_data(plant_traits)
+
+SAMP <- plant_traits |>
+  filter(Unique_ID %in% sample_ids) |>
+  column_to_rownames(var = "Unique_ID")  #Making sure that the Unique_ID is the rowname
+  sample_data()
 
 # Phyloseq object with cleaned ASV table
 ps_clean <- phyloseq(ASV, TAX, SAMP)
