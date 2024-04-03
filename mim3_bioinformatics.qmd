@@ -739,11 +739,17 @@ seqtab_nochim <- removeBimeraDenovo(seqtab,
 #Frequency of chimeras
 sum(seqtab_nochim)/sum(seqtab)
 
-#Save file
-#saveRDS(seqtab_nochim, file.path(out_dir, "clean_data/ASV_tables/ASV_8859_v2_seqtable_nochim_denoise.rds"))
-#write.csv(seqtab_nochim, file.path(out_dir, "clean_data/ASV_tables/ASV_8859_v2_seqtable_nochim_denoise.csv")) # Long file name but it indicates this file has gone through all the steps in the pipeline.
+# Sample name change due to error
+# These names were manually changed in the fasta files. +
+seqtab_nochim$X <- gsub("LM_23_5_11_F2WY", "LM_23_5_F2YW", seqtab_nochim$X)
+seqtab_nochim$X <- gsub("CG_19_8_F2YW", "CF_19_8_F2YW", seqtab_nochim$X)
+seqtab_nochim$X <- gsub("CF_52_10_F2YW", "CF_53_10_F2YW", seqtab_nochim$X)
 
-seqtab <- readRDS(file.path(out_dir,"ASV_tables/ASV_8859_v2_seqtable_nochim_denoise.rds"))
+#Save file
+saveRDS(seqtab_nochim, file.path(out_dir, "clean_data/ASV_tables/ASV_8859_v2_seqtable_nochim_denoise.rds"))
+write.csv(seqtab_nochim, file.path(out_dir, "clean_data/ASV_tables/ASV_8859_v2_seqtable_nochim_denoise.csv")) # Long file name but it indicates this file has gone through all the steps in the pipeline.
+
+seqtab_nochim <- readRDS(file.path(out_dir, "clean_data/ASV_tables/ASV_8859_v2_seqtable_nochim_denoise.rds"))
 ```
 
 Inspect distribution of sequence lengths
@@ -899,7 +905,7 @@ out_dir <- file.path("../mim3_bioinformatics")
 taxa <- read.csv(file.path(out_dir, "clean_data/taxonomy/assign_tax_8859_v2.csv"))
 
 # Adding "ASV_" to the taxonomical assignment
-rownames(taxa)<-paste0("ASV_",1:nrow(taxa))
+rownames(taxa) <- paste0("ASV_", 1:nrow(taxa))
 taxa <- taxa |> 
   select(!X) |>
   setDT(keep.rownames = "ASV_ID")
@@ -1322,7 +1328,7 @@ write.table(decontaminated_p3, file.path(out_dir,"clean_data/ASV_tables/P3_Mim88
 #| eval: true
 #| tidy: true
 
-# PLATE 3
+# PLATE 4
 plate4 <- column_to_rownames(plate4, var = "Sample_ID")
 
 #add column with sums for each OTU
@@ -1367,7 +1373,7 @@ write.table(decontaminated_p4, file.path(out_dir,"clean_data/ASV_tables/P4_Mim88
 
 ##Saving decontaminated files as one.
 
-all_decontaminated <- bind_rows(decontaminated_p1, decontaminated_p2, decontaminated_p3, decontaminated_p4) #288 decontaminated samples
+all_decontaminated <- bind_rows(decontaminated_p1, decontaminated_p2, decontaminated_p3, decontaminated_p4) #287 decontaminated samples
 
 # Summing up duplicate samples
 all_decontaminated <- all_decontaminated |>
@@ -1382,7 +1388,6 @@ asv.decon <- all_decontaminated |>
   select(-c(1)) |> #Remove X column if loading from here
   as.data.frame()
 write.csv(asv.decon, file.path(out_dir , "clean_data/ASV_tables/ASVs_8859_v2_toFilt_10_percent.csv")) ## in the format to remove <10% OTUs -- see below
-
 
 
 #### Script to remove < 0.10% abundance per sample #### From Shuzo Oita
@@ -1417,16 +1422,18 @@ the phyloseq object with the cleaned ASV table.
 #| tidy: true
 
 # Phyloseq object with cleaned ASV table
-ASV <- otu_table(asv_10, taxa_are_rows = TRUE)
+ASV <- otu_table(t(asv_10), taxa_are_rows = TRUE)
 
 # We have removed contaminants from our ASV table, now we will remove them from our taxonomic table.
 #Removing contaminants from Taxonomic table
 asv_filter <- colnames(asv_10) #Using our cleaned ASV table to filter out the taxonomic table
 
 taxa <- taxa |>
+  as.data.frame() |>
+  rownames_to_column(var = "ASV_ID") |>
   filter(ASV_ID %in% asv_filter) |>
-  column_to_rownames(var = "ASV_ID") |>
   as.matrix()
+
 TAX <- tax_table(taxa) #1 ASVs (cleaned)
 
 #Sample data
@@ -1436,15 +1443,31 @@ plant_traits <- readRDS(file.path(out_dir, "clean_data/statistics/plant_traits.r
 sample_ids <- rownames(asv_10) #Names of samples that have ASV and passed decontamination 287 samples
 ```
 Filter sample data to match the samples in the ASV table.
-Turns out the samples with ASV informations don't completly match up with the samples with leaf traits. We will rowbind the two tables to keep samples with ASV info but not leaf traits. This was probably a mistake in the field data collection.
+Turns out the samples with ASV information doesn't completely match up with the samples with leaf traits. We will rowbind the two tables to keep samples with ASV info but not leaf traits. This was probably a mistake in the naming the sample in the field. Alternating F2WY to F2YW in the sample names.
 
-```{r, clean_phyloseq2}
+```{r, name_correction}
 samples_asv_traits <-  plant_traits |>
   filter(Unique_ID %in% sample_ids)
 
 samples_not_traits <- asv_10 |>
+  rownames_to_column(var = "Unique_ID") |>
   filter(!rownames(asv_10) %in% samples_asv_traits$Unique_ID) |> #Samples with ASV info but not leaf traits
-rownames()
+  select(Unique_ID) |>
+  as.data.frame() #names to be corrected
+
+#Correcting the names
+samples_not_traits$Unique_ID_new <- gsub("F2WY", "F2YW", samples_not_traits$Unique_ID)
+
+# Creating a charaters vector to join with sample_ids and filter the sample data
+sample_ids <- c(sample_ids, samples_not_traits$Unique_ID_new)
+
+```
+
+```{r, phyloseq_clean}
+
+SAMP <- rbind(samples_asv_traits, samples_not_traits)
+  column_to_rownames(var = "Unique_ID") |>
+  as.data.frame()
 # Phyloseq object with cleaned ASV table
 ps_clean <- phyloseq(ASV, TAX, SAMP)
 
