@@ -30,6 +30,7 @@ library("nlme")
 # Diversity
 library("vegan")
 library("hillR")
+library("iNEXT")
 library("geosphere")
 library("indicspecies")
 
