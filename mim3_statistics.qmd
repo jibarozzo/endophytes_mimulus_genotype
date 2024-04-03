@@ -81,7 +81,8 @@ This section cleans and shapes the raw data into two main data frames: `leaf_tra
 ################################
 
 traits <- read_excel(file.path(path, "field_data/Mimulus_CH3_Endophytes_ReciprocalTransplant_2023.xlsx"), sheet = "CH3_Leaf_traits") # Main raw data set
-imagej <- read_excel(file.path(path, "field_data/Mimulus_CH3_ImageJ_Data.xlsx"), sheet = "All_Site_ImageJ_Preliminary") # ImageJ data set
+imagej <- read_excel(file.path(path, "field_data/Mimulus_CH3_ImageJ_Data.xlsx"), sheet = "All_Site_ImageJ_Preliminary")  |># ImageJ data set
+  distinct(Unique_ID, .keep_all = T) # Removing duplicates
 
 
 # Cleaning and transforming data
@@ -109,9 +110,7 @@ pooled_parental <- leaf_traits |>
 # Bind parental pools to F2 hybrids
 # Log transformed
 plant_traits <- leaf_traits |>
-  filter(!is.na(Genotype), 
-         Genotype == c("F2WY", "F2YW")) |>
-    bind_rows(pooled_parental) |>
+    bind_rows(pooled_parental) |> # Adding pooled samples. Samples that are part of the pool are still present. 
   group_by(Unique_ID, Site, Block, Genotype)|>
   summarise(ACI = mean(ACI, na.rm = TRUE),
             LT = mean(Leaf_thickness, na.rm = TRUE),

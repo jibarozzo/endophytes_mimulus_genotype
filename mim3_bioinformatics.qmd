@@ -690,7 +690,7 @@ mergers <- mergePairs(dadaFs, filtFs,
 #saveRDS(mergers, file.path(out_dir, "preprocess/mergers_8859_v2.rds"))
 
 # Load file
-mergers <- readRDS(file.path(out_dir, "preprocess/pre_8859_v2/mergers_8859_v2.rds"))
+mergers <- readRDS(file.path(out_dir, "preprocess/mergers_8859_v2.rds"))
 
 # Inspect the merger data.frame from the first sample
 head(mergers[[1]])
@@ -714,11 +714,11 @@ dim(seqtab)
 table(nchar(getSequences(seqtab)))
 
 #Save file R object, and .csv
-#saveRDS(seqtab, file.path(out_dir, "clean_data/ASV_tables/ASV_8859_v2_seqtable_raw.rds")) #Functions to write a single R object to a file, and to restore it.
-#write.csv(seqtab, file.path(out_dir, "clean_data/ASV_tables/ASV_8859_v2_seqtable_raw.rds"))
+saveRDS(seqtab, file.path(out_dir, "clean_data/ASV_tables/ASV_8859_v2_seqtable_raw.rds")) #Functions to write a single R object to a file, and to restore it.
+write.csv(seqtab, file.path(out_dir, "clean_data/ASV_tables/ASV_8859_v2_seqtable_raw.rds"))
 
 #Open from here in case R crashes
-seqtab <- readRDS(file.path(out_dir, "clean_data/ASV_tables/ASV_8859_v2_seqtable_raw.rds"))
+#seqtab <- readRDS(file.path(out_dir, "clean_data/ASV_tables/ASV_8859_v2_seqtable_raw.rds"))
 ```
 
 ### Remove chimeras
@@ -740,10 +740,18 @@ seqtab_nochim <- removeBimeraDenovo(seqtab,
 sum(seqtab_nochim)/sum(seqtab)
 
 # Sample name change due to error
-# These names were manually changed in the fasta files. +
+# These names were manually changed in the fasta files.
+seqtab_nochim <- seqtab_nochim |>
+  as.data.frame() |>
+  rownames_to_column(var = "X")
+
 seqtab_nochim$X <- gsub("LM_23_5_11_F2WY", "LM_23_5_F2YW", seqtab_nochim$X)
 seqtab_nochim$X <- gsub("CG_19_8_F2YW", "CF_19_8_F2YW", seqtab_nochim$X)
 seqtab_nochim$X <- gsub("CF_52_10_F2YW", "CF_53_10_F2YW", seqtab_nochim$X)
+
+seqtab_nochim <- seqtab_nochim |>
+  column_to_rownames(var = "X")
+
 
 #Save file
 saveRDS(seqtab_nochim, file.path(out_dir, "clean_data/ASV_tables/ASV_8859_v2_seqtable_nochim_denoise.rds"))
@@ -1421,21 +1429,6 @@ the phyloseq object with the cleaned ASV table.
 #| eval: true
 #| tidy: true
 
-# Phyloseq object with cleaned ASV table
-ASV <- otu_table(t(asv_10), taxa_are_rows = TRUE)
-
-# We have removed contaminants from our ASV table, now we will remove them from our taxonomic table.
-#Removing contaminants from Taxonomic table
-asv_filter <- colnames(asv_10) #Using our cleaned ASV table to filter out the taxonomic table
-
-taxa <- taxa |>
-  as.data.frame() |>
-  rownames_to_column(var = "ASV_ID") |>
-  filter(ASV_ID %in% asv_filter) |>
-  as.matrix()
-
-TAX <- tax_table(taxa) #1 ASVs (cleaned)
-
 #Sample data
 # The sample data here is the leaf traits measurements collected from the field. The file can be found in the statistics folder.
 plant_traits <- readRDS(file.path(out_dir, "clean_data/statistics/plant_traits.rds"))
@@ -1456,26 +1449,66 @@ samples_not_traits <- asv_10 |>
   as.data.frame() #names to be corrected
 
 #Correcting the names
+# Not pretty but it works.
 samples_not_traits$Unique_ID_new <- gsub("F2WY", "F2YW", samples_not_traits$Unique_ID)
+samples_not_traits$Unique_ID_new <- gsub("OPN_5_4_F2YW", "OPN_5_4_F2WY", samples_not_traits$Unique_ID_new)
 
-# Creating a charaters vector to join with sample_ids and filter the sample data
+# Creating a characters vector to join with sample_ids and filter the sample data
 sample_ids <- c(sample_ids, samples_not_traits$Unique_ID_new)
 
+# Return to top to correct the sample names after determining the samples the thre samples that are in `samples_not_traits`.
 ```
 
 ```{r, phyloseq_clean}
+# Phyloseq object with cleaned ASV table
+asv_10_newnames <- asv_10 |>
+  rownames_to_column(var = "Unique_ID") |>
+  mutate(Unique_ID = str_replace(Unique_ID, "CF_13_10_F2WY", "CF_13_10_F2YW"),
+         Unique_ID = str_replace(Unique_ID, "LM_43_23_F2WY", "LM_43_23_F2YW"),
+         Unique_ID = str_replace(Unique_ID, "OPN_5_4_F2YW", "OPN_5_4_F2WY")) |>
+  filter(Unique_ID %in% sample_ids)
+  as.matrix()
 
-SAMP <- rbind(samples_asv_traits, samples_not_traits)
+
+ASV <- asv_10 |>
+  as.data.frame() |>
+  rownames_to_column(var = "Unique_ID") |>
+  mutate(Unique_ID = str_replace(Unique_ID, "CF_13_10_F2WY", "CF_13_10_F2YW"),
+         Unique_ID = str_replace(Unique_ID, "LM_43_23_F2WY", "LM_43_23_F2YW"),
+         Unique_ID = str_replace(Unique_ID, "OPN_5_4_F2YW", "OPN_5_4_F2WY")) |>
+  filter(Unique_ID %in% sample_ids) |>
   column_to_rownames(var = "Unique_ID") |>
-  as.data.frame()
+  as.matrix() |>
+  t() 
+  otu_table(taxa_are_rows = TRUE)
+
+# We have removed contaminants from our ASV table, now we will remove them from our taxonomic table.
+#Removing contaminants from Taxonomic table
+asv_filter <- colnames(asv_10) #Using our cleaned ASV table to filter out the taxonomic table
+
+taxa <- taxa |>
+  as.data.frame() |>
+  rownames_to_column(var = "ASV_ID") |>
+  filter(ASV_ID %in% asv_filter) |> #Filtering out the ASVs in taxonomy that are in the cleaned ASV table
+  column_to_rownames(var = "ASV_ID") |>
+  as.matrix()
+
+taxa_names(taxa) #Should be ASV_#
+TAX <- tax_table(taxa) #1 ASVs (cleaned)
+
+
+SAMP <- samples_asv_traits |>
+  as.data.frame() |>
+  column_to_rownames(var = "Unique_ID") |>
+  sample_data()
+
 # Phyloseq object with cleaned ASV table
 ps_clean <- phyloseq(ASV, TAX, SAMP)
 
 # Checking the dimensions of the object we see that we lost two samples
 #Somewhere in this joining of phyloseq object two samples are lost. We need to find out which ones they are and why they are lost.
-lost <- setdiff(sample_names(ASV), sample_names(SAMP)) #This is the difference between the two sets of samples.
-print(lost) #These are the samples that are lost. They are duplicate samples from the same plant. We proceed without them. 
-
+setdiff(rownames(ASV), sample_names(SAMP)) #This is the difference between the two sets of samples.
+print(lost) #These are the samples that are lost. 
 # Save phyloseq object
 #saveRDS(ps_clean, file.path(out_dir, "clean_data/taxonomy/phyloseq_clean_8859_v2.rds"))
 ```
