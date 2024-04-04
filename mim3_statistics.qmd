@@ -146,12 +146,12 @@ Variables ACI and leaf toughness show up a logical. There must be a character or
 ###################################
 #### Load Phyloseq objects ########
 ###################################
-#Phyloseq joins various objects that we have already prepare: taxonomic table, ASV table and our sample data. These are the data frames resulting from the phyloseq section in mim2_bioinformatics.qmd notebook.
+#Phyloseq joins various objects that we have already prepare: taxonomic table, ASV table and our sample data. These are the data frames resulting from the phyloseq section in mim3_bioinformatics.qmd notebook.
 
 # Load Phyloseq object cleaned of singletons (231 ASVs)
 ps_clean_3 <- readRDS(file.path(path, "clean_data/taxonomy/ASV_8859_v2_phyloseq_nonsingletons.rds"))
 #ps_clean_3_df  <- read.csv(file.path(path, "clean_data/taxonomy/ASV_8859_v2_phyloseq_nonsingletons.csv"))
-pseq_rrfa <- readRDS(file.path(path, "clean_data/statistics/pseq_rrfa.rds")) #Mirlyn object from Method B
+pseq_rrfa <- readRDS(file.path(path, "clean_data/statistics/pseq_rrfa.rds")) #Mirlyn object
 rarefied_phyloseq <- readRDS(file.path(path, "clean_data/statistics/rarefied_phyloseq.rds"))
 ```
 
@@ -211,11 +211,6 @@ my_comparisons2 <- list(c("CF", "LM"), c("CF", "OPN"), c("LM", "OPN"))
 
 # List of ASV samples
 names_list <- colnames(ps_clean_3@otu_table) #List of samples
-
-#Subset data set for NMDS and dbRDA plot
-# Samples resulting from rarefaction
-#ordi_traits <- plant_traits |>
-#  filter(Unique_ID %in% final_names_methodB)
 ```
 
 ## Descriptive stats
@@ -372,6 +367,66 @@ pairwise.wilcox.test(plant_traits$logLBI, g = plant_traits$Genotype)
 
 # Figures
 
+
+### Themes
+
+```{r, themes}
+#ggplot themes
+# Theme for leaf trait and diversity plots: discrete
+theme_lfspp_discrete <-      theme_classic(base_size = 16) +
+  theme(
+    legend.title = element_text(face = "bold"),
+    strip.text = element_text(face = "bold"),
+    panel.border = element_rect(linetype = "blank", fill = NA),
+    legend.text = element_markdown(size = 12),
+    #Make legend text italic
+    axis.text.x = element_blank()
+  )
+
+# Theme for leaf trait plots: continuous
+theme_lfspp_continuous <- theme_classic(base_size = 16) +
+  theme(
+    legend.title = element_text(face = "bold"),
+    panel.border = element_rect(linetype = "blank", fill = NA),
+    legend.text = element_markdown(size = 12),
+    #Make legend text italic
+    axis.text.x = element_text(size = 14),
+    legend.position = "bottom"
+  )
+
+# Theme for species by diversity  plots: discrete
+theme_sppdiv_discrete <-    theme_classic(base_size = 16) +
+  theme(
+    legend.title = element_text(face = "bold"),
+    #strip.text = element_text(face = "italic", size = 14),
+    panel.border = element_rect(linetype = "blank", fill = NA),
+    #legend.text = element_text(face = "italic", size = 12), #Make legend text italic
+    axis.text.x.bottom = element_blank(),
+    axis.title.x = element_blank()
+  )
+
+# Theme for elevation diversity  plots: continuous
+theme_div_discrete <-    theme_classic(base_size = 16) +
+  theme(
+    legend.title = element_text(face = "bold"),
+    #strip.text = element_text(face = "italic", size = 14),
+    panel.border = element_rect(linetype = "blank", fill = NA),
+    axis.text.x.bottom = element_blank(),
+    axis.title.x = element_blank()
+  )
+
+# Theme for leaf trait and diversity  plots: continuous
+theme_lfdiv_continuous <- theme_classic(base_size = 16) +
+  theme(
+    legend.title = element_text(face = "bold"),
+    strip.text = element_text(face = "bold.italic", size = 14),
+    panel.border = element_rect(linetype = "blank", fill = NA),
+    legend.text = element_markdown(size = 14), #Make legend text italic
+    axis.text.x = element_text(size = 14)
+  )
+```
+
+
 ### Leaf traits
 
 ```{r, correlations}
@@ -394,52 +449,6 @@ t4gg <- t4$cal_autocor(group = c("Genotype"), upper = list(continuous = GGally::
   scale_color_manual(values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1)))
 t4gg
 #ggplot2::ggsave(file.path(path, "figures/supp_fig1.png") , plot = t4gg, dpi=300, units=c("mm"), width=300, height=300)
-```
-
-.
-
-```{r, themes}
-#ggplot themes
-# Theme for leaf trait and diversity plots: discrete
-theme_lfspp_discrete <-      theme_classic(base_size = 16) +
-  theme(legend.title = element_text(face = "bold"),
-        strip.text = element_text(face = "bold"),
-        panel.border = element_rect(linetype = "blank", fill = NA),
-        legend.text = element_markdown(size = 12), #Make legend text italic
-        axis.text.x = element_blank())
-
-# Theme for leaf trait plots: continuous
-theme_lfspp_continuous <- theme_classic(base_size = 16) +
-  theme(legend.title = element_text(face = "bold"),
-        panel.border = element_rect(linetype = "blank", fill = NA),
-        legend.text = element_markdown(size = 12), #Make legend text italic
-        axis.text.x = element_text(size = 14),
-        legend.position = "bottom")
-
-# Theme for species by diversity  plots: discrete
-theme_sppdiv_discrete <-    theme_classic(base_size = 16) +
-   theme(legend.title = element_text(face = "bold"),
-         strip.text = element_text(face = "italic", size = 14),
-         panel.border = element_rect(linetype = "blank", fill = NA),
-         legend.text = element_text(face = "italic", size = 12), #Make legend text italic
-         axis.text.x.bottom = element_blank(),
-         axis.title.x = element_blank())
-
-# Theme for elevation diversity  plots: continuous
-theme_elevdiv_discrete <-    theme_classic(base_size = 16) +
-   theme(legend.title = element_text(face = "bold"),
-         strip.text = element_text(face = "italic", size = 14),
-         panel.border = element_rect(linetype = "blank", fill = NA),
-         axis.text.x.bottom = element_blank(),
-         axis.title.x = element_blank())
-
-# Theme for leaf trait and diversity  plots: continuous
-theme_lfdiv_continuous <- theme_classic(base_size = 16) +
-   theme(legend.title = element_text(face = "bold"),
-         strip.text = element_text(face = "bold.italic", size = 14),
-         panel.border = element_rect(linetype = "blank", fill = NA),
-         legend.text = element_markdown(size = 14), #Make legend text italic
-         axis.text.x = element_text(size = 14))
 ```
 
 #### LBI
@@ -467,7 +476,7 @@ lbi_compare_means <- compare_means(LBI ~ Genotype,
 #Roughly the same outcome as pairwise_t_test.
 
 #Report with `compare_means` because it is easier to plot with `ggpubr` package.
-errbar_lims <- group_by(leaf_traits_noB, Species) |> 
+errbar_lims <- group_by(leaf_traits, Genotype) |> 
               summarize(mean = mean(logLBI), se = sd(logLBI)/sqrt(n()), 
                         upper = mean + (2*se), lower = mean - (2*se))
 
@@ -477,17 +486,26 @@ my_comparisons2 <- list(c("CF", "LM"), c("CF", "OPN"), c("LM", "OPN"))
 
 
 lbi <- ggplot(plant_traits, aes(y = logLBI, x = Genotype)) +
-  geom_violin(aes(fill = Genotype)) +
-  #geom_boxplot(width = 0.3, color = "grey30", alpha = 0.2) +
-  geom_crossbar(stat = "summary",
-                fun = mean,
-                fun.max = mean,
-                fun.min = mean,
-                fatten = 1.5, width = 0.8) +
-  geom_point(color = "black", alpha = 0.2,
-             size = 1.7,
-             position = position_jitter(w = 0.05))  +
-  scale_fill_manual(values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) +
+  geom_point(
+    aes(color = Genotype),
+    alpha = 0.2,
+    size = 1.7,
+    position = position_jitter(w = 0.2)
+  ) +
+  geom_boxplot(aes(color = Genotype), alpha = 0.5, outlier.alpha = 0.0) +
+  scale_color_manual(values = met.brewer(
+      "Isfahan2",
+      n = 4,
+      type = "discrete",
+      direction = -1
+    )
+  ) +
+  scale_fill_manual(values = met.brewer(
+    "Isfahan2",
+    n = 4,
+    type = "discrete",
+    direction = -1
+  )) +
   theme_lfspp_discrete +
   labs(y = "log10[LBI (convex_hull - true_area]/convex_hull)]", x = "") +
   stat_compare_means(comparisons = my_comparisons,
@@ -497,7 +515,7 @@ lbi <- ggplot(plant_traits, aes(y = logLBI, x = Genotype)) +
    facet_wrap(~Site)
  
 lbi
-#ggsave(filename = file.path(path, "figures/lbi_violin.png"), plot = lbi, dpi=300, units=c("mm"), width=300, height=150)
+ggsave(filename = file.path(path, "figures/lbi_boxplot.png"), plot = lbi, dpi=300, units=c("mm"), width=300, height=150)
 ```
 
 # Community Diversity
@@ -713,7 +731,7 @@ samples_per_site <- reads |>
 ```
 We have a good balance of genotypes per site. OPN is the site with the most samples (n = 116), CF has n = 89 and LM n = 82.
 
-#### Method A: Rarefaction of sequences \> samples
+#### Rarefaction of sequences \> samples
 
 ```{r, rarefaction_sequence}
 # Phyloseq friendly packages
@@ -754,7 +772,7 @@ ggplot(plant_traits_rfy, aes(x = Genotype, y = shannon_, color = Genotype)) +
 
 Now let's clean it up, select the randomized subsamples, and start plotting.
 
-##### Rarefied data frame Method A
+##### Rarefied data frame
 
 ```{r, rarefaction_output}
 # Method A output
@@ -783,7 +801,7 @@ saveRDS(plant_traits_rfy, file = "clean_data/statistics/plant_traits_rarefied.rd
 write.csv(plant_traits_rfy, file = "clean_data/statistics/plant_traits_rarefied.csv") # Saving rarefied data frame as csv
 
 #Loading rarefied data frame
-#plant_traits_MA <- readRDS("clean_data/statistics/plant_traits_rarefied.rds") # Loading rarefied data frame
+plant_traits_rfy <- readRDS("clean_data/statistics/plant_traits_rarefied.rds") # Loading rarefied data frame
 ```
 
 I now have a data frame with 282 samples with rarefied alpha diversity indices and plant traits. Site counts: OPN n = 111, CF n = 89, LM n = 82. I will use this for downstream analyses. 
@@ -801,9 +819,11 @@ All analyses for alpha and beta diversity below are completed with `plant_traits
 #Names of samples cleaned an filtered
 final_names <- sample_names(pseq_rrfa[[1]]) # Names of samples)
 
-rrfy_asv_table <- as.data.frame(t(rep_otu_df(pseq_rrfa))) |> # Rarefied counts
+rrfy_asv_table <-
+  as.data.frame(t(rep_otu_df(pseq_rrfa))) |> # Rarefied counts
   rownames_to_column("X") |>
-  mutate(Unique_ID =  X, # Copyin column to new column
+  mutate(Unique_ID =  X,
+         # Copyin column to new column
          Unique_ID =  str_remove(Unique_ID, "^.*?(_|-)")) |>
   relocate(Unique_ID, .after = X) |>
   left_join(plant_traits, by = "Unique_ID")
@@ -811,8 +831,9 @@ rrfy_asv_table <- as.data.frame(t(rep_otu_df(pseq_rrfa))) |> # Rarefied counts
 
 #ASV table
 ASV <- rrfy_asv_table |>
-                  column_to_rownames(var = "X") |>
-                 select(-c(1, 534:553))
+  column_to_rownames(var = "X") |>
+  select(-c(1, 534:553))
+
 ASV <- otu_table(t(ASV), taxa_are_rows = TRUE)
 taxa_names(ASV) #Should be ASV_#
 
@@ -826,7 +847,7 @@ TAXA <- TAXA|>
 
 # Sample data
 SAMP <- rrfy_asv_table |>
-  select(c(1:2, 534:553)) |>
+  select(c(1:2, 534:554)) |>
   as.data.frame() |>
   column_to_rownames(var = "X") |>
   sample_data()
@@ -842,16 +863,16 @@ saveRDS(rarefied_phyloseq, file.path(path, "clean_data/statistics/rarefied_phylo
 # Core ASV abundance
 core_abundance(
   rarefied_phyloseq@otu_table,
-  detection = 0.1/100,
-  prevalence = 50/100,
+  detection = 0.1 / 100,
+  prevalence = 50 / 100,
   include.lowest = FALSE
 )
 
 # Rare ASVs
 rare_abundance(
- rarefied_phyloseq@otu_table,
-  detection = 0.1/100,
-  prevalence = 50/100,
+  rarefied_phyloseq@otu_table,
+  detection = 0.1 / 100,
+  prevalence = 50 / 100,
   include.lowest = FALSE
 )
 
@@ -859,6 +880,7 @@ rare_abundance(
 core_tax <- core_members(rarefied_phyloseq, detection = 0.1/100, prevalence = 50/100, include.lowest = FALSE)
 
 rfy_core_filter <- list("ASV_1",  "ASV_2",  "ASV_3",  "ASV_4",  "ASV_5",  "ASV_6",  "ASV_7",  "ASV_8", "ASV_11", "ASV_12", "ASV_19", "ASV_21", "ASV_23")
+
 core_taxa <- taxa |>
   filter(ASV_ID %in% rfy_core_filter)
 
@@ -962,11 +984,53 @@ colnames(asv_avgdist) <- final_names_methodA
 # geo_distm <- readRDS("clean_data/statistics/geo_distm.rds")
 ```
 
+#### ASV abundance barplots
+
+```{r, asv_barplot}
+#Barplots with microeco
+micro_psclean <- phyloseq2meco(ps_clean_3) # First convert phyloseq to meco
+
+
+t1 <- trans_abund$new(dataset = micro_psclean, taxrank = "Phylum", ntaxa = 8)
+t1gg <- t1$plot_bar(others_color = "grey70", facet = c("Site", "Genotype"), xtext_keep = FALSE, legend_text_italic = FALSE, color_values = RColorBrewer::brewer.pal(8, "Set3"))
+t1gg <- t1gg + theme(legend.title = element_text(face = "bold"),
+         strip.text = element_text(face = "bold.italic", size = 12),
+         panel.border = element_rect(linetype = "blank", fill = NA),
+         axis.text.x = element_blank())
+t1gg
+#ggsave(file.path(path, "figures/figure3.png") , plot = t1gg, dpi=300, units=c("mm"), width=200, height=250)
+
+# rarefied Abundance
+micro_rarefied_ps <- phyloseq2meco(rarefied_phyloseq) # First convert phyloseq to meco
+
+r1 <- trans_abund$new(dataset = micro_rarefied_ps, taxrank = "Phylum", ntaxa = 8)
+r1gg <- r1$plot_bar(others_color = "grey70", facet = c("Site", "Genotype"), xtext_keep = FALSE, legend_text_italic = FALSE, color_values = RColorBrewer::brewer.pal(8, "Set3"))
+r1gg <- r1gg + theme(legend.title = element_text(face = "bold"),
+         strip.text = element_text(face = "bold.italic", size = 12),
+         panel.border = element_rect(linetype = "blank", fill = NA),
+         axis.text.x = element_blank())
+r1gg
+
+r2 <- trans_abund$new(dataset = micro_rarefied_ps, taxrank = "Genus", ntaxa = 10)
+r2gg <- r2$plot_heatmap(facet = c("Site", "Genotype"), xtext_keep = FALSE, withmargin = FALSE) + theme(legend.title = element_text(face = "bold"),
+         strip.text = element_text(face = "bold.italic", size = 12),
+         panel.border = element_rect(linetype = "blank", fill = NA),
+         axis.text.x = element_blank())
+
+r2gg
+```
+
+
 #### Hill number plots
+##### Alpha diversity
 
 ```{r, hill_numbers}
 # Shannon Diversity or hill number 1
 # Three main faceted plots come out of this chunk
+############################################
+#### Alpha diversity ####
+#### At the species level ####
+############################################
 
 ########## Labels ###########
 #Legend title label
@@ -976,284 +1040,114 @@ labels_list <- c("M. laciniatus", "M. nasutus", "M. guttatus")
 names(labels_list) <- c("L", "N", "G")
 #############################
 
-#####################################################
-#### Alpha diversity ####
-#### Across elevation ####
-#####################################################
-# Hill number 0 
-# Species richness or hill number 0
-
-#Linear model summary
-#summary(lm(Observed ~ Elevation_m, data = plant_traits_rf))
-#richness_p <- format.p(cor.test(plant_traits$Observed, plant_traits$Elevation_m)$p.value) # This is just to make the p-value nicer. 
-# Species labels
-labels_list <- c("M. laciniatus", "M. nasutus", "M. guttatus")
-names(labels_list) <- c("L", "N", "G")
-
 # Plot
-hill0_diversity <- ggplot(data = plant_traits_MB, 
-                          aes(x = Elevation_m, y = Observed, color = Species)) +
-   geom_jitter(aes(color = Species), 
-               #stat = "summary",
-               #fun = mean,
-               size = 3, alpha = 0.3) + 
-   #geom_smooth(method = lm, se = F) +
-  geom_smooth(method = lm, se = T, level = 0.95, na.rm = F, color = "black") +
-  stat_poly_eq(formula = y ~ x, color = "black",
-               aes(label = paste(#..eq.label.., 
-                 ..adj.rr.label.., #"~italic(p) ==",
-                 ..p.value.label.., 
-                 #signif(..p.value.., digits = 4),
-                 sep = "*`,`~~")), 
-               rr.digits = 2,
-               p.digits = 3 ,
-               parse = TRUE,
-               label.x = "left",
-               label.y= "top",
-               vstep = 0.08) +
-   scale_fill_manual(labels = c("*M. laciniatus*","*M. nasutus*", "*M. guttatus*"), 
-                     values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) + 
-   scale_color_manual(legend_title, labels = c("*M. laciniatus*", "*M. nasutus*", "*M. guttatus*"), 
-                      values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) + 
-   theme_lfdiv_continuous +
-   labs(y =  "\U1D492 = 0", x = "", col = "") + 
-   scale_y_continuous(expand = c(0.05, 0.05)) +
-  scale_x_continuous(expand = c(0.05, 0.05)) +
-  facet_wrap(~ Species) +
-  guides(color = "none")        #To turn off color legend
-  # annotate(geom = "text", x = 2100, y = 2.5, label = "p = 0.03", color = "black")
-#annotate(geom="text", x=2100, y=50, label="p = 0.06", color = "black")
-
-#hill0_diversity
-
-#ggsave(filename = file.path(path, "figures/richness_elevation.png"), plot = hill0_diversity, dpi=300, units=c("mm"), width=250, height=150)
-
-# Linear models per species
-# Linear model summary
-# M. laciniatus
-#summary(lm(Observed ~ Elevation_m, data = plant_traits[plant_traits$Species == "L",]))
-#Not significant
-
-# M. nasutus
-#summary(lm(Observed ~ Elevation_m, data = plant_traits[plant_traits$Species == "N",]))
-#Not significant
-
-# M. guttatus
-#summary(lm(Observed~ Elevation_m, data = plant_traits[plant_traits$Species == "G",]))
-#Not significant
-
-# Hill number 1
-# Shannon diversity or hill number 1
-# Linear model summary
-#summary(lm(Shannon ~ Elevation_m, data = plant_traits))
-#elev_div_p <- format.p(cor.test(plant_traits$Shannon, plant_traits$Elevation_m)$p.value) # This is just to make the p-value nicer. 
-
-# Plot
-hill1_diversity <- ggplot(data = plant_traits_MB,
-                          aes(x = Elevation_m, y = hill_1, color = Species)) +
-   geom_jitter(aes(color = Species), 
-               #stat = "summary",
-               #fun = mean,
-               size = 3, alpha = 0.3) + 
-   geom_smooth(method = lm, se = F) + 
-   geom_smooth(method = lm, se = T, level = 0.95, na.rm = F, color = "black") + 
-  stat_poly_eq(formula = y ~ x, color = "black",
-               aes(label = paste(#..eq.label.., 
-                 ..adj.rr.label.., #"~italic(p) ==",
-                 ..p.value.label.., 
-                 #signif(..p.value.., digits = 4),
-                 sep = "*`,`~~")), 
-               rr.digits = 2,
-               p.digits = 3 ,
-               parse = TRUE,
-               label.x = "left",
-               label.y = "top",
-               vstep = 0.08) +
-   #scale_fill_manual(labels = c("*M. laciniatus*","*M. nasutus*", "*M. guttatus*"), 
-                     #values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) + 
-   scale_color_manual(legend_title,
-                     values = met.brewer("Isfahan2", n = 4, type = "discrete", 
-                                          direction = c(-1))) + 
-  labs(y = "\U1D492 = 1", x = "", col = "") +
-  scale_y_continuous(expand = c(0.05, 0.05)) +
-  theme_lfdiv_continuous +
-  theme(strip.text = element_blank()) +
-  #facet_wrap(~ Species, labeller = labeller(Species = labels_list)) +
-  facet_wrap(~ Species) +
-  guides(color = "none")        #To turn off color legend
-
-#hill1_diversity
-
-#ggsave(filename = file.path(path, "figures/shannon_elevation.png"), plot = hill1_diversity, dpi=300, units=c("mm"), width=250, height=150)
-
-# Linear models per species
-# Linear model summary
-# M. laciniatus
-#summary(lm(hill_1 ~ Elevation_m, data = plant_traits[plant_traits$Species == "L",]))
-#Not significant
-
-# M. nasutus
-#summary(lm(hill_1 ~ Elevation_m, data = plant_traits[plant_traits$Species == "N",]))
-#Not significant
-
-# M. guttatus
-#summary(lm(hill_1 ~ Elevation_m, data = plant_traits[plant_traits$Species == "G",]))
-#Not significant
-
-# Hill number 2
-# Inverse Simpson diversity or hill number 2
-# Linear model summary
-#summary(lm(hill_2 ~ Elevation_m, data = plant_traits))
-#elev_div_p <- format.p(cor.test(plant_traits$Shannon, plant_traits$Elevation_m)$p.value) # This is just to make the p-value nicer. 
-
-# Plot
-hill2_diversity <- ggplot(data = plant_traits_MB, 
-  aes(x = Elevation_m, y = hill_2, color = Species)) +
-   geom_jitter(aes(color = Species), 
-               #stat = "summary",
-               #fun = mean,
-               size = 3, alpha = 0.3) + 
-   geom_smooth(method = lm, se = F) + 
-   # stat_regline_equation(aes(label = paste(..eq.label.., ..adj.rr.label.., sep = '~~~~'))) 
-   geom_smooth(method = lm, se = T, level = 0.95, na.rm = F, color = "black") + 
-  stat_poly_eq(formula = y ~ x, color = "black",
-               aes(label = paste(#..eq.label.., 
-                 ..adj.rr.label.., #"~italic(p) ==",
-                 ..p.value.label.., 
-                 #signif(..p.value.., digits = 4),
-                 sep = "*`,`~~")), 
-               rr.digits = 2,
-               p.digits = 3 ,
-               parse = TRUE,
-               label.x = "left",
-               label.y = "top",
-               vstep = 0.08) +
-   #scale_fill_manual(labels = c("*M. laciniatus*","*M. nasutus*", "*M. guttatus*"), 
-                     #values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) + 
-   scale_color_manual(legend_title, labels = c("*M. laciniatus*", "*M. nasutus*", "*M. guttatus*"), 
-                     values = met.brewer("Isfahan2", n = 4, type = "discrete", 
-                                          direction = c(-1))) + 
-  labs(y = "\U1D492 = 2", x = "Elevation (m.a.s.l.)", col = "") +
-  theme_lfdiv_continuous +
-  theme(strip.text = element_blank()) +
-  #facet_wrap(~ Species, labeller = labeller(Species = labels_list)) +
-  facet_wrap(~ Species) +
-  guides(color = "none")        #To turn off color legend
-
-#hill2_diversity
-
-#ggsave(filename = file.path(path, "figures/invsimpson_elevation.png"), plot = hill2_diversity, dpi=300, units=c("mm"), width=250, height=150)
-
-# Linear models per species
-# Linear model summary
-# M. laciniatus
-#summary(lm(hill_2 ~ Elevation_m, data = plant_traits[plant_traits$Species == "L",]))
-#Not significant
-
-# M. nasutus
-#summary(lm(hill_2 ~ Elevation_m, data = plant_traits[plant_traits$Species == "N",]))
-#Not significant
-
-# M. guttatus
-#summary(lm(hill_2 ~ Elevation_m, data = plant_traits[plant_traits$Species == "G",]))
-#Not significant
-
-
-###### Joined plots ######
-hill_numbers <- ggarrange(hill0_diversity, hill1_diversity, hill2_diversity,
-                          labels = c("A", "B", "C"),
-                          nrow = 3, ncol = 1)
-
-hill_numbers
-#ggsave(filename = file.path(path, "figures/figure2.png"), plot = hill_numbers, dpi=300, units=c("mm"), width=300, height=275)
-
-############################################
-#### Alpha diversity ####
-#### At the species level ####
-############################################
-
-labels_list <- c("M. laciniatus", "M. nasutus", "M. guttatus")
-names(labels_list) <- c("L", "N", "G")
-
-# Plot
-hill0_species <- ggplot(data = plant_traits_MB, 
-  aes(x = Species, y = Observed)) +
-  geom_boxplot(aes(fill = Species)) +
-  # geom_crossbar(stat="summary",
-  #               fun = mean,
-  #               fun.max = mean,
-  #               fun.min = mean,
-  #               fatten = 1.5, width = 0.8) +
-  # geom_point(color="black", alpha = 0.2,
-  #            size=1.7, 
-  #            position = position_jitter(w = 0.05))  +
-  scale_fill_manual(labels=c('*M. laciniatus*', '*M. nasutus*', '*M. guttatus*'),
-                    values= met.brewer("Isfahan2", n = 4, type = "discrete", direction = -1)) +
-  scale_color_manual(aes(color = "black")) +
+hill0_species <- ggplot(data = plant_traits_rfy,
+                        aes(x = Genotype, y = Observed)) +
+  geom_point(
+    aes(color = Genotype),
+    alpha = 0.2,
+    size = 1.7,
+    position = position_jitter(w = 0.2)
+  ) +
+  geom_boxplot(aes(color = Genotype), alpha = 0.5, outlier.alpha = 0.0) +
+  scale_color_manual(values = met.brewer(
+      "Isfahan2",
+      n = 4,
+      type = "discrete",
+      direction = -1
+    )
+  ) +
+  scale_fill_manual(values = met.brewer(
+    "Isfahan2",
+    n = 4,
+    type = "discrete",
+    direction = -1
+  )) +
+  #scale_color_manual(aes(color = "black")) +
   theme_sppdiv_discrete +
-  labs(y =  "\U1D492 = 0", x = "", col = "") + 
+  labs(y =  "\U1D492 = 0", x = "", col = "") +
+  guides(color = guide_legend(title = "Genotype")) +
   stat_compare_means(comparisons = my_comparisons,
-                     method = "wilcox.test", 
-                     label = "p.signif") 
-  #guides(color = "none")        #To turn off color legend
-  
+                     method = "wilcox.test",
+                     label = "p.signif")
+
 hill0_species
-# annotate(geom = "text", x = 2100, y = 2.5, label = "p = 0.03", color = "black")
-#annotate(geom="text", x=2100, y=50, label="p = 0.06", color = "black")
 
 
 # Hill number 1
 # Shannon diversity or hill number 1
 # Plot
-hill1_species <- ggplot(data = plant_traits_MB, 
-  aes(x = Species, y = hill_1)) +
-  geom_boxplot(aes(fill = Species)) +
-  # geom_crossbar(stat="summary",
-  #               
-  #               fun = mean,
-  #               fun.max = mean,
-  #               fun.min = mean,
-  #               fatten = 1.5, width = 0.8) +
-  # geom_point(color="black", alpha = 0.2,
-  #            size=1.7, 
-  #            position = position_jitter(w = 0.05))  +
-  scale_fill_manual(values= met.brewer("Isfahan2", n = 4, type = "discrete", direction = -1)) +
-  scale_color_manual(aes(color = "black")) +
+hill1_species <- ggplot(data = plant_traits_rfy,
+                        aes(x = Genotype, y = hill_1)) +
+  geom_point(
+    aes(color = Genotype),
+    alpha = 0.2,
+    size = 1.7,
+    position = position_jitter(w = 0.2)
+  ) +
+  geom_boxplot(aes(color = Genotype), alpha = 0.5, outlier.alpha = 0.0) +
+  scale_color_manual(values = met.brewer(
+      "Isfahan2",
+      n = 4,
+      type = "discrete",
+      direction = -1
+    )
+  ) +
+  scale_fill_manual(values = met.brewer(
+    "Isfahan2",
+    n = 4,
+    type = "discrete",
+    direction = -1
+  )) +
+  #scale_color_manual(aes(color = "black")) +
   theme_sppdiv_discrete +
-  labs(y =  "\U1D492 = 1", x = "", col = "") + 
-  scale_y_continuous(expand = c(0.05, 0.05)) +
+  labs(y =  "\U1D492 = 1", x = "", col = "") +
+  guides(color = guide_legend(title = "Genotype")) +
   stat_compare_means(comparisons = my_comparisons,
-                     method = "wilcox.test", 
-                     label = "p.signif") 
- # facet_wrap(~ Species, labeller = labeller(Species = labels_list)) +
- # guides(color = "none")        #To turn off color legend
+                     method = "wilcox.test",
+                     label = "p.signif")
   
 hill1_species
 
 
 # Hill number 2
 # Inverse Simpson diversity or hill number 2
-hill2_species <- ggplot(data = plant_traits_MB, 
-                        aes(x = Species, y = hill_2)) +
-  geom_boxplot(aes(fill = Species)) +
+hill2_species <- ggplot(data = plant_traits_rfy,
+                        aes(x = Genotype, y = hill_2)) +
+  geom_point(
+    aes(color = Genotype),
+    alpha = 0.2,
+    size = 1.7,
+    position = position_jitter(w = 0.2)
+  ) +
+  geom_boxplot(aes(color = Genotype), alpha = 0.5, outlier.alpha = 0.0) +
   # geom_crossbar(stat="summary",
-  #               fun = mean,
-  #               fun.max = mean,
-  #               fun.min = mean,
-  #               fatten = 1.5, width = 0.8) +
-  # geom_point(color="black", alpha = 0.2,
-  #            size=1.7, 
-  #            position = position_jitter(w = 0.05))  +
-  scale_fill_manual(labels=c('*M. laciniatus*', '*M. nasutus*', '*M. guttatus*'),
-                    values= met.brewer("Isfahan2", n = 4, type = "discrete", direction = -1)) +
-  scale_color_manual(aes(color = "black")) +
+  #               fun = median,
+  #               fun.max = median,
+  #               fun.min = median,
+  #               fatten = 2,
+  #               width = 0.8,
+  #               color="black") +
+  scale_color_manual(values = met.brewer(
+      "Isfahan2",
+      n = 4,
+      type = "discrete",
+      direction = -1
+    )
+  ) +
+  scale_fill_manual(values = met.brewer(
+    "Isfahan2",
+    n = 4,
+    type = "discrete",
+    direction = -1
+  )) +
+  #scale_color_manual(aes(color = "black")) +
   theme_sppdiv_discrete +
-  labs(y =  "\U1D492 = 2", x = "", col = "") + 
+  labs(y =  "\U1D492 = 2", x = "", col = "") +
+  guides(color = guide_legend(title = "Genotype")) +
   stat_compare_means(comparisons = my_comparisons,
-                     method = "wilcox.test", 
-                     label = "p.signif") 
- # facet_wrap(~ Species, labeller = labeller(Species = labels_list)) +
- #guides(color = "none")        #To turn off color legend
+                     method = "wilcox.test",
+                     label = "p.signif")
   
 hill2_species
 
@@ -1265,63 +1159,90 @@ hill_numbers_species <- ggarrange(hill0_species, hill1_species, hill2_species,
                                   legend = "bottom")
 
 hill_numbers_species
-#ggsave(filename = file.path(path, "figures/hill_numbers_species.png"), plot = hill_numbers_species, dpi=300, units=c("mm"), width=250, height=275)
+ggsave(filename = file.path(path, "figures/hill_numbers_species.png"), plot = hill_numbers_species, dpi=300, units=c("mm"), width=250, height=275)
+```
 
+##### Beta diversity
+```{r, beta_hill}
 #################################
 #### Beta diversity ####
-#### Across elevation ####
+#### Across sites ####
 #################################
+
+########## Labels ###########
+#Legend title label
+legend_title <- "Species"
+# Species labels
+labels_list <- c("M. laciniatus", "M. nasutus", "M. guttatus")
+names(labels_list) <- c("L", "N", "G")
+#############################
 
 # Observed richness
 # Hill number 0
-hill0_beta <-  ggplot(plant_traits_MB, aes(x = Elevation_cat, y = Observed)) +
-  geom_boxplot(aes(fill = Elevation_cat)) +
-  # geom_crossbar(stat="summary", 
-  #               fun = mean, 
-  #               fun.max = mean, 
-  #               fun.min = mean,  
-  #               fatten = 2, 
-  #               width = 0.5, 
-  #               color="black") +
-  # geom_point(aes(shape = Species),color="black", alpha = 0.4,size= 2.5, position = position_jitter(w=0.05)) +
-   scale_color_manual(labels=c('Low', 'Mid', 'High'),values= met.brewer("Cassatt1", n = 3, type = "discrete", direction = -1)) +
-  scale_fill_manual(labels=c('Low', 'Mid', 'High'),values= met.brewer("Cassatt1", n = 3, type = "discrete", direction = -1)) +
-  scale_shape_manual(values=c(15:18),labels=c('*M. laciniatus*', '*M. nasutus*', '*M. guttatus*')) +
-  theme_elevdiv_discrete +
+hill0_beta <-
+  ggplot(plant_traits_rfy, aes(x = Site, y = Observed)) +
+  geom_point(
+    aes(shape = Genotype),
+    alpha = 0.2,
+    size = 1.7,
+    position = position_jitter(w = 0.2)
+  )+
+  geom_boxplot(aes(color = Site), alpha = 0.5, outlier.alpha = 0.0) +
+  scale_color_manual(
+    labels = c('Crane Flat', 'Little Meadow', 'Olmstead Point'),
+    values = met.brewer(
+      "Cassatt1",
+      n = 3,
+      type = "discrete",
+      direction = -1
+    )
+  ) +
+  scale_shape_manual(
+    values = c(15:18),
+  ) +
+  theme_div_discrete +
   scale_x_discrete(labels = c('', '', '', '')) +
-  stat_compare_means(comparisons = my_comparisons3,
-                     method = "wilcox.test", 
+  stat_compare_means(comparisons = my_comparisons2,
+                     method = "wilcox.test",
                      label = "p.signif") +
   labs(y = "\U1D492 = 0", x = "") +
-  guides(fill = guide_legend(title = "Elevation"), shape = guide_legend(title = "Species"))
+  guides(fill = guide_legend(title = "Site"),
+         shape = guide_legend(title = "Genotype"))
 
 hill0_beta
 
-#ggsave(file.path(path, "figures/shannon_elevation.png") , plot = bbe, dpi=300, units=c("mm"), width=200, height=150)
+
 
 # Hill number 1
 # Shannon diversity or hill number 1
-hill1_beta <- ggplot(plant_traits_MB, aes(x = Elevation_cat, y = hill_1)) +
-  
-  geom_boxplot(aes(fill = Elevation_cat)) +
-  # geom_crossbar(stat="summary", 
-  #               fun = mean, 
-  #               fun.max = mean, 
-  #               fun.min = mean,  
-  #               fatten = 2, 
-  #               width = 0.5, 
-  #               color="black") +
-  # geom_point(aes(shape = Species),color="black", alpha = 0.4,size= 2.5, position = position_jitter(w=0.05)) +
-   scale_color_manual(labels=c('Low', 'Mid', 'High'),values= met.brewer("Cassatt1", n = 3, type = "discrete", direction = -1)) +
-  scale_fill_manual(labels=c('Low', 'Mid', 'High'),values= met.brewer("Cassatt1", n = 3, type = "discrete", direction = -1)) +
-  scale_shape_manual(values=c(15:18),labels=c('*M. laciniatus*', '*M. nasutus*', '*M. guttatus*')) +
-  theme_elevdiv_discrete +
+hill1_beta <- ggplot(plant_traits_rfy, aes(x = Site, y = hill_1)) +
+  geom_point(
+    aes(shape = Genotype),
+    alpha = 0.2,
+    size = 1.7,
+    position = position_jitter(w = 0.2)
+  )+
+  geom_boxplot(aes(color = Site), alpha = 0.5, outlier.alpha = 0.0) +
+  scale_color_manual(
+    labels = c('Crane Flat', 'Little Meadow', 'Olmstead Point'),
+    values = met.brewer(
+      "Cassatt1",
+      n = 3,
+      type = "discrete",
+      direction = -1
+    )
+  ) +
+  scale_shape_manual(
+    values = c(15:18),
+  ) +
+  theme_div_discrete +
   scale_x_discrete(labels = c('', '', '', '')) +
-  stat_compare_means(comparisons = my_comparisons3,
-                     method = "wilcox.test", 
+  stat_compare_means(comparisons = my_comparisons2,
+                     method = "wilcox.test",
                      label = "p.signif") +
   labs(y = "\U1D492 = 1", x = "") +
-  guides(fill = guide_legend(title = "Elevation"), shape = guide_legend(title = "Species"))
+  guides(fill = guide_legend(title = "Site"),
+         shape = guide_legend(title = "Genotype"))
 
 hill1_beta
 
@@ -1329,26 +1250,41 @@ hill1_beta
 # Hill number 2
 # Inverse Simpson diversity or hill number 2
 
-hill2_beta <- ggplot(plant_traits_MB, aes(x = Elevation_cat, y = hill_2, color = Elevation_cat)) +
-  
-  geom_boxplot(aes(fill = Elevation_cat), alpha = 0.5) +
-  # geom_crossbar(stat="summary", 
-  #               fun = mean, 
-  #               fun.max = mean, 
-  #               fun.min = mean,  
-  #               fatten = 2, 
-  #               width = 0.5, 
+hill2_beta <- ggplot(plant_traits_rfy, aes(x = Site, y = hill_2)) +
+  geom_point(
+    aes(shape = Genotype),
+    alpha = 0.2,
+    size = 1.7,
+    position = position_jitter(w = 0.2)
+  )+
+  geom_boxplot(aes(color = Site), alpha = 0.5, outlier.alpha = 0.0) +
+  # geom_crossbar(stat="summary",
+  #               fun = mean,
+  #               fun.max = mean,
+  #               fun.min = mean,
+  #               fatten = 2,
+  #               width = 0.5,
   #               color="black") +
-  # geom_point(aes(shape = Species),color="black", alpha = 0.4,size= 2.5, position = position_jitter(w=0.05)) +
-   scale_color_manual(labels=c('Low', 'Mid', 'High'),values= met.brewer("Cassatt1", n = 3, type = "discrete", direction = -1)) +
-  scale_fill_manual(labels=c('Low', 'Mid', 'High'),values= met.brewer("Cassatt1", n = 3, type = "discrete", direction = -1)) +
-  theme_elevdiv_discrete +
+  scale_color_manual(
+    labels = c('Crane Flat', 'Little Meadow', 'Olmstead Point'),
+    values = met.brewer(
+      "Cassatt1",
+      n = 3,
+      type = "discrete",
+      direction = -1
+    )
+  ) +
+  scale_shape_manual(
+    values = c(15:18),
+  ) +
+  theme_div_discrete +
   scale_x_discrete(labels = c('', '', '', '')) +
-  stat_compare_means(comparisons = my_comparisons3,
-                     method = "wilcox.test", 
+  stat_compare_means(comparisons = my_comparisons2,
+                     method = "wilcox.test",
                      label = "p.signif") +
   labs(y = "\U1D492 = 2", x = "") +
-  guides(fill = guide_legend(title = "Elevation"), color = guide_legend(title = "Elevation"))
+  guides(fill = guide_legend(title = "Site"),
+         shape = guide_legend(title = "Genotype"))
 
 hill2_beta
 
@@ -1359,7 +1295,7 @@ hill_beta <- ggarrange(hill0_beta, hill1_beta, hill2_beta,
           common.legend = TRUE,
           legend = "bottom",
           labels = c("D", "E", "F"))
-# hill_beta
+hill_beta
 
 #### Alpha and Beta diversity ####
 # Joined plots
@@ -1375,7 +1311,7 @@ alpha_beta_diversity <- ggarrange(hill_numbers_species, "", hill_beta,
 
 alpha_beta_diversity
 
-#ggsave(filename = file.path(path, "figures/figure3.png"), plot = alpha_beta_diversity, dpi=300, units=c("mm"), width=300, height=275)
+ggsave(filename = file.path(path, "figures/figure3.png"), plot = alpha_beta_diversity, dpi=300, units=c("mm"), width=300, height=275)
 ```
 
 #### Mantel tests and correlations
@@ -1701,47 +1637,7 @@ ant_arranged_with_caption
 
 ```
 
-#### ASV barplot
 
-```{r, asv_barplot}
-#Barplots with microeco
-# Quick addition trais log transformed
-ps_clean_3@sam_data <- plant_traits |>
-  filter(Unique_ID %in% names_list) |>
-  select(c(1:12, 15:20)) |>
-  sample_data()
-
-micro_psclean <- phyloseq2meco(ps_clean_3) # First convert phyloseq to meco
-
-
-t1 <- trans_abund$new(dataset = micro_psclean, taxrank = "Phylum", ntaxa = 8)
-t1gg <- t1$plot_bar(others_color = "grey70", facet = c("Species", "Elevation_cat"), xtext_keep = FALSE, legend_text_italic = FALSE, color_values = RColorBrewer::brewer.pal(8, "Set3"))
-t1gg <- t1gg + theme(legend.title = element_text(face = "bold"),
-         strip.text = element_text(face = "bold.italic", size = 12),
-         panel.border = element_rect(linetype = "blank", fill = NA),
-         axis.text.x = element_blank())
-t1gg
-#ggsave(file.path(path, "figures/figure3.png") , plot = t1gg, dpi=300, units=c("mm"), width=200, height=250)
-
-# rarefied Abundance
-micro_rarefied_ps <- phyloseq2meco(rarefied_phyloseq) # First convert phyloseq to meco
-
-r1 <- trans_abund$new(dataset = micro_rarefied_ps, taxrank = "Phylum", ntaxa = 8)
-r1gg <- r1$plot_bar(others_color = "grey70", facet = c("Species", "Elevation_cat"), xtext_keep = FALSE, legend_text_italic = FALSE, color_values = RColorBrewer::brewer.pal(8, "Set3"))
-r1gg <- r1gg + theme(legend.title = element_text(face = "bold"),
-         strip.text = element_text(face = "bold.italic", size = 12),
-         panel.border = element_rect(linetype = "blank", fill = NA),
-         axis.text.x = element_blank())
-r1gg
-
-r2 <- trans_abund$new(dataset = micro_rarefied_ps, taxrank = "Genus", ntaxa = 10)
-r2gg <- r2$plot_heatmap(facet = c("Species", "Elevation_cat"), xtext_keep = FALSE, withmargin = FALSE) + theme(legend.title = element_text(face = "bold"),
-         strip.text = element_text(face = "bold.italic", size = 12),
-         panel.border = element_rect(linetype = "blank", fill = NA),
-         axis.text.x = element_blank())
-
-r2gg
-```
 
 ### dbRDA
 
@@ -1753,42 +1649,52 @@ r2gg
 # Traits for dbRDA
 dbrda_hell_matrix <- rrfy_hell_matrix |>
   column_to_rownames(var = "X") |>
-  select(-c(1, 233:256))
+  select(-c(1, 534:553))
 
 dbrda_traits <- rrfy_hell_matrix |>
-  select(X, Unique_ID, Site, Species, Elevation_m, Elevation_cat, Sample_Date, logACI, logLT, logLPS, logLMA, logLBI)
+  select(X, Unique_ID, Site, Genotype, logLBI)
 ```
 
 ```{r}
 # Model with intercept only ####
 # Using rrfy_hell_matrix as the distance matrix
-m0_hell <- dbrda(dbrda_hell_matrix ~ 1,
-            distance = "bray",
-            dfun = vegdist,
-            data = dbrda_traits,
-            parallel = 8, #Passes parallelization to metaMDS function
-            na.action = na.omit) #Model with intercept only.
+m0_hell <- dbrda(
+  dbrda_hell_matrix ~ 1,
+  distance = "bray",
+  dfun = vegdist,
+  data = dbrda_traits,
+  parallel = 8, #Passes parallelization to metaMDS function
+  na.action = na.omit
+) #Model with intercept only.
 
-m1_hell <- dbrda(dbrda_hell_matrix ~ ., 
-            distance = "bray", 
-            dfun = vegdist,
-            data = dbrda_traits,
-            parallel = 8, #Passes parallelization to metaMDS function
-            na.action = na.omit) # Model with all explanatory variables.
+m1_hell <- dbrda(
+  dbrda_hell_matrix ~ .,
+  distance = "bray",
+  dfun = vegdist,
+  data = dbrda_traits,
+  parallel = 8,
+  na.action = na.omit
+) # Model with all explanatory variables.
 
 # Model with species, site, leaf traits and elevation. ####
-m2_hell <- dbrda(dbrda_hell_matrix ~ logLBI + Elevation_m + Sample_Date + Site + Species,  
-            distance = "bray",
-            dfun = vegdist,
-            data = dbrda_traits,
-            parallel = 8, #Passes parallelization to metaMDS function
-            na.action = na.omit)
+m2_hell <-
+  dbrda(
+    dbrda_hell_matrix ~ logLBI + Site + Genotype,
+    distance = "bray",
+    dfun = vegdist,
+    data = dbrda_traits,
+    parallel = 8,
+    na.action = na.omit
+  )
 
 #Anovas for m2
 set.seed(123)
-anova.cca(m2_hell, by = "margin", permutations = 999, parallel = 8)
+anova.cca(m2_hell,
+          by = "margin",
+          permutations = 999,
+          parallel = 8)
 anova(m2_hell, by = "axis")
-anova(m2_hell, by = "axis", perm.max=500)
+anova(m2_hell, by = "axis", perm.max = 500)
 ```
 
 ##### Forward and backward selection with ordistep
