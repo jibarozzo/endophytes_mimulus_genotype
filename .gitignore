@@ -1,4 +1,4 @@
-
+﻿
 # History files
 .Rhistory
 .Rapp.history
@@ -20,8 +20,8 @@
 .Rproj.user/
 
 # Directories with big files
-preprocess/pre_8859/derepFs_8859.rds
-preprocess/pre_8859/derepRs_8859.rds
+preprocess/derepFs_8859_v2.rds
+preprocess/derepRs_8859_v2.rds
 filtered/
 clean_data/taxonomy/sh_general_release_dynamic_s_25.07.2023_dev.fasta
 clean_data/taxonomy/sh_general_release_dynamic_s_25.07.2023.fasta

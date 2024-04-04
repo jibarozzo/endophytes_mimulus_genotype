@@ -2315,6 +2315,21 @@
       ],
       "Hash": "5b2c97022c4b5cfbc3838315a3bf7867"
     },
+    "iNEXT": {
+      "Package": "iNEXT",
+      "Version": "3.0.1",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "R",
+        "Rcpp",
+        "ggplot2",
+        "graphics",
+        "reshape2",
+        "stats"
+      ],
+      "Hash": "81766ec84732c1c3c19164d1f97feae2"
+    },
     "ids": {
       "Package": "ids",
       "Version": "1.0.1",
@@ -3006,6 +3021,18 @@
         "stats"
       ],
       "Hash": "5a15e068f0bd9bac4252f8f9e11dc79f"
+    },
+    "parallelly": {
+      "Package": "parallelly",
+      "Version": "1.37.1",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "parallel",
+        "tools",
+        "utils"
+      ],
+      "Hash": "5410df8d22bd36e616f2a2343dbb328c"
     },
     "patchwork": {
       "Package": "patchwork",
