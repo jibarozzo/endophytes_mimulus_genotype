@@ -61,13 +61,13 @@ path <- "../mim3_bioinformatics" # Change accordingly
 
 # Objective of the notebook
 
-The goal of this notebook is to explore the relationship between leaf endophytes of *Mimulus* spp. with elevation and host leaf traits. I attempt to analyze in every possible way by firs performing descriptive statistics and then the adequate analyses for each question. The notebook is meant to serves as a draft for the analyses I include in the manuscript. Because of this there will be some differences between the documents. The code here can be at times messy and not well organized. The manuscript document has all the refined code for plots and analyses. I try to keep both documents as similar as possible, but the manuscript document is the final product. Here you may find violin plots and the manuscript boxplots, things like that.
+The goal of this notebook is to explore how endophytes differ in *Mimulus* in a reciprocal transplant experiment in Yosemite National Park. The code here can be at times messy and not well organized. The manuscript document has all the refined code for plots and analyses. I try to keep both documents as similar as possible, but the manuscript document is the final product. Here you may find violin plots and the manuscript boxplots, things like that.
 
 # Data sets
 
 ## Cleaning and Shaping
 
-This section cleans and shapes the raw data into two main data frames: `leaf_traits` and `plant_traits`. The first has all data point for leaf trait measurements at the leaf level (raw) and the second one represents the average per plant while incorporating FEF community data. The FEF community data is only available for 160/320 samples. For the downstream analyses, we eliminated *M. bicolor* or species "B" from the leaf trait data set and the phyloseq object (see `mim2_bioinformatics.qmd`). The removal of this is due to a small sample size for leaf trait measurements and even smaller for FEF community data (*n* = 3). The removal is not explicit in `plant_traits` it is only explicit in the subset `leaf_traits_noB` and and phyloseq objects. This is important for the rarefaction of sequence dept and later on in the `asv_matrix` that gives way for community analyses in [Community Diversity]. I include a custom function for p-value formatting.
+This section cleans and shapes the raw data into two main data frames: `leaf_traits` and `plant_traits`. The first has all data point for leaf trait measurements at the leaf level (raw) and the second one represents the average per plant while incorporating FEF community data. The FEF community data is only available for 287 samples.This is important for the rarefaction of sequence dept and later on in the `asv_matrix` that gives way for community analyses in [Community Diversity]. I include a custom function for p-value formatting.
 
 ### Raw data sets
 
@@ -113,6 +113,7 @@ pooled_parental <- leaf_traits |>
 plant_traits <- leaf_traits |>
     bind_rows(pooled_parental) |> # Adding pooled samples. Samples that are part of the pool are still present. 
   group_by(Unique_ID, Site, Block, Genotype)|>
+  filter(!Site == "YCN") |> # Removing YCN site
   summarise(ACI = mean(ACI, na.rm = TRUE),
             LT = mean(Leaf_thickness, na.rm = TRUE),
             LPS= mean(Leaf_toughness, na.rm =TRUE),
@@ -138,6 +139,9 @@ plant_traits <- leaf_traits |>
  saveRDS(plant_traits, file.path(path, "clean_data/statistics/plant_traits.rds"))
 ```
 
+Variables ACI and leaf toughness show up a logical. There must be a character or something in the raw data that is causing this. I will ignore this for now. 04/03/2024
+
+
 ### Phyloseq, mirl, and meco objects
 ```{r, phylo_objects}
 ###################################
@@ -146,8 +150,8 @@ plant_traits <- leaf_traits |>
 #Phyloseq joins various objects that we have already prepare: taxonomic table, ASV table and our sample data. These are the data frames resulting from the phyloseq section in mim2_bioinformatics.qmd notebook.
 
 # Load Phyloseq object cleaned of singletons (231 ASVs)
-ps_clean_3 <- readRDS(file.path(path, "clean_data/taxonomy/ASV_8450_phyloseq_nonsingletons_noB.rds"))
-#ps_clean_3_df  <- read.csv(file.path(path, "clean_data/taxonomy/ASV_8450_phyloseq_nonsingletons_noB.csv"))
+ps_clean_3 <- readRDS(file.path(path, "clean_data/taxonomy/ASV_8859_v2_phyloseq_nonsingletons.rds"))
+#ps_clean_3_df  <- read.csv(file.path(path, "clean_data/taxonomy/ASV_8859_v2_phyloseq_nonsingletons.csv"))
 pseq_rrfb <- readRDS(file.path(path, "clean_data/statistics/pseq_rrfb.rds")) #Mirlyn object from Method B
 rarefied_phyloseq <- readRDS(file.path(path, "clean_data/statistics/rarefied_phyloseq.rds"))
 ```
@@ -175,19 +179,6 @@ plant_traits <- ps_clean_3 |> #Estimating community richness and shannon diversi
   rename(Simpson_1minusD = Simpson)
 # See https://www.jak.bio/posts/me/20211227_simpson/simpson_diversity.html for a good explanation of Simpson's diversity index.
 
-# Melt data  frame from ps_clean_3
-ps_melt <- ps_clean_3 |>
-  psmelt() |>
-  # group_by(Phylum, Elevation_cat) |>
-  # mutate(mean_abundance = mean(Abundance), 
-  #        se = sd(Abundance)/sqrt(length(Abundance)),
-  #        sd = sd(Abundance),
-  #        sample_Species = factor(sample_Species)) |>
-  # ungroup() |>
-  rename(Unique_ID = Sample, ASV = OTU) |> #Renaming OTU column
-  dplyr::select(!c(4, 6:15))  #Reordering columns 
-#This data frame is useful for barplots and other visualizations.
-
 
 ##########################################################
 ############### Save files after changes #################
@@ -200,10 +191,6 @@ ps_melt <- ps_clean_3 |>
 # # Plant traits with community data
  saveRDS(plant_traits, file.path(path, "clean_data/statistics/plant_traits.rds"))
  write.csv(plant_traits, file.path(path, "clean_data/statistics/plant_traits.csv"))
-# 
-# # Save ps_melt
-# saveRDS(ps_melt, file.path(path, "clean_data/statistics/ps_melt.rds"))
-# write.csv(ps_melt, file.path(path, "clean_data/statistics/ps_melt.csv"))
 ```
 
 ### Load files
@@ -213,35 +200,14 @@ ps_melt <- ps_clean_3 |>
 #####################################################
 leaf_traits <- readRDS(file.path(path, "clean_data/statistics/leaf_traits.rds")) # Post all the processing aboove, lod from here.
 plant_traits <- readRDS(file.path(path, "clean_data/statistics/plant_traits.rds"))
-plant_traits_MB <- readRDS(file.path(path, "clean_data/statistics/plant_traits_MB.rds"))
-ps_melt <- readRDS(file.path(path, "clean_data/statistics/ps_melt.rds"))
-
-# Samples with species to subset/filter matrices downstream
-# M. laciniatus
-lac_names <- plant_traits |>
-  slice(1:157) |> # Only selecting observations with ASV data 
-  filter(Species == "M. laciniatus") |>
-  pull(Unique_ID) 
-
-# M. guttatus
-gut_names <- plant_traits |> 
-  slice(1:157) |> # Only selecting observations with ASV data 
-  filter(Species == "M. guttatus") |>
-  pull(Unique_ID)
-
-# M. nasutus
-nas_names <- plant_traits |> 
-  slice(1:157) |> # Only selecting observations with ASV data 
-  filter(Species == "M. nasutus") |>
-  pull(Unique_ID)
 
 # Functions
 source("functions/alpha_rfy.R")
 source("functions/pval_format.R")
 
 # Comparisons
-my_comparisons <- list(c("M. nasutus", "M. laciniatus"), c("M. nasutus", "M. guttatus"), c("M. laciniatus", "M. guttatus"))
-my_comparisons3 <- list(c("LOW", "MID"), c("LOW", "HIGH"), c("MID", "HIGH"))
+my_comparisons <- list(c("F2WY", "L"), c("F2WY", "G"), c("F2YW", "L"), c("F2YW", "G"), c("G", "L"), c("F2YW", "F2WY"))
+my_comparisons2 <- list(c("CF", "LM"), c("CF", "OPN"), c("LM", "OPN"))
 
 # List of ASV samples
 names_list <- colnames(ps_clean_3@otu_table) #List of samples
@@ -254,27 +220,29 @@ names_list <- colnames(ps_clean_3@otu_table) #List of samples
 
 ## Descriptive stats
 
+From previous experience in MIM2 project, I know the data is not normally distributed, thus transformed in previous sections. I will focus on LBI for this project. Other traits have a lot of missing data or have a character that causes them to be interpreted as logical.
+
 ```{r, Leaf_traits_basics}
 #| echo: false
 #| eval: true
 #| tidy: true
 # Sites and Species sampled
-leaf_traits_noB |>
-  group_by(Site,Species, Longitude, Latitude) |>
-  summarise(n = as.integer(n()/3))|> # Dividing by 3 due to replicate measurments of each sample
-  pivot_wider(names_from = Species, values_from = n)|>
+leaf_traits |>
+  group_by(Site,Genotype) |>
+  summarise(n = as.integer(n()/3))|> # Dividing by 3 due to replicate measurements of each sample
+  pivot_wider(names_from = Genotype, values_from = n)|>
   knitr::kable(caption = "Number of samples per population/site and species.")
 
 #LBI
-hist(leaf_traits$LBI) #Skewed to the left, non-normal distribution of LBI data
-mean(leaf_traits$LBI, na.rm = TRUE)
-max(leaf_traits$LBI, na.rm = TRUE)
-min(leaf_traits$LBI, na.rm = TRUE)
-sd(leaf_traits$LBI, na.rm = TRUE)
+hist(leaf_traits$Leaf_Lobe_Index) #Skewed to the left, non-normal distribution of LBI data
+mean(leaf_traits$Leaf_Lobe_Index, na.rm = TRUE)
+max(leaf_traits$Leaf_Lobe_Index, na.rm = TRUE)
+min(leaf_traits$Leaf_Lobe_Index, na.rm = TRUE)
+sd(leaf_traits$Leaf_Lobe_Index, na.rm = TRUE)
 
-qqPlot(leaf_traits$LBI) #Does not seem normal at all.
-hist(rnorm(n = length(leaf_traits$LBI))) #For comparison: normal distribution based on random permutation of my data.
-shapiro.test(leaf_traits$LBI) #Since p-value is less than 0.05 this means the residuals from the LBI data are not normally distributed. Data needs transfromation.
+qqPlot(leaf_traits$Leaf_Lobe_Index) #Does not seem normal at all.
+hist(rnorm(n = length(leaf_traits$Leaf_Lobe_Index))) #For comparison: normal distribution based on random permutation of my data.
+shapiro.test(leaf_traits$Leaf_Lobe_Index) #Since p-value is less than 0.05 this means the residuals from the LBI data are not normally distributed. Data needs transfromation.
 fligner.test(logLBI ~ Site, data = leaf_traits) #Homogeneity of variances test. p-value < 0.05, variances are not equal.
 
 #LMA
@@ -284,22 +252,22 @@ max(leaf_traits$LMA, na.rm = TRUE)
 min(leaf_traits$LMA, na.rm = TRUE)
 sd(leaf_traits$LMA, na.rm = TRUE)
 
-qqPlot(leaf_traits$LMA) #Remove outiler 4.4mg
+qqPlot(leaf_traits$LMA)
 #hist(rnorm(n = length(leaf_traits$LMA))) #For comparison: normal distribution based on random permutation of my data.
 shapiro.test(leaf_traits$LMA) #Since p-value is less than 0.05 this means the residuals from the LMA data are not normally distributed.
 fligner.test(LMA ~ Site, data = leaf_traits) #Homogeneity of variances test. p-value < 0.05, variances are not equal.
 
 #Toughness
-hist(leaf_traits$LPS[leaf_traits$LPS < 4]) # Remove two outliers by using cut-off at 4.
-mean(leaf_traits$LPS[leaf_traits$LPS < 4], na.rm = TRUE)
-max(leaf_traits$LPS[leaf_traits$LPS < 4], na.rm = TRUE)
-min(leaf_traits$LPS[leaf_traits$LPS < 4], na.rm = TRUE)
-sd(leaf_traits$LPS[leaf_traits$LPS < 4], na.rm = TRUE)
+hist(leaf_traits$Leaf_toughness) 
+mean(leaf_traits$Leaf_toughness, na.rm = TRUE)
+max(leaf_traits$Leaf_toughness, na.rm = TRUE)
+min(leaf_traits$Leaf_toughness, na.rm = TRUE)
+sd(leaf_traits$Leaf_toughness, na.rm = TRUE)
 
-qqPlot(leaf_traits$LPS[leaf_traits$LPS < 4]) 
+qqPlot(leaf_traits$Leaf_toughness) 
 hist(rnorm(n = length(leaf_traits$LPS[leaf_traits$LPS < 4]))) #For comparison: normal distribution based on random permutation of my data.
-shapiro.test(leaf_traits$LPS[leaf_traits$LPS < 4]) #Since p-value is less than 0.05 this means the residuals from the LPS data are not normally distributed. Data needs transformation.
-fligner.test(LPS ~ Site, data = leaf_traits) #Homogeneity of variances test. p-value < 0.05, variances are not equal.
+shapiro.test(leaf_traits$Leaf_toughness) #Since p-value is less than 0.05 this means the residuals from the LPS data are not normally distributed. Data needs transformation.
+fligner.test(Leaf_toughness ~ Site, data = leaf_traits) #Homogeneity of variances test. p-value < 0.05, variances are not equal.
 
 #Thickness
 hist(leaf_traits$LT)
@@ -338,32 +306,6 @@ shapiro.test(leaf_traits$Elevation_m) #Since p-value is less than 0.05 this mean
 fligner.test(Elevation_m ~ Site, data = leaf_traits) #Homogeneity of variances test. p-value < 0.05, variances are not equal.
 ```
 
-All leaf traits and elevation are not normally distributed. This requires transformation for further analysis. I will proceed with a log transformation of the data.
-
-```{r, Leaf_traits_transformation}
-
-# Leaf traits transformed
-# leaf_traits <- leaf_traits |>
-#   mutate(logLBI = log10(LBI),
-#          logACI = log10(ACI),
-#          logLT = log10(Thickness),
-#          logLPS = log10(Toughness),
-#          logLMA = log10(LMA))
-# 
-# #Removing species B
-# leaf_traits_noB <- leaf_traits |>
-#   filter(!Species == "B")
-# 
-# # Plant traits transformed
-# plant_traits <- plant_traits |>
-#   mutate(logLBI = log10(LBI),
-#          logACI = log10(ACI),
-#          logLT = log10(Thickness),
-#          logLPS = log10(Toughness),
-#          logLMA = log10(LMA))
-```
-
-I will not omiting samples with NAs because some have the complete data for some leaf traits and not for others. I will omit samples with NAs for the Fungal analyses.
 
 ## Post data transformations
 
@@ -373,10 +315,10 @@ I will not omiting samples with NAs because some have the complete data for some
 #| tidy: true
 
 #LBI
-hist(leaf_traits$LBI, col = "steelblue", main = "Non-normal distribution")
-hist(na.omit(leaf_traits$logLBI), col='coral2', main='Log Transformed')
-qqPlot(leaf_traits$logLBI) #a BETTER, but not normal distribution
-shapiro.test(leaf_traits$logLBI)
+hist(plant_traits$LBI, col = "steelblue", main = "Non-normal distribution")
+hist(na.omit(plant_traits$logLBI), col='coral2', main='Log Transformed')
+qqPlot(plant_traits$logLBI) #a BETTER, but not normal distribution
+shapiro.test(plant_traits$logLBI)
 
 #LMA
 hist(leaf_traits$LMA, col = "steelblue", main = "Non-normal distribution")
@@ -414,61 +356,19 @@ The log transformations improve the normality of the data, but it does not meet 
 #Because the data does not meet normality assumptions after transformation, I decisded to stick to a non-parametric test like Kruskal-Wallis.
 # LBI by Site
 print(kruskal.test(logLBI ~ Site, 
-                   data = leaf_traits,
+                   data = plant_traits,
                    na.action = na.omit))
 
-# LBI by Elevation_m
-print(kruskal.test(logLBI ~ Elevation_m, 
-             data = leaf_traits,
+# LBI by Genotype
+print(kruskal.test(logLBI ~ Genotype, 
+             data = plant_traits,
              na.action = na.omit))
-
-# LMA by Site
-print(kruskal.test(logLMA ~ Site, 
-                   data = leaf_traits,
-                   na.action = na.omit))
-
-# LMA by Elevation_m
-print(kruskal.test(logLMA ~ Elevation_m, 
-                   data = leaf_traits,
-                   na.action = na.omit))
-
-# Toughness by Site
-print(kruskal.test(logLPS ~ Site, 
-                   data = leaf_traits,
-                   na.action = na.omit))
-
-# Toughness by Elevation_m
-print(kruskal.test(logLPS ~ Elevation_m, 
-                   data = leaf_traits,
-                   na.action = na.omit))
-
-# Thickness by Site
-print(kruskal.test(logLT ~ Site, 
-                   data = leaf_traits,
-                   na.action = na.omit))
-
-# Thickness by Elevation_m
-print(kruskal.test(logLT ~ Elevation_m, 
-                   data = leaf_traits,
-                   na.action = na.omit))
-
-# ACI by Site
-print(kruskal.test(logACI ~ Site, 
-                   data = leaf_traits,
-                   na.action = na.omit))
-
-# ACI by Elevation_m
-print(kruskal.test(logACI ~ Elevation_m, 
-                   data = leaf_traits,
-                   na.action = na.omit))
-
 
 
 #Post-Hoc tests
-TukeyHSD(two.way, which = "Species")
-pairwise.wilcox.test(imagej1$logLBI, g = imagej1$Site)
-pairwise.wilcox.test(imagej1$logLBI, g = imagej1$Elevation_m)
-pairwise.wilcox.test(imagej1$logLBI, g = imagej1$Genotype)
+TukeyHSD(two.way, which = "Genotype")
+pairwise.wilcox.test(plant_traits$logLBI, g = plant_traits$Site)
+pairwise.wilcox.test(plant_traits$logLBI, g = plant_traits$Genotype)
 ```
 
 # Figures
@@ -477,29 +377,26 @@ pairwise.wilcox.test(imagej1$logLBI, g = imagej1$Genotype)
 
 ```{r, correlations}
 #Barplots with microeco
-# Quick addition trais log transformed
+# Quick addition traits log transformed
 ps_clean_3@sam_data <- plant_traits |>
   filter(Unique_ID %in% names_list) |>
-  select(c(1:12, 15:20)) |>
   sample_data()
 
 micro_psclean <- phyloseq2meco(ps_clean_3) # First convert phyloseq to meco
 
-t4 <- trans_env$new(dataset = micro_psclean, env_cols = c(5,14:18))
+t4 <- trans_env$new(dataset = micro_psclean, env_cols = 12) # 12 is the index for logLBI
 
-t4gg <- t4$cal_autocor(group = "Species", upper = list(continuous = GGally::wrap("cor", method= "spearman"))) + 
+t4gg <- t4$cal_autocor(group = c("Genotype"), upper = list(continuous = GGally::wrap("cor", method= "spearman"))) + 
   theme(
     legend.title = element_text(face = "bold"),
          strip.text = element_text(face = "bold", size = 12),
          panel.border = element_rect(linetype = "blank", fill = NA)) +
-  scale_fill_manual(values = met.brewer("Isfahan2", n = 3, type = "discrete", direction = c(-1))) +
-  scale_color_manual(values = met.brewer("Isfahan2", n = 3, type = "discrete", direction = c(-1)))
-
+  scale_fill_manual(values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) +
+  scale_color_manual(values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1)))
 t4gg
 #ggplot2::ggsave(file.path(path, "figures/supp_fig1.png") , plot = t4gg, dpi=300, units=c("mm"), width=300, height=300)
 ```
-
-It looks like logLPS and logLMA are highly correlated globally and per species. The only traits not correlated are logLT and logLBI. Fot further analyses like dbRDA I will use logACI, logLBI, and logLT as part of the initial model.
+.
 
 ```{r, themes}
 #ggplot themes
@@ -545,207 +442,17 @@ theme_lfdiv_continuous <- theme_classic(base_size = 16) +
          axis.text.x = element_text(size = 14))
 ```
 
-#### LMA
-
-```{r, lma_elevation}
-#| echo: false
-#| eval: true
-#| tidy: true
-#| label: lma_elevation
-
-########## Labels ###########
-#Legend title label
-legend_title <- "Species"
-# Species labels
-labels_list <- c("M. laciniatus", "M. nasutus", "M. guttatus")
-names(labels_list) <- c("L", "N", "G")
-#############################
-
-#ggpubr package used for comparisons tests
-lma_compare_means <- compare_means(logLMA ~ Species,
-         data = leaf_traits_noB,
-         group.by = "Elevation_cat",
-         method = "wilcox.test",
-         p.adjust.method = "BH",
-  paired = FALSE,
-  alternative = "two.sided", 
-  mu = 0, 
-  var.equal = FALSE,
-  conf.level = 0.95)
-
-#lma_compare_means
-#Report with `compare_means` because it is easier to plot with `ggpubr` package.
-
-#Error bars for plots 
-errbar_lims <- group_by(leaf_traits_noB, Site) |> 
-              summarize(mean = mean(logLMA), se = sd(logLMA)/sqrt(n()), 
-                        upper = mean+(2*se), lower = mean-(2*se))
-
-#By Site discrete comparison
-lma <- ggplot(leaf_traits_noB, aes(y = logLMA, x = Species)) +
-  geom_violin(aes(fill = Species)) +
-  geom_crossbar(stat = "summary",
-                fun = mean,
-                fun.max = mean,
-                fun.min = mean,
-                fatten = 1.5, width = 0.8) +
-  geom_point(color = "black", alpha = 0.2,
-             size = 1.7, 
-             position = position_jitter(w = 0.05))  +
-  scale_fill_manual(labels =c('*M. laciniatus*', '*M. nasutus*', '*M. guttatus*'),
-                    values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) +
-  theme_lfspp_discrete +
-  labs(y = "log10[Leaf Mass per Area (LMA) (mg/mm)]", x = "") +
-  stat_compare_means(comparisons = my_comparisons,
-                     method = "wilcox.test",
-                     #label.y = c(0.4, 0.6, 1),
-                     label = "p.signif") +
-  facet_wrap(~Elevation_cat)
-
-lma
-
-#ggsave(filename = file.path(path, "figures/lma_violin.png"), plot = lma, dpi=300, units=c("mm"), width=300, height=150)
-
-# By Elevation continuous comparison
-# Linear model summary
-summary(lm(logLMA ~ Elevation_m, data = leaf_traits_noB |>
-             filter(!logLMA == "-Inf"), na.action = na.omit)) # Remove -Inf values
-elev_lma_p <- format.p(cor.test(leaf_traits_noB$logLMA, leaf_traits_noB$Elevation_m, na.action = na.omit)$p.value) # This is just to make the p-value nicer. 
-
-# logLMA by Elevation
-lma_cont <- ggplot(leaf_traits_noB, aes(y = logLMA, x = Elevation_m)) +
-  geom_jitter(aes(color = Species), alpha = 0.6,
-             size = 2.5) +
-  geom_smooth(method = lm, se = TRUE, level = 0.95, na.rm = F, color = "black") + 
-  geom_smooth(aes(color = Species), method = lm, se = FALSE, na.rm = F) +
-  stat_regline_equation(aes(label = paste(#..eq.label.., 
-                                          ..adj.rr.label..,
-                                          sprintf("italic('p')~'%s'", elev_lma_p), 
-                                          sep = "~~~~")), size = rel(4), color = "black") +
-  scale_color_manual(labels =c('*M. laciniatus*', '*M. nasutus*', '*M. guttatus*'),
-                    values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) +
-  theme_lfspp_continuous +
-  labs(y = "log10[Leaf Mass per Area (LMA) (mg/mm)]", x = "Elevation (m.a.s.l.)") +
-  scale_y_continuous(expand = c(0.07, 0.07)) 
-
-lma_cont
-#ggsave(filename = file.path(path, "figures/lma_elev.png"), plot = logLMA_elev, dpi=300, units=c("mm"), width=300, height=150)
-
-# Joining plots
-lma_elevation <- ggarrange(lma, lma_cont, ncol = 1, nrow = 2, 
-                           common.legend = TRUE, 
-                           legend = "bottom",
-                           labels = c("A", "B"),
-                           heights = c(1, 1))
-
-lma_elevation
-
-#ggsave(filename = file.path(path, "figures/supp_fig1.png"), plot = lma_elevation, dpi=300, units=c("mm"), width=300, height=250)
-```
-
-#### ACI
-
-```{r, aci_elevation}
-#| echo: false
-#| eval: true
-#| tidy: true
-#| label: aci_elevation
-
-#ggpubr package used for comparisons tests
-aci_compare_means <- compare_means(logACI ~ Species,
-         data = leaf_traits_noB,
-         group.by = "Elevation_cat",
-         method = "wilcox.test",
-         p.adjust.method = "BH",
-  paired = FALSE,
-  alternative = "two.sided", 
-  mu = 0, 
-  var.equal = FALSE,
-  conf.level = 0.95)
-
-#aci_compare_means
-#Roughly the same outcome as pairwise_t_test.
-
-#Report with `compare_means` because it is easier to plot with `ggpubr` package.
-errbar_lims <- group_by(leaf_traits_noB, Species) |> 
-              summarize(mean = mean(logACI), se = sd(logACI)/sqrt(n()), 
-                        upper = mean + (2*se), lower = mean - (2*se))
-
-#Comparisons
-my_comparisons <- list(c("N", "L"), c("N", "G"), c("L", "G"))
-
-
-aci <- ggplot(leaf_traits_noB, aes(y = logACI, x = Species)) +
-  geom_violin(aes(fill = Species)) +
-  geom_crossbar(stat="summary",
-                fun = mean,
-                fun.max = mean,
-                fun.min = mean,
-                fatten = 1.5, width = 0.8) +
-  geom_point(color="black", alpha = 0.2,
-             size=1.7, 
-             position = position_jitter(w = 0.05))  +
-  scale_fill_manual(labels=c('*M. laciniatus*', '*M. nasutus*', '*M. guttatus*'),
-                    values= met.brewer("Isfahan2", n = 4, type = "discrete", direction = -1)) +
-  theme_lfspp_discrete +
-  labs(y = expression(paste("log[ACI (% ", italic("A") [lambda]," at 931 nm / % ", italic("A") [lambda]," at 530 nm)]")), x = "") +
-  stat_compare_means(comparisons = my_comparisons,
-                     method = "wilcox.test",
-                     #label.y = c(0.4, 0.6, 1),
-                     label = "p.signif") +
-  facet_wrap(~Elevation_cat)
-
-aci
-#ggsave(filename = file.path(path, "figures/aci_violin.png"), plot = aci, dpi=300, units=c("mm"), width=300, height=150)
-
-# By Elevation continuous comparison
-# Linear model summary
-summary(lm(logACI~ Elevation_m, data = leaf_traits_noB, na.action = na.omit))
-elev_aci_p <- format.p(cor.test(leaf_traits_noB$logACI, leaf_traits_noB$Elevation_m, na.action = na.omit)$p.value) # This is just to make the p-value nicer. 
-
-# logACI by Elevation
-aci_cont <- ggplot(leaf_traits_noB, aes(y = logACI, x = Elevation_m)) +
-  geom_jitter(aes(color = Species), alpha = 0.6,
-             size = 2.5)  +
-  geom_smooth(method = lm, se = TRUE, level = 0.95, na.rm = F, color = "black") + 
-  geom_smooth(aes(color = Species), method = lm, se = FALSE, na.rm = F) +
-  stat_regline_equation(aes(label = paste(#..eq.label.., 
-                                          ..adj.rr.label..,
-                                          sprintf("italic('p')~'%s'", elev_aci_p), 
-                                          sep = "~~~~")), size = rel(4), color = "black") +
-  scale_color_manual(labels =c('*M. laciniatus*', '*M. nasutus*', '*M. guttatus*'),
-                    values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) +
-  theme_lfspp_continuous +
- labs(y = expression(paste("log[ACI (% ", italic("A") [lambda]," at 931 nm / % ", italic("A") [lambda]," at 530 nm)]")), x = "Elevation (m.a.s.l.)") +
-  scale_y_continuous(expand = c(0.07, 0.07)) 
-
-aci_cont
-#ggsave(filename = file.path(path, "figures/aci_elev.png"), plot = aci_cont, dpi=300, units=c("mm"), width=300, height=150)
-
-# Joining plots
-aci_elevation <- ggarrange(aci, aci_cont, ncol = 1, nrow = 2, 
-                           common.legend = TRUE, 
-                           legend = "bottom",
-                           labels = c("A", "B"),
-                           heights = c(1, 1))
-
-aci_elevation
-
-#ggsave(filename = file.path(path, "figures/supp_fig2.png"), plot = aci_elevation, dpi=300, units=c("mm"), width=300, height=250)
-```
-
 #### LBI
 
-```{r, lbi_elevation}
+```{r, lbi_}
 #| echo: false
 #| eval: true
 #| tidy: true
-#| label: lbi_elevation
-
+#| label: lbi
 #ggpubr package used for comparisons tests
-lbi_compare_means <- compare_means(logLBI ~ Species,
-         data = leaf_traits_noB,
-         group.by = "Elevation_cat",
+lbi_compare_means <- compare_means(LBI ~ Genotype,
+         data = plant_traits,
+         group.by = "Site",
          method = "wilcox.test",
          p.adjust.method = "BH",
   paired = FALSE,
@@ -765,10 +472,12 @@ errbar_lims <- group_by(leaf_traits_noB, Species) |>
                         upper = mean + (2*se), lower = mean - (2*se))
 
 #Comparisons
-my_comparisons <- list(c("N", "L"), c("N", "G"), c("L", "G"))
+my_comparisons <- list(c("F2WY", "L"), c("F2WY", "G"), c("F2YW", "L"), c("F2YW", "G"), c("G", "L"), c("F2YW", "F2WY"))
+my_comparisons2 <- list(c("CF", "LM"), c("CF", "OPN"), c("LM", "OPN"))
 
-lbi <- ggplot(leaf_traits_noB, aes(y = logLBI, x = Species)) +
-  geom_violin(aes(fill = Species)) +
+
+lbi <- ggplot(plant_traits, aes(y = logLBI, x = Genotype)) +
+  geom_violin(aes(fill = Genotype)) +
   #geom_boxplot(width = 0.3, color = "grey30", alpha = 0.2) +
   geom_crossbar(stat = "summary",
                 fun = mean,
@@ -778,339 +487,23 @@ lbi <- ggplot(leaf_traits_noB, aes(y = logLBI, x = Species)) +
   geom_point(color = "black", alpha = 0.2,
              size = 1.7,
              position = position_jitter(w = 0.05))  +
-  scale_fill_manual(labels =c('*M. laciniatus*', '*M. nasutus*', '*M. guttatus*'),
-                    values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) +
+  scale_fill_manual(values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) +
   theme_lfspp_discrete +
   labs(y = "log10[LBI (convex_hull - true_area]/convex_hull)]", x = "") +
   stat_compare_means(comparisons = my_comparisons,
                      method = "wilcox.test",
                      #label.y = c(0.4, 0.6, 1),
                      label = "p.signif") +
-   facet_wrap(~Elevation_cat)
+   facet_wrap(~Site)
  
 lbi
 #ggsave(filename = file.path(path, "figures/lbi_violin.png"), plot = lbi, dpi=300, units=c("mm"), width=300, height=150)
-
-# By Elevation continuous comparison
-# Linear model summary
-summary(lm(logLBI~ Elevation_m, data = leaf_traits_noB, na.action = na.omit))
-elev_lbi_p <- format.p(cor.test(leaf_traits_noB$logLBI, leaf_traits_noB$Elevation_m, na.action = na.omit)$p.value) # This is just to make the p-value nicer. 
-
-# logLBI by Elevation
-lbi_cont <- ggplot(leaf_traits_noB, aes(y = logLBI, x = Elevation_m)) +
-  geom_jitter(aes(color = Species), alpha = 0.6,
-             size = 2.5)  +
-  geom_smooth(method = lm, se = TRUE, level = 0.95, na.rm = F, color = "black") + 
-  geom_smooth(aes(color = Species), method = lm, se = FALSE, na.rm = F) +
-  stat_regline_equation(aes(label = paste(#..eq.label.., 
-                                          ..adj.rr.label..,
-                                          sprintf("italic('p')~'%s'", elev_lbi_p), 
-                                          sep = "~~~~")), size = rel(4), color = "black") +
-  scale_color_manual(labels =c('*M. laciniatus*', '*M. nasutus*', '*M. guttatus*'),
-                    values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) +
-  theme_lfspp_continuous +
-  labs(y = "log10[LBI (convex_hull - true_area]/convex_hull)]", x = "Elevation (m.a.s.l.)") +
-  scale_y_continuous(expand = c(0.07, 0.07)) 
-
-lbi_cont
-#ggsave(filename = file.path(path, "figures/lbi_elev.png"), plot = lbi_cont, dpi=300, units=c("mm"), width=300, height=150)
-
-# Joining plots
-lbi_elevation <- ggarrange(lbi, lbi_cont, ncol = 1, nrow = 2, 
-                           common.legend = TRUE, 
-                           legend = "bottom",
-                           labels = c("A", "B"),
-                           heights = c(1, 1))
-
-lbi_elevation
-
-#ggsave(filename = file.path(path, "figures/supp_fig3.png"), plot = lbi_elevation, dpi=300, units=c("mm"), width=300, height=250)
 ```
 
-#### Toughness
-
-```{r, lps_elevation}
-#| echo: false
-#| eval: true
-#| tidy: true
-#| label: lps_elevation
-
-#ggpubr package used for comparisons tests
-lps_compare_means <- compare_means(logLPS ~ Species,
-         data = leaf_traits_noB,
-         group.by = "Elevation_cat",
-         method = "wilcox.test",
-         p.adjust.method = "BH",
-  paired = FALSE,
-  alternative = "two.sided", 
-  mu = 0, 
-  var.equal = FALSE,
-  conf.level = 0.95)
-
-#lps_compare_means
-
-#Report with `compare_means` because it is easier to plot with `ggpubr` package.
-errbar_lims <- group_by(leaf_traits_noB, Species) |> 
-              summarize(mean = mean(logLPS), se = sd(logLPS)/sqrt(n()), 
-                        upper = mean + (2*se), lower = mean - (2*se))
-
-#Comparisons
-my_comparisons <- list(c("N", "L"), c("N", "G"), c("L", "G"))
-
-lps <- ggplot(leaf_traits_noB, aes(y = logLPS, x = Species)) +
-  geom_violin(aes(fill = Species)) +
-  #geom_boxplot(width = 0.3, color = "grey30", alpha = 0.2) +
-  geom_crossbar(stat = "summary",
-                fun = mean,
-                fun.max = mean,
-                fun.min = mean,
-                fatten = 1.5, width = 0.8) +
-  geom_point(color = "black", alpha = 0.2,
-             size = 1.7,
-             position = position_jitter(w = 0.05))  +
-  scale_fill_manual(labels =c('*M. laciniatus*', '*M. nasutus*', '*M. guttatus*'),
-                    values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) +
-  scale_color_manual(aes(color = "black")) +
-  theme_lfspp_discrete +
-  labs(y = expression(paste("Leaf punch strength (N mm","^-1)")), x = "") +
-  #scale_x_discrete(labels = c('M. laciniatus', 'M. nasutus', 'M. guttatus')) +
-  stat_compare_means(comparisons = my_comparisons,
-                     method = "wilcox.test",
-                     #label.y = c(0.4, 0.6, 1),
-                     label = "p.signif") +
-   facet_wrap(~Elevation_cat)
- 
-
-lps
-#ggsave(filename = file.path(path, "figures/lps_violin.png"), plot = lps, dpi=300, units=c("mm"), width=300, height=150)
-
-# By Elevation continuous comparison
-# Linear model summary
-summary(lm(logLPS ~ Elevation_m, data = leaf_traits_noB, na.action = na.omit))
-elev_lps_p <- format.p(cor.test(leaf_traits_noB$logLPS, leaf_traits_noB$Elevation_m, na.action = na.omit)$p.value) # This is just to make the p-value nicer. 
-
-# logLPS by Elevation
-lps_cont <- ggplot(leaf_traits_noB, aes(y = logLPS, x = Elevation_m)) +
-  geom_jitter(aes(color = Species), alpha = 0.6,
-             size = 2.5)  +
-  geom_smooth(method = lm, se = TRUE, level = 0.95, na.rm = F, color = "black") + 
-  geom_smooth(aes(color = Species), method = lm, se = FALSE, na.rm = F) +
-  stat_regline_equation(aes(label = paste(#..eq.label.., 
-                                          ..adj.rr.label..,
-                                          sprintf("italic('p')~'%s'", elev_lps_p), 
-                                          sep = "~~~~")), size = rel(4), color = "black") +
-  scale_color_manual(labels =c('*M. laciniatus*', '*M. nasutus*', '*M. guttatus*'),
-                    values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) +
-  theme_lfspp_continuous +
-  labs(y = expression(paste("Leaf punch strength (N mm","^-1)")), x = "Elevation (m.a.s.l.)") +
-  scale_y_continuous(expand = c(0.07, 0.07)) 
-
-lps_cont
-#ggsave(filename = file.path(path, "figures/lps_elev.png"), plot = lps_cont, dpi=300, units=c("mm"), width=300, height=150)
-
-# Joining plots
-lps_elevation <- ggarrange(lps, lps_cont, ncol = 1, nrow = 2, 
-                           common.legend = TRUE, 
-                           legend = "bottom",
-                           labels = c("A", "B"),
-                           heights = c(1, 1))
-
-lps_elevation
-
-#ggsave(filename = file.path(path, "figures/supp_fig4.png"), plot = lps_elevation, dpi=300, units=c("mm"), width=300, height=250)
-```
-
-#### Thickness
-
-```{r, lt_elevation}
-#| echo: false
-#| eval: true
-#| tidy: true
-#| label: lt_violin
-
-#ggpubr package used for comparisons tests
-lt_compare_means <- compare_means(logLT ~ Species,
-         data = leaf_traits_noB,
-         group.by = "Elevation_cat",
-         method = "wilcox.test",
-         p.adjust.method = "BH",
-  paired = FALSE,
-  alternative = "two.sided", 
-  mu = 0, 
-  var.equal = FALSE,
-  conf.level = 0.95)
-
-lt_compare_means
-#Roughly the same outcome as pairwise_t_test.
-
-#Report with `compare_means` because it is easier to plot with `ggpubr` package.
-errbar_lims <- group_by(leaf_traits_noB, Species) |> 
-              summarize(mean = mean(logLT), se = sd(logLT)/sqrt(n()), 
-                        upper = mean + (2*se), lower = mean - (2*se))
-
-#Comparisons
-my_comparisons <- list(c("N", "L"), c("N", "G"), c("L", "G"))
-
-lt <- ggplot(leaf_traits_noB, aes(y= logLT, x = Species)) +
-  geom_violin(aes(fill = Species)) +
-  #geom_boxplot(width = 0.3, color = "grey30", alpha = 0.2) +
-  geom_crossbar(stat = "summary",
-                fun = mean,
-                fun.max = mean,
-                fun.min = mean,
-                fatten = 1.5, width = 0.8) +
-  geom_point(color = "black", alpha = 0.2,
-             size = 1.7,
-             position = position_jitter(w = 0.05))  +
-  scale_fill_manual(labels =c('*M. laciniatus*', '*M. nasutus*', '*M. guttatus*'),
-                    values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) +
-  scale_color_manual(aes(color = "black")) +
-  theme_lfspp_discrete +
-  labs(y = expression(paste("Leaf thickness (",mu,"m)")), x = "") +
-  scale_x_discrete(labels = c('M. laciniatus', 'M. nasutus', 'M. guttatus')) +
-  stat_compare_means(comparisons = my_comparisons,
-                     method = "wilcox.test",
-                     #label.y = c(0.4, 0.6, 1),
-                     label = "p.signif") +
-   facet_wrap(~Elevation_cat)
- 
-lt
-#ggsave(filename = file.path(path, "figures/lt_violin.png"), plot = lt, dpi=300, units=c("mm"), width=300, height=150)
-
-# By Elevation continuous comparison
-# Linear model summary
-summary(lm(logLT ~ Elevation_m, data = leaf_traits_noB, na.action = na.omit))
-elev_lt_p <- format.p(cor.test(leaf_traits_noB$logLT, leaf_traits_noB$Elevation_m, na.action = na.omit)$p.value) # This is just to make the p-value nicer. 
-
-# logLT by Elevation
-lt_cont <- ggplot(leaf_traits_noB, aes(y = logLT, x = Elevation_m)) +
-  geom_jitter(aes(color = Species), alpha = 0.6,
-             size = 2.5)  +
-  geom_smooth(method = lm, se = TRUE, level = 0.95, na.rm = F, color = "black") + 
-  geom_smooth(aes(color = Species), method = lm, se = FALSE, na.rm = F) +
-  stat_regline_equation(aes(label = paste(#..eq.label.., 
-                                          ..adj.rr.label..,
-                                          sprintf("italic('p')~'%s'", elev_lt_p), 
-                                          sep = "~~~~")), size = rel(4), color = "black") +
-  scale_color_manual(labels =c('*M. laciniatus*', '*M. nasutus*', '*M. guttatus*'),
-                    values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) +
-  theme_lfspp_continuous +
-  labs(y = expression(paste("Leaf thickness (",mu,"m)")), x = "Elevation (m.a.s.l.)") +
-  scale_y_continuous(expand = c(0.07, 0.07)) 
-
-lt_cont
-#ggsave(filename = file.path(path, "figures/lps_elev.png"), plot = lps_cont, dpi=300, units=c("mm"), width=300, height=150)
-
-# Joining plots
-lt_elevation <- ggarrange(lt, lt_cont, ncol = 1, nrow = 2, 
-                           common.legend = TRUE, 
-                           legend = "bottom",
-                           labels = c("A", "B"),
-                           heights = c(1, 1))
-lt_elevation
-#ggsave(filename = file.path(path, "figures/supp_fig5.png"), plot = lt_elevation, dpi=300, units=c("mm"), width=300, height=250)
-```
-
-#### Multiple plots together
-
-```{r}
-# Multiples plots together
-#LMA and ACI
-arrange <- ggarrange(lma, aci, lbi, lps, lt,
-                     nrow = 2, 
-                     ncol = 3, 
-                     common.legend = TRUE, 
-                     legend="right")
-arrange
-
-ggsave(filename = file.path(path, "Plots", "/lma_aci_evo23.png"), plot = arrange, dpi=300, units=c("mm"), width=300, height=150)
-
-#LBI
-ggsave(filename = file.path(path, "Plots", "/lbi_evo23.png"), plot = lbi, dpi=300, units=c("mm"), width=150, height=150)
-
-#Toughness and Thickness
-arrange2 <- ggarrange( thg, thk, nrow = 1, ncol=2, common.legend = TRUE, legend="right")
-arrange2
-
-ggsave(filename = file.path(path, "Plots", "/thg_thk_evo23.png"), plot = arrange2, dpi=300, units=c("mm"), width=300, height=150)
-
-
-# Adding caption
-ant_caption <- "*All individuals per tree species included (n = 210)"
-ant_arranged_with_caption <- annotate_figure(ant_arranged, bottom = text_grob(ant_caption), fig.lab.pos = "bottom.right", fig.lab.size = 6)
-
-ant_arranged_with_caption
-```
-
-#### PCA
-
-```{r, PCA}
-#| echo: false
-#| eval: true
-#| tidy: true
-#| fig-width: 5
-#| fig-height: 5
-#| label: pca
-#| fig-cap: "PCA of leaf traits by species."
-
-# PCA using covariates to explain species richness/abundance ####
-data.pca <- leaf_traits_noB |>
-  na.omit() |>
-  select(c(20:24)) #Selecting only the log-transformed leaf trait columns. I use the log transformed data due to our findings of non-normality in the data. See this post for a hot take: https://stats.stackexchange.com/questions/164381/why-log-transforming-the-data-before-performing-principal-component-analysis
-
-leaf_traits.pca <- na.omit(leaf_traits_noB) 
-
-
-###Run this to create pca with prcomp function
-pca <- prcomp(data.pca, scale = TRUE)
-pca$rotation=-pca$rotation
-pca$x=-pca$x
-
-#Checking the PCA
-plot(pca,type = "lines")
-biplot(pca) # Base type PCA
-
-# PCA using autoplot() and prcomp()and modifying with ggplot syntax ####
-pca_auto <- autoplot((pca), data = data.frame(leaf_traits.pca), # For some reason this functions require data to be data= data.frame()
-         alpha = 0, #Setting alpha to zero render the automatic circle point null.Manipulate shapes with geom_point(). 
-         loadings = TRUE,loadings.colour = "black",
-         loadings.label = TRUE, loadings.label.colour="black",
-         loadings.label.size = 4, size = 7, 
-         loadings.label.vjust = 0, 
-         loadings.label.hjust = -0.15) + 
-  geom_point(aes(fill = Species, color = Species), alpha = 0.5, size = 3) +
-  geom_hline(yintercept = 0, colour = "gray45") +
-  geom_vline(xintercept = 0, colour = "gray45") +
-    scale_fill_manual(labels=c("*M. laciniatus*", "*M. nasutus*", "*M. guttatus*"), 
-                    values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) +
-  scale_color_manual(labels = c("*M. laciniatus*", "*M. nasutus*", "*M. guttatus*"),
-                     values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) +
-  stat_ellipse(aes(color = Species), 
-               geom = "path", 
-               size = 1.3, 
-               position = "identity", 
-               type = "t", 
-               linetype = 1, 
-               level = 0.95, 
-               segments = 51, na.rm = TRUE, show.legend = NA, inherit.aes = TRUE) +
-  #scale_x_continuous(expand = c(0.0, -0.09)) +
-  theme_classic(base_size = 12) +
-  theme(legend.text = element_markdown(),
-        legend.position = "bottom",
-        legend.title = element_text(face = "bold")) 
-  # labs(caption = expression("ACI = anthocyanins, LPS = leaf punch strength, LMA = leaf mass per area, LT = leaf thickness. LBI = Leaf lobe index. All leaf replicates per species ("~ italic("n") ~ "= 501)."))
-
-
-pca_auto$layers <- c(pca_auto$layers, pca_auto$layers[[2]], pca_auto$layers[[3]]) # This adds/copies layers 2-3 and overlays them. It makes the arrows be on top of the points. There must be a better ways of doing this.
-
-pca_auto
-
-#ggsave(filename = file.path(path, "figures/pca.png"), plot = pca_auto, dpi=300, units=c("mm"), width=150, height=150)
-```
 
 # Community Diversity
 
-Here we are going to explore the relationship between elevation and FEF community composition through richness and species diversity. I have already calculated Hill numbers in \[Cleaning and Shaping data\]. He we create a dissimilarity matrix and calculate the distance between samples. I remove *M. bicolor* (species "B") from the analysis (see \[Cleaning and Shaping data\] for more details). Here we used a classic data frame that stems from `ps_clean_3` object. The matrix calculations can also be achieved using the phyloseq friendly packages: `microbiome`, `metagMisc` and `mirlyn`. First let's look as summary information from our phyloseq object (see also `mim2_bioinformatics.qmd`).
+Here we are going to explore the relationship between elevation and FEF community composition through richness and species diversity. I have already calculated Hill numbers in \[Cleaning and Shaping data\]. He we create a dissimilarity matrix and calculate the distance between samples. I remove *M. bicolor* (species "B") from the analysis (see \[Cleaning and Shaping data\] for more details). Here we used a classic data frame that stems from `ps_clean_3` object. The matrix calculations can also be achieved using the phyloseq friendly packages: `microbiome`, `metagMisc` and `mirlyn`. First let's look as summary information from our phyloseq object (see also `mim3_bioinformatics.qmd`).
 
 ```{r, summary_info}
 # How many ASVs per Phyla and reads per sample are there after decontamination?
@@ -1136,7 +529,6 @@ percent_phyla_clean <- phyloseq_ntaxa_by_tax(
 # Coverage
 cover_chao <- phyloseq_coverage(ps_clean_3, correct_singletons = T) #Coverage: Good-Turing frequency estimation (Chiu, Chao 2016)
 
-
 # Prevalence plot
 phyloseq_prevalence_plot(
   ps_clean_3,
@@ -1152,9 +544,9 @@ ps_average <- phyloseq_average(
   ps_clean_3,
   avg_type = "arithmetic",
   acomp_zero_impute = NULL,
-  aldex_samples = 157,
+  aldex_samples = 287,
   aldex_denom = "all",
-  group = "Species",
+  group = "Genotype",
   drop_group_zero = TRUE,
   verbose = TRUE,
   progress = "text",
@@ -1179,11 +571,17 @@ sample_names(ps_clean_3)
 # Core taxa
 core_tax <- core_members(ps_clean_3, detection = 0.1/100, prevalence = 50/100, include.lowest = FALSE)
 
+# Subset core taxa information
+taxa <- readRDS(file.path(path, "clean_data/taxonomy/assign_tax_8859_v2.rds"))
+core_filter <- list("ASV_1", "ASV_2",  "ASV_3",  "ASV_4",  "ASV_5",  "ASV_6",  "ASV_7",  "ASV_8",  "ASV_9",  "ASV_11", "ASV_12", "ASV_14", "ASV_16", "ASV_18", "ASV_19", "ASV_21", "ASV_23", "ASV_27")
+core_taxa <- taxa |>
+  filter(ASV_ID %in% core_filter)
+
 # Rare taxa
 rare_tax <- rare_members(ps_clean_3, detection = 0.1/100, prevalence = 50/100, include.lowest = FALSE)
 ```
 
-The core taxa members are *Vishniacozyma victoriae* (ASV_1), *Cladosporium herbanum* (ASV_2) and *Cladosporium* spp. (ASV_7). The rest of the ASVs (228) are rare. Now that we have a better idea of what is present in samples we can move on to the next steps.
+The core taxa members are "ASV_1", "ASV_2",  "ASV_3",  "ASV_4",  "ASV_5",  "ASV_6",  "ASV_7",  "ASV_8",  "ASV_9",  "ASV_11", "ASV_12", "ASV_14", "ASV_16", "ASV_18", "ASV_19", "ASV_21", "ASV_23", "ASV_27".  Like in MIM2 project, we see *Cladosporium* spp. (ASV_1), *Vishniacozyma victoriae* (ASV_2), and *Cladosporium herbanum* (ASV_27) and. I notice that some ASVs are duplicates. For some reason the dada algorithm identified them as separate, but the taxonomic information is the same. This could be due to child sequences identified in the process. The sample coverage for this NextSeq 150bp PE run was excellent. 
 
 # Sampling depth and effort
 
@@ -1200,11 +598,11 @@ reads <- readcount(ps_clean_3) |>
   rename(n_seqs = "readcount(ps_clean_3)") |>
   right_join(plant_traits, by = "Unique_ID") |>
   filter(Unique_ID %in% names_list) |>
-  select(Unique_ID, Site, Species, n_seqs)
+  select(Unique_ID, Site, Genotype, n_seqs)
 
-# Sum of reads per site per species
+# Sum of reads per site per genotype
 reads_sum <- reads |>
-  group_by(Site, Species) |>
+  group_by(Site, Genotype) |>
   filter(Unique_ID %in% names_list) |>
   summarise(n_seqs = sum(n_seqs)) 
 
@@ -1232,19 +630,22 @@ reads |>
   filter(Unique_ID %in% names_list)
 
 #Good's coverage
-cover_goods <- ps_melt |>
-  select(Unique_ID, sample_Species, ASV, Abundance) |>
+cover_goods <- ps_clean_3 |>
+  psmelt() |>
+  rename(Unique_ID = Sample, ASV = OTU) |> #Renaming OTU column
+  dplyr::select(c(1:6))|>  
+  #select(Unique_ID, sample_Species, ASV, Abundance) |>
   group_by(Unique_ID) |>
   summarise(n_seqs = sum(Abundance),
             n_sing = sum(Abundance == 1),
             goods = 1 - (n_sing/n_seqs)) 
 cover_goods|>
-  filter(n_seqs > 750) |> #Filtering samples with more than f000 reads
+  filter(n_seqs > 1300) |> #Filtering samples with more than f000 reads
   ggplot(aes(x= n_seqs,y = goods)) +
   geom_point() # Similar to `phyloseq_coverage` results above but here we know how it is calculated.
           
 cover_goods |>
-  filter(n_seqs > 750) |>
+  filter(n_seqs > 1300) |>
   arrange(goods)
 ```
 
@@ -1582,7 +983,7 @@ ASV <- otu_table(t(ASV), taxa_are_rows = TRUE)
 taxa_names(ASV) #Should be ASV_#
 
 #Taxonomixc table
-TAXA <- read.csv(file.path(path,"clean_data/taxonomy/ASV_8450_phyloseq_nonsingletons_noB.csv")) # Taxonomic table
+TAXA <- read.csv(file.path(path,"clean_data/taxonomy/ASV_8859_v2_phyloseq_nonsingletons_noB.csv")) # Taxonomic table
 TAXA <- TAXA|>
   select(2:9) |>
   column_to_rownames(var = "ASV") |>
