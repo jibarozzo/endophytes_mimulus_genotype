@@ -1647,12 +1647,33 @@ ant_arranged_with_caption
 
 ```{r}
 # Traits for dbRDA
+# All samples
 dbrda_hell_matrix <- rrfy_hell_matrix |>
   column_to_rownames(var = "X") |>
   select(-c(1, 534:553))
 
+
 dbrda_traits <- rrfy_hell_matrix |>
   select(X, Unique_ID, Site, Genotype, logLBI)
+
+
+
+# Hybrids only
+dbrda_hybrids_matrix <- rrfy_hell_matrix |>
+  column_to_rownames(var = "X") |>
+  select(-c(1, 534:553)) |>
+  t() |>
+  as.data.frame() |>
+  select(contains(c("F2WY", "F2YW"))) |>
+  t() |>
+  as.data.frame()
+saveRDS(dbrda_hybrids_matrix, file = file.path(path, "clean_data/statistics/dbrda_hybrids_matrix.rds"))
+
+dbrda_hybrids_traits <- rrfy_hell_matrix |>
+  select(X, Unique_ID, Site, Genotype, logLBI)|>
+  filter(X %in% rownames(dbrda_hybrids_matrix))
+saveRDS(dbrda_hybrids_traits, file = file.path(path, "clean_data/statistics/dbrda_hybrids_traits.rds"))
+
 ```
 
 ```{r}
