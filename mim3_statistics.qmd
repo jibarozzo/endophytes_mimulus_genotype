@@ -908,7 +908,7 @@ We see 5 less core taxa members than the none rarefied data set. Bu the main pla
 #| echo: false
 #| eval: true
 #| tidy: true
-# Simple Matrix of 84 samples from Method B pipeline
+# Simple Matrix
 asv_matrix <- otu_table(ps_clean_3) |> # ASV matrix
   as.data.frame() |>
   select(contains(final_names_methodA)) |> # Samples from method B randomization
@@ -1689,12 +1689,13 @@ m2_hell <-
 
 #Anovas for m2
 set.seed(123)
-anova.cca(m2_hell,
-          by = "margin",
-          permutations = 999,
-          parallel = 8)
-anova(m2_hell, by = "axis")
-anova(m2_hell, by = "axis", perm.max = 500)
+anova_m2_hell <- anova.cca(m2_hell,
+                           by = "margin",
+                           permutations = 999,
+                           parallel = 8)
+
+save(m2_hell, file.path(path, file = "clean_data/statistics/m2_hell.rda"))
+save(anova_m2_hell, file.path(path, file = "clean_data/statistics/m2_hell.rda"))
 ```
 
 ##### Forward and backward selection with ordistep
@@ -1727,70 +1728,6 @@ anova(m2_hell, by = "axis", perm.max = 500)
 Ordistep fails to compute with `dbrda_hell_matrix`. Results from `anova.cca` on m2 show that all terms are significant. This is too good to be true and seems to be overfitting. I will try to remove the least significant terms and re-run the model. From `vif.cca` help page: *Variance inflation is a diagnostic tool to identify useless constraints. A common rule is that values over 10 indicate redundant constraints.*
 :::
 
-```{r}
-#Variance inflation factor for constrained ordination
-vif.cca(m2)
-```
-
-All of the sampling dates are redundant. I will remove `Sampling_Date` term. Elevation also has an extremely high `vif`, but it is part of the question. Let's keep it for a minute.
-
-```{r}
-# No sampling date
-m3_hell <- dbrda(dbrda_hell_matrix ~  logLBI + Elevation_m + Site + Species,  
-            distance = "bray",
-            dfun = vegdist,
-            data = dbrda_traits,
-            parallel = 8, #Passes parallelization to metaMDS function
-            na.action = na.omit)
-# Save
-save(m3_hell, file = "clean_data/statistics/m3_hell.rda")
-
-# Load
-load("clean_data/statistics/m3_hell.rda")
-
-
-vif.cca(m3_hell)
-summary(m3_hell)
-
-set.seed(123)
-anova_m3hell <- anova.cca(m3_hell, by = "margin", permutations = 999, parallel = 8)
-
-# Save
-save(anova_m3hell, file = "clean_data/statistics/anova_m3hell.rda")
-#Load
-load("clean_data/statistics/anova_m3hell.rda")
-```
-
-Sites are redundant. It over fits the model given all the site factors (n= 21)
-
-```{r}
-# No site
-m4_hell <- dbrda(dbrda_hell_matrix ~  logLBI + Elevation_m + Species,  
-            distance = "bray",
-            dfun = vegdist,
-            data = dbrda_traits,
-            parallel = 8, #Passes parallelization to metaMDS function
-            na.action = na.omit)
-
-# Save
-save(m4_hell, file = "clean_data/statistics/m4_hell.rda")
-
-# Load
-load("clean_data/statistics/m4_hell.rda")
-
-vif.cca(m4_hell) 
-summary(m4_hell)
-
-set.seed(123)
-anova_m4hell <- anova.cca(m4_hell, by = "margin", permutations = 999, parallel = 8)
-
-# Save
-save(anova_m4hell, file = "clean_data/statistics/anova_m4hell.rda")
-#Load
-load("clean_data/statistics/anova_m4hell.rda")
-
-
-```
 
 #### Plot dbRDA
 
@@ -1839,7 +1776,7 @@ A4.sub6 <- arrow_scores[6,] #LT.
 
 # dbRDA plot based on species
 p_final_model <- ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
-  geom_point(data = merged_data, aes(color = Species, shape = Site), size = rel(4), alpha = 0.7, stroke = 1) +
+  geom_point(data = merged_data, aes(color = Genotype, shape = Site), size = rel(4), alpha = 0.7, stroke = 1) +
   geom_segment(arrow_map, size = rel(.8), data = arrow_scores, color = "black", arrow = arrowhead) +
   geom_vline(xintercept = 0, color = "grey30", linetype = "dashed") + # plot vertical line
   geom_hline(yintercept = 0, color = "grey30", linetype = "dashed") + # plot horizontal line
@@ -1881,29 +1818,31 @@ p_final_model
 ```{r, adonis2}
 # Real data
 set.seed(123)
-perma <- adonis2(t(asv_matrix) ~ logACI + logLT + logLPS + logLMA +
-                   Elevation_m + 
-                 
-                   Species,
-                 data = dbrda_real_traits,
-                 method = "bray",
-                 parallel = 8,
-                 permutation = 999, 
-                 na.action = na.omit, 
-                 strata = NULL)
+perma <- adonis2(
+  dbrda_hell_matrix ~ logLBI + Site + Genotype,
+  data = dbrda_traits,
+  method = "bray",
+  parallel = 8,
+  permutation = 999,
+  na.action = na.omit,
+  strata = NULL
+)
 print(perma)
 
 # Rarefied data
 set.seed(123)
-perma2 <- adonis2(dbrda_hell_matrix ~ logACI + logLT + logLPS + logLMA +
-                   Elevation_m + 
-                   Species,
-                 data = dbrda_traits,
-                 method = "bray",
-                 parallel = 8,
-                 permutation = 999, 
-                 na.action = na.omit, 
-                 strata = NULL)
+perma2 <-
+  adonis2(
+    dbrda_hell_matrix ~ logACI + logLT + logLPS + logLMA +
+      Elevation_m +
+      Species,
+    data = dbrda_traits,
+    method = "bray",
+    parallel = 8,
+    permutation = 999,
+    na.action = na.omit,
+    strata = NULL
+  )
 print(perma2)
 
 # Simulated data
