@@ -1754,7 +1754,8 @@ Ordistep fails to compute with `dbrda_hell_matrix`. Results from `anova.cca` on 
 
 ```{r, final_model}
 # Final model
-final_model <- m3_hell
+#m2_hell <- load("clean_data/statistics/m2_hell.rda")
+final_model <- m2_hell
 
 names(final_model)
 B <- summary(final_model)
@@ -1770,7 +1771,7 @@ ordination_names <- rownames(ordination_scores)
 ordination_scores$Unique_ID <- rownames(ordination_scores)
 
 # Subset for the plot
-dbrda_df <- plant_traits_MB
+dbrda_df <- plant_traits_rfy
   #filter(Unique_ID %in% ordination_names)
 
 # Merge scores with trait data
