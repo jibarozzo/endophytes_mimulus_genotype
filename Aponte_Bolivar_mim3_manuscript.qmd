@@ -265,7 +265,7 @@ It functions by conducting punch-and-die tests with a sharp-edged cylindrical st
 
 ### Tissue preservation
 
-After collecting the leaf traits measurements, we prepared and preserved samples at the UC Merced Yosemite Field Station. We preserved the whole leaf lamina from plants due to thei small size, in contrast to Arnold et al., [-@arnold2003] and Tellez et al., [-@tellezTraits2022]. Leaf lamina sterilized with sequential washes in 95% EtOH (10 s), 0.5% sodium hypochlorite (NaOCl) (60 s), and 70% EtOH (60 s) and air dried under sterile conditions. Due to the small size of monkeyflower plants, the maximum amount of leaf lamina was preserved in sterile 2 mL tubes with \~ 1 mL CTAB solution (1 M Tris–HCl pH 8, 5 M NaCl, 0.5 M EDTA, and 20 g CTAB). The leaf tissue in CTAB solution was used for amplicon sequencing (described in detail below). All leaf tissue handling was performed in a sterile environment with an alcohol burner lamp inside a portable biosafety cabinet. All surfaces were previously sterilized sequentially with 0.5% NaOCl, 95% EtOH, and 70% EtOH. We surface sterilized surfaces and instruments in between sample handling to prevent cross contamination.
+After collecting the leaf traits measurements, we prepared and preserved samples at the UC Merced Yosemite Field Station. We preserved the whole leaf lamina from plants due to their small size, in contrast to Arnold et al., [-@arnold2003] and Tellez et al., [-@tellezTraits2022]. Leaf lamina were sterilized with sequential washes in 95% EtOH (10 s), 0.5% sodium hypochlorite (NaOCl) (60 s), and 70% EtOH (60 s) and air dried under sterile conditions. The maximum amount of leaf lamina was preserved in sterile 2 mL tubes with \~ 1 mL CTAB solution (1 M Tris–HCl pH 8, 5 M NaCl, 0.5 M EDTA, and 20 g CTAB). The leaf tissue in CTAB solution was used for amplicon sequencing (described in detail below). All leaf tissue handling was performed in a sterile environment with an alcohol burner lamp inside a portable biosafety cabinet. All surfaces were previously sterilized sequentially with 0.5% NaOCl, 95% EtOH, and 70% EtOH. We surface sterilized surfaces and instruments in between sample handling to prevent cross contamination.
 
 ### Amplicon sequencing
 
@@ -274,19 +274,31 @@ We stored leaf tissue in CTAB solution for 12 months at 20°C before extracting 
 
 <!-- We used a DNA extraction protocol for high-molecular weight DNA extraction adapted from Russo et al., [-@russo2022]. Briefly, it is a CTAB:chloroform:isoamyl extraction combined with a solid-phase reversible immobilization (SPRI) bead step [@russo2022; @rohland2012; @liu2023]. Protocol modifications allowed us to optimize extractions for fungal DNA from preserved leaf tissue [see details in @aponterolon2023]. After all genomic DNA was extracted, we quantified the DNA using Quant-iT® dsDNA HS Assay kit with Qubit Flourometer (Thermo Fisher Scientific, Waltham, MA, USA., Cat# Q33120) and followed a two-step amplification approach described by Sarmiento et al. [-@sarmiento2017] and U'Ren & Arnold [-@uren2017]. We used standard primers ITS1F [@gardes1993] and ITS2 [@inbook] modified with the Illumina TruSeq adaptor (see Supplementary Material). Every sample was amplified in three parallel reactions at the annealing temperatures 52 ℃, 54 ℃, and 56 ℃ to amplify a wide range of fungal taxa and reduce amplification bias for short ITS sequences [@uren2017; @lumibao2018]. Each PCR (PCR1) reaction contained 2 µL of sample DNA template. We visualized PCR1 reactions with SYBR™ Safe DNA Gel Stain (Thermo Fisher Scientific, Waltham, MA, USA., Cat# S33102) on 2% agarose gel [@oita2021]. We combined 5 µL of amplicon product from parallel reactions into a single tube per sample and purified using Sera-Mag™ SpeedBead Carboxylate-Modified Magnetic Particles (Hydrophobic) (Thermo Fisher Scientific, Waltham, MA, USA., Cat#09-981-123) prepared as per [-@rohland2012 and -@liu2023] and used a ratio of 1.2x:1 with 80% EtOH following manufacturer's instructions. We used 3 µL of PCR1 product from samples, DNA extraction controls, and PCR1 negative controls for a second PCR (PCR2) with barcoded adapters (IDT, Coralville, Iowa, USA). Each PCR2 reaction (total 30 µL) contained 1X Phusion Flash High Fidelity PCR Master Mix (Thermo Fisher Scientific, Waltham, MA, USA., Cat# F548L), 0.075 µM of barcoded primers (forward and reverse pooled at an initial concentration of 2 µM) and 0.20mg/mL of BSA (Thermo Fisher Scientific, Waltham, MA, USA., Cat# B14) following [-@sarmiento2017 and -@uren2017]. Before final pooling for sequencing, we purified and concentrated amplicons using SPRI beads to a total volume of 20 µL. We quantified PCR2 product with Quant-iT™ PicoGreen™ dsDNA Assay Kit (Thermo Fisher Scientific, Waltham, MA, USA., Cat# P7589) with the BioTek Synergy LX plate reader (Agilent, Santa Clara, CA) and combined equimolar amounts of libraries, including DNA extraction controls, PCR1, and PCR2 negative controls into a 10nM library pool. We did not detect any contamination visually or fluorometrically. Libraries were sequenced on the Illumina MiSeq platform with Reagent Kit v3 (2 \u00D7 300 bp) at Duke Genome Sequencing and Analysis Core Facility (Durham, NC, USA). Throughout all these steps, we used a separate set of sterile pipettes, tips, and equipment to reduce contamination in a designated PCR area to restrict contact with pre-PCR materials [@oita2021]. -->
 
+### Sequence-based genotyping
+
+We genotyped individuals following a modified ddRADseq protocol, Rapture [@ali2016; @nelson2019], for the identification of single nucleotide polymorphisms (SNPs). We allotted the remaining DNA extracted from leaf tissue to the ddRADseq library preparation. The Rapture protocol call for a two step digestion process, for which we used the restriction enzyme *Bfal-HF* (R0568S, New England Biolabs, Ipswich, MA, USA) in the first DNA digestion, and  *PstI* (R0140L, New England Biolabs, Ipswich, MA, USA) in the second digestion. We then ligated annealed oligos to each sample. We prepared ddRAD libraries using the NEBNext® Ultra™ II DNA Library Prep Kit for Illumina® (E7645S, New England Biolabs, Ipswich, MA, USA) with the *i7* oligos from NEBNext® Multiplex Oligos for Illumina® (E7335S, New England Biolabs, Ipswich, MA, USA) and a custom *i5* barcoded oligos (IDT, Coralville, Iowa, USA; see Supplementary Materials). We sequenced the library on the Illumina NovaSeq X Plus platform at Duke Genome Sequencing and Analysis Core Facility (Durham, NC, USA). 
+
+
 ### Bioinformatic analyses
 
-We used FastQc v0.12.1 [ v0.12.1; @andrews2010] and MultiQC [@ewels2016] tools to assess the quality of the reads. A total of 20,685,544 total ITS1 reads yielded from 318 (including 31 controls) libraries sequenced in a single run. We modified the open-source DADA2 bioinformatic pipeline for our data set [@callahan2016]. Our initial quality assessment revealed both, forward and reverse reads,were of high quality. We filtered our reads for ambiguous calls before removing the adapters by using `filterAndTrim` function and argument `maxN = 0` from the `dada2` package [v1.28.0; @callahan2016]. We removed forward and reverse primer adapters (and their reverse compliments) and eliminated reads shorter than 10 bp using the `cutadapt` tool [v4.6, @martin2011]. Following this filtering process, we re-evaluated read quality and then applied stringent filter and truncation parameters based on maximum expected errors (maxEE) rather than read length [@edgar2015] to ensure  high-quality taxonomy assignment later on. For this we set set the arguments `trunQ = 2`, `maxEE = c(2,2)` for forward and reverse reads, and minimum read length of 50 bp with `minLen = 50` in the used the `filterAndTrim` function [@callahan2016]. After this filter, we dereplicated reads with the `derepFastq` function and merged pairs using `mergePairs` functions with an overlap of 12 bp, minimum. We then inferred composition of the samples with `dada` function, which applies the DADA algorithm [@callahan2016; @rosen2012]. We removed chimeras via the "consensus"method with the `removeBimeraDenovo` function and ultimately we used the `assignTaxonomy` function to assign taxonomy the amplicon sequence variants (ASV) referenced against the UNITE database [@abarenkov2023a]. After taxonomy assignment we used the `phyloseq` package [@mcmurdie2013] to create a phyloseq object for downstream analyses.
+#### ITS amplicons
+Similar to Chapter 2, we used FastQc v0.12.1 [ v0.12.1; @andrews2010] and MultiQC [@ewels2016] tools to assess the quality of the reads. A total of 20,685,544 total ITS1 reads yielded from 318 (including 31 controls) libraries sequenced in a single run. We modified the open-source DADA2 bioinformatic pipeline for our data set [@callahan2016]. Our initial quality assessment revealed both, forward and reverse reads,were of high quality. We filtered our reads for ambiguous calls before removing the adapters by using `filterAndTrim` function and argument `maxN = 0` from the `dada2` package [v1.28.0; @callahan2016]. We removed forward and reverse primer adapters (and their reverse compliments) and eliminated reads shorter than 10 bp using the `cutadapt` tool [v4.6, @martin2011]. Following this filtering process, we re-evaluated read quality and then applied stringent filter and truncation parameters based on maximum expected errors (maxEE) rather than read length [@edgar2015] to ensure  high-quality taxonomy assignment later on. For this we set set the arguments `trunQ = 2`, `maxEE = c(2,2)` for forward and reverse reads, and minimum read length of 50 bp with `minLen = 50` in the used the `filterAndTrim` function [@callahan2016]. After this filter, we dereplicated reads with the `derepFastq` function and merged pairs using `mergePairs` functions with an overlap of 12 bp, minimum. We then inferred composition of the samples with `dada` function, which applies the DADA algorithm [@callahan2016; @rosen2012]. We removed chimeras via the "consensus"method with the `removeBimeraDenovo` function and ultimately we used the `assignTaxonomy` function to assign taxonomy the amplicon sequence variants (ASV) referenced against the UNITE database [@abarenkov2023a]. After taxonomy assignment we used the `phyloseq` package [@mcmurdie2013] to create a phyloseq object for downstream analyses.
 
-We decontaminated and performed all post-quality bioinformatic steps as described in Chapter 2
-<!-- We used the `decontam` package [v1.20.0; @davis2018] to statistically determine which ASVs are likely contaminants based on their frequency in our samples and remove them using `prune_taxa` function from the `phyloseq` package [v1.44.0; @mcmurdie2013]. After which, we calculated the average read count found in DNA and PCR extraction controls, considered to be laboratory contaminants, and subtracted that from the samples' read counts. We then used custom scripts to remove any ASV that represented less than 0.1% of the abundance per sample on the assumption that it originates from contamination throughout handling of samples in the DNA and PCR processes. We removed singleton ASVs with the `prune_taxa` function [@mcmurdie2013]. All post-quality bioinformatic steps were performed in *R* [v.4.3.2; @rcoreteam2023]. -->
+We decontaminated ITS amplicons and performed all post-quality bioinformatic steps as described in Chapter 2.
+<!-- We used the `decontam` package [v1.20.0; @davis2018] to statistically determine which ASVs are likely contaminants based on their frequency in our samples and remove them using `prune_taxa` function from the `phyloseq` package [v1.44.0; @mcmurdie2013]. After which, we calculated the average read count found in DNA and PCR extraction controls, considered to be laboratory contaminants, and subtracted that from the samples' read counts. We then used custom scripts to remove any ASV that represented less than 0.1% of the abundance per sample on the assumption that it originates from contamination throughout handling of samples in the DNA and PCR processes. We removed singleton ASVs with the `prune_taxa` function [@mcmurdie2013]. All post-quality bioinformatic steps were performed in *R* [v.4.3.3; @rcoreteam2024]. -->
+
+#### Single Nucleotide Polymorphisms (SNPs)
+
+The *i7* demultiplexing was performed by Duke Genome Sequencing and Analysis Core Facility (Durham, NC, USA). The *i5* demultiplexing and generation of *vcf* files was done following the Nelson [-@nelson2020]. NEEDS MORE
+
+
 
 ## Statistical Analyses
 
 ### Community Diversity
 
-To account for uneven sampling effort and over-representation of sequences, we normalized libraries by repeated rarefying, following Cameron et al. [-@cameron2021].
-We determined a sequence depth of 750 by calculating Good's coverage and qualitative evaluation of libraries to determine a balanced coverage and breadth of samples [@schloss2024].
+We normalized libraries by repeated rarefying, following Cameron et al. [-@cameron2021].
+We determined a sequence depth of 1300 reads by calculating Good's coverage and qualitative evaluation of libraries to determine a balanced coverage and breadth of samples [@schloss2024].
 This approach allowed for a proportionate representation of observed sequences from host species and a robust characterization of random variation inherent in rarefaction of small libraries [@cameron2021; @schloss2024].
 First, we randomly selected 136 samples out of the 157 that resulted from the bioinformatic pipeline (refer to the Results section below).
 The sample pool was reduced to 136 to match the theoretical reduction of one sample per site (*n* = 21).
@@ -316,7 +328,7 @@ For the geographical distances between sites, we used `distm` function with the 
 ### Leaf traits
 
 We checked for normality and homoscedasticity of the leaf traits measured.
-We used Shapiro-Wilk and Fligner-Killen tests from the `stats` package [@rcoreteam2023] to check for normality and homoscedasticity, respectively.
+We used Shapiro-Wilk and Fligner-Killen tests from the `stats` package [@rcoreteam2024] to check for normality and homoscedasticity, respectively.
 We established that the leaf funtional trait data was not normally distributed and not homoscedastic.
 We then used non-parametric tests, the Wilcoxon Rank Sum test, to compare leaf functional trait means among species and sites to answer the first portion of Q1 and Q2.
 We used the `compare_means` and `stat_compare_means`functions from the `ggpubr` package [@kassambara2023] to perform these tests and properly visualize them.
@@ -324,7 +336,7 @@ We adjusted *p* values to account for false discovery rates in multiple comparis
 We performed Principal Component Analysis (PCA) to understand patterns and relationships among leaf traits of host species.
 We used the `prcomp` function from the `vegan` package [@oksanen2022] compute the PCA analysis with variables ACI, LT, LPS, LMA, and LBI, all log-transformed.
 We used only complete raw leaf functional traits measurements to compute the PCA analysis (*n* = 504), samples with missing values were omitted.
-All statistical analyses were performed in *R* programming language [v.4.3.2; @rcoreteam2023].
+All statistical analyses were performed in *R* programming language [v.4.3.3; @rcoreteam2024].
 We present the log-transformed leaf functional trait data at the leaf level: ACI (*n* = `r sum(!is.na(leaf_traits_noB$logACI))`), LT (*n* = `r sum(!is.na(leaf_traits_noB$logLT))`), LPS (*n* = `r sum(!is.na(leaf_traits_noB$logLPS))`), LMA (*n* = `r sum(!is.na(leaf_traits_noB$logLMA))`), LBI (*n* = `r sum(!is.na(leaf_traits_noB$logLBI))`).
 The FEF community data is presented at the plant/sample level (*n* = `r sum(!is.na(plant_traits$Observed))`).
 
@@ -1949,8 +1961,27 @@ phyloseq_ntaxa_by_tax(
 
 ## Supplementary methods
 
-### Illumina TruSeq adapters
+### Illumina TruSeq adapters for ITS sequencing
 
-The modified primers for the first PCR (adapter ligation and ITS1 amplification) were as follows: 5’ CACTCTTTCCCTACACGACGCTCTTCCGATCTCTTGGTCATTTAGAGGAAGTAA 3’ (forward) and 5’ GTGACTGGAGTTCAGACGTGTGCTCTTCCGATCTGCTGCGTTCTTCATCGATGC 3’ (reverse).
+The modified primers for the first PCR (adapter ligation and ITS1 amplification) were as follows: 5’-CAC TCT TTC CCT ACA CGA CGC TCT TCC GAT CTC TTG GTC ATT TAG AGG AAG TAA-3’ (forward) and 5’-GTG ACT GGA GTT CAG ACG TGT GCT CTT CCG ATC TGC TGC GTT CTT CAT CGA TGC-3’ (reverse).
 
 See [@gardes1993] and [@inbook] for more details.
+
+### IDT BestRAD barcodes and *i5* custom oligos
+
+####BestRAD adaptors:
+Top oligo 
+Anatomy: biotin spacer SbfI barcode overhang 
+Sequence: /5Biosg/GTACGT CCTGCAGG NNNNNNN TGCA 
+Bottom oligo 
+Sequence: /5Phos/NNNNNNN CCTGCAGG ACGTAC 
+
+
+#### BestRAD *i5*
+
+5'-AAT GAT ACG GCG ACC ACC GAG ATC TAC ACN NNN NNN NAC ACT CTT TCC CTA CAC GAC GCT CTT CCG ATC*T-3’
+
+
+
+
+```{r, supp_table2}

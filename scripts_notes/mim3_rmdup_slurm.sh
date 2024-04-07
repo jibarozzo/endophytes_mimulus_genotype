@@ -12,7 +12,7 @@
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=baponterolon@tulane.edu
 
-export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK #$SLURM_CPUS_PER_TASK stores whatever value we assign to cpus-per-task, and is therefore our candidate for passing to OMP_NUM_THREADS
+export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK # Set OMP_NUM_THREADS to the number of CPUs per task we asked for.
 
 ##Modules/Singularity
 module load anaconda

@@ -70,7 +70,7 @@ m0_hell <- dbrda(
     distance = "bray",
     dfun = vegdist,
     data = dbrda_traits,
-    parallel = 8, #Passes parallelization to metaMDS function # Do not use when using Rmpi
+    parallel = 10, #Passes parallelization to metaMDS function # Do not use when using Rmpi
     na.action = na.omit
 ) #Model with intercept only.
 save(m0_hell, file = "clean_data/statistics/m0_hell.rda")
@@ -80,7 +80,7 @@ m1_hell <- dbrda(
     distance = "bray",
     dfun = vegdist,
     data = dbrda_traits,
-    parallel = 8,
+    parallel = 10,
     na.action = na.omit
 ) # Model with all explanatory variables.
 save(m1_hell, file = "clean_data/statistics/m1_hell.rda")
@@ -93,7 +93,7 @@ m2_hell <-
         distance = "bray",
         dfun = vegdist,
         data = dbrda_traits,
-        parallel = 8,
+        parallel = 10,
         na.action = na.omit
     )
 save(m2_hell, file = "clean_data/statistics/m2_hell.rda")
@@ -126,7 +126,7 @@ save(beta_dis1, file = "clean_data/statistics/beta_dis1.rda")
 set.seed(123)
 beta_perm1 <-
     permutest(beta_dis1,
-              parallel = 8,
+              parallel = 10,
               permutations = 999,
               by = "margin")
 save(beta_perm1, file = "clean_data/statistics/beta_perm1.rda")
@@ -146,7 +146,7 @@ save(beta_dis2, file = "clean_data/statistics/beta_dis2.rda")
 set.seed(123)
 beta_perm2 <-
     permutest(beta_dis2,
-              parallel = 8,
+              parallel = 10,
               permutations = 999,
               by = "margin")
 save(beta_perm2, file = "clean_data/statistics/beta_perm2.rda")
@@ -180,7 +180,7 @@ m0_hybrids_hell <- dbrda(
     distance = "bray",
     dfun = vegdist,
     data = dbrda_hybrids_traits,
-    parallel = 8, #Passes parallelization to metaMDS function
+    parallel = 10, #Passes parallelization to metaMDS function
     na.action = na.omit
 ) #Model with intercept only.
 save(m0_hybrids_hell, file = "clean_data/statistics/m0_hybrids_hell.rda")
@@ -190,7 +190,7 @@ m1_hybrids_hell <- dbrda(
     distance = "bray",
     dfun = vegdist,
     data = dbrda_hybrids_traits,
-    parallel = 8,
+    parallel = 10,
     na.action = na.omit
 ) # Model with all explanatory variables.
 save(m1_hybrids_hell, file = "clean_data/statistics/m1_hybrids_hell.rda")
@@ -203,7 +203,7 @@ m2_hybrids_hell <-
         distance = "bray",
         dfun = vegdist,
         data = dbrda_hybrids_traits,
-        #parallel = 8,
+        #parallel = 10,
         na.action = na.omit
     )
 save(m2_hybrids_hell, file = "clean_data/statistics/m2_hybrids_hell.rda")
@@ -214,7 +214,7 @@ anova_m2_hybrids_hell <- anova.cca(
     m2_hybrids_hell,
     by = "margin",
     permutations = 999,
-    parallel = 8
+    parallel = 10
 )
 save(anova_m2_hybrids_hell, file = "clean_data/statistics/anova_m2_hybrids_hell.rda")
 
@@ -238,7 +238,7 @@ save(beta_hybrids_dis1, file = "clean_data/statistics/beta_hybrids_dis1.rda")
 set.seed(123)
 beta_hybrids_perm1 <-
     permutest(beta_hybrids_dis1,
-              parallel = 8,
+              parallel = 10,
               permutations = 999,
               by = "margin")
 save(beta_hybrids_perm1, file = "clean_data/statistics/beta_hybrids_perm1.rda")
@@ -258,7 +258,7 @@ save(beta_hybrids_dis2, file = "clean_data/statistics/beta_hybrids_dis2.rda")
 set.seed(123)
 beta_hybrids_perm2 <-
     permutest(beta_dis2,
-              parallel = 8,
+              parallel = 10,
               permutations = 999,
               by = "margin")
 save(beta_hybrids_perm2, file = "clean_data/statistics/beta_hybrids_perm2.rda")

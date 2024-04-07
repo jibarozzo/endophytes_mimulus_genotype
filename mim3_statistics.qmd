@@ -778,10 +778,11 @@ Now let's clean it up, select the randomized subsamples, and start plotting.
 # Method A output
 plant_traits_rfy <- plant_traits_rfy |>
   select(!c(10:11)) |> # Removing variables calculated before rarefactions
-  relocate(Unique_ID, .before = Site) |> # Moving Unique_ID to the front
-  mutate(Unique_ID =  str_remove(Unique_ID, "^.*?(_|-)"),
+  mutate(X = Unique_ID,
+         Unique_ID =  str_remove(Unique_ID, "^.*?(_|-)"),
          hill_1 = exp(shannon_)) |> # Observed column is equivalent to hill_0
   # Simpson index is (1-D) and InvSimpson (1/D) which is equivalent to hill_2
+  relocate(X, Unique_ID, .before = Site) |> # Moving Unique_ID to the front
   rename(
     Observed = observed,
     Shannon = shannon_,
@@ -1754,7 +1755,7 @@ Ordistep fails to compute with `dbrda_hell_matrix`. Results from `anova.cca` on 
 
 ```{r, final_model}
 # Final model
-#m2_hell <- load("clean_data/statistics/m2_hell.rda")
+m2_hell <- load("clean_data/statistics/m2_hell.rda")
 final_model <- m2_hell
 
 names(final_model)
@@ -1789,12 +1790,12 @@ arrowhead = arrow(length = unit(0.02, "npc"))
 arrow_scores <- arrow_scores[order(rownames(arrow_scores)), ]
 A4 <- lapply(1:6, function(i) arrow_scores[i, ])
 
-A4.sub1 <- arrow_scores[1,] #Elevation
-A4.sub2 <- arrow_scores[2,] #ACi
-A4.sub3 <- arrow_scores[3,] #LBI
-A4.sub4 <- arrow_scores[4,] #LMA
-A4.sub5 <- arrow_scores[5,] #LPS
-A4.sub6 <- arrow_scores[6,] #LT.
+# A4.sub1 <- arrow_scores[1,] #Elevation
+# A4.sub2 <- arrow_scores[2,] #ACi
+# A4.sub3 <- arrow_scores[3,] #LBI
+A4.sub4 <- arrow_scores[4,] #logLBI
+# A4.sub5 <- arrow_scores[5,] #LPS
+# A4.sub6 <- arrow_scores[6,] #LT.
 
 # dbRDA plot based on species
 p_final_model <- ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
@@ -1802,17 +1803,17 @@ p_final_model <- ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
   geom_segment(arrow_map, size = rel(.8), data = arrow_scores, color = "black", arrow = arrowhead) +
   geom_vline(xintercept = 0, color = "grey30", linetype = "dashed") + # plot vertical line
   geom_hline(yintercept = 0, color = "grey30", linetype = "dashed") + # plot horizontal line
-  geom_text(label_map, size = rel(4), data = A4[[1]], fontface = "bold", show.legend = FALSE, label = c("Elev.")) +
-  geom_text(label_map, size = rel(4), data = A4[[2]], fontface = "bold", show.legend = FALSE, label = c("logACI")) +
-  geom_text(label_map, size = rel(4), data = A4[[3]], fontface = "bold", show.legend = FALSE, label = c("logLBI")) +
-  geom_text(label_map, size = rel(4), data = A4[[4]], fontface = "bold", show.legend = FALSE, label = c("logLMA")) +
-  geom_text(label_map, size = rel(4), data = A4[[5]], fontface = "bold", show.legend = FALSE, label = c("logLPS")) +
-  geom_text(label_map, size = rel(4), data = A4[[6]], fontface = "bold", show.legend = FALSE, label = c("logLT")) +
+  geom_text(label_map, size = rel(4), data = A4[[1]], fontface = "bold", show.legend = FALSE, label = c("F2WY")) +
+  geom_text(label_map, size = rel(4), data = A4[[2]], fontface = "bold", show.legend = FALSE, label = c("G")) +
+  geom_text(label_map, size = rel(4), data = A4[[3]], fontface = "bold", show.legend = FALSE, label = c("L")) +
+  geom_text(label_map, size = rel(4), data = A4[[4]], fontface = "bold", show.legend = FALSE, label = c("logLBI")) +
+  geom_text(label_map, size = rel(4), data = A4[[5]], fontface = "bold", show.legend = FALSE, label = c("LM")) +
+  geom_text(label_map, size = rel(4), data = A4[[6]], fontface = "bold", show.legend = FALSE, label = c("OPN")) +
   xlab(label = paste("dbRDA1 (", round(B$concont$importance[2,1]*100, digits = 1), "%)", sep="")) +
   ylab(label = paste("dbRDA2 (", round(B$concont$importance[2,2]*100, digits = 1), "%)", sep="")) + 
-  scale_color_manual(values= met.brewer("Isfahan2", n = 3, type = "discrete", direction = -1)) +
+  scale_color_manual(values= met.brewer("Isfahan2", n = 4, type = "discrete", direction = -1)) +
   scale_shape_manual(values=c(1:22)) +
-  stat_ellipse(aes(color = Species),
+  stat_ellipse(aes(color = Genotype),
                geom = "path",
                linewidth = 1.7,
                position = "identity",

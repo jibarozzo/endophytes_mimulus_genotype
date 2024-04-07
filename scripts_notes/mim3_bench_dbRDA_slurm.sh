@@ -7,8 +7,8 @@
 #SBATCH --time=23:00:00
 #SBATCH --mem=128000 #Up to 256000, the maximum increases queue time
 #SBATCH --nodes=2               # One is enough. When running MPIs, anywhere from 2-4 should be good.
-#SBATCH --ntasks-per-node=1    # Number of Tasks per Node (MPI processes)
-#SBATCH --cpus-per-task=20      # Number of cpu-cores (threads) per task (OMP threads)
+#SBATCH --ntasks-per-node=2    # Number of Tasks per Node (MPI processes)
+#SBATCH --cpus-per-task=10      # Number of cpu-cores (threads) per task (OMP threads)
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=baponterolon@tulane.edu
 #SBATCH --partition=centos7    #This is important to run the latest software versions
@@ -26,7 +26,7 @@ echo job id: $SLURM_JOB_ID
 echo Number of tasks: $SLURM_NTASKS
 
 #Run R script
-R CMD BATCH mim3_dbRDA_models.R # Add your script here
+R CMD BATCH mim3_bench_dbRDA_models.R # Add your script here
 
 module purge
 
