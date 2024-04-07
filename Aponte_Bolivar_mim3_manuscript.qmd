@@ -230,6 +230,10 @@ names_list <- colnames(ps_clean_3@otu_table) #List of samples
 
 # Introduction
 
+
+# Results
+How many individuals do we have LBI data, how many do we have genetic data (fungi and ddRAD)? 
+(*n* = `r sum(!is.na(plant_traits$logLBI))`) and `r sum(!is.na(ps_clean_3@sam_data[["logLBI"]]))`
 # Materials and Methods
 
 Study system The *M. guttatus* species complex, is an ideal system to our questions because it has two members, *M. guttatus* and *M. laciniatus*, that are locally adapted to contrasting microhabitats and diverge exhibit differences in various traits such as leaf morphology, timing of flowering, and reproductive mechanism (Ferris, Sexton, & Willis, 2014; Ferris & Willis, 2018).

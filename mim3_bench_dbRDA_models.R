@@ -53,7 +53,7 @@ rrfy_hell_matrix <- readRDS("clean_data/statistics/rrfy_hell_matrix.rds")
 # Traits for dbRDA
 # dbrda_hell_matrix <- rrfy_hell_matrix |>
 #     column_to_rownames(var = "X") |>
-#     select(-c(1, 534:553))
+#     select(-c(1, 2:16))
 dbrda_hell_matrix <- readRDS("clean_data/statistics/dbrda_hell_matrix.rds")
 
 # dbrda_traits <- rrfy_hell_matrix |>

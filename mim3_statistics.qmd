@@ -773,23 +773,24 @@ ggplot(plant_traits_rfy, aes(x = Genotype, y = shannon_, color = Genotype)) +
 Now let's clean it up, select the randomized subsamples, and start plotting.
 
 ##### Rarefied data frame
-
+Function alpha_rfy_DF() return a data frame with rarefied alpha diversity, BUT also rarefied leaf traits. Somehow it randomizes values and we end up with CF_5_4_F2WY matching with genotype G and corresponding data. Here I remove the randomized leaf trait data and assign the correct values to each sample. It needs to be the same for Unique_ID accrose rarefied data frames.
 ```{r, rarefaction_output}
-# Method A output
 plant_traits_rfy <- plant_traits_rfy |>
-  select(!c(10:11)) |> # Removing variables calculated before rarefactions
+  select(c(16:20)) |> # Removing variables calculated before rarefactions
   mutate(X = Unique_ID,
          Unique_ID =  str_remove(Unique_ID, "^.*?(_|-)"),
          hill_1 = exp(shannon_)) |> # Observed column is equivalent to hill_0
   # Simpson index is (1-D) and InvSimpson (1/D) which is equivalent to hill_2
-  relocate(X, Unique_ID, .before = Site) |> # Moving Unique_ID to the front
+  relocate(X, Unique_ID, .before = shannon_) |> # Moving Unique_ID to the front
   rename(
     Observed = observed,
     Shannon = shannon_,
     Simpson_1minusD = simpson_,
     hill_2 = invsimpson_
   ) |>
-  relocate(Observed, .before = Shannon)# Renaming and relocating columns
+  left_join(plant_traits, by = "Unique_ID") |> # Joining with plant_traits data frame
+  relocate(Observed, Shannon, Simpson_1minusD, hill_1, hill_2, .after = logLMA)
+
 
 
 plant_traits_rfy |>
@@ -925,8 +926,8 @@ rrfy_hell_matrix <- as.data.frame(rrfy_hell_matrix) |>
   mutate(Unique_ID =  X, # Copyin column to new column 
          Unique_ID =  str_remove(Unique_ID, "^.*?(_|-)")) |>
   relocate(Unique_ID, .after = X) |>
-  left_join(plant_traits, by = "Unique_ID")
-  t() # Transpose due to duplicate row names not allowed
+  left_join(plant_traits, by = "Unique_ID") |>
+  relocate(c(535:549), .before = ASV_1)
 
 # Save
 saveRDS(rrfy_hell_matrix, file = "clean_data/statistics/rrfy_hell_matrix.rds") 
@@ -1639,123 +1640,243 @@ ant_arranged_with_caption
 ```
 
 
+### dbRDA and PERMDISP modelling
 
-### dbRDA
-
-#### dbRDA modelling
-
-##### Hellinger transformed rarefied data
 
 ```{r}
+################################################################
+#### dbRDA modelling for all samples: parentals and hybrids ####
+################################################################
+
 # Traits for dbRDA
+##### Hellinger transformed rarefied data
 # All samples
 dbrda_hell_matrix <- rrfy_hell_matrix |>
   column_to_rownames(var = "X") |>
-  select(-c(1, 534:553))
+  select(-c(1, 2:16))
+saveRDS(dbrda_hell_matrix, file = "clean_data/statistics/dbrda_hell_matrix.rds")
 
 
 dbrda_traits <- rrfy_hell_matrix |>
   select(X, Unique_ID, Site, Genotype, logLBI)
+saveRDS(dbrda_traits, file = "clean_data/statistics/dbrda_traits.rds")
 
-
-
-# Hybrids only
-dbrda_hybrids_matrix <- rrfy_hell_matrix |>
-  column_to_rownames(var = "X") |>
-  select(-c(1, 534:553)) |>
-  t() |>
-  as.data.frame() |>
-  select(contains(c("F2WY", "F2YW"))) |>
-  t() |>
-  as.data.frame()
-saveRDS(dbrda_hybrids_matrix, file = file.path(path, "clean_data/statistics/dbrda_hybrids_matrix.rds"))
-
-dbrda_hybrids_traits <- rrfy_hell_matrix |>
-  select(X, Unique_ID, Site, Genotype, logLBI)|>
-  filter(X %in% rownames(dbrda_hybrids_matrix))
-saveRDS(dbrda_hybrids_traits, file = file.path(path, "clean_data/statistics/dbrda_hybrids_traits.rds"))
-
-```
-
-```{r}
 # Model with intercept only ####
 # Using rrfy_hell_matrix as the distance matrix
 m0_hell <- dbrda(
-  dbrda_hell_matrix ~ 1,
-  distance = "bray",
-  dfun = vegdist,
-  data = dbrda_traits,
-  parallel = 8, #Passes parallelization to metaMDS function
-  na.action = na.omit
+    dbrda_hell_matrix ~ 1,
+    distance = "bray",
+    dfun = vegdist,
+    data = dbrda_traits,
+    parallel = 8, #Passes parallelization to metaMDS function # Do not use when using Rmpi
+    na.action = na.omit
 ) #Model with intercept only.
+save(m0_hell, file = "clean_data/statistics/m0_hell.rda")
 
 m1_hell <- dbrda(
-  dbrda_hell_matrix ~ .,
-  distance = "bray",
-  dfun = vegdist,
-  data = dbrda_traits,
-  parallel = 8,
-  na.action = na.omit
-) # Model with all explanatory variables.
-
-# Model with species, site, leaf traits and elevation. ####
-m2_hell <-
-  dbrda(
-    dbrda_hell_matrix ~ logLBI + Site + Genotype,
+    dbrda_hell_matrix ~ .,
     distance = "bray",
     dfun = vegdist,
     data = dbrda_traits,
     parallel = 8,
     na.action = na.omit
-  )
+) # Model with all explanatory variables.
+save(m1_hell, file = "clean_data/statistics/m1_hell.rda")
+
+
+# Model with species, site, leaf traits and elevation. ####
+m2_hell <-
+    dbrda(
+        dbrda_hell_matrix ~ logLBI + Site + Genotype,
+        distance = "bray",
+        dfun = vegdist,
+        data = dbrda_traits,
+        parallel = 8,
+        na.action = na.omit
+    )
+save(m2_hell, file = "clean_data/statistics/m2_hell.rda")
 
 #Anovas for m2
 set.seed(123)
 anova_m2_hell <- anova.cca(m2_hell,
                            by = "margin",
                            permutations = 999,
-                           parallel = 8)
+                           parallel = 10)
+save(anova_m2_hell, file = "clean_data/statistics/anova_m2_hell.rda")
 
-save(m2_hell, file.path(path, file = "clean_data/statistics/m2_hell.rda"))
-save(anova_m2_hell, file.path(path, file = "clean_data/statistics/m2_hell.rda"))
+
+### PERMDISP
+
+#Analysis of multivariate homogeneity of group dispersions.
+
+# By Genotype
+set.seed(123)
+beta_dis1 <-
+    betadisper(
+        vegdist(dbrda_hell_matrix, method = "bray"), # Matrix of Hellinger transformed data rarefied
+        dbrda_traits$Genotype,
+        type = "median",
+        sqrt.dist = FALSE
+    )
+save(beta_dis1, file = "clean_data/statistics/beta_dis1.rda")
+
+## Permutest
+set.seed(123)
+beta_perm1 <-
+    permutest(beta_dis1,
+              parallel = 8,
+              permutations = 999,
+              by = "margin")
+save(beta_perm1, file = "clean_data/statistics/beta_perm1.rda")
+
+
+# By Site
+set.seed(123)
+beta_dis2 <- betadisper(
+    vegdist(dbrda_hell_matrix, method = "bray"),
+    dbrda_traits$Site,
+    type = "median",
+    sqrt.dist = FALSE
+)
+save(beta_dis2, file = "clean_data/statistics/beta_dis2.rda")
+
+## Permutest
+set.seed(123)
+beta_perm2 <-
+    permutest(beta_dis2,
+              parallel = 8,
+              permutations = 999,
+              by = "margin")
+save(beta_perm2, file = "clean_data/statistics/beta_perm2.rda")
 ```
-
-##### Forward and backward selection with ordistep
 
 ```{r}
-#Both, forward and backward selection. This way I can see the step by step.
-#m3
-# m2.forsel <-  ordistep(m0, scope = formula(m1), Pin = 0.009, Pout = 0.06 , 
-#                        trace = T, 
-#                        permutations = how(nperm = 10),
-#                        parallel = 8,
-#                        steps = 50, 
-#                        direction = "both", 
-#                        na.action = na.omit)
-# 
-# m2.forsel <-  ordiR2step(m0, m1, 
-#                        Pin = 0.009,
-#                        R2scope = TRUE,
-#                        permutations = how(nperm = 499), 
-#                        trace = TRUE, 
-#                        R2permutations = 1000, 
-#                        na.action = na.omit)
-# 
+#################################################################
+#### dbRDA modelling for all samples: hybrids ONLY ####
+#################################################################
 
-#summary(m2.forsel)
-#anova(m2.forsel, by = "margin") # test for sign. environ. variables 
+##### Hellinger transformed rarefied data
+dbrda_hybrids_matrix <- rrfy_hell_matrix |>
+  column_to_rownames(var = "X") |>
+  select(-c(1, 2:16)) |>
+  t() |>
+  as.data.frame() |>
+  select(contains(c("F2WY", "F2YW"))) |>
+  t() |>
+  as.data.frame()
+saveRDS(dbrda_hybrids_matrix, file = "clean_data/statistics/dbrda_hybrids_matrix.rds")
+dbrda_hybrids_matrix <-
+  readRDS(file.path(path, "clean_data/statistics/dbrda_hybrids_matrix.rds"))
+
+
+dbrda_hybrids_traits <- rrfy_hell_matrix |>
+  select(X, Unique_ID, Site, Genotype, logLBI) |>
+  filter(X %in% rownames(dbrda_hybrids_matrix))
+saveRDS(dbrda_hybrids_traits, file = "clean_data/statistics/dbrda_hybrids_traits.rds")
+dbrda_hybrids_traits <-
+  readRDS(file.path(path, "clean_data/statistics/dbrda_hybrids_traits.rds"))
+
+
+# Model with intercept only ####
+# Using rrfy_hell_matrix as the distance matrix
+m0_hybrids_hell <- dbrda(
+    dbrda_hybrids_matrix ~ 1,
+    distance = "bray",
+    dfun = vegdist,
+    data = dbrda_hybrids_traits,
+    parallel = 8, #Passes parallelization to metaMDS function
+    na.action = na.omit
+) #Model with intercept only.
+save(m0_hybrids_hell, file = "clean_data/statistics/m0_hybrids_hell.rda")
+
+m1_hybrids_hell <- dbrda(
+    dbrda_hybrids_matrix ~ .,
+    distance = "bray",
+    dfun = vegdist,
+    data = dbrda_hybrids_traits,
+    parallel = 8,
+    na.action = na.omit
+) # Model with all explanatory variables.
+save(m1_hybrids_hell, file = "clean_data/statistics/m1_hybrids_hell.rda")
+
+
+# Model with species, site, leaf traits and elevation. ####
+m2_hybrids_hell <-
+    dbrda(
+        dbrda_hybrids_matrix ~ logLBI + Site + Genotype,
+        distance = "bray",
+        dfun = vegdist,
+        data = dbrda_hybrids_traits,
+        #parallel = 8,
+        na.action = na.omit
+    )
+save(m2_hybrids_hell, file = "clean_data/statistics/m2_hybrids_hell.rda")
+
+#Anovas for m2
+set.seed(123)
+anova_m2_hybrids_hell <- anova.cca(
+    m2_hybrids_hell,
+    by = "margin",
+    permutations = 999,
+    parallel = 8
+)
+save(anova_m2_hybrids_hell, file = "clean_data/statistics/anova_m2_hybrids_hell.rda")
+
+
+### PERMDISP
+
+#Analysis of multivariate homogeneity of group dispersions.
+
+# By Genotype
+set.seed(123)
+beta_hybrids_dis1 <-
+    betadisper(
+        vegdist(dbrda_hybrids_matrix, method = "bray"), # Matrix of Hellinger transformed data rarefied
+        dbrda_hybrids_traits$Genotype,
+        type = "median",
+        sqrt.dist = FALSE
+    )
+save(beta_hybrids_dis1, file = "clean_data/statistics/beta_hybrids_dis1.rda")
+
+## Permutest
+set.seed(123)
+beta_hybrids_perm1 <-
+    permutest(beta_hybrids_dis1,
+              parallel = 8,
+              permutations = 999,
+              by = "margin")
+save(beta_hybrids_perm1, file = "clean_data/statistics/beta_hybrids_perm1.rda")
+
+
+# By Site
+set.seed(123)
+beta_hybrids_dis2 <- betadisper(
+    vegdist(dbrda_hybrids__matrix, method = "bray"),
+    dbrda_traits$Site,
+    type = "median",
+    sqrt.dist = FALSE
+)
+save(beta_hybrids_dis2, file = "clean_data/statistics/beta_hybrids_dis2.rda")
+
+## Permutest
+set.seed(123)
+beta_hybrids_perm2 <-
+    permutest(beta_dis2,
+              parallel = 8,
+              permutations = 999,
+              by = "margin")
+save(beta_hybrids_perm2, file = "clean_data/statistics/beta_hybrids_perm2.rda")
 ```
 
-::: warning
-Ordistep fails to compute with `dbrda_hell_matrix`. Results from `anova.cca` on m2 show that all terms are significant. This is too good to be true and seems to be overfitting. I will try to remove the least significant terms and re-run the model. From `vif.cca` help page: *Variance inflation is a diagnostic tool to identify useless constraints. A common rule is that values over 10 indicate redundant constraints.*
-:::
 
 
 #### Plot dbRDA
 
-```{r, final_model}
+##### Full model
+
+```{r, full_model}
 # Final model
-m2_hell <- load("clean_data/statistics/m2_hell.rda")
+load("clean_data/statistics/m2_hell.rda")
 final_model <- m2_hell
 
 names(final_model)
@@ -1772,8 +1893,7 @@ ordination_names <- rownames(ordination_scores)
 ordination_scores$Unique_ID <- rownames(ordination_scores)
 
 # Subset for the plot
-dbrda_df <- plant_traits_rfy
-  #filter(Unique_ID %in% ordination_names)
+dbrda_df <- plant_traits_rfy 
 
 # Merge scores with trait data
 merged_data <- right_join(ordination_scores, dbrda_df, by = c("Unique_ID" = "X"))
@@ -1798,7 +1918,7 @@ A4.sub4 <- arrow_scores[4,] #logLBI
 # A4.sub6 <- arrow_scores[6,] #LT.
 
 # dbRDA plot based on species
-p_final_model <- ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
+full_final_model <- ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
   geom_point(data = merged_data, aes(color = Genotype, shape = Site), size = rel(4), alpha = 0.7, stroke = 1) +
   geom_segment(arrow_map, size = rel(.8), data = arrow_scores, color = "black", arrow = arrowhead) +
   geom_vline(xintercept = 0, color = "grey30", linetype = "dashed") + # plot vertical line
@@ -1829,9 +1949,96 @@ p_final_model <- ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
 
      
 # Rearranging the order of layers so arrows are above the points.
-p_final_model$layers
-p_final_model$layers <- c(p_final_model$layers, p_final_model$layers[[5]], p_final_model$layers[[6]])
-p_final_model
+# full_final_model$layers
+# full_final_model$layers <- c(full_final_model$layers, full_final_model$layers[[5]], full_final_model$layers[[6]])
+full_final_model
+
+#ggsave(filename=file.path(path, "figures/dbRDA_species.png"), plot = p_m2dbrda, dpi=600, units=c("mm"), width=150, height=150)
+```
+
+##### Hybrid model
+
+```{r, hybrid_model}
+load("clean_data/statistics/m2_hybrids_hell.rda")
+final_model <- m2_hybrids_hell
+
+names(final_model)
+B <- summary(final_model)
+vegan::scores(final_model)
+
+# Extracting scores for the plot
+ordination_scores <- as.data.frame(vegan::scores(final_model)$sites)
+
+# Extracting names for the plot
+ordination_names <- rownames(ordination_scores)
+
+# Row names to column
+ordination_scores$Unique_ID <- rownames(ordination_scores)
+
+# Subset for the plot
+dbrda_df <- plant_traits_rfy |>
+   filter(X %in% ordination_names,
+         Genotype == "F2WY" | Genotype == "F2YW") # Extra filtering to remove parentals
+
+# Merge scores with trait data
+merged_data <- right_join(ordination_scores, dbrda_df, by = c("Unique_ID" = "X"))
+  select(!Unique_ID.y)
+  filter(Genotype == "F2WY" | Genotype == "F2YW")
+
+# Extracting scores for arrows
+arrow_scores <- as.data.frame(vegan::scores(final_model, display = "bp"))
+
+# Define the arrow aesthetic mapping
+arrow_map <- aes(xend = (dbRDA1*2), yend = (dbRDA2*2), x = 0, y = 0, shape = NULL, color = NULL, fill = NULL)
+label_map <- aes(x = 2*dbRDA1, y = 2*dbRDA2, label = row.names(arrow_scores), shape = NULL, color = NULL, fill = NULL)
+arrowhead = arrow(length = unit(0.02, "npc"))
+
+#subset A4 for labeling
+arrow_scores <- arrow_scores[order(rownames(arrow_scores)), ]
+A4 <- lapply(1:6, function(i) arrow_scores[i, ])
+
+# A4.sub1 <- arrow_scores[1,] #Elevation
+# A4.sub2 <- arrow_scores[2,] #ACi
+# A4.sub3 <- arrow_scores[3,] #LBI
+A4.sub4 <- arrow_scores[4,] #logLBI
+# A4.sub5 <- arrow_scores[5,] #LPS
+# A4.sub6 <- arrow_scores[6,] #LT.
+
+# dbRDA plot based on species
+hybrid_final_model <- ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
+  geom_point(data = merged_data, aes(color = Site, shape = Genotype), size = rel(4), alpha = 0.7, stroke = 1) +
+  geom_segment(arrow_map, size = rel(.8), data = arrow_scores, color = "black", arrow = arrowhead) +
+  geom_vline(xintercept = 0, color = "grey30", linetype = "dashed") + # plot vertical line
+  geom_hline(yintercept = 0, color = "grey30", linetype = "dashed") + # plot horizontal line
+  # geom_text(label_map, size = rel(4), data = A4[[1]], fontface = "bold", show.legend = FALSE, label = c("F2WY")) +
+  # geom_text(label_map, size = rel(4), data = A4[[2]], fontface = "bold", show.legend = FALSE, label = c("G")) +
+  # geom_text(label_map, size = rel(4), data = A4[[3]], fontface = "bold", show.legend = FALSE, label = c("L")) +
+  # geom_text(label_map, size = rel(4), data = A4[[4]], fontface = "bold", show.legend = FALSE, label = c("logLBI")) +
+  # geom_text(label_map, size = rel(4), data = A4[[5]], fontface = "bold", show.legend = FALSE, label = c("LM")) +
+  # geom_text(label_map, size = rel(4), data = A4[[6]], fontface = "bold", show.legend = FALSE, label = c("OPN")) +
+  xlab(label = paste("dbRDA1 (", round(B$concont$importance[2,1]*100, digits = 1), "%)", sep="")) +
+  ylab(label = paste("dbRDA2 (", round(B$concont$importance[2,2]*100, digits = 1), "%)", sep="")) + 
+  scale_color_manual(values= met.brewer("Isfahan2", n = 4, type = "discrete", direction = -1)) +
+  scale_shape_manual(values=c(1:22)) +
+  stat_ellipse(aes(color = Site),
+               geom = "path",
+               linewidth = 1.7,
+               position = "identity",
+               type = "t", linetype = 1,
+               level = 0.95,
+               segments = 51,
+               na.rm = FALSE,
+               show.legend = NA, inherit.aes = TRUE) +
+  theme_classic(base_size = 16) +
+  theme(legend.title = element_text(face = "bold"),
+        legend.text = element_text(face = "italic")) +
+  guides(shape = guide_legend(ncol=2))
+
+     
+# Rearranging the order of layers so arrows are above the points.
+# hybrid_final_model$layers
+# hybrid_final_model$layers <- c(hybrid_final_model$layers, hybrid_final_model$layers[[5]], hybrid_final_model$layers[[6]])
+hybrid_final_model
 
 #ggsave(filename=file.path(path, "figures/dbRDA_species.png"), plot = p_m2dbrda, dpi=600, units=c("mm"), width=150, height=150)
 ```
@@ -1883,49 +2090,7 @@ print(perma3)
 
 ```
 
-### PERMDISP
-
-Analysis of multivariate homogeneity of group dispersions.
-
-```{r, PERMDISP}
-
-# By Species
-set.seed(123)
-beta_dis1 <- betadisper(vegdist(dbrda_hell_matrix, method = "bray"), # Matrix of Hellinger transformed data rarefied 
-                   dbrda_traits$Species,
-                   type = "median", 
-                   sqrt.dist = FALSE)
-save(beta_dis1, file = "clean_data/statistics/beta_dis1.rda")
-anova(beta_dis1)
-
-set.seed(123)
-beta_perm1 <- permutest(beta_dis1, parallel = 8, permutations = 999, by = "margin")
-save(beta_perm1, file = "clean_data/statistics/beta_perm1.rda")
-
-TukeyHSD(beta_dis1, conf.level = 0.95)
-
-
-# By Elevation
-# set.seed(123)
-# beta_dis2 <- betadisper(vegdist(dbrda_hell_matrix, method = "bray"), 
-#                    dbrda_traits$Elevation_cat, 
-#                    type = "median", 
-#                    sqrt.dist = FALSE)
-# save(beta_dis2, file = "clean_data/statistics/beta_dis2.rda")
-load(file = "clean_data/statistics/beta_dis2.rda")
-# anova(beta_dis2)
-
-set.seed(123)
-beta_perm2 <- permutest(beta_dis2, parallel = 8, permutations = 999, by = "margin")
-save(beta_perm2, file = "clean_data/statistics/beta_perm2.rda")
-load(file = "clean_data/statistics/beta_perm2.rda")
-
-beta_perm2
-
-
-TukeyHSD(beta_dis2, conf.level = 0.95)
-```
-
+### SIMPER
 Who contributes more to differences in the community composition?
 
 ```{r, SIMPER}
