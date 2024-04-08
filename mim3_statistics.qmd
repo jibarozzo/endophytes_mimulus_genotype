@@ -379,6 +379,7 @@ theme_lfspp_discrete <-      theme_classic(base_size = 16) +
     strip.text = element_text(face = "bold"),
     panel.border = element_rect(linetype = "blank", fill = NA),
     legend.text = element_markdown(size = 12),
+    plot.caption = element_markdown(size = 12),
     #Make legend text italic
     axis.text.x = element_blank()
   )
@@ -480,10 +481,11 @@ errbar_lims <- group_by(leaf_traits, Genotype) |>
               summarize(mean = mean(logLBI), se = sd(logLBI)/sqrt(n()), 
                         upper = mean + (2*se), lower = mean - (2*se))
 
-#Comparisons
+#Comparisons and labels
 my_comparisons <- list(c("F2WY", "L"), c("F2WY", "G"), c("F2YW", "L"), c("F2YW", "G"), c("G", "L"), c("F2YW", "F2WY"))
 my_comparisons2 <- list(c("CF", "LM"), c("CF", "OPN"), c("LM", "OPN"))
-
+labels_habitat <- c("Meadow 2", "Meadow 1", "Granite 1")
+names(labels_habitat) <- c("CF", "LM", "OPN")
 
 lbi <- ggplot(plant_traits, aes(y = logLBI, x = Genotype)) +
   geom_point(
@@ -494,27 +496,28 @@ lbi <- ggplot(plant_traits, aes(y = logLBI, x = Genotype)) +
   ) +
   geom_boxplot(aes(color = Genotype), alpha = 0.5, outlier.alpha = 0.0) +
   scale_color_manual(values = met.brewer(
-      "Isfahan2",
+      "Johnson",
       n = 4,
       type = "discrete",
-      direction = -1
+      direction = 1
     )
   ) +
   scale_fill_manual(values = met.brewer(
-    "Isfahan2",
+    "Johnson",
     n = 4,
     type = "discrete",
-    direction = -1
+    direction = 1
   )) +
   theme_lfspp_discrete +
-  labs(y = "log10[LBI (convex_hull - true_area]/convex_hull)]", x = "") +
+  labs(y = "log10[LBI (convex_hull - true_area]/convex_hull)]", x = "", caption = "*n* = 793") +
   stat_compare_means(comparisons = my_comparisons,
                      method = "wilcox.test",
                      #label.y = c(0.4, 0.6, 1),
                      label = "p.signif") +
-   facet_wrap(~Site)
- 
+   facet_wrap(~Site, labeller = labeller( Site = labels_habitat)) 
+
 lbi
+
 ggsave(filename = file.path(path, "figures/lbi_boxplot.png"), plot = lbi, dpi=300, units=c("mm"), width=300, height=150)
 ```
 
@@ -1919,7 +1922,7 @@ A4.sub4 <- arrow_scores[4,] #logLBI
 
 # dbRDA plot based on species
 full_final_model <- ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
-  geom_point(data = merged_data, aes(color = Genotype, shape = Site), size = rel(4), alpha = 0.7, stroke = 1) +
+  geom_point(data = merged_data, aes(color = Genotype, shape= Site), size = rel(4), alpha = 0.7, stroke = 1) +
   geom_segment(arrow_map, size = rel(.8), data = arrow_scores, color = "black", arrow = arrowhead) +
   geom_vline(xintercept = 0, color = "grey30", linetype = "dashed") + # plot vertical line
   geom_hline(yintercept = 0, color = "grey30", linetype = "dashed") + # plot horizontal line
@@ -1953,7 +1956,7 @@ full_final_model <- ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
 # full_final_model$layers <- c(full_final_model$layers, full_final_model$layers[[5]], full_final_model$layers[[6]])
 full_final_model
 
-#ggsave(filename=file.path(path, "figures/dbRDA_species.png"), plot = p_m2dbrda, dpi=600, units=c("mm"), width=150, height=150)
+ggsave(filename=file.path(path, "figures/dbRDA_species.png"), plot = full_final_model, dpi=600, units=c("mm"), width=150, height=150)
 ```
 
 ##### Hybrid model

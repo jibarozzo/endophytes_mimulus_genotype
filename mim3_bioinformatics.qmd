@@ -1035,7 +1035,7 @@ summarize_phyloseq(psraw) #Microbiome package summary
 raw_relabundance_phyla <- tax_glom(psraw, 
                  taxrank = "Phylum", 
                  NArm = FALSE, bad_empty=c(NA, "", " ", "\t")) |>
-  phyloseq_to_df() |>
+  metagMisc::phyloseq_to_df() |>
   dplyr::select(-OTU) |> #Remove OTU column. It represents the first ASV of Phylum
   mutate(total_reads_phy = rowSums(across(where(is.numeric))),
          relabun_reads_phy = total_reads_phy/sum(total_reads_phy)*100) |> #Relative abundance of phyla
