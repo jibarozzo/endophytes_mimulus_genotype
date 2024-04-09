@@ -1731,6 +1731,7 @@ beta_dis1 <-
         sqrt.dist = FALSE
     )
 save(beta_dis1, file = "clean_data/statistics/beta_dis1.rda")
+load("clean_data/statistics/beta_dis1.rda")
 
 ## Permutest
 set.seed(123)
@@ -1740,6 +1741,9 @@ beta_perm1 <-
               permutations = 999,
               by = "margin")
 save(beta_perm1, file = "clean_data/statistics/beta_perm1.rda")
+load("clean_data/statistics/beta_perm1.rda")
+
+TukeyHSD(beta_dis1)
 
 
 # By Site
@@ -1751,6 +1755,7 @@ beta_dis2 <- betadisper(
     sqrt.dist = FALSE
 )
 save(beta_dis2, file = "clean_data/statistics/beta_dis2.rda")
+load("clean_data/statistics/beta_dis2.rda")
 
 ## Permutest
 set.seed(123)
@@ -1760,7 +1765,12 @@ beta_perm2 <-
               permutations = 999,
               by = "margin")
 save(beta_perm2, file = "clean_data/statistics/beta_perm2.rda")
+load("clean_data/statistics/beta_perm2.rda")
+
+TukeyHSD(beta_dis2)
 ```
+
+
 
 ```{r}
 #################################################################

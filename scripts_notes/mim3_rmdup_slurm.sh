@@ -35,6 +35,7 @@ echo Number of tasks: $SLURM_NTASKS
 # Array job
 sh ./bar$(printf "%02d" $SLURM_ARRAY_TASK_ID).sh
 
-module purge
+echo End Task: $SLURM_ARRAY_TASK_ID
 
+module purge
 echo End Job
