@@ -1,5 +1,5 @@
 ---
-title: "[Working title]: Foliar fungal symbionts in sympatric yellow monkeyflowers along elevation gradients in the Sierra Nevada"
+title: "[Working title]: Yellow monkeflower host genetics and phenotype interactions with foliar fungal symbionts in common gardens"
 date: last-modified
 date-format: "MMMM D, YYYY"
 bibliography: references.bib
@@ -197,7 +197,7 @@ asv_avgdist <- readRDS("clean_data/statistics/asv_avgdist.rds")
 # Traits for dbRDA
 dbrda_hell_matrix <- rrfy_hell_matrix |>
   column_to_rownames(var = "X") |>
-  select(-c(1, 534:553))
+  select(-c(1, 2:16))
 
 dbrda_traits <- rrfy_hell_matrix |>
   select(X, Unique_ID, Site, Genotype, logLBI)
@@ -230,46 +230,51 @@ names_list <- colnames(ps_clean_3@otu_table) #List of samples
 
 # Introduction
 
+Evolutionary dynamics are significantly shaped by phenotypic plasticity and genetic adaptation, with both mechanisms playing crucial roles in facilitating plant survival and adaptation to a changing climate [@jump2005; @franks2013]. The effect of climate change on plastic and evolutionary responses is evident and accelerating [@franks2013; @ipcc2021]. Phenotypic plasticity and genetic adaptation are predicted to mitigate some of the effects of climate change, however, evidence supports that the rate of evolution may not keep pace with the rate of climate change, leading to the extinction of species [@urban2014]. The diversity and distribution of plants will be affected, resulting in "winners" and "losers" in optimally or ill-adapted to an uncertain climate future [@pecl2017]. Local adaptation and genetic variation have been extensively studied in the context of spatial and temporal changes in climate, but the role of symbiotic relationships in plant adaptation is less understood [@peay2016; @kivlin2022; @mojica2012; ADD OTHER CITES]. Plants' ability to adapt to novel environments has been facilitated by their symbiotic relationships with fungi and bacteria [reviewed in @peay2016; @remy1994]. From colonization of land by plants in consort with arbuscular mycorrhizal root mutualists aiding in nutrient acquisition [peay2016; @remy1994], to the benefits fungal symbionts provide against pathogen resistance [@mejia2008; @estrada2013; @rasmussen2008; @clay1996], and stress tolerance [@peay2016; CITE], the potential for fungi to enhance plant fitness is vast. Nonetheless, the potential benefits are contingent on host plant identity and genetics and the fungal functional guild observed [@kivlin2022; MORE CITE]. 
+
+Foliar endophytic fungi (FEF) are a diverse group that live within plant leaves visibly asymptomatically [@arnold2007], but can alter plants' response to stressful environments, such as drought [@giauque2019; @giauque2013; @aimone2023], herbivory [@mejia2008; CITE], and pathogen damage [@mejia2014; @busby2016]. Hence, effectively expanding the host plants' phenotype through genetic and metabolic pathways [@hawkes2021; @kaddes2019]. In turn, host phenotype and genetics shape the foliar microbiomes [@tellezTraits2022; @kivlin2022; @vanwallendael2022; @horton2014]. A significant part of our knowledge of horizontally transmitted FEF communities and leaf traits derives from studies focused on a few selected genera or species with varying leaf traits along a growth vs. persistence gradient [@tellezTraits2022; @kitajima2013; @poorter2006; @wright2004]. This has enabled a deeper understanding of how leaf traits interact with FEF communities, but the role FEF play in the local adaptation and phenotypic plasticity of their hosts is less clear [@cordovez2019]. The ability to have genetic adaptation or plastic response that increases the potential for establishing beneficial symbionts, above or below-ground, can be crucial for plant survival and adaptation to changing environments.
+
+The *Mimulus guttatus* species complex is an ideal system to study interactions between leaf phenotype, host genetics, and FEF communities [@twyford2015; @wu2008). It comprises about a dozen closely related species [@coughlan2021; @wu2008], two interfertile species, *M. guttatus* and *M. laciniatus*, exhibit strong differences in leaf morphology controlled by overlapping genetic regions, suggesting that large-effect loci underlie this trait [@ferris2015]. Additionally, the contrasting habitats of *M. guttatus*, moist seeps, and *M. laciniatus*, granite, outcrops throughout the Sierra Nevada mountain range in California provide an opportunity to explore the role of leaf shape and host genetics in conforming FEF communities [@tataru2023]. McIntosh et al., [-@mcintosh2024] found that coastal perennial and montane annual *M. guttatus* harbored distinct soil fungal communities, despite the absences of host local adaptation to underground conditions. This suggests that species divergence in life history and associated traits can shape responsiveness to symbionts [@mcintosh2024]. To our knowledge, no studies have considered FEF symbionts in leaf tissue of *Mimulus* spp. and host genetics and leaf shape influence FEF community composition.
+
+In this study, we asked: 1) How do sympatric populations of *M. guttatus* and *M. laciniatus* differ in diversity of FEF communities when grown in common gardens? 2) Does leaf morphology drive FEF colonization in *M. guttatus* and *M. laciniatus*? EXPLAIN COMMON GARDENS To answer these questions we conducted a reciprocal transplant experiment in Yosemite National Park, CA, USA. We used locally adapted genotypes of *Mimulus guttatus* (syn. *Erythranthe guttata* (Fisch. ex DC.) G.L. Nesom) and *Mimulus laciniatus* (syn. *Erythranthe laciniata* (Fisch. ex DC.) G.L. Nesom) as parental lines and their F~2~ hybrids to understand the contributions of host plant genetics and phenotype, and the environment to FEF community composition. Crossing parental lines and generating F~2~ hybrids allowed us to decouple leaf shape from host genetics and understand the relative importance of each component in shaping FEF communities. 
+
+PREDICTIONS 
+ Locally adapted genotypes will have more FEF COMMUNITY COMPOSITION than non-locals 
+ Laciniatus might recruit more endophytes due to local adaptation.
+ Granite will have less abundance/diversity
+
 
 # Results
 How many individuals do we have LBI data, how many do we have genetic data (fungi and ddRAD)? 
 (*n* = `r sum(!is.na(plant_traits$logLBI))`) and `r sum(!is.na(ps_clean_3@sam_data[["logLBI"]]))`
+
+
+
+
 # Materials and Methods
 
-Study system The *M. guttatus* species complex, is an ideal system to our questions because it has two members, *M. guttatus* and *M. laciniatus*, that are locally adapted to contrasting microhabitats and diverge exhibit differences in various traits such as leaf morphology, timing of flowering, and reproductive mechanism (Ferris, Sexton, & Willis, 2014; Ferris & Willis, 2018).
-The ancestral species, *M. guttatus*, occurs across Western North America, typically in meadows near moist seeps, while *M. laciniatus*'s range is restricted to the central Sierra Nevada and thrives in high elevation granite outcrops (\> 5,000 ft elevation).
-<!-- The contrasting habitats  Relative to meadow habitats, granite habitats are harsher with shallow soil and low water retention, high light intensity, more extreme temperatures, and a shorter growing season. *Mimulus laciniatus* has adapted to the harsh granite habitat with a smaller plant size, self-fertilizing mating system, reduced floral size, and earlier flowering time (CITE). -->
+### Field experiment design 
 
-Field experiment design The reciprocal transplant was conducted in Yosemite National Park, CA, USA from May to July 2021.
-It involved arranging 24 individuals into 25 randomized blocks in an 8 x 15 cm formation with a separation of 2.5 cm.
-Our study closely replicated experiments carried out in the years 2013 and 2019 by Ferris and Willis (-@ferris2018) as well as Tataru and Ferris (-@tataru2023).
-The experiment utilized four different study sites: two meadows where native *M. guttatus* grows near a standing seep (Little Meadow "Meadow 1" \[37.767781, -119.772720; elevation: 6,605 ft\], Crane Flat "Meadow 2" \[37.755968, -119.803031; elevation: 6,163 ft\]) and two granite outcrops hosting native *M.laciniatus* (Olmstead Point "Granite 1" \[37-810700, -119485200; elevation: 8436ft), Yosemite Creek "Granite 2" \[37843702, -119573120; elevation:8117ft\]).
+The reciprocal transplant was conducted in Yosemite National Park, CA, USA from May to July 2021. It involved arranging 24 individuals into 25 randomized blocks in an 8 x 15 cm formation with a separation of 2.5 cm. Our study closely replicated experiments carried out in the years 2013 and 2019 by Ferris and Willis (-@ferris2018) as well as Tataru and Ferris (-@tataru2023). The experiment utilized four different study sites: two meadows where native *M. guttatus* grows near a standing seep (Little Meadow "Meadow 1" [37.767781, -119.772720; elevation: 2013 m a.s.l.], Crane Flat "Meadow 2" [37.755968, -119.803031; elevation: 1879 m a.s.l.) and two granite outcrops hosting native *M.laciniatus* (Olmstead Point "Granite 1" [37.810700, -119485200; elevation: 2572 m a.s.l.), Yosemite Creek "Granite 2" [37843702, -119573120; elevation: 2424 m a.s.l.]).
 
-The reciprocal transplants used generations of hybrids created from inbred *M. guttatus* (YVO 18; 37.723366, -119.746433; 5,395 ft elevation) and *M. laciniatus* lines (WLF 47; 37.841533, -119.59385; 7993 ft elevation).
-Hybrids were created by crossing the parental inbred lines to generate F1 hybrids, which were then self-fertilized to generate F2 seeds used in this study.
-Plant breeding was conducted in the greenhouse at Tulane University (New Orleans, LA, USA).
-We incorporated both reciprocal hybrid crosses: F2 WLF 47 maternal x YVO 18 paternal (“F2 WxY”) and F2 YVO 18 maternal x WLF 47 paternal (“F2 YxW”).
-Each block was composed of 6 of each reciprocal F2 hybrid and 6 of each parent, totaling 150 of each genotype per habitat (i.e. meadow and granite) and 2,400 overall experimental plants.
+The reciprocal transplants used generations of hybrids created from inbred *M. guttatus* (YVO 18; 37.723366, -119.746433; elevation: 1645 m a.s.l.) and *M. laciniatus* lines (WLF 47; 37.841533, -119.59385; elevation: 2436 m a.s.l.). Parental lines were locally adapted to moist seep/meadow and granite outcrops, respectively, not the experimental sites. Hybrids were created by crossing the parental inbred lines to generate F1 hybrids, which were then self-fertilized to generate F2 seeds used in this study. Plant breeding was conducted in the greenhouse at Tulane University (New Orleans, LA, USA). We incorporated both reciprocal hybrid crosses: F2 WLF 47 maternal x YVO 18 paternal (“F2 WxY”) and F2 YVO 18 maternal x WLF 47 paternal (“F2 YxW”). Each block was composed of 6 of each reciprocal F2 hybrid and 6 of each parent, totaling 150 of each genotype per habitat (i.e. meadow and granite) and 2,400 overall experimental plants.
 
 ### Seed preparation and germination
 
-We cold-stratified parental *M. laciniatus* and hybrid seeds at 4°C for 10 days and parental *M. guttatus* seeds at 4°C for 5 days to break dormancy and synchronize germination in soil (Sunshine Mix #4 Professional Growing Mix, Sun Gro).
-Then, we germinated seeds for one week in a greenhouse.
-Cold-stratification and germination was carried out at the University of California (UC) Davis.
-Following germination, cotyledons were carefully placed into the randomized block designs using forceps and placed wooden toothpicks to track individuals.
+We cold-stratified parental *M. laciniatus* and hybrid seeds at 4°C for 10 days and parental *M. guttatus* seeds at 4°C for 5 days to break dormancy and synchronize germination in soil (Sunshine Mix #4 Professional Growing Mix, Sun Gro). Then, we germinated seeds for one week in a greenhouse. Cold-stratification and germination was carried out at the University of California (UC) Davis. Following germination, cotyledons were carefully placed into the randomized block designs using forceps and placed wooden toothpicks to track individuals.
 We attributed mortality within the first week to transplant shock and dead germinates were replaced. 
 
-## Leaf traits measurement
+## Leaf shape measurement
 
-For each plant, we obtained measurements for leaf traits: leaf thickness (LT), leaf punch strength (LPS), and anthocyanin content index (ACI) which are known to be associated with FEF communities [@tellezTraits2022] as well as leaf lobe index (LBI) [@ferris2015]. We cleaned plants with tap water to remove all soil and debris remnants from the leaves and roots. We removed all healthy leaves (\~ 5 - 7) from the stems and took three measurements per trait from three haphazardly selected leaves from individual plants, with the exception of LBI, only one leaf per plant. We used a transparency film to hold the leaf in place and flatten, after which we took a digital photograph for further analysis. To calculate the LBI, we followed [-@ferris2015]. Briefly, leaf lobing is calculated as the convex hull area minus the true leaf area divided by convex hull area of a digital photograph of a leaf in ImageJ [v1.52r; @schneider2012]. We measured ACI content with ACM-200plus (Opti-Sciences Inc. Hudson, New Hampshire, U.S.A.) on haphazardly selected locations of the leaf surface (working from the petiole out to the leaf tip) [@tellezTraits2022]. The ACM-200 calculates an ACI value from the ratio of % transmittance at 931 nm/% transmittance at 525 nm [@opti-sciencesinc], effectively accounting for leaf thickness. We measured LT (μm) with a Mitutoyo 7327 Micrometer Gauge (Mitutoyo, Takatsu-ku, Kawasaki, Japan) on haphazardly selected locations of the leaf lamina, taking care to avoid major and secondary veins. We used an Imada DST-11a digital force gauge (Imada Inc., Northbrook, IL, United States) to measure LPS, a measure of leaf toughness, on the lamina of each leaf selected, avoiding minor leaf veins when possible [@tellezTraits2022].
-It functions by conducting punch-and-die tests with a sharp-edged cylindrical steel punch (2.0 mm diameter) and a steel die with a sharp-edged aperture of small clearance (0.05 mm).
-<!-- Once LPS was measured, we used a 4 mm diameter punch hole to puncture disks for LMA measurements. We collected one disk per leaf (see Supplementary material for details). The disk punches dried were shipped to Tulane University, New Orleans, LA, USA to dry at 60 ℃ for 48-72 hours before being weighed. -->
+For each plant, we obtained measurements leaf lobe index (LBI) as our measure of leaf shape [@ferris2015]. We destructively sampled individuals from experimental block by uprooting and placing samples in Ziploc bags and preserving in ice chest until ready to process (~ 2-3 hrs). We ensured samples did not came into direct contact with ice by placing a barrier (e.g., towel) to avoid tissue damage. We prepared and preserved samples at the UC Merced Yosemite Field Station. Fist, we cleaned plants with tap water to remove all soil and debris remnants from the leaves and roots. We removed all healthy leaves (\~ 5 - 7) from the stems. We used a transparency film to hold the most notably lobed leaf in place and flatten, after which we took a digital photograph for further analysis. To calculate the LBI, we followed Ferris et al., [-@ferris2015]. Briefly, leaf lobing is calculated as the convex hull area minus the true leaf area divided by convex hull area of a digital photograph of a leaf in ImageJ [v1.52r; @schneider2012]. 
+
+<!-- We measured ACI content with ACM-200plus (Opti-Sciences Inc. Hudson, New Hampshire, U.S.A.) on haphazardly selected locations of the leaf surface (working from the petiole out to the leaf tip) [@tellezTraits2022]. The ACM-200 calculates an ACI value from the ratio of % transmittance at 931 nm/% transmittance at 525 nm [@opti-sciencesinc], effectively accounting for leaf thickness. We measured LT (μm) with a Mitutoyo 7327 Micrometer Gauge (Mitutoyo, Takatsu-ku, Kawasaki, Japan) on haphazardly selected locations of the leaf lamina, taking care to avoid major and secondary veins. We used an Imada DST-11a digital force gauge (Imada Inc., Northbrook, IL, United States) to measure LPS, a measure of leaf toughness, on the lamina of each leaf selected, avoiding minor leaf veins when possible [@tellezTraits2022]. It functions by conducting punch-and-die tests with a sharp-edged cylindrical steel punch (2.0 mm diameter) and a steel die with a sharp-edged aperture of small clearance (0.05 mm). Once LPS was measured, we used a 4 mm diameter punch hole to puncture disks for LMA measurements. We collected one disk per leaf (see Supplementary material for details). The disk punches dried were shipped to Tulane University, New Orleans, LA, USA to dry at 60 ℃ for 48-72 hours before being weighed. -->
 
 ## Molecular Work
 
 ### Tissue preservation
 
-After collecting the leaf traits measurements, we prepared and preserved samples at the UC Merced Yosemite Field Station. We preserved the whole leaf lamina from plants due to their small size, in contrast to Arnold et al., [-@arnold2003] and Tellez et al., [-@tellezTraits2022]. Leaf lamina were sterilized with sequential washes in 95% EtOH (10 s), 0.5% sodium hypochlorite (NaOCl) (60 s), and 70% EtOH (60 s) and air dried under sterile conditions. The maximum amount of leaf lamina was preserved in sterile 2 mL tubes with \~ 1 mL CTAB solution (1 M Tris–HCl pH 8, 5 M NaCl, 0.5 M EDTA, and 20 g CTAB). The leaf tissue in CTAB solution was used for amplicon sequencing (described in detail below). All leaf tissue handling was performed in a sterile environment with an alcohol burner lamp inside a portable biosafety cabinet. All surfaces were previously sterilized sequentially with 0.5% NaOCl, 95% EtOH, and 70% EtOH. We surface sterilized surfaces and instruments in between sample handling to prevent cross contamination.
+After collecting the leaf shape measurements. We preserved the whole leaf lamina from plants due to their small size, in contrast to Arnold et al., [-@arnold2003] and Tellez et al., [-@tellezTraits2022]. Leaf lamina were sterilized with sequential washes in 95% EtOH (10 s), 0.5% sodium hypochlorite (NaOCl) (60 s), and 70% EtOH (60 s) and air dried under sterile conditions. The maximum amount of leaf lamina was preserved in sterile 2 mL tubes with \~ 1 mL CTAB solution (1 M Tris–HCl pH 8, 5 M NaCl, 0.5 M EDTA, and 20 g CTAB). The leaf tissue in CTAB solution was used for amplicon sequencing (described in detail below). All leaf tissue handling was performed in a sterile environment with an alcohol burner lamp inside a portable biosafety cabinet. All surfaces were previously sterilized sequentially with 0.5% NaOCl, 95% EtOH, and 70% EtOH. We surface sterilized surfaces and instruments in between sample handling to prevent cross contamination.
 
 ### Amplicon sequencing
 
@@ -301,73 +306,41 @@ The *i7* demultiplexing was performed by Duke Genome Sequencing and Analysis Cor
 
 ### Community Diversity
 
-We normalized libraries by repeated rarefying, following Cameron et al. [-@cameron2021].
-We determined a sequence depth of 1300 reads by calculating Good's coverage and qualitative evaluation of libraries to determine a balanced coverage and breadth of samples [@schloss2024].
-This approach allowed for a proportionate representation of observed sequences from host species and a robust characterization of random variation inherent in rarefaction of small libraries [@cameron2021; @schloss2024].
-First, we randomly selected 136 samples out of the 157 that resulted from the bioinformatic pipeline (refer to the Results section below).
-The sample pool was reduced to 136 to match the theoretical reduction of one sample per site (*n* = 21).
-We generated 50 rarefied abundance matrices without replacement by using the `mirl` function from the `mirlyn` package [@cameron2021].
-After which, we calculated alpha diversity per sample as Hill orders, the observed richness (𝑞 = 0), the exponent of Shannon's entropy (𝑞 = 1), and the Inverse Simpson's Diversity (𝑞 = 2) by applying a modified version of the function `alphadivDF`[@cameron2021], which wraps the common diversity indices in `vegan` [@oksanen2022] (see custom script in Supplementary material).
-Finally, for beta diversity analyses, we performed a Hellinger transformation on the rarefied abundance matrices and calculated a Bray-Curtis dissimilarity matrix for each.
+We standardized the libraries using repeated rarefaction, as described by Cameron et al., [-@cameron2021]. Following an assessment of Good's coverage and a qualitative evaluation of the libraries, we established a sequence depth of 1300 reads to ensure balanced coverage and sample breadth. This approach facilitated a proportional representation of observed sequences from host species and provided a robust characterization of random variation inherent in the rarefaction process [@cameron2021; @schloss2024]. Subsequently, we generated 50 rarefied abundance matrices without replacement utilizing the `mirl` function from the `mirlyn` package.
+Next, we computed alpha diversity per sample as Hill orders -observed richness (q = 0), exponentiated Shannon's entropy (q = 1), and Inverse Simpson's Diversity (q =2)— using our modified version of the `alphadivDF` function based on work by Cameron et al., [-@cameron2021; see custom script in Supplementary material] that wraps common diversity indices in `vegan` package utility functions [@oksanen2022]. .
 
-We calculated simple linear regressions understand how different measures of alpha diversity changed in response to elevation.
-To answer how FEF communities differ *among* host species (Q1) and *between* sites (Q2) and facilitate our understanding of the effects of elevation on FEF communities, we categorized elevation as "low" (\< 1219 m.a.s.l), "mid" (1220 - 1828 m.a.s.l.) and "high" (\> 1829 m.a.s.l.).
-Additionally, we applied a distance-based Redundancy Analysis (dbRDA) on the Bray-Curtis dissimilarities to statistically compare the FEF community similarities within each host species per site (Q3).
-Its visualizations effectively portray underlying patterns of compositional differences [@anderson2017; @legendre1999; @mcardle2001], akin to permutational analysis of variance.
-We calculated Spearman's rho for all leaf traits (see below and Fig. S1) and informed our selection of leaf traits with results from the PCA (see below and Fig. 1), and selected those with the lowest correlation coefficient per host species: logLBI.
-Our initial dbRDA model consisted of terms logLBI, sampling date, site, and elevation (m).
-The leaf functional trait data, as well as elevation, was not randomized or subsampled to match rarefied dataset, the same values applied to all 50 rarefied matrices.
-For our initial model, we determined the variance inflation factor (VIF) of each term with function `vif.cca` and eliminated redundant ones: site and sampling date.
-We performed manual model selection by evaluating the marginal significance of constraining variables after 999 permutations with function `anova.cca` [@legendre2011; @legendre2012; @oksanen2022].
-We corroborated homogeneous dispersion of variances with a permutational analysis of multivariate dispersion (PERMDISP) using the `betadisper` with parameter `type = "median"`, and `permutest` functions from `vegan`, the latter with 999 permutations [@oksanen2022].
-We used a post-hoc Tukey's test to compare the differences in the dispersion of the FEF communities among sites and elevation categories.
-We used the `simper` function from `vegan` to discriminate which species contribute the most to compositional differences between groups [@oksanen2022].
+For beta diversity analyses, we performed a Hellinger transformation on the rarefied abundance matrices and calculated a Bray-Curtis dissimilarity matrix for each, then we applied a distance-based Redundancy Analysis (dbRDA) on dissimilarities to statistically compare similarities within each host species per site [@anderson2017; @legendre1999; @mcardle2001].
+
+Our dbRDA model consisted of terms logLBI, site, and genotype. The leaf shape data was not randomized or subsampled to match rarefied dataset, the original values applied to all 50 rarefied matrices. To select the best model, we evaluated the marginal significance of constraining variables after 999 permutations with function `anova.cca` [@legendre2011; @legendre2012; @oksanen2022]. We evaluated the homogeneous dispersion of variances with a permutational analysis of multivariate dispersion (PERMDISP) using the `betadisper` with parameter `type = "median"`, and `permutest` functions from `vegan`, the latter with 999 permutations [@oksanen2022]. We used a post-hoc Tukey's test to compare the differences in the dispersion of the FEF communities among sites and elevation categories.
+<!-- We used the `simper` function from `vegan` to discriminate which species contribute the most to compositional differences between groups [@oksanen2022]. -->
 To determine if there is a core FEF community associated with host species or elevation categories, we conducted an indicators species analyses (ISA) using the `multipatt` function from the `indicspecies` package [@decaceres2009].
 
-To assess correlations between pairwise FEF community dissimilarity and the geographical distance matrix per host species (Q4), we computed a Mantel tests with Spearman's rho and 999 permutations using the `mantel` function [@oksanen2022].
-For this test, we opted for a less taxing computational approach and rarefied sequences with the same parameters as before and calculated Hellinger transformations with the `avgdist` function [@oksanen2022].
-We then calculated the Bray-Curtis dissimilarity with `vegdist` [@oksanen2022].
-For the geographical distances between sites, we used `distm` function with the Vicenty (ellipsoid) method from the `geosphere` package [@hijmans2022].
+<!-- To assess correlations between pairwise FEF community dissimilarity and the geographical distance matrix per host species (Q4), we computed a Mantel tests with Spearman's rho and 999 permutations using the `mantel` function [@oksanen2022]. -->
+<!-- For this test, we opted for a less taxing computational approach and rarefied sequences with the same parameters as before and calculated Hellinger transformations with the `avgdist` function [@oksanen2022]. -->
+<!-- We then calculated the Bray-Curtis dissimilarity with `vegdist` [@oksanen2022]. -->
+<!-- For the geographical distances between sites, we used `distm` function with the Vicenty (ellipsoid) method from the `geosphere` package [@hijmans2022]. -->
 
-### Leaf traits
+### Leaf shape
 
-We checked for normality and homoscedasticity of the leaf traits measured.
-We used Shapiro-Wilk and Fligner-Killen tests from the `stats` package [@rcoreteam2024] to check for normality and homoscedasticity, respectively.
-We established that the leaf funtional trait data was not normally distributed and not homoscedastic.
-We then used non-parametric tests, the Wilcoxon Rank Sum test, to compare leaf functional trait means among species and sites to answer the first portion of Q1 and Q2.
-We used the `compare_means` and `stat_compare_means`functions from the `ggpubr` package [@kassambara2023] to perform these tests and properly visualize them.
-We adjusted *p* values to account for false discovery rates in multiple comparisons by using “BH” method [@benjamini1995].
-We performed Principal Component Analysis (PCA) to understand patterns and relationships among leaf traits of host species.
-We used the `prcomp` function from the `vegan` package [@oksanen2022] compute the PCA analysis with variables ACI, LT, LPS, LMA, and LBI, all log-transformed.
-We used only complete raw leaf functional traits measurements to compute the PCA analysis (*n* = 504), samples with missing values were omitted.
+We checked for normality and homoscedasticity of the LBI measurements.
+We used Shapiro-Wilk and Fligner-Killen tests from the `stats` package [@rcoreteam2024] to check for normality and homoscedasticity, respectively. We established that the leaf lobe index data was not normally distributed and not homoscedastic and perfomed log-transformation. We then used non-parametric tests, the Wilcoxon Rank Sum test, to compare LBI means among genotypes. We used the `compare_means` and `stat_compare_means`functions from the `ggpubr` package [@kassambara2023] to perform these tests and properly visualize them. We adjusted *p* values to account for false discovery rates in multiple comparisons by using “BH” method [@benjamini1995].
+
 All statistical analyses were performed in *R* programming language [v.4.3.3; @rcoreteam2024].
-We present the log-transformed leaf functional trait data at the leaf level: ACI (*n* = `r sum(!is.na(leaf_traits_noB$logACI))`), LT (*n* = `r sum(!is.na(leaf_traits_noB$logLT))`), LPS (*n* = `r sum(!is.na(leaf_traits_noB$logLPS))`), LMA (*n* = `r sum(!is.na(leaf_traits_noB$logLMA))`), LBI (*n* = `r sum(!is.na(leaf_traits_noB$logLBI))`).
+We present the log-transformed LBI (*n* = `r sum(!is.na(plant_traits$logLBI))`).
 The FEF community data is presented at the plant/sample level (*n* = `r sum(!is.na(plant_traits$Observed))`).
 
 # Results
 
-We obtained 5,082,229 reads representing 726 ASVs from 174 samples after processing samples through the DADA2 pipeline.
-The raw reads obtained were composed of 26.81% Ascomycota, 71.53% Basidiomycota, \<0.05% Chytridiomycota, \<0.5% Mortierellomycota, \<0.03% Olpidiomycota, 0.01% Rozellomycota, \<0.001% Aphelidiomycota, and 1.19% missed BLAST hits.
-After decontamination, and removal of singletons we obtained 4,856,220 reads representing 231 ASVs from 157 samples composed of 26% Ascomycota, 73% Basidiomycota, 0.01% Chytridiomycota, \<0.1% Mortierellomycota, 0.03% Olpidiomycota, \<0.002% Rozellomycota and \<1.0% unknown reads (Fig. 1 and Fig. S2).
-The presence of Ascomycota (92%) and Basidiomycota (97%) was consistent in samples across all sites and host species in the un-rarefied data (Table ??).
-Three core taxa members were detected in the un-rarefied data: *Vishniacozyma victoriae* (Basidiomycota, ASV_1), *Cladosporium herbanum* (Ascomycota, ASV_2) and *Cladosporium* spp.
-(Ascomycota, ASV_7).
-The rarefied data contained three more core taxa: Dyszogia patagonica (ASV_3), *Filobasidium chernovii* (Basidiomycota, ASV_5), and *Alternaria tenuissima* (Ascomycota, ASV_8) (Fig. S2).
-The following section reports on results from the rarefied data sets.
+Our sequencing effort yielded 20,157,032 reads representing 532 ASVs from 287 samples after processing samples through the DADA2 pipeline. The raw reads obtained were composed of 69.1% Ascomycota, 31% Basidiomycota, 0.05% Chytridiomycota, 0.01% Mortierellomycota, \<0.01% Glomeromycota, \<0.01% Rozellomycota, \<0.001% Aphelidiomycota, and 0.23% missed hits. Following decontamination and removal of singletons we obtained 4,856,220 reads representing 231 ASVs from 157 samples composed of 69.1% Ascomycota, 31% Basidiomycota, 0.05% Chytridiomycota, 0.01% Mortierellomycota, 0.001% Glomeromycota, \<0.001% Rozellomycota, and 0.22% missed hits (Fig. 1 and Fig. S2). The presence of Ascomycota (100%) and Basidiomycota (99%) was consistent in samples across all sites and host species in the un-rarefied data (Fig. 1 and Fig. S2). We identified eighteen core taxa members in the un-rarefied data (Table 1) The following section reports on results from the rarefied data sets.
 
-To determine the correlation between FEF diversity and elevation, we calculated simple linear regressions between elevation and alpha diversity (Q1).
-At the genus levels, we observed the complete data set we did see a statistically significant negative correlation between elevation and observed richness (𝑞 = 0) (R^2^-adjusted \< .01, *F*~1,4198~= 16.69, *p* \< .001), the exponent of Shannon's entropy (𝑞 = 1) (R^2^-adjusted \< .01, *F*~1,4198~= 37.91, *p* \< .001), and the Inverse Simpson's Diversity (𝑞 = 2) (R^2^-adjusted \< .01, *F*~1,4198~= 23.73, *p* \< .001).
-At the species level, we observed a significant decrease as elevation increased in all alpha diversity measures (Fig. S2A - S2C), with the exception of *M. guttatus* which had no significant change in Hill orders 1 and 2 (Fig. 2B - 2C).
-The alpha diversity measures from rarefied data showed significant differences between all host species, except *M. laciniatus* and *M. nasutus* in Hill order 1 (𝑞 = 1, *p* \> .05, Fig. 3B).
-We observed a similar pattern in beta diversity between elevation sites (Fig. 3D -3C).
+We observed significant differences in the FEF alpha diversity of genotypes in the rarefied data, *M. laciniatus* and *M. nasutus* in Hill order 1 (𝑞 = 1, *p* \> .05, Fig. ????).
+We observed a similar pattern in beta diversity between sites (Fig. ???).
 We saw no differences in beta diversity between low and mid elevation sites for Hill order 2 (𝑞 = 2, *p* \> 0.05, Fig. 3F).
 
 To test for differences in FEF community composition, we used a distance-based Redundancy Analysis (dbRDA) to model the relationship between FEF communities, leaf functional traits and elevation (Q3).
-The best fit model revealed that 17% of the overall variance in FEF communities was accounted for by log-transformed LBI, host species, and elevation, the constraining variables.
-We saw that the first axis (dbRDA1) explained 65.8% and the second axis (dbRDA2) explained 15.3% of the constrained variance (Fig. 4).
-We observed a distinct, yet overlapping, grouping of FEF communities by species (Fig. 4A), as well as when visualized by elevation category (Fig. 4B).
-Elevation tracks along the dbRDA1 axis while logLBI is diagonal to the axes (Fig. 5).
-We found that LBI and elevation are significantly correlated with FEF communities (PERMANOVA TABLE COMMING SOON).
+The best fit model revealed that 17% of the overall variance in FEF communities was accounted for by log-transformed LBI, host species, and elevation, the constraining variables. We saw that the first axis (dbRDA1) explained 65.8% and the second axis (dbRDA2) explained 15.3% of the constrained variance (Fig. 4). We observed a distinct, yet overlapping, grouping of FEF communities by species (Fig. 4A), as well as when visualized by elevation category (Fig. 4B). 
+
+
 To corroborate our findings, we used a permutational analysis of multivariate dispersion (PERMDISP) to test for homogeneity of variances in FEF communities.
 We found that FEF communities were homogeneous across all species (*F*~2,4197~= 320.3, *p* \< .001).
 The post-hoc Tukey's test revealed that all species comparison differences were statistically significant at ⍺ = 0.05.
@@ -377,12 +350,6 @@ Finally, we tested for FEF community dissimilarity by geographical distance and 
 At the host species level, we saw a significant correlation between FEF community and geographical distance for *M. laciniatus* (*r* = 0.27, *p* = .01, Fig. 5A) and *M. nasutus* (*r* = .29, *p* \< .01, Fig. 5B) .
 For *M. guttatus* we saw a negative correlation between FEF communities and geographic distance (*r* = -.004, *p* = .48, Fig. 5B).
 
-Our PCA analysis showed how leaf functional traits were related (Q3-Q4).
-We plotted leaf functional traits according to species groups on the PCA axes to show how the variance in the complete data set is explained by PC1 (42.57%) and PC2 (23.27%) (Fig. 6).
-The PCA analyses showed correlations between ACI, LT, LPS, and LMA as loadings tracked along PC1 towards positive values (Fig. 6).
-We observed that LBI loading is orthogonal along PC2 to the other traits, indicative of low correlation.
-We note distinct groupings by species along PC2 such that *M. laciniatus*, the most lobed species, is distinct from *M.gutatus* and *M. nasutus*.
-The latter two overlap along PC1 and PC2 (Fig. 6).
 
 We found that leaf functional traits differed among and within *Mimulus* species across elevation (Fig. S3 - S7).
 For LMA, when we observed all host species, we saw a statistically significant positive correlation between LMA and elevation (R^2^-adjusted = .041, *p* \< .001, Fig. S3A).
@@ -406,45 +373,7 @@ At high elevations, *M. guttatus* and *M. nasutus* also show significant differe
 
 # Discussion
 
-Our dbRDA results (Fig. 4) indicate that LBI, host species, and elevation, account for 17% of the variance in FEF community composition.
-Subsequent PERMDISP analyses also support significant differences in FEF community composition between host species and at low, mid, and high elevations.
-Further insight from our Mantel tests indicate a significant correlation between FEF community dissimilarity and geographical distance at the genus level, rather than at the host species level, providing additional evidence in support of spatial driven differences in FEF community composition in *Mimulus*.
-Our findings, overall support the idea that distinct FEF communities are structured by the interplay of host species and elevation.
-We saw a a consistent prevalence of *Vishniacozyma victoriae*, *Cladosporium herbanum*, and *Cladosporium* spp.
-in un-rarefied and rarefied data across all sites and samples.
-Cladosporium spp.
-is a well documented environmental fungi that occur in fading or dead leaves of herbaceaus and woody plants [@samson2004; @schubert2007].
-The basidiomycetous yeast *V. vitoriae* (formerly *Cryptococcus vistoriae*) is also a well known environmentally abundant fungi capable of causing respiratory issues [@rush2023].
-It was first isolated in the Antarctic [@montes1999] and has since been detected worldwide [@demenezes2019].
-Despite potential respiratory health detriments, *V. victoriae* has been utilized in agricultural settings for the post-harvest control of fruit diseases [@lutz2020].
-It thrives at low temperatures (15 °C), but it is known to tolerate a variety of environmental conditions, and lacks a polysacharide capsule, which is thought to contribute to its lack of pathogenicity \[rush2023\].
-It applications in wheat agriculture suggest that kernel weight is influenced by *V. victoriae*'s coexistence with other plant acquired endophytic fungi [@vujanovic2021].
-Its presence might serve as an indicators of wheat's kernel resistance to pathobiota [@lutz2020].
-It is proposed that through the production of various bio-active compound, it can contribute to plant growth and ecological adaptation to cold environment [@vujanovic2021; @buzzini2018].
-According to Vujanovic [-@vujanovic] and Ogaki et al. [-@ogaki2020], no antagonism has been detected between *V. victoriae* with other yeasts, and plant pathogens.
-We are in need of further quantitative studies to confirm the existence of cold-adapted microbial taxa and their associated hosts [@marian2022].
-The presence of *V. victoriae* in our samples might be indicative of its potential role in the local adaptation of *Mimulus* to cold and high elevation environments.
 
-The observed decline in alpha diversity and changes in beta diversity with increased elevation echoes macroecological patterns of biodiversity [@sabatini2018; @kraft2011; @villacampa2019; @jimenez-hernandez2020].
-This quintessential question is still relevant to plan-microbe interactions since altitudinal gradients can serve as a proxy to predict species distribution in future climate conditions [@kazenel2019].
-For microbial ecology, patterns of diversity and community composition exhibit more nuances.
-In an experimental setup, Kivlin et al [@kivlin2022] reported that host species (alpine grasses) was a stronger predictor of alpha diversity and community composition of leaf endophytes.
-In contrast, root endophyte community responded to both host species and elevation [@kivlin2022].
-Our results point to significant decline alpha diversity as elevation increases, as well as significant differences in community composition due to elevation change for all host species.
-It is possible that this is due to different phenologies, and tissue types of herbaceous and gramineous plants.
-Similarly, Kezenel et al. [-@kazenel2019] to found greater change in leaf endophytes due to altitude and warming when compared to root colonizing fungi, but the direction and magnitude of responses varied among host species and fungal functional groups.
-A major difference in this study is the low ASV count and the use of multiple rarefied data sets compared to Kazenel et al. [-@kazenel2019].
-A study by Cordier et al. [-@cordier2012] focused on the fungal phyllosphere in European beech along an elevation gradient, found that climatic variables, especially temperature, were best correlated with fungal community dissimilarities.
-The effect of site and sampling day was a significant factor determining fungal phyllosphere composition [@cordier2012].
-While the phyllosphere of beech varies widely, Cordier et al. [-@cordier2012], found a strong affinity of fungal taxa to elevation site supporting regional spatial structure.
-An important distinction is that they focus on the outer and inner phyllosphere, hence observed patterns might better reflect the outer leaf dynamics, more susceptible to climatic factors, as opposed inner leaf dynamics we explore in our study.
-Another key difference is the host species phenology and function leaf traits of European beech compared to *Mimulus*.
-
-Our results show how leaf functional traits differ among and within *Mimulus* species across elevation.
-Specifically LMA, LBI, LPS and LT, show a positive correlation with elevation at the genus level, reflecting a conserved plastic response to environmental changes along elevation.
-When we conducted Principal Component Analysis (PCA) (Fig 1) illustrated correlations between leaf functional traits while demonstrating the distinct groupings of *M. laciniatus*, *M. guttatus*, and *M. nasutus* based on LBI differences compared to the rest of the traits, ACI, LMA, LPS and LT. The distinct grouping of host species along LBI trait reflects findings by XXXXX and XXXXX in previous studies showing how lobed leaves are more common in alpine environments, where they are thought to be an adaptation to reduce water loss and increase heat dissipation \[CITE\].
-*Mimulus laciniatus* is considered the most lobed species (Fig. 6 and Fig. S5)\[CITE all evidence here\], and thrives at higher elevation.
-Future investigations can help tease apart the effect of mutualist FEF on host *M. laciniatus* success in cold temperature and high elevation environments.
 
 # Conclusions
 
@@ -486,7 +415,8 @@ theme_lfspp_discrete <-      theme_classic(base_size = 16) +
   theme(legend.title = element_text(face = "bold"),
         strip.text = element_text(face = "bold"),
         panel.border = element_rect(linetype = "blank", fill = NA),
-        legend.text = element_text(face = "italic"), #Make legend text italic
+        #legend.text = element_text(face = "italic"), #Make legend text italic
+        plot.caption = element_markdown(size = 12),
         axis.text.x = element_blank())
 
 # Theme for leaf trait plots: continuous
@@ -502,12 +432,11 @@ theme_sppdiv_discrete <-    theme_classic(base_size = 16) +
    theme(legend.title = element_text(face = "bold"),
          strip.text = element_text(face = "italic", size = 14),
          panel.border = element_rect(linetype = "blank", fill = NA),
-         legend.text = element_text(face = "italic", size = 12), #Make legend text italic
+         #legend.text = element_text(face = "italic", size = 12), #Make legend text italic
          axis.text.x.bottom = element_blank(),
          axis.title.x = element_blank())
 
-# Theme for elevation plots: discrete
-theme_elevdiv_discrete <-    theme_classic(base_size = 16) +
+theme_div_discrete <-    theme_classic(base_size = 16) +
    theme(legend.title = element_text(face = "bold"),
          strip.text = element_text(face = "italic", size = 14),
          panel.border = element_rect(linetype = "blank", fill = NA),
@@ -593,203 +522,73 @@ ggsave(file.path(path, "figures/figure1.png") , plot = ra_plots, dpi=300, units=
 #| eval: true
 #| tidy: true
 #| fig-width: 6
-#| fig-height: 7
-#| label: scatter_hill_orders
-#| fig-cap: "Relationship between Hill orders by host species and elevation. A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2) per host species as elevation increases. Blue filled points correspond to *M. laciniatus*, green filled to *M. nasutus*, and yellow to *M. guttatus*.  The solid line represents the linear model fit and the shaded area represents the 95% confidence interval."
+#| fig-height: 6
+#| label: lbi_elev_scatter
+#| fig-cap: "Change in log-transformed leaf lobe index (LBI) by genotype and habitat. A) Compares logLBI means by species and habitat category. The black line across violins represents the mean value. B) Change in logLPS per species as elevation increases. The black trend line represents the fitted model for all data points, see main text for R squared and *p* values. Significance levels are represented by *ns* (not significant) and asterisks [*p* < 0.05 (\\*), *p* < 0.01 (\\**), *p* < 0.001 (\\***), and *p* < 0.0001 (\\****)]."
 
-# Shannon Diversity or hill number 1
-# Three main faceted plots come out of this chunk
+#ggpubr package used for comparisons tests
+lbi_compare_means <- compare_means(LBI ~ Genotype,
+         data = plant_traits,
+         group.by = "Site",
+         method = "wilcox.test",
+         p.adjust.method = "BH",
+  paired = FALSE,
+  alternative = "two.sided", 
+  mu = 0, 
+  var.equal = FALSE,
+  conf.level = 0.95)
 
-########## Labels ###########
-#Legend title label
-legend_title <- "Species"
-# Species labels
-labels_list <- c("M. laciniatus", "M. nasutus", "M. guttatus")
-names(labels_list) <- c("M. laciniatus", "M. nasutus", "M. guttatus")
-#############################
-
-
-# Hill number 0 
-# Species richness or hill number 0
-
-#Linear model summary
-#summary(lm(Observed ~ Elevation_m, data = plant_traits_MB))
-#richness_p <- format.p(cor.test(plant_traits$Observed, plant_traits$Elevation_m)$p.value) # This is just to make the p-value nicer. 
-# Species labels
-labels_list <- c("M. laciniatus", "M. nasutus", "M. guttatus")
-names(labels_list) <- c("L", "N", "G")
-
-# Plot
-hill0_diversity <- ggplot(data = plant_traits_MB, 
-                          aes(x = Elevation_m, y = Observed, color = Species)) +
-   geom_jitter(aes(color = Species), 
-               #stat = "summary",
-               #fun = mean,
-               size = 3, alpha = 0.3) + 
-   #geom_smooth(method = lm, se = F) +
-  geom_smooth(method = lm, se = T, level = 0.95, na.rm = F, color = "black") +
-  stat_poly_eq(formula = y ~ x, color = "black",
-               aes(label = paste(#..eq.label.., 
-                 ..adj.rr.label.., #"~italic(p) ==",
-                 ..p.value.label.., 
-                 #signif(..p.value.., digits = 4),
-                 sep = "*`,`~~")), 
-               rr.digits = 2,
-               p.digits = 3 ,
-               parse = TRUE,
-               label.x = "right",
-               label.y= "top",
-               vstep = 0.08) +
-   scale_fill_manual(values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) + 
-   scale_color_manual(legend_title, values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) + 
-   theme_lfdiv_continuous +
-   labs(y =  "\U1D492 = 0", x = "", col = "") + 
-   scale_y_continuous(expand = c(0.05, 0.05)) +
-  scale_x_continuous(expand = c(0.05, 0.05)) +
-  facet_wrap(~ Species) +
-  guides(color = "none")        #To turn off color legend
-  # annotate(geom = "text", x = 2100, y = 2.5, label = "p = 0.03", color = "black")
-#annotate(geom="text", x=2100, y=50, label="p = 0.06", color = "black")
-
-#hill0_diversity
-
-#ggsave(filename = file.path(path, "figures/richness_elevation.png"), plot = hill0_diversity, dpi=300, units=c("mm"), width=250, height=150)
-
-# Linear models per species
-# Linear model summary
-# M. laciniatus
-#summary(lm(Observed ~ Elevation_m, data = plant_traits[plant_traits$Species == "L",]))
-#Not significant
-
-# M. nasutus
-#summary(lm(Observed ~ Elevation_m, data = plant_traits[plant_traits$Species == "N",]))
-#Not significant
-
-# M. guttatus
-#summary(lm(Observed~ Elevation_m, data = plant_traits[plant_traits$Species == "G",]))
-#Not significant
-
-# Hill number 1
-# Shannon diversity or hill number 1
-# Linear model summary
-#summary(lm(hill_1 ~ Elevation_m, data = plant_traits_MB))
-#elev_div_p <- format.p(cor.test(plant_traits$Shannon, plant_traits$Elevation_m)$p.value) # This is just to make the p-value nicer. 
-
-# Plot
-hill1_diversity <- ggplot(data = plant_traits_MB,
-                          aes(x = Elevation_m, y = hill_1, color = Species)) +
-   geom_jitter(aes(color = Species), 
-               #stat = "summary",
-               #fun = mean,
-               size = 3, alpha = 0.3) + 
-   geom_smooth(method = lm, se = F) + 
-   geom_smooth(method = lm, se = T, level = 0.95, na.rm = F, color = "black") + 
-  stat_poly_eq(formula = y ~ x, color = "black",
-               aes(label = paste(#..eq.label.., 
-                 ..adj.rr.label.., #"~italic(p) ==",
-                 ..p.value.label.., 
-                 #signif(..p.value.., digits = 4),
-                 sep = "*`,`~~")), 
-               rr.digits = 2,
-               p.digits = 3 ,
-               parse = TRUE,
-               label.x = "right",
-               label.y = "top",
-               vstep = 0.08) +
-   scale_color_manual(legend_title,
-                     values = met.brewer("Isfahan2", n = 4, type = "discrete", 
-                                          direction = c(-1))) + 
-  labs(y = "\U1D492 = 1", x = "", col = "") +
-  scale_y_continuous(expand = c(0.05, 0.05)) +
-  theme_lfdiv_continuous +
-  theme(strip.text = element_blank()) +
-  facet_wrap(~ Species) +
-  guides(color = "none")        #To turn off color legend
-
-#hill1_diversity
-
-#ggsave(filename = file.path(path, "figures/shannon_elevation.png"), plot = hill1_diversity, dpi=300, units=c("mm"), width=250, height=150)
-
-# Linear models per species
-# Linear model summary
-# M. laciniatus
-#summary(lm(hill_1 ~ Elevation_m, data = plant_traits[plant_traits$Species == "L",]))
-#Not significant
-
-# M. nasutus
-#summary(lm(hill_1 ~ Elevation_m, data = plant_traits[plant_traits$Species == "N",]))
-#Not significant
-
-# M. guttatus
-#summary(lm(hill_1 ~ Elevation_m, data = plant_traits[plant_traits$Species == "G",]))
-#Not significant
-
-# Hill number 2
-# Inverse Simpson diversity or hill number 2
-# Linear model summary
-#summary(lm(hill_2 ~ Elevation_m, data = plant_traits))
-#elev_div_p <- format.p(cor.test(plant_traits$Shannon, plant_traits$Elevation_m)$p.value) # This is just to make the p-value nicer. 
-
-# Plot
-hill2_diversity <- ggplot(data = plant_traits_MB, 
-  aes(x = Elevation_m, y = hill_2, color = Species)) +
-   geom_jitter(aes(color = Species), 
-               #stat = "summary",
-               #fun = mean,
-               size = 3, alpha = 0.3) + 
-   geom_smooth(method = lm, se = F) + 
-   # stat_regline_equation(aes(label = paste(..eq.label.., ..adj.rr.label.., sep = '~~~~'))) 
-   geom_smooth(method = lm, se = T, level = 0.95, na.rm = F, color = "black") + 
-  stat_poly_eq(formula = y ~ x, color = "black",
-               aes(label = paste(#..eq.label.., 
-                 ..adj.rr.label.., #"~italic(p) ==",
-                 ..p.value.label.., 
-                 #signif(..p.value.., digits = 4),
-                 sep = "*`,`~~")), 
-               rr.digits = 2,
-               p.digits = 3 ,
-               parse = TRUE,
-               label.x = "right",
-               label.y = "top",
-               vstep = 0.08) +
-   #scale_fill_manual(labels = c("*M. laciniatus*","*M. nasutus*", "*M. guttatus*"), 
-                     #values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) + 
-   scale_color_manual(legend_title, labels = c("*M. laciniatus*", "*M. nasutus*", "*M. guttatus*"), 
-                     values = met.brewer("Isfahan2", n = 4, type = "discrete", 
-                                          direction = c(-1))) + 
-  labs(y = "\U1D492 = 2", x = "Elevation (m.a.s.l.)", col = "") +
-  theme_lfdiv_continuous +
-  theme(strip.text = element_blank()) +
-  facet_wrap(~ Species) +
-  guides(color = "none")        #To turn off color legend
-
-#hill2_diversity
-
-#ggsave(filename = file.path(path, "figures/invsimpson_elevation.png"), plot = hill2_diversity, dpi=300, units=c("mm"), width=250, height=150)
-
-# Linear models per species
-# Linear model summary
-# M. laciniatus
-#summary(lm(hill_2 ~ Elevation_m, data = plant_traits[plant_traits$Species == "L",]))
-#Not significant
-
-# M. nasutus
-#summary(lm(hill_2 ~ Elevation_m, data = plant_traits[plant_traits$Species == "N",]))
-#Not significant
-
-# M. guttatus
-#summary(lm(hill_2 ~ Elevation_m, data = plant_traits[plant_traits$Species == "G",]))
-#Not significant
+#lbi_compare_means
 
 
-###### Joined plots ######
-hill_numbers <- ggarrange(hill0_diversity, hill1_diversity, hill2_diversity,
-                          labels = c("A", "B", "C"),
-                          nrow = 3, ncol = 1)
+#Roughly the same outcome as pairwise_t_test.
 
-hill_numbers
-ggsave(filename = file.path(path, "figures/figure2.png"), plot = hill_numbers, dpi=300, units=c("mm"), width=300, height=275)
+#Report with `compare_means` because it is easier to plot with `ggpubr` package.
+errbar_lims <- group_by(leaf_traits, Genotype) |> 
+              summarize(mean = mean(logLBI), se = sd(logLBI)/sqrt(n()), 
+                        upper = mean + (2*se), lower = mean - (2*se))
+
+# Comparisons and labels
+my_comparisons <- list(c("F2WY", "L"), c("F2WY", "G"), c("F2YW", "L"), c("F2YW", "G"), c("G", "L"), c("F2YW", "F2WY"))
+my_comparisons2 <- list(c("CF", "LM"), c("CF", "OPN"), c("LM", "OPN"))
+labels_habitat <- c("Meadow 1", "Meadow 2", "Granite 1")
+names(labels_habitat) <- c("CF", "LM", "OPN")
+
+lbi <- ggplot(plant_traits, aes(y = logLBI, x = Genotype)) +
+  geom_point(
+    aes(color = Genotype),
+    alpha = 0.2,
+    size = 1.7,
+    position = position_jitter(w = 0.2)
+  ) +
+  geom_boxplot(aes(color = Genotype), alpha = 0.5, outlier.alpha = 0.0) +
+  scale_color_manual(values = met.brewer(
+      "Johnson",
+      n = 4,
+      type = "discrete",
+      direction = 1
+    )
+  ) +
+  scale_fill_manual(values = met.brewer(
+    "Johnson",
+    n = 4,
+    type = "discrete",
+    direction = 1
+  )) +
+  theme_lfspp_discrete +
+  labs(y = "log10[LBI (convex_hull - true_area]/convex_hull)]", x = "", caption = "*n* = 793") +
+  stat_compare_means(comparisons = my_comparisons,
+                     method = "wilcox.test",
+                     #label.y = c(0.4, 0.6, 1),
+                     label = "p.signif") +
+  #facet_wrap(~Site, labeller = labeller(Site = labels_habitat))  
+  facet_wrap(~factor(Site, levels =  c('LM', 'CF', 'OPN'))) 
+
+lbi
+ggsave(filename = file.path(path, "figures/figure2.png"), plot = lbi, dpi=300, units=c("mm"), width=300, height=150)
 ```
+
+
 
 ## Figure 3
 
@@ -800,74 +599,136 @@ ggsave(filename = file.path(path, "figures/figure2.png"), plot = hill_numbers, d
 #| warning: false
 #| fig-width: 6
 #| fig-height: 6
-#| label: violin_hill_orders
-#| fig-cap: "Alpha and beta diversity means comparisons in host species and eklevation categories. Alpha diversity means comparisons; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2) per host species. A-C) Blue filled violins correspond to *M. laciniatus*, green filled to *M. nasutus*, and yellow to *M. guttatus*. Beta diversity mean comparions; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2)per elevation category. D-F) Violet violins correspond to LOW elevation sites, pink filled to MID and light maroon to HIGH elevation sites, while squares represent *M. laciniatus* , circles *M. nasutus* and triangles *M. guttatus*.  Significance levels are represented by *ns* (not significant) and asterisks [*p* < 0.05 (\\*), *p* < 0.01 (\\**), *p* < 0.001 (\\***), and *p* < 0.0001 (\\****)]."
+#| label: boxplot_hill_orders
+#| fig-cap: "Alpha and beta diversity means comparisons in host species and habitat types. Alpha diversity means comparisons; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2) per host species. A-C) Red filled boxplots correspond to F2YW, orange filled to G (*M. guttatus*), yellow to L (*M. laciniatus*), and teal to F2WY genotype. Beta diversity mean comparions; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2)per elevation category. D-F) Light teal filled boxplot corresponds to Meadow 1, purple to Meadow 2, and light maroon to Granite 1. Open shapes represent: squares (F2YW), circles (G), triangles (L), and crosses (F2WY).  Significance levels are represented by *ns* (not significant) and asterisks [*p* < 0.05 (\\*), *p* < 0.01 (\\**), *p* < 0.001 (\\***), and *p* < 0.0001 (\\****)]."
 
 ############################################
 #### Alpha diversity ####
 #### At the species level ####
 ############################################
 
+########## Labels ###########
+#Legend title label
+legend_title <- "Species"
+# Species labels
 labels_list <- c("M. laciniatus", "M. nasutus", "M. guttatus")
-names(labels_list) <- c("M. laciniatus", "M. nasutus", "M. guttatus")
+names(labels_list) <- c("L", "N", "G")
+#############################
 
 # Plot
-hill0_species <- ggplot(data = plant_traits_MB, 
-  aes(x = Species, y = Observed)) +
-  geom_boxplot(aes(fill = Species)) +
-  scale_fill_manual(values= met.brewer("Isfahan2", n = 4, type = "discrete", direction = -1)) +
-  scale_color_manual(aes(color = "black")) +
+hill0_species <- ggplot(data = plant_traits_rfy,
+                        aes(x = Genotype, y = Observed)) +
+  geom_point(
+    aes(color = Genotype),
+    alpha = 0.2,
+    size = 1.7,
+    position = position_jitter(w = 0.2)
+  ) +
+  geom_boxplot(aes(color = Genotype), alpha = 0.5, outlier.alpha = 0.0) +
+  scale_color_manual(values = met.brewer(
+      "Johnson",
+      n = 4,
+      type = "discrete",
+      direction = 1
+    )
+  ) +
+  scale_fill_manual(values = met.brewer(
+    "Johnson",
+    n = 4,
+    type = "discrete",
+    direction = 1
+  )) +
+  #scale_color_manual(aes(color = "black")) +
   theme_sppdiv_discrete +
-  labs(y =  "\U1D492 = 0", x = "", col = "") + 
+  labs(y =  "\U1D492 = 0", x = "", col = "") +
+  guides(color = guide_legend(title = "Genotype")) +
+  #facet_grid(~Site) +
   stat_compare_means(comparisons = my_comparisons,
-                     method = "wilcox.test", 
-                     label = "p.signif") 
-  #guides(color = "none")        #To turn off color legend
-  
+                     method = "wilcox.test",
+                     label = "p.signif")
+
 #hill0_species
-# annotate(geom = "text", x = 2100, y = 2.5, label = "p = 0.03", color = "black")
-#annotate(geom="text", x=2100, y=50, label="p = 0.06", color = "black")
 
 
 # Hill number 1
 # Shannon diversity or hill number 1
 # Plot
-hill1_species <- ggplot(data = plant_traits_MB, 
-  aes(x = Species, y = hill_1)) +
-  geom_boxplot(aes(fill = Species)) +
-  scale_fill_manual(values= met.brewer("Isfahan2", n = 4, type = "discrete", direction = -1)) +
-  scale_color_manual(aes(color = "black")) +
+hill1_species <- ggplot(data = plant_traits_rfy,
+                        aes(x = Genotype, y = hill_1)) +
+  geom_point(
+    aes(color = Genotype),
+    alpha = 0.2,
+    size = 1.7,
+    position = position_jitter(w = 0.2)
+  ) +
+  geom_boxplot(aes(color = Genotype), alpha = 0.5, outlier.alpha = 0.0) +
+  scale_color_manual(values = met.brewer(
+      "Johnson",
+      n = 4,
+      type = "discrete",
+      direction = 1
+    )
+  ) +
+  scale_fill_manual(values = met.brewer(
+    "Johnson",
+    n = 4,
+    type = "discrete",
+    direction = 1
+  )) +
+  #scale_color_manual(aes(color = "black")) +
   theme_sppdiv_discrete +
-  labs(y =  "\U1D492 = 1", x = "", col = "") + 
-  scale_y_continuous(expand = c(0.05, 0.05)) +
+  labs(y =  "\U1D492 = 1", x = "", col = "") +
+  guides(color = guide_legend(title = "Genotype")) +
   stat_compare_means(comparisons = my_comparisons,
-                     method = "wilcox.test", 
-                     label = "p.signif") 
- # facet_wrap(~ Species, labeller = labeller(Species = labels_list)) +
- # guides(color = "none")        #To turn off color legend
+                     method = "wilcox.test",
+                     label = "p.signif")
   
 #hill1_species
 
 
 # Hill number 2
 # Inverse Simpson diversity or hill number 2
-hill2_species <- ggplot(data = plant_traits_MB, 
-                        aes(x = Species, y = hill_2)) +
-  geom_boxplot(aes(fill = Species)) +
-  scale_fill_manual(values= met.brewer("Isfahan2", n = 4, type = "discrete", direction = -1)) +
-  scale_color_manual(aes(color = "black")) +
+hill2_species <- ggplot(data = plant_traits_rfy,
+                        aes(x = Genotype, y = hill_2)) +
+  geom_point(
+    aes(color = Genotype),
+    alpha = 0.2,
+    size = 1.7,
+    position = position_jitter(w = 0.2)
+  ) +
+  geom_boxplot(aes(color = Genotype), alpha = 0.5, outlier.alpha = 0.0) +
+  # geom_crossbar(stat="summary",
+  #               fun = median,
+  #               fun.max = median,
+  #               fun.min = median,
+  #               fatten = 2,
+  #               width = 0.8,
+  #               color="black") +
+  scale_color_manual(values = met.brewer(
+      "Johnson",
+      n = 4,
+      type = "discrete",
+      direction = 1
+    )
+  ) +
+  scale_fill_manual(values = met.brewer(
+    "Johnson",
+    n = 4,
+    type = "discrete",
+    direction = 1
+  )) +
+  #scale_color_manual(aes(color = "black")) +
   theme_sppdiv_discrete +
-  labs(y =  "\U1D492 = 2", x = "", col = "") + 
+  labs(y =  "\U1D492 = 2", x = "", col = "") +
+  guides(color = guide_legend(title = "Genotype")) +
   stat_compare_means(comparisons = my_comparisons,
-                     method = "wilcox.test", 
-                     label = "p.signif") 
- # facet_wrap(~ Species, labeller = labeller(Species = labels_list)) +
- #guides(color = "none")        #To turn off color legend
+                     method = "wilcox.test",
+                     label = "p.signif")
   
 #hill2_species
 
 # Joined plots
- hill_numbers_species <- ggarrange(hill0_species, hill1_species, hill2_species, 
+hill_numbers_species <- ggarrange(hill0_species, hill1_species, hill2_species, 
                                   nrow = 1, ncol = 3,
                                   common.legend = TRUE,
                                   labels = c("A", "B", "C"),
@@ -876,48 +737,86 @@ hill2_species <- ggplot(data = plant_traits_MB,
 #hill_numbers_species
 #ggsave(filename = file.path(path, "figures/hill_numbers_species.png"), plot = hill_numbers_species, dpi=300, units=c("mm"), width=250, height=275)
 
+
 #################################
 #### Beta diversity ####
-#### Across elevation ####
+#### Across sites ####
 #################################
+
+########## Labels ###########
+#Legend title label
+legend_title <- "Species"
+# Species labels
+labels_list <- c("M. laciniatus", "M. nasutus", "M. guttatus")
+names(labels_list) <- c("L", "N", "G")
+#############################
 
 # Observed richness
 # Hill number 0
-hill0_beta <-  ggplot(plant_traits_MB, aes(x = Elevation_cat, y = Observed)) +
-  
-  geom_boxplot(aes(fill = Elevation_cat)) +
-  scale_color_manual(labels=c('Low', 'Mid', 'High'),values= met.brewer("Cassatt1", n = 3, type = "discrete", direction = -1)) +
-  scale_fill_manual(labels=c('Low', 'Mid', 'High'),values= met.brewer("Cassatt1", n = 3, type = "discrete", direction = -1)) +
-  scale_shape_manual(values=c(15:18)) +
-  theme_elevdiv_discrete +
-  theme(legend.text = element_text(size = 14)) +
-  scale_y_continuous(expand = c(0.05, 0.05)) +
-  stat_compare_means(comparisons = my_comparisons3,
-                     method = "wilcox.test", 
+hill0_beta <-
+  ggplot(plant_traits_rfy, aes(x = Site, y = Observed)) +
+  geom_point(
+    aes(shape = Genotype, color = Site),
+    alpha = 0.5,
+    size = 1.7,
+    position = position_jitter(w = 0.2)
+  )+
+  geom_boxplot(aes(color = Site), alpha = 0.5, outlier.alpha = 0.0) +
+  scale_color_manual(
+    labels = c('Crane Flat', 'Little Meadow', 'Olmstead Point'),
+    values = met.brewer(
+      "Tsimshian",
+      n = 3,
+      type = "discrete",
+      direction = -1
+    )
+  ) +
+  scale_shape_manual(
+    values = c(21:24),
+  ) +
+  theme_div_discrete +
+  scale_x_discrete(labels = c('', '', '', '')) +
+  stat_compare_means(comparisons = my_comparisons2,
+                     method = "wilcox.test",
                      label = "p.signif") +
   labs(y = "\U1D492 = 0", x = "") +
-  guides(fill = guide_legend(title = "Elevation"), shape = guide_legend(title = "Species"))
+  guides(fill = guide_legend(title = "Site"),
+         shape = guide_legend(title = "Genotype"))
 
 #hill0_beta
 
-#ggsave(file.path(path, "figures/shannon_elevation.png") , plot = bbe, dpi=300, units=c("mm"), width=200, height=150)
+
 
 # Hill number 1
 # Shannon diversity or hill number 1
-hill1_beta <- ggplot(plant_traits_MB, aes(x = Elevation_cat, y = hill_1)) +
-  
-  geom_boxplot(aes(fill = Elevation_cat)) +
-  scale_color_manual(labels=c('Low', 'Mid', 'High'),values= met.brewer("Cassatt1", n = 3, type = "discrete", direction = -1)) +
-  scale_fill_manual(labels=c('Low', 'Mid', 'High'),values= met.brewer("Cassatt1", n = 3, type = "discrete", direction = -1)) +
-  scale_shape_manual(values=c(15:18)) +
-  theme_elevdiv_discrete +
-  theme(legend.text = element_text(size = 14)) +
-  scale_y_continuous(expand = c(0.05, 0.05)) +
-  stat_compare_means(comparisons = my_comparisons3,
-                     method = "wilcox.test", 
+hill1_beta <- ggplot(plant_traits_rfy, aes(x = Site, y = hill_1)) +
+  geom_point(
+    aes(shape = Genotype, color = Site),
+    alpha = 0.5,
+    size = 1.7,
+    position = position_jitter(w = 0.2)
+  )+
+  geom_boxplot(aes(color = Site), alpha = 0.5, outlier.alpha = 0.0) +
+  scale_color_manual(
+    labels = c('Crane Flat', 'Little Meadow', 'Olmstead Point'),
+    values = met.brewer(
+      "Tsimshian",
+      n = 3,
+      type = "discrete",
+      direction = -1
+    )
+  ) +
+  scale_shape_manual(
+    values = c(21:24),
+  ) +
+  theme_div_discrete +
+  scale_x_discrete(labels = c('', '', '', '')) +
+  stat_compare_means(comparisons = my_comparisons2,
+                     method = "wilcox.test",
                      label = "p.signif") +
   labs(y = "\U1D492 = 1", x = "") +
-  guides(fill = guide_legend(title = "Elevation"), shape = guide_legend(title = "Species"))
+  guides(fill = guide_legend(title = "Site"),
+         shape = guide_legend(title = "Genotype"))
 
 #hill1_beta
 
@@ -925,20 +824,50 @@ hill1_beta <- ggplot(plant_traits_MB, aes(x = Elevation_cat, y = hill_1)) +
 # Hill number 2
 # Inverse Simpson diversity or hill number 2
 
-hill2_beta <- ggplot(plant_traits_MB, aes(x = Elevation_cat, y = hill_2)) +
-  
-  geom_boxplot(aes(fill = Elevation_cat)) +
-  scale_color_manual(labels=c('Low', 'Mid', 'High'),values= met.brewer("Cassatt1", n = 3, type = "discrete", direction = -1)) +
-  scale_fill_manual(labels=c('Low', 'Mid', 'High'),values= met.brewer("Cassatt1", n = 3, type = "discrete", direction = -1)) +
-  scale_shape_manual(values=c(15:18)) +
-  theme_elevdiv_discrete +
-  theme(legend.text = element_text(size = 14))+
-  scale_y_continuous(expand = c(0.05, 0.05)) +
-  stat_compare_means(comparisons = my_comparisons3,
-                     method = "wilcox.test", 
+hill2_beta <- ggplot(plant_traits_rfy, aes(x = Site, y = hill_2)) +
+  geom_point(
+    aes(shape = Genotype, color = Site),
+    alpha = 0.5,
+    size = 1.7,
+    position = position_jitter(w = 0.2)
+  ) +
+  geom_boxplot(aes(color = Site), alpha = 0.5, outlier.alpha = 0.0) +
+  # geom_crossbar(stat="summary",
+  #               fun = mean,
+  #               fun.max = mean,
+  #               fun.min = mean,
+  #               fatten = 2,
+  #               width = 0.5,
+  #               color="black") +
+  scale_color_manual(
+    labels = c('Crane Flat', 'Little Meadow', 'Olmstead Point'),
+    values = met.brewer(
+      "Tsimshian",
+      n = 3,
+      type = "discrete",
+      direction = -1
+    )
+  ) +
+   scale_fill_manual(
+    #labels = c('Crane Flat', 'Little Meadow', 'Olmstead Point'),
+    values = met.brewer(
+      "Tsimshian",
+      n = 4,
+      type = "discrete",
+      direction = -1
+    )
+  ) +
+  scale_shape_manual(
+    values = c(0:3),
+  ) +
+  theme_div_discrete +
+  scale_x_discrete(labels = c('', '', '', '')) +
+  stat_compare_means(comparisons = my_comparisons2,
+                     method = "wilcox.test",
                      label = "p.signif") +
   labs(y = "\U1D492 = 2", x = "") +
-  guides(fill = guide_legend(title = "Elevation"), shape = guide_legend(title = "Species"))
+  guides(fill = guide_legend(title = "Site"),
+         shape = guide_legend(title = "Genotype", alpha = 1))
 
 #hill2_beta
 
@@ -949,7 +878,7 @@ hill_beta <- ggarrange(hill0_beta, hill1_beta, hill2_beta,
           common.legend = TRUE,
           legend = "bottom",
           labels = c("D", "E", "F"))
-# hill_beta
+#hill_beta
 
 #### Alpha and Beta diversity ####
 # Joined plots
@@ -981,12 +910,12 @@ ggsave(filename = file.path(path, "figures/figure3.png"), plot = alpha_beta_dive
 
 # dbRDA using Elevation as continuous variable
 #logACI + logLT + logLPS + logLMA +
-load(file = "clean_data/statistics/m4_hell.rda")
+load("clean_data/statistics/m2_hell.rda")
+final_model <- m2_hell
 
-# Final model
-final_model <- m4_hell
-
+names(final_model)
 B <- summary(final_model)
+
 
 # Extracting scores for the plot
 ordination_scores <- as.data.frame(vegan::scores(final_model)$sites)
@@ -998,8 +927,7 @@ ordination_names <- rownames(ordination_scores)
 ordination_scores$Unique_ID <- rownames(ordination_scores)
 
 # Subset for the plot
-dbrda_df <- plant_traits_MB
-  #filter(Unique_ID %in% ordination_names)
+dbrda_df <- plant_traits_rfy 
 
 # Merge scores with trait data
 merged_data <- right_join(ordination_scores, dbrda_df, by = c("Unique_ID" = "X"))
@@ -1016,21 +944,32 @@ arrowhead = arrow(length = unit(0.02, "npc"))
 arrow_scores <- arrow_scores[order(rownames(arrow_scores)), ]
 A4 <- lapply(1:6, function(i) arrow_scores[i, ])
 
+# A4.sub1 <- arrow_scores[1,] #Elevation
+# A4.sub2 <- arrow_scores[2,] #ACi
+# A4.sub3 <- arrow_scores[3,] #LBI
+A4.sub4 <- arrow_scores[4,] #logLBI
+# A4.sub5 <- arrow_scores[5,] #LPS
+# A4.sub6 <- arrow_scores[6,] #LT.
+
 # dbRDA plot based on species
-p_final_model <- ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
-  geom_point(data = merged_data, aes(color = Species, shape = Site), size = rel(4), alpha = 0.7, stroke = 1) +
-  geom_segment(arrow_map, size = rel(.8), data = arrow_scores[1:2, ], color = "black", arrow = arrowhead) +
+full_final_model <- ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
+  geom_point(data = merged_data, aes(color = Genotype, shape= Site), size = rel(4), alpha = 0.2, stroke = 1) +
+  geom_segment(arrow_map, size = rel(.8), data = arrow_scores, color = "black", arrow = arrowhead) +
   geom_vline(xintercept = 0, color = "grey30", linetype = "dashed") + # plot vertical line
   geom_hline(yintercept = 0, color = "grey30", linetype = "dashed") + # plot horizontal line
-  geom_text(label_map, size = rel(4), data = A4[[1]], fontface = "bold", show.legend = FALSE, label = c("Elev."), nudge_x = 0.25) +
-  geom_text(label_map, size = rel(4), data = A4[[2]], fontface = "bold", show.legend = FALSE, label = c("logLBI"), nudge_y = 0.2) +
+  geom_text(label_map, size = rel(4), data = A4[[1]], fontface = "bold", show.legend = FALSE, label = c("F2WY"), hjust = 1.2 ) +
+  geom_text(label_map, size = rel(4), data = A4[[2]], fontface = "bold", show.legend = FALSE, label = c("G"),  vjust = 1.3 ) +
+  geom_text(label_map, size = rel(4), data = A4[[3]], fontface = "bold", show.legend = FALSE, label = c("L"), vjust = -0.6) +
+  geom_text(label_map, size = rel(4), data = A4[[4]], fontface = "bold", show.legend = FALSE, label = c("logLBI"), vjust = -0.3,  hjust = 0.1) +
+  geom_text(label_map, size = rel(4), data = A4[[5]], fontface = "bold", show.legend = FALSE, label = c("LM"), hjust = -0.2 ) +
+  geom_text(label_map, size = rel(4), data = A4[[6]], fontface = "bold", show.legend = FALSE, label = c("OPN"), vjust = -0.3, hjust = 1.2 ) +
   xlab(label = paste("dbRDA1 (", round(B$concont$importance[2,1]*100, digits = 1), "%)", sep="")) +
   ylab(label = paste("dbRDA2 (", round(B$concont$importance[2,2]*100, digits = 1), "%)", sep="")) + 
-  scale_color_manual(values= met.brewer("Isfahan2", n = 3, type = "discrete", direction = -1)) +
-  scale_shape_manual(values=c(1:22)) +
-  stat_ellipse(aes(color = Species),
+  scale_color_manual(values= met.brewer("Johnson", n = 4, type = "discrete", direction = 1)) +
+  scale_shape_manual(values=c(0:3)) +
+  stat_ellipse(aes(color = Genotype),
                geom = "path",
-               linewidth = 1.3,
+               linewidth = 1.7,
                position = "identity",
                type = "t", linetype = 1,
                level = 0.95,
@@ -1038,35 +977,40 @@ p_final_model <- ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
                na.rm = FALSE,
                show.legend = NA, inherit.aes = TRUE) +
   theme_classic(base_size = 16) +
-  theme(legend.title = element_text(face = "bold"),
-        legend.text = element_text(face = "italic")) +
-  guides(shape = guide_legend(ncol=2))
+  theme(legend.title = element_text(face = "bold")) +
+  guides(shape = guide_legend(ncol=1))
 
      
 # Rearranging the order of layers so arrows are above the points.
-#p_final_model$layers
-p_final_model$layers <- c(p_final_model$layers, p_final_model$layers[[2]], p_final_model$layers[[5]], p_final_model$layers[[5]])
-#p_final_model
+full_final_model$layers <- c(full_final_model$layers,full_final_model$layers[[2]], full_final_model$layers[[5]], full_final_model$layers[[6]], full_final_model$layers[[7]], full_final_model$layers[[8]], full_final_model$layers[[9]], full_final_model$layers[[10]])
+# full_final_model
 
-#ggsave(filename=file.path(path, "figures/dbRDA_species.png"), plot = p_m2dbrda, dpi=300, units=c("mm"), width=150, height=150)
+#ggsave(filename=file.path(path, "figures/dbRDA_full_model.png"), plot = full_final_model, dpi=600, units=c("mm"), width=150, height=150)
 
 #####################################
 # dbRDA using Elevation 
 #m3bdrda <- dbrda(asv_vegdist ~ logACI + logLT + logLPS + logLMA + logLBI + Elevation_cat, distance = "bray", data = ordi_traits, na.action = na.omit)
 
 # dbRDA plot based on elevation
-elev_cat_dbrda <-  ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
-  geom_point(data = merged_data, aes(color = Elevation_cat, shape = Species), size = rel(4), alpha = 0.7, stroke = 1) +
-  geom_segment(arrow_map, size = rel(.8), data = arrow_scores[1:2, ], color = "black", arrow = arrowhead) +
+full_site_model <-  ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
+  geom_point(data = merged_data, aes(color = Site, shape = Genotype), size = rel(4), alpha = 0.2, stroke = 1) +
+  geom_segment(arrow_map, size = rel(.8), data = arrow_scores, color = "black", arrow = arrowhead) +
   geom_vline(xintercept = 0, color = "grey30", linetype = "dashed") + # plot vertical line
   geom_hline(yintercept = 0, color = "grey30", linetype = "dashed") + # plot horizontal line
-  geom_text(label_map, size = rel(4), data = A4[[1]], fontface = "bold", show.legend = FALSE, label = c("Elev."), nudge_x = 0.25) +
-  geom_text(label_map, size = rel(4), data = A4[[2]], fontface = "bold", show.legend = FALSE, label = c("logLBI"), nudge_y = 0.2) +
+  geom_text(label_map, size = rel(4), data = A4[[1]], fontface = "bold", show.legend = FALSE, label = c("F2WY"), hjust = 1.2 ) +
+  geom_text(label_map, size = rel(4), data = A4[[2]], fontface = "bold", show.legend = FALSE, label = c("G"),  vjust = 1.3 ) +
+  geom_text(label_map, size = rel(4), data = A4[[3]], fontface = "bold", show.legend = FALSE, label = c("L"), vjust = -0.6) +
+  geom_text(label_map, size = rel(4), data = A4[[4]], fontface = "bold", show.legend = FALSE, label = c("logLBI"), vjust = -0.3,  hjust = 0.1 ) +
+  geom_text(label_map, size = rel(4), data = A4[[5]], fontface = "bold", show.legend = FALSE, label = c("LM"), hjust = -0.2 ) +
+  geom_text(label_map, size = rel(4), data = A4[[6]], fontface = "bold", show.legend = FALSE, label = c("OPN"), vjust = -0.3, hjust = 1.2 ) +
   xlab(label = paste("dbRDA1 (", round(B$concont$importance[2,1]*100, digits = 1), "%)", sep="")) +
   ylab(label = paste("dbRDA2 (", round(B$concont$importance[2,2]*100, digits = 1), "%)", sep="")) + 
-  scale_color_manual(values= met.brewer("Cassatt1", n = 3, type = "discrete", direction = -1)) +
-  scale_shape_manual(values=c(15:18), labels = c("*M. laciniatus*","*M. nasutus*", "*M. guttatus*")) +
-  stat_ellipse(aes(color = Elevation_cat),
+  scale_color_manual(values= met.brewer("Tsimshian",
+      n = 4,
+      type = "discrete",
+      direction = -1)) +
+  scale_shape_manual(values=c(0:3)) +
+  stat_ellipse(aes(color = Site),
                geom = "path",
                linewidth = 1.3,
                position = "identity",
@@ -1076,17 +1020,17 @@ elev_cat_dbrda <-  ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
                na.rm = FALSE,
                show.legend = NA, inherit.aes = TRUE) +
   theme_classic(base_size = 16) +
-  theme(legend.title = element_text(face = "bold"),
-        legend.text = element_markdown()) +
+  theme(legend.title = element_text(face = "bold")) +
+  scale_x_continuous(limits = c(-2.4, 3), breaks = c(-2:3)) +
   guides(shape = guide_legend(ncol=1))
 
      
 # Rearranging the order of layers so arrows are above the points.
-elev_cat_dbrda$layers <- c(elev_cat_dbrda$layers, elev_cat_dbrda$layers[[2]], elev_cat_dbrda$layers[[5]], elev_cat_dbrda$layers[[6]])
-#elev_cat_dbrda
+full_site_model$layers <- c(full_site_model$layers, full_site_model$layers[[2]], full_site_model$layers[[5]], full_site_model$layers[[6]], full_site_model$layers[[7]], full_site_model$layers[[8]], full_site_model$layers[[9]], full_site_model$layers[[10]])
+#full_site_model
 
 # Joining plots
-double_dbrda <- ggarrange(p_final_model,"", elev_cat_dbrda, ncol = 1, nrow = 3, 
+double_dbrda <- ggarrange(full_final_model,"", full_site_model, ncol = 1, nrow = 3, 
                           heights = c(1, 0.1, 1),
                           widths = c(1, 0.1, 1),
           labels = c("A", "B"),
@@ -1097,236 +1041,169 @@ double_dbrda
 ggsave(file.path(path, "figures/figure4.png"), plot = double_dbrda, dpi=300, units=c("mm"), width=200, height=250)
 ```
 
-## Figure 5
+<!-- ## Figure 5 -->
 
-```{r, figure5}
-#| echo: false
-#| eval: true
-#| tidy: true
-#| fig-width: 6
-#| fig-height: 7
-#| label: mantel_plot
-#| fig-cap: "Dissimilarity of FEF communities associates with *Mimulus* as a function of geographic distance per site. Data represent pairwise Bray-Curtis dissimilarity among sites. A) Fefe community dissimilarity in considering all host species. B) FEf community dissimilarity by host species. Blue filled points correspond to *M. laciniatus*, green filled to *M. nasutus*, and yellow to *M. guttatus*."
+<!-- ```{r, figure5} -->
+<!-- #| echo: false -->
+<!-- #| eval: true -->
+<!-- #| tidy: true -->
+<!-- #| fig-width: 6 -->
+<!-- #| fig-height: 7 -->
+<!-- #| label: mantel_plot -->
+<!-- #| fig-cap: "Dissimilarity of FEF communities associates with *Mimulus* as a function of geographic distance per site. Data represent pairwise Bray-Curtis dissimilarity among sites. A) Fefe community dissimilarity in considering all host species. B) FEf community dissimilarity by host species. Blue filled points correspond to *M. laciniatus*, green filled to *M. nasutus*, and yellow to *M. guttatus*." -->
 
-# Prepare the data for correlation plot
-# Longer format
-asv_vegdist <- as.matrix(vegdist(t(asv_matrix), method = "bray"))
+<!-- # Prepare the data for correlation plot -->
+<!-- # Longer format -->
+<!-- asv_vegdist <- as.matrix(vegdist(t(asv_matrix), method = "bray")) -->
 
-asv_long <-  asv_vegdist |>
-  as_tibble(rownames = "A") |>
-  pivot_longer(-A, names_to = "B", values_to = "bray_diss")
+<!-- asv_long <-  asv_vegdist |> -->
+<!--   as_tibble(rownames = "A") |> -->
+<!--   pivot_longer(-A, names_to = "B", values_to = "bray_diss") -->
 
-geo_long <- geo_distm |>
-  as_tibble(rownames = "A") |>
-  pivot_longer(-A, names_to = "B", values_to = "geo_dist")
+<!-- geo_long <- geo_distm |> -->
+<!--   as_tibble(rownames = "A") |> -->
+<!--   pivot_longer(-A, names_to = "B", values_to = "geo_dist") -->
 
-# Merge the two dataframes
-asv_geo_matrix_long <- inner_join(asv_long, geo_long, by = c("A", "B")) |>
-  inner_join(plant_traits |>
-               dplyr::select(Unique_ID, Site, Species, Elevation_cat), by = c("A" ="Unique_ID"))
+<!-- # Merge the two dataframes -->
+<!-- asv_geo_matrix_long <- inner_join(asv_long, geo_long, by = c("A", "B")) |> -->
+<!--   inner_join(plant_traits |> -->
+<!--                dplyr::select(Unique_ID, Site, Species, Elevation_cat), by = c("A" ="Unique_ID")) -->
 
-# Mantel test
-# All data points
-set.seed(859)
-abund_geo  <- mantel(asv_vegdist, geo_distm,
-                     method = "spearman", 
-                     parallel = 8,
-                     permutations = 999, 
-                     na.rm = TRUE)
-#abund_geo
+<!-- # Mantel test -->
+<!-- # All data points -->
+<!-- set.seed(859) -->
+<!-- abund_geo  <- mantel(asv_vegdist, geo_distm, -->
+<!--                      method = "spearman",  -->
+<!--                      parallel = 8, -->
+<!--                      permutations = 999,  -->
+<!--                      na.rm = TRUE) -->
+<!-- #abund_geo -->
 
-# Mantel test by species
-# M. laciniatus
+<!-- # Mantel test by species -->
+<!-- # M. laciniatus -->
 
-# Samples with species to subset/filter matrices downstream
-# M. laciniatus
-lac_names_rfy <- plant_traits |>
-  slice(1:157) |> # Only selecting observations with ASV data 
-  filter(Unique_ID %in% final_names_methodB,
-    Species == "M. laciniatus") |>
-  pull(Unique_ID) 
+<!-- # Samples with species to subset/filter matrices downstream -->
+<!-- # M. laciniatus -->
+<!-- lac_names_rfy <- plant_traits |> -->
+<!--   slice(1:157) |> # Only selecting observations with ASV data  -->
+<!--   filter(Unique_ID %in% final_names_methodB, -->
+<!--     Species == "M. laciniatus") |> -->
+<!--   pull(Unique_ID)  -->
 
-# Subset the data
-lac_mantel  <- mantel(asv_long |> # Subset the data
-                       filter(A %in% lac_names_rfy, B %in% lac_names_rfy) |>
-                       pivot_wider(names_from = B, values_from = bray_diss) |>
-                       column_to_rownames(var = "A") |>
-                       as.matrix(),
-                     geo_long |> # Subset the data
-                       filter(A %in% lac_names_rfy, B %in% lac_names_rfy) |>
-                       pivot_wider(names_from = B, values_from = geo_dist) |>
-                       column_to_rownames(var = "A") |>
-                       as.matrix(),
-                      method = "spearman", permutations = 999, na.rm = TRUE)
-#lac_mantel
+<!-- # Subset the data -->
+<!-- lac_mantel  <- mantel(asv_long |> # Subset the data -->
+<!--                        filter(A %in% lac_names_rfy, B %in% lac_names_rfy) |> -->
+<!--                        pivot_wider(names_from = B, values_from = bray_diss) |> -->
+<!--                        column_to_rownames(var = "A") |> -->
+<!--                        as.matrix(), -->
+<!--                      geo_long |> # Subset the data -->
+<!--                        filter(A %in% lac_names_rfy, B %in% lac_names_rfy) |> -->
+<!--                        pivot_wider(names_from = B, values_from = geo_dist) |> -->
+<!--                        column_to_rownames(var = "A") |> -->
+<!--                        as.matrix(), -->
+<!--                       method = "spearman", permutations = 999, na.rm = TRUE) -->
+<!-- #lac_mantel -->
 
-# M. nasutus
-nas_names_rfy <- plant_traits |> 
-  slice(1:157) |> # Only selecting observations with ASV data 
-  filter(Unique_ID %in% final_names_methodB,
-         Species == "M. nasutus") |>
-  pull(Unique_ID)
-nas_mantel  <- mantel(asv_long |> # Subset the data
-                       filter(A %in% nas_names_rfy, B %in% nas_names_rfy) |>
-                       pivot_wider(names_from = B, values_from = bray_diss) |>
-                       column_to_rownames(var = "A") |>
-                       as.matrix(), 
-                      geo_long |> # Subset the data
-                       filter(A %in% nas_names_rfy, B %in% nas_names_rfy) |>
-                       pivot_wider(names_from = B, values_from = geo_dist) |>
-                       column_to_rownames(var = "A") |>
-                       as.matrix(), 
-                     method = "spearman", permutations = 999, na.rm = TRUE)
-#nas_mantel
+<!-- # M. nasutus -->
+<!-- nas_names_rfy <- plant_traits |>  -->
+<!--   slice(1:157) |> # Only selecting observations with ASV data  -->
+<!--   filter(Unique_ID %in% final_names_methodB, -->
+<!--          Species == "M. nasutus") |> -->
+<!--   pull(Unique_ID) -->
+<!-- nas_mantel  <- mantel(asv_long |> # Subset the data -->
+<!--                        filter(A %in% nas_names_rfy, B %in% nas_names_rfy) |> -->
+<!--                        pivot_wider(names_from = B, values_from = bray_diss) |> -->
+<!--                        column_to_rownames(var = "A") |> -->
+<!--                        as.matrix(),  -->
+<!--                       geo_long |> # Subset the data -->
+<!--                        filter(A %in% nas_names_rfy, B %in% nas_names_rfy) |> -->
+<!--                        pivot_wider(names_from = B, values_from = geo_dist) |> -->
+<!--                        column_to_rownames(var = "A") |> -->
+<!--                        as.matrix(),  -->
+<!--                      method = "spearman", permutations = 999, na.rm = TRUE) -->
+<!-- #nas_mantel -->
 
-# M. guttatus
-gut_names_rfy <- plant_traits |> 
-  slice(1:157) |> # Only selecting observations with ASV data 
-  filter(Unique_ID %in% final_names_methodB,
-         Species == "M. guttatus") |>
-  pull(Unique_ID)
-# Subset the data
-gut_mantel  <- mantel(asv_long |> # Subset the data
-                       filter(A %in% gut_names_rfy, B %in% gut_names_rfy) |>
-                       pivot_wider(names_from = B, values_from = bray_diss) |>
-                       column_to_rownames(var = "A") |>
-                       as.matrix(),
-                     geo_long |> # Subset the data
-                       filter(A %in% gut_names_rfy, B %in% gut_names_rfy) |>
-                       pivot_wider(names_from = B, values_from = geo_dist) |>
-                       column_to_rownames(var = "A") |>
-                       as.matrix(),
-                     method = "spearman", permutations = 999, na.rm = TRUE)
-#gut_mantel
+<!-- # M. guttatus -->
+<!-- gut_names_rfy <- plant_traits |>  -->
+<!--   slice(1:157) |> # Only selecting observations with ASV data  -->
+<!--   filter(Unique_ID %in% final_names_methodB, -->
+<!--          Species == "M. guttatus") |> -->
+<!--   pull(Unique_ID) -->
+<!-- # Subset the data -->
+<!-- gut_mantel  <- mantel(asv_long |> # Subset the data -->
+<!--                        filter(A %in% gut_names_rfy, B %in% gut_names_rfy) |> -->
+<!--                        pivot_wider(names_from = B, values_from = bray_diss) |> -->
+<!--                        column_to_rownames(var = "A") |> -->
+<!--                        as.matrix(), -->
+<!--                      geo_long |> # Subset the data -->
+<!--                        filter(A %in% gut_names_rfy, B %in% gut_names_rfy) |> -->
+<!--                        pivot_wider(names_from = B, values_from = geo_dist) |> -->
+<!--                        column_to_rownames(var = "A") |> -->
+<!--                        as.matrix(), -->
+<!--                      method = "spearman", permutations = 999, na.rm = TRUE) -->
+<!-- #gut_mantel -->
 
-# Visualize the correlation
-# Species labels
-labels_list <- c("M. laciniatus", "M. nasutus", "M. guttatus")
-names(labels_list) <- c("M. laciniatus", "M. nasutus", "M. guttatus")
+<!-- # Visualize the correlation -->
+<!-- # Species labels -->
+<!-- labels_list <- c("M. laciniatus", "M. nasutus", "M. guttatus") -->
+<!-- names(labels_list) <- c("M. laciniatus", "M. nasutus", "M. guttatus") -->
 
-# Correlation ggplot
-mantel_test <- ggplot(asv_geo_matrix_long, aes(y = bray_diss, x = geo_dist)) +
-  geom_point(aes(color = Species), alpha = 0.5, size = 3) +
-  geom_smooth(method = "lm", se = TRUE, color = "black") +
-  # stat_poly_eq(formula = y ~ x, 
-  #              aes(label = paste("R2 =", abund_geo$statistic, 
-  #                                ..p.value.label..,
-  #                                sep = "~~~~")), 
-  #              parse = TRUE, size = 4, color = "black", label.y = 0.25, label.x = 50000) +
-  # geom_label(aes(x = 100000, y = 0.25,
-  #                 label = paste("r = "), sep = "")) +
-   #stat_regline_equation(label.y = 0.5, label.x = 1900, 
-                          #aes(label = ..eq.label..), size = rel(4), color = "black") +
-  #scale_fill_manual(labels = c("*M. laciniatus*","*M. nasutus*", "*M. guttatus*"), 
-                     #values = met.brewer("Archambault", n = 4, type = "discrete", direction = c(1))) + 
-  scale_color_manual(values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) + 
-  labs(y = "Bray Curtis dissimilarity", x = "Geographic distance (m)", col = "") + 
-  scale_x_continuous(labels = function(x) format(x, scientific = FALSE)) +
-  theme_lfspp_continuous
+<!-- # Correlation ggplot -->
+<!-- mantel_test <- ggplot(asv_geo_matrix_long, aes(y = bray_diss, x = geo_dist)) + -->
+<!--   geom_point(aes(color = Species), alpha = 0.5, size = 3) + -->
+<!--   geom_smooth(method = "lm", se = TRUE, color = "black") + -->
+<!--   # stat_poly_eq(formula = y ~ x,  -->
+<!--   #              aes(label = paste("R2 =", abund_geo$statistic,  -->
+<!--   #                                ..p.value.label.., -->
+<!--   #                                sep = "~~~~")),  -->
+<!--   #              parse = TRUE, size = 4, color = "black", label.y = 0.25, label.x = 50000) + -->
+<!--   # geom_label(aes(x = 100000, y = 0.25, -->
+<!--   #                 label = paste("r = "), sep = "")) + -->
+<!--    #stat_regline_equation(label.y = 0.5, label.x = 1900,  -->
+<!--                           #aes(label = ..eq.label..), size = rel(4), color = "black") + -->
+<!--   #scale_fill_manual(labels = c("*M. laciniatus*","*M. nasutus*", "*M. guttatus*"),  -->
+<!--                      #values = met.brewer("Archambault", n = 4, type = "discrete", direction = c(1))) +  -->
+<!--   scale_color_manual(values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) +  -->
+<!--   labs(y = "Bray Curtis dissimilarity", x = "Geographic distance (m)", col = "") +  -->
+<!--   scale_x_continuous(labels = function(x) format(x, scientific = FALSE)) + -->
+<!--   theme_lfspp_continuous -->
 
-#mantel_test
+<!-- #mantel_test -->
 
-# By species
-mantel_species <- ggplot(asv_geo_matrix_long, aes(y = bray_diss, x = geo_dist)) +
-   geom_jitter(aes(color = Species), alpha = 0.5, size = 3) +
-   geom_smooth(method = "lm", se = TRUE, color = "black") +
-   # stat_regline_equation(label.y = 0.25, label.x = "right",
-   #                        #aes(label = ..adj.rr.label.., ), size = rel(4), color = "black") 
-   # stat_fit_glance(method = 'lm',
-   #                 method.args = list(formula = y ~ x),
-   #                 geom = 'text',
-   #                 aes(label = paste("p = ",
-   #                                   signif(..p.value.., digits = 4),
-   #                                   sep = "")),
-   #                 color = "black",
-   #                 label.x = 'right',
-   #                 label.y = 0.23, size = 4) +
-   scale_color_manual(values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) +
-  labs(y = "Bray Curtis dissimilarity", x = "Geographic distance (m)", col = "") +
-  scale_x_continuous(labels = function(x) format(x, scientific = FALSE)) +
-  theme_lfspp_continuous +
-  facet_wrap(~ Species, labeller = labeller(Species = labels_list))
-#mantel_species
+<!-- # By species -->
+<!-- mantel_species <- ggplot(asv_geo_matrix_long, aes(y = bray_diss, x = geo_dist)) + -->
+<!--    geom_jitter(aes(color = Species), alpha = 0.5, size = 3) + -->
+<!--    geom_smooth(method = "lm", se = TRUE, color = "black") + -->
+<!--    # stat_regline_equation(label.y = 0.25, label.x = "right", -->
+<!--    #                        #aes(label = ..adj.rr.label.., ), size = rel(4), color = "black")  -->
+<!--    # stat_fit_glance(method = 'lm', -->
+<!--    #                 method.args = list(formula = y ~ x), -->
+<!--    #                 geom = 'text', -->
+<!--    #                 aes(label = paste("p = ", -->
+<!--    #                                   signif(..p.value.., digits = 4), -->
+<!--    #                                   sep = "")), -->
+<!--    #                 color = "black", -->
+<!--    #                 label.x = 'right', -->
+<!--    #                 label.y = 0.23, size = 4) + -->
+<!--    scale_color_manual(values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) + -->
+<!--   labs(y = "Bray Curtis dissimilarity", x = "Geographic distance (m)", col = "") + -->
+<!--   scale_x_continuous(labels = function(x) format(x, scientific = FALSE)) + -->
+<!--   theme_lfspp_continuous + -->
+<!--   facet_wrap(~ Species, labeller = labeller(Species = labels_list)) -->
+<!-- #mantel_species -->
 
-# Joining plots
-mantel <- ggarrange(mantel_test, "", mantel_species, 
-                    ncol = 1, nrow = 3, 
-                    widths = c(1, 0.1, 1),
-                    heights = c(1, 0.1, 1),
-                    labels = c("A", "B"),
-                    common.legend = T, legend = "bottom")
+<!-- # Joining plots -->
+<!-- mantel <- ggarrange(mantel_test, "", mantel_species,  -->
+<!--                     ncol = 1, nrow = 3,  -->
+<!--                     widths = c(1, 0.1, 1), -->
+<!--                     heights = c(1, 0.1, 1), -->
+<!--                     labels = c("A", "B"), -->
+<!--                     common.legend = T, legend = "bottom") -->
 
-mantel
-ggsave(file.path(path, "figures/figure5.png") , plot = mantel, dpi=300, units=c("mm"), width=200, height=250)
-```
+<!-- mantel -->
+<!-- ggsave(file.path(path, "figures/figure5.png") , plot = mantel, dpi=300, units=c("mm"), width=200, height=250) -->
+<!-- ``` -->
 
-## Figure 6
-
-```{r, figure6}
-#| echo: false
-#| eval: true
-#| tidy: true
-#| fig-width: 6
-#| fig-height: 6
-#| label: pca
-#| fig-cap: "The Principal Component Analysis (PCA) shows how leaf functional traits are correlated. The PCA analyses shows correlations between ACI, LT, LPS, and LMA as loadings track along PC1 towards positive values. We observe distinct groupings by species along PC2 such that *M. laciniatus*, the most lobed species, is distinct from *M.guttatus* and *M. nasutus*. The latter two have greater overlap along PC1 and PC2."
-
-# PCA using covariates to explain species richness/abundance ####
-data.pca <- leaf_traits_noB |>
-  na.omit() |>
-  select(c(20:24)) #Selecting only the log-transformed leaf trait columns. We use the log transformed data due to our findings of non-normality in the data. See this post for a hot take: https://stats.stackexchange.com/questions/164381/why-log-transforming-the-data-before-performing-principal-component-analysis
-
-leaf_traits.pca <- na.omit(leaf_traits_noB) 
-
-
-###Run this to create pca with prcomp function
-pca <- prcomp(data.pca, scale = TRUE)
-pca$rotation=-pca$rotation
-pca$x=-pca$x
-
-#Checking the PCA
-#plot(pca,type = "lines")
-#biplot(pca) # Base type PCA
-
-# PCA using autoplot() and prcomp()and modifying with ggplot syntax ####
-pca_auto <- autoplot((pca), data = data.frame(leaf_traits.pca), # For some reason this functions require data to be data= data.frame()
-         alpha = 0, #Setting alpha to zero render the automatic circle point null.Manipulate shapes with geom_point(). 
-         loadings = TRUE,
-         loadings.colour = "black",
-         loadings.label = TRUE, 
-         loadings.label.colour="black",
-         loadings.label.size = 4, size = 7, 
-         loadings.label.vjust = 0, 
-         loadings.label.hjust = -0.15) + 
-  geom_point(aes(fill = Species, color = Species), alpha = 0.5, size = 3) +
-  geom_hline(yintercept = 0, colour = "gray45") +
-  geom_vline(xintercept = 0, colour = "gray45") +
-  scale_fill_manual(labels=c("*M. laciniatus*", "*M. nasutus*", "*M. guttatus*"), 
-                    values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) +
-  scale_color_manual(labels = c("*M. laciniatus*", "*M. nasutus*", "*M. guttatus*"),
-                     values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) +
-  stat_ellipse(aes(color = Species), 
-               geom = "path", 
-               linewidth = 1.3, 
-               position = "identity", 
-               type = "t", 
-               linetype = 1, 
-               level = 0.95, 
-               segments = 51, na.rm = TRUE, show.legend = NA, inherit.aes = TRUE) +
-  #scale_x_continuous(expand = c(0.0, -0.09)) +
-  theme_classic(base_size = 16) +
-  theme(legend.text = element_markdown(),
-        legend.position = "bottom",
-        legend.title = element_text(face = "bold")) 
-  # labs(caption = expression("ACI = anthocyanins, LPS = leaf punch strength, LMA = leaf mass per area, LT = leaf thickness. LBI = Leaf lobe index. All leaf replicates per species ("~ italic("n") ~ "= 501)."))
-
-
-pca_auto$layers <- c(pca_auto$layers, pca_auto$layers[[2]], pca_auto$layers[[3]]) # This adds/copies layers 2-3 and overlays them. It makes the arrows be on top of the points. There must be a better ways of doing this.
-
-pca_auto
-
-ggsave(filename = file.path(path, "figures/figure6.png"), plot = pca_auto, dpi=300, units=c("mm"), width=150, height=150)
-```
 
 # Supplementary Material
 
@@ -1399,541 +1276,9 @@ heatplots
 ggplot2::ggsave(filename = file.path(path, "figures/supp_fig2.png"), plot = heatplots, dpi=300, units=c("mm"), width=300, height=250)
 ```
 
-## Figure S3
 
-```{r, supp_fig3}
-#| echo: false
-#| eval: true
-#| tidy: true
-#| fig-width: 6
-#| fig-height: 6
-#| label: lma_elev_scatter
-#| fig-cap: "Comparison of log-transformed leaf mass per area (LMA) by species and elevation category. A) Compares logLMA means by species and elevation category: LOW (<1220 m), MID (1221 - 1828 m), HIGH (> 1829 m). The black line across violins represents the mean value. B) Change in logLMA per species as elevation increases. The black trend line represents the fitted model for all data points, see main text for R squared and *p* values. Significance levels are represented by *ns* (not significant) and asterisks [*p* < 0.05 (\\*), *p* < 0.01 (\\**), *p* < 0.001 (\\***), and *p* < 0.0001 (\\****)]."
 
 
-########## Labels ###########
-#Legend title label
-legend_title <- "Species"
-# Species labels
-labels_list <- c("M. laciniatus", "M. nasutus", "M. guttatus")
-names(labels_list) <- c("L", "N", "G")
-#############################
-
-#ggpubr package used for comparisons tests
-lma_compare_means <- compare_means(logLMA ~ Species,
-         data = leaf_traits_noB,
-         group.by = "Elevation_cat",
-         method = "wilcox.test",
-         p.adjust.method = "BH",
-  paired = FALSE,
-  alternative = "two.sided", 
-  mu = 0, 
-  var.equal = FALSE,
-  conf.level = 0.95)
-
-#lma_compare_means
-#Report with `compare_means` because it is easier to plot with `ggpubr` package.
-
-#Error bars for plots 
-errbar_lims <- group_by(leaf_traits_noB, Site) |> 
-              summarize(mean = mean(logLMA), se = sd(logLMA)/sqrt(n()), 
-                        upper = mean+(2*se), lower = mean-(2*se))
-#Comparisons
-my_comparisons <- list(c("M. nasutus", "M. laciniatus"), c("M. nasutus", "M. guttatus"), c("M. laciniatus", "M. guttatus"))
-
-#By Site discrete comparison
-lma <- ggplot(leaf_traits_noB, aes(y = logLMA, x = Species)) +
-  #geom_violin(aes(fill = Species)) +
-  geom_boxplot(aes(fill= Species),width = 0.7, color = "grey30", alpha = 0.7) +
-  # geom_crossbar(stat = "summary",
-  #               fun = mean,
-  #               fun.max = mean,
-  #               fun.min = mean,
-  #               fatten = 1.5, width = 0.8) +
-  geom_point(color = "black", alpha = 0.2,
-             size = 1.7, 
-             position = position_jitter(w = 0.05))  +
-  scale_fill_manual(labels =c('*M. laciniatus*', '*M. nasutus*', '*M. guttatus*'),
-                    values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) +
-  scale_color_manual(aes(color = "black")) +
-  theme_lfspp_discrete +
-  labs(y = "log10[Leaf Mass per Area (LMA) (mg/mm)]", x = "") +
-  stat_compare_means(comparisons = my_comparisons,
-                     method = "wilcox.test",
-                     #label.y = c(0.4, 0.6, 1),
-                     label = "p.signif") +
-  facet_wrap(~Elevation_cat)
-
-#lma
-#ggsave(filename = file.path(path, "figures/lma_violin.png"), plot = lma, dpi=300, units=c("mm"), width=300, height=150)
-
-# By Elevation continuous comparison
-# Linear model summary
-# summary(lm(logLMA ~ Elevation_m, data = leaf_traits_noB |>
-#              filter(!logLMA == "-Inf"), na.action = na.omit)) # Remove -Inf values
-elev_lma_p <- format.p(cor.test(leaf_traits_noB$logLMA, leaf_traits_noB$Elevation_m, na.action = na.omit)$p.value) # This is just to make the p-value nicer. 
-
-# logLMA by Elevation
-lma_cont <- ggplot(leaf_traits_noB |> # Removing infinite values
-                     filter(!logLMA == "-Inf"), aes(y = logLMA, x = Elevation_m)) +
-  geom_jitter(aes(color = Species), alpha = 0.6,
-             size = 2.5) +
-  geom_smooth(aes(color = Species), method = lm, se = FALSE, na.rm = F) +
-  geom_smooth(method = lm, se = TRUE, level = 0.95, na.rm = F, color = "black") +
-  stat_poly_eq(formula = y ~ x, 
-               aes(color = Species,
-                   label = paste(#..eq.label.., 
-                                 ..adj.rr.label.., 
-                                 #"~italic(p) ==",
-                                 ..p.value.label.., 
-                                 #signif(..p.value.., digits = 4),
-                                 sep = "*`,`~~")), 
-               rr.digits = 2,
-               p.digits = 3 ,
-               parse = TRUE,
-               label.x.npc = "left",
-               vstep = 0.08) +
-  scale_color_manual(labels =c('*M. laciniatus*', '*M. nasutus*', '*M. guttatus*'),
-                    values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) +
-  theme_lfspp_continuous +
-  labs(y = "log10[Leaf Mass per Area (LMA)]", x = "Elevation (m.a.s.l.)") 
-
-#lma_cont
-#ggsave(filename = file.path(path, "figures/lma_elev.png"), plot = logLMA_elev, dpi=300, units=c("mm"), width=300, height=150)
-
-# Joining plots
-lma_elevation <- ggarrange(lma_cont, lma, ncol = 1, nrow = 2, 
-                           common.legend = TRUE, 
-                           legend = "bottom",
-                           labels = c("A", "B"),
-                           heights = c(1, 1))
-
-lma_elevation
-
-ggsave(filename = file.path(path, "figures/supp_fig3.png"), plot = lma_elevation, dpi=300, units=c("mm"), width=300, height=250)
-```
-
-## Figure S4
-
-```{r, supp_fig4}
-#| echo: false
-#| eval: true
-#| tidy: true
-#| fig-width: 6
-#| fig-height: 5
-#| label: aci_elev_scatter
-#| fig-cap: "Change in log-transformed anthocyanin content index (ACI) by species and elevation category. A) Compares logACI means by species and elevation category: LOW (<1220 m), MID (1221 - 1828 m), HIGH (> 1829 m). The black line across violins represents the mean value. B) Change in logLPS per species as elevation increases. The black trend line represents the fitted model for all data points, see main text for R squared and *p* values. Significance levels are represented by *ns* (not significant) and asterisks [*p* < 0.05 (\\*), *p* < 0.01 (\\**), *p* < 0.001 (\\***), and *p* < 0.0001 (\\****)]."
-
-#ggpubr package used for comparisons tests
-aci_compare_means <- compare_means(logACI ~ Species,
-         data = leaf_traits_noB,
-         group.by = "Elevation_cat",
-         method = "wilcox.test",
-         p.adjust.method = "BH",
-  paired = FALSE,
-  alternative = "two.sided", 
-  mu = 0, 
-  var.equal = FALSE,
-  conf.level = 0.95)
-
-#aci_compare_means
-#Roughly the same outcome as pairwise_t_test.
-
-#Report with `compare_means` because it is easier to plot with `ggpubr` package.
-errbar_lims <- group_by(leaf_traits_noB, Species) |> 
-              summarize(mean = mean(logACI), se = sd(logACI)/sqrt(n()), 
-                        upper = mean + (2*se), lower = mean - (2*se))
-
-#Comparisons
-my_comparisons <- list(c("M. nasutus", "M. laciniatus"), c("M. nasutus", "M. guttatus"), c("M. laciniatus", "M. guttatus"))
-
-
-aci <- ggplot(leaf_traits_noB, aes(y = logACI, x = Species)) +
-  #geom_violin(aes(fill = Species)) +
-  geom_boxplot(aes(fill= Species),width = 0.7, color = "grey30", alpha = 0.7) +
-  # geom_crossbar(stat="summary",
-  #               fun = mean,
-  #               fun.max = mean,
-  #               fun.min = mean,
-  #               fatten = 1.5, width = 0.8) +
-  geom_point(color="black", alpha = 0.2,
-             size=1.7, 
-             position = position_jitter(w = 0.05))  +
-  scale_fill_manual(values= met.brewer("Isfahan2", n = 4, type = "discrete", direction = -1)) +
-  scale_color_manual(aes(color = "black")) +
-  theme_lfspp_discrete +
-  labs(y = paste("log[Anthocyanin Content Index (ACI)]"), x = "") +
-  stat_compare_means(comparisons = my_comparisons,
-                     method = "wilcox.test",
-                     #label.y = c(0.4, 0.6, 1),
-                     label = "p.signif") +
-  facet_wrap(~Elevation_cat)
-
-#aci
-#ggsave(filename = file.path(path, "figures/aci_violin.png"), plot = aci, dpi=300, units=c("mm"), width=300, height=150)
-
-# By Elevation continuous comparison
-# Linear model summary
-#summary(lm(logACI~ Elevation_m, data = leaf_traits_noB, na.action = na.omit))
-elev_aci_p <- format.p(cor.test(leaf_traits_noB$logACI, leaf_traits_noB$Elevation_m, na.action = na.omit)$p.value) # This is just to make the p-value nicer. 
-
-# logACI by Elevation
-aci_cont <- ggplot(leaf_traits_noB, aes(y = logACI, x = Elevation_m)) +
-  geom_jitter(aes(color = Species), alpha = 0.6,
-             size = 2.5)  +
-  geom_smooth(aes(color = Species), method = lm, se = FALSE, na.rm = F) +
-  geom_smooth(method = lm, se = TRUE, level = 0.95, na.rm = F, color = "black") +
-  stat_poly_eq(formula = y ~ x, 
-               aes(color = Species,
-                   label = paste(#..eq.label.., 
-                                 ..adj.rr.label.., 
-                                 #"~italic(p) ==",
-                                 ..p.value.label.., 
-                                 #signif(..p.value.., digits = 4),
-                                 sep = "*`,`~~")), 
-               parse = TRUE,
-               label.x.npc = "left",
-               vstep = 0.08) +
-  scale_color_manual(values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) +
-  theme_lfspp_continuous +
-  theme(plot.caption = element_text(size = 10)) +
-  labs(y = paste("log[Anthocyanin Content Index (ACI)]"), x = "Elevation (m.a.s.l.)", 
-      caption = (expression(paste("ACI = % ", italic("A") [lambda]," at 931 nm / % ", italic("A") [lambda]," at 530 nm")))) +
-  scale_y_continuous(expand = c(0.07, 0.07)) 
-
-#aci_cont
-#ggsave(filename = file.path(path, "figures/aci_elev.png"), plot = aci_cont, dpi=300, units=c("mm"), width=300, height=150)
-
-# Joining plots
-aci_elevation <- ggarrange(aci_cont, "", aci, ncol = 1, nrow = 3, 
-                           widths = c(1, 0.1, 1),
-                           heights = c(1, 0.1, 1.1),
-                           common.legend = TRUE, 
-                           legend = "bottom",
-                           labels = c("A", "B")
-                           )
-
-aci_elevation
-ggsave(filename = file.path(path, "figures/supp_fig4.png"), plot = aci_elevation, dpi=300, units=c("mm"), width=300, height=250)
-```
-
-## Figure S5
-
-```{r, supp_fig5}
-#| echo: false
-#| eval: true
-#| tidy: true
-#| fig-width: 6
-#| fig-height: 6
-#| label: lbi_elev_scatter
-#| fig-cap: "Change in log-transformed leaf lobe index (LBI) by species and elevation category. A) Compares logLBI means by species and elevation category: LOW (<1220 m), MID (1221 - 1828 m), HIGH (> 1829 m). The black line across violins represents the mean value. B) Change in logLPS per species as elevation increases. The black trend line represents the fitted model for all data points, see main text for R squared and *p* values. Significance levels are represented by *ns* (not significant) and asterisks [*p* < 0.05 (\\*), *p* < 0.01 (\\**), *p* < 0.001 (\\***), and *p* < 0.0001 (\\****)]."
-
-#ggpubr package used for comparisons tests
-lbi_compare_means <- compare_means(logLBI ~ Species,
-         data = leaf_traits_noB,
-         group.by = "Elevation_cat",
-         method = "wilcox.test",
-         p.adjust.method = "BH",
-  paired = FALSE,
-  alternative = "two.sided", 
-  mu = 0, 
-  var.equal = FALSE,
-  conf.level = 0.95)
-
-#lbi_compare_means
-
-
-#Roughly the same outcome as pairwise_t_test.
-
-#Report with `compare_means` because it is easier to plot with `ggpubr` package.
-errbar_lims <- group_by(leaf_traits_noB, Species) |> 
-              summarize(mean = mean(logLBI), se = sd(logLBI)/sqrt(n()), 
-                        upper = mean + (2*se), lower = mean - (2*se))
-
-#Comparisons
-my_comparisons <- list(c("M. nasutus", "M. laciniatus"), c("M. nasutus", "M. guttatus"), c("M. laciniatus", "M. guttatus"))
-
-lbi <- ggplot(leaf_traits_noB, aes(y = logLBI, x = Species)) +
-  #geom_violin(aes(fill = Species)) +
-  geom_boxplot(aes(fill= Species),width = 0.7, color = "grey30", alpha = 0.7) +
-  # geom_crossbar(stat = "summary",
-  #               fun = mean,
-  #               fun.max = mean,
-  #               fun.min = mean,
-  #               fatten = 1.5, width = 0.8) +
-  geom_point(color = "black", alpha = 0.2,
-             size = 1.7,
-             position = position_jitter(w = 0.05))  +
-  scale_fill_manual(labels =c('*M. laciniatus*', '*M. nasutus*', '*M. guttatus*'),
-                    values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) +
-  scale_color_manual(aes(color = "black")) +
-  theme_lfspp_discrete +
-  labs(y = "log[Leaf Lobe Index (LBI)", x = "") +
-  #scale_x_discrete(labels = c('M. laciniatus', 'M. nasutus', 'M. guttatus')) +
-  stat_compare_means(comparisons = my_comparisons,
-                     method = "wilcox.test", 
-                     label = "p.signif") +
-   facet_wrap(~Elevation_cat)
-
-#lbi
-#ggsave(filename = file.path(path, "figures/lbi_violin.png"), plot = lbi, dpi=300, units=c("mm"), width=300, height=150)
-
-# By Elevation continuous comparison
-# Linear model summary
-#summary(lm(logLBI~ Elevation_m, data = leaf_traits_noB, na.action = na.omit))
-elev_lbi_p <- format.p(cor.test(leaf_traits_noB$logLBI, leaf_traits_noB$Elevation_m, na.action = na.omit)$p.value) # This is just to make the p-value nicer. 
-
-# logLBI by Elevation
-lbi_cont <- ggplot(leaf_traits_noB, aes(y = logLBI, x = Elevation_m)) +
-  geom_jitter(aes(color = Species), alpha = 0.6,
-             size = 2.5)  +
-  geom_smooth(aes(color = Species), method = lm, se = FALSE, na.rm = F) +
-  geom_smooth(method = lm, se = TRUE, level = 0.95, na.rm = F, color = "black") +
-  stat_poly_eq(formula = y ~ x, 
-               aes(color = Species,
-                   label = paste(#..eq.label.., 
-                                 ..adj.rr.label.., 
-                                 #"~italic(p) ==",
-                                 ..p.value.label.., 
-                                 #signif(..p.value.., digits = 4),
-                                 sep = "*`,`~~")), 
-               rr.digits = 2,
-               p.digits = 3 ,
-               parse = TRUE,
-               label.x.npc = "left",
-               vstep = 0.08) +
-  scale_color_manual(labels =c('*M. laciniatus*', '*M. nasutus*', '*M. guttatus*'),
-                    values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) +
-  theme_classic(base_size = 16) +
-  theme(legend.title = element_text(face = "bold"),
-        panel.border = element_rect(linetype = "blank", fill = NA),
-        legend.text = element_markdown(size = 14), #Make legend text italic
-        axis.text.x = element_text(size = 14),
-        legend.position = "bottom") +
-  labs(y = "log[Leaf Lobe Index (LBI)]", x = "Elevation (m.a.s.l.)") +
-  scale_y_continuous(expand = c(0.07, 0.07)) 
-
-#lbi_cont
-#ggsave(filename = file.path(path, "figures/lbi_elev.png"), plot = lbi_cont, dpi=300, units=c("mm"), width=300, height=150)
-
-# Joining plots
-lbi_elevation <- ggarrange(lbi_cont, lbi, ncol = 1, nrow = 2, 
-                           common.legend = TRUE, 
-                           legend = "bottom",
-                           labels = c("A", "B"),
-                           heights = c(1, 1))
-
-lbi_elevation
-
-ggsave(filename = file.path(path, "figures/supp_fig5.png"), plot = lbi_elevation, dpi=300, units=c("mm"), width=300, height=250)
-```
-
-## Figure S6
-
-```{r, supp_fig6}
-#| echo: false
-#| eval: true
-#| tidy: true
-#| fig-width: 6
-#| fig-height: 6
-#| label: lps_elev_scatter
-#| fig-cap: "Change in log-transformed leaf-punch strength (LPS), a measure of leaf toughness, by species and elevation category. A) Compares logLPS means by species and elevation category: LOW (<1220 m), MID (1221 - 1828 m), HIGH (> 1829 m). The black line across violins represents the mean value. B) Change in logLPS per species as elevation increases. The black trend line represents the fitted model for all data points, see main text for R squared and *p* values. Significance levels are represented by *ns* (not significant) and asterisks [*p* < 0.05 (\\*), *p* < 0.01 (\\**), *p* < 0.001 (\\***), and *p* < 0.0001 (\\****)]."
-
-#ggpubr package used for comparisons tests
-lps_compare_means <- compare_means(logLPS ~ Species,
-         data = leaf_traits_noB,
-         group.by = "Elevation_cat",
-         method = "wilcox.test",
-         p.adjust.method = "BH",
-  paired = FALSE,
-  alternative = "two.sided", 
-  mu = 0, 
-  var.equal = FALSE,
-  conf.level = 0.95)
-
-#lps_compare_means
-
-#Report with `compare_means` because it is easier to plot with `ggpubr` package.
-errbar_lims <- group_by(leaf_traits_noB, Species) |> 
-              summarize(mean = mean(logLPS), se = sd(logLPS)/sqrt(n()), 
-                        upper = mean + (2*se), lower = mean - (2*se))
-
-
-lps <- ggplot(leaf_traits_noB, aes(y = logLPS, x = Species)) +
-  #geom_violin(aes(fill = Species)) +
-  geom_boxplot(aes(fill= Species),width = 0.7, color = "grey30", alpha = 0.7) +
-  # geom_crossbar(stat = "summary",
-  #               fun = mean,
-  #               fun.max = mean,
-  #               fun.min = mean,
-  #               fatten = 1.5, width = 0.8) +
-  geom_point(color = "black", alpha = 0.2,
-             size = 1.7,
-             position = position_jitter(w = 0.05))  +
-  scale_fill_manual(values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) +
-  scale_color_manual(aes(color = "black")) +
-  theme_lfspp_discrete +
-  labs(y = expression(paste("Leaf punch strength (N mm","^-1)")), x = "") +
-  #scale_x_discrete(labels = c('M. laciniatus', 'M. nasutus', 'M. guttatus')) +
-  stat_compare_means(comparisons = my_comparisons,
-                     method = "wilcox.test",
-                     #label.y = c(0.4, 0.6, 1),
-                     label = "p.signif") +
-   facet_wrap(~Elevation_cat)
-  
-#lps
-
-#ggsave(filename = file.path(path, "figures/lps_violin.png"), plot = lps, dpi=300, units=c("mm"), width=300, height=150)
-
-# By Elevation continuous comparison
-# Linear model summary
-#summary(lm(logLPS ~ Elevation_m, data = leaf_traits_noB, na.action = na.omit))
-elev_lps_p <- format.p(cor.test(leaf_traits_noB$logLPS, leaf_traits_noB$Elevation_m, na.action = na.omit)$p.value) # This is just to make the p-value nicer. 
-
-# logLPS by Elevation
-lps_cont <- ggplot(leaf_traits_noB, aes(y = logLPS, x = Elevation_m)) +
-  geom_jitter(aes(color = Species), alpha = 0.6,
-             size = 2.5)  +
-  geom_smooth(aes(color = Species), method = lm, se = FALSE, na.rm = F) +
-  geom_smooth(method = lm, se = TRUE, level = 0.95, na.rm = F, color = "black") +
-  # stat_regline_equation(aes(label = paste(#..eq.label.., 
-  #                                         ..adj.rr.label..,
-  #                                         sprintf("italic('p')~'%s'", elev_lps_p), 
-  #                                         sep = "~~~~")), size = rel(6), color = "black") +
-   stat_poly_eq(formula = y ~ x, 
-               aes(color = Species,
-                   label = paste(#..eq.label.., 
-                                 ..adj.rr.label.., 
-                                 #"~italic(p) ==",
-                                 ..p.value.label.., 
-                                 #signif(..p.value.., digits = 4),
-                                 sep = "*`,`~~")), 
-               rr.digits = 2,
-               p.digits = 3 ,
-               parse = TRUE,
-               label.x.npc = "left",
-               vstep = 0.08) +
-  scale_color_manual(values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) +
-  theme_lfspp_continuous+
-  labs(y = expression(paste("Leaf punch strength (LPS) (N mm","^-1)")), x = "Elevation (m.a.s.l.)") +
-  scale_y_continuous(expand = c(0.07, 0.07)) 
-
-#lps_cont
-#ggsave(filename = file.path(path, "figures/lps_elev.png"), plot = lps_cont, dpi=300, units=c("mm"), width=300, height=150)
-
-# Joining plots
-lps_elevation <- ggarrange(lps_cont, lps, ncol = 1, nrow = 2, 
-                           common.legend = TRUE, 
-                           legend = "bottom",
-                           labels = c("A", "B"),
-                           heights = c(1, 1))
-
-lps_elevation
-
-ggsave(filename = file.path(path, "figures/supp_fig6.png"), plot = lps_elevation, dpi=300, units=c("mm"), width=300, height=250)
-```
-
-## Figure S7
-
-```{r, supp_fig6}
-#| echo: false
-#| eval: true
-#| tidy: true
-#| fig-width: 6
-#| fig-height: 6
-#| label: lt_elev_scatter
-#| fig-cap: "Change in log-transformed leaf thickness (LT) (𝜇m) by species and elevation category. A) Compares logLT means by species and elevation category: LOW (<1220 m), MID (1221 - 1828 m), HIGH (> 1829 m). The black line across violins represents the mean value. B) Change in logLT per species as elevation increases. The black trend line represents the fitted model for all data points, see main text for R squared and *p* values. Significance levels are represented by *ns* (not significant) and asterisks [*p* < 0.05 (\\*), *p* < 0.01 (\\**), *p* < 0.001 (\\***), and *p* < 0.0001 (\\****)]."
-
-#ggpubr package used for comparisons tests
-lt_compare_means <- compare_means(logLT ~ Species,
-         data = leaf_traits_noB,
-         group.by = "Elevation_cat",
-         method = "wilcox.test",
-         p.adjust.method = "BH",
-  paired = FALSE,
-  alternative = "two.sided", 
-  mu = 0, 
-  var.equal = FALSE,
-  conf.level = 0.95)
-
-#lt_compare_means
-#Roughly the same outcome as pairwise_t_test.
-
-#Report with `compare_means` because it is easier to plot with `ggpubr` package.
-errbar_lims <- group_by(leaf_traits_noB, Species) |> 
-              summarize(mean = mean(logLT), se = sd(logLT)/sqrt(n()), 
-                        upper = mean + (2*se), lower = mean - (2*se))
-
-#Comparisons
-my_comparisons <- list(c("M. nasutus", "M. laciniatus"), c("M. nasutus", "M. guttatus"), c("M. laciniatus", "M. guttatus"))
-
-lt <- ggplot(leaf_traits_noB, aes(y= logLT, x = Species)) +
-  #geom_violin(aes(fill = Species)) +
-  geom_boxplot(aes(fill= Species),width = 0.7, color = "grey30", alpha = 0.7) +
-  # geom_crossbar(stat = "summary",
-  #               fun = mean,
-  #               fun.max = mean,
-  #               fun.min = mean,
-  #               fatten = 1.5, width = 0.8) +
-  geom_point(color = "black", alpha = 0.2,
-             size = 1.7,
-             position = position_jitter(w = 0.05))  +
-  scale_fill_manual(values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) +
-  scale_color_manual(aes(color = "black")) +
-  theme_lfspp_discrete +
-  labs(y = expression(paste("log[Leaf thickness (LT) (",mu,"m)]")), x = "") +
-  #scale_x_discrete(labels = c('M. laciniatus', 'M. nasutus', 'M. guttatus')) +
-  stat_compare_means(comparisons = my_comparisons,
-                     method = "wilcox.test",
-                     #label.y = c(0.4, 0.6, 1),
-                     label = "p.signif") +
-   facet_wrap(~Elevation_cat)
-
-#lt
-#ggsave(filename = file.path(path, "figures/lt_violin.png"), plot = lt, dpi=300, units=c("mm"), width=300, height=150)
-
-# By Elevation continuous comparison
-# Linear model summary
-#summary(lm(logLT ~ Elevation_m, data = leaf_traits_noB, na.action = na.omit))
-#elev_lt_p <- format.p(cor.test(leaf_traits_noB$logLT, leaf_traits_noB$Elevation_m, na.action = na.omit)$p.value) # This is just to make the p-value nicer. 
-
-# logLT by Elevation
-lt_cont <- ggplot(leaf_traits_noB, aes(y = logLT, x = Elevation_m)) +
-  geom_jitter(aes(color = Species), alpha = 0.6,
-             size = 2.5)  +
-  geom_smooth(aes(color = Species), method = lm, se = FALSE, na.rm = F) +
-  geom_smooth(method = lm, se = TRUE, level = 0.95, na.rm = F, color = "black") +
-  stat_poly_eq(formula = y ~ x, 
-               aes(color = Species,
-                   label = paste(#..eq.label.., 
-                                 ..adj.rr.label.., 
-                                 #"~italic(p) ==",
-                                 ..p.value.label.., 
-                                 #signif(..p.value.., digits = 4),
-                                 sep = "*`,`~~")), 
-               rr.digits = 2,
-               p.digits = 3 ,
-               
-               parse = TRUE,
-               label.x.npc = "left",
-               vstep = 0.08) +
-  scale_color_manual(values = met.brewer("Isfahan2", n = 4, type = "discrete", direction = c(-1))) +
-  theme_lfspp_continuous +
-  labs(y = expression(paste("log[Leaf thickness (LT) (",mu,"m)]")), x = "Elevation (m.a.s.l.)") +
-  scale_y_continuous(expand = c(0.07, 0.07)) 
-
-#lt_cont
-#ggsave(filename = file.path(path, "figures/lps_elev.png"), plot = lps_cont, dpi=300, units=c("mm"), width=300, height=150)
-
-# Joining plots
-lt_elevation <- ggarrange(lt_cont, lt, ncol = 1, nrow = 2, 
-                           common.legend = TRUE, 
-                           legend = "bottom",
-                           labels = c("A", "B"),
-                           heights = c(1, 1))
-lt_elevation
-ggsave(filename = file.path(path, "figures/supp_fig7.png"), plot = lt_elevation, dpi=300, units=c("mm"), width=300, height=250)
-```
 
 ## Table 1
 
