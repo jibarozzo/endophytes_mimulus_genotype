@@ -1592,10 +1592,9 @@ phyloseq_prevalence_plot(
 ```
 
 The removal of singletons and samples with no reads of any taxa resulted
-in 532 ASVs in 160 samples. We have lost 14 samples in the process. It looks like good coverage for all/many of the samples.
+in 532 ASVs in 287 samples. It looks like good coverage for all/many of the samples.
 
-We see that Ascomycota is present in 147 samples, Basidiomycota in 155 samples. The rest of the phyla are present in less than 6 samples.
-
+We see that Ascomycota is present in 287 samples, Basidiomycota in 286 samples.
 
 
 ### Phyloseq objects to data frames

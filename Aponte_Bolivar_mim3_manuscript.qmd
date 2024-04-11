@@ -230,26 +230,14 @@ names_list <- colnames(ps_clean_3@otu_table) #List of samples
 
 # Introduction
 
-Evolutionary dynamics are significantly shaped by phenotypic plasticity and genetic adaptation, with both mechanisms playing crucial roles in facilitating plant survival and adaptation to a changing climate [@jump2005; @franks2013]. The effect of climate change on plastic and evolutionary responses is evident and accelerating [@franks2013; @ipcc2021]. Phenotypic plasticity and genetic adaptation are predicted to mitigate some of the effects of climate change, however, evidence supports that the rate of evolution may not keep pace with the rate of climate change, leading to the extinction of species [@urban2014]. The diversity and distribution of plants will be affected, resulting in "winners" and "losers" in optimally or ill-adapted to an uncertain climate future [@pecl2017]. Local adaptation and genetic variation have been extensively studied in the context of spatial and temporal changes in climate, but the role of symbiotic relationships in plant adaptation is less understood [@peay2016; @kivlin2022; @mojica2012; ADD OTHER CITES]. Plants' ability to adapt to novel environments has been facilitated by their symbiotic relationships with fungi and bacteria [reviewed in @peay2016; @remy1994]. From colonization of land by plants in consort with arbuscular mycorrhizal root mutualists aiding in nutrient acquisition [peay2016; @remy1994], to the benefits fungal symbionts provide against pathogen resistance [@mejia2008; @estrada2013; @rasmussen2008; @clay1996], and stress tolerance [@peay2016; CITE], the potential for fungi to enhance plant fitness is vast. Nonetheless, the potential benefits are contingent on host plant identity and genetics and the fungal functional guild observed [@kivlin2022; MORE CITE]. 
+Evolutionary dynamics are significantly shaped by phenotypic plasticity and genetic adaptation, with both mechanisms playing crucial roles in facilitating plant survival and adaptation to a changing climate [@jump2005; @franks2013]. The effect of climate change on plastic and evolutionary responses is evident and accelerating [@franks2013; @ipcc2021]. Phenotypic plasticity and genetic adaptation are predicted to mitigate some of the effects of climate change, however, evidence supports that the rate of evolution may not keep pace, leading to the extinction of species [@urban2014]. The diversity and distribution of plants will be affected, resulting in "winners" and "losers" that are optimally or ill-adapted to an uncertain climate future [@pecl2017]. Local adaptation and genetic variation have been extensively studied in the context of spatial and temporal changes, but the role of symbiotic relationships in plant adaptation is less understood [@peay2016; @kivlin2022; @mojica2012; ADD OTHER CITES]. Plants' ability to adapt to novel environments has been facilitated by their symbiotic relationships with fungi and bacteria [reviewed in @peay2016; @remy1994]. From colonization of land by plants in consort with arbuscular mycorrhizal root mutualists aiding in nutrient acquisition [peay2016; @remy1994], to the benefits fungal symbionts provide against pathogen resistance [@mejia2008; @estrada2013; @rasmussen2008; @clay1996], and stress tolerance [@peay2016; @giauque2019], the potential for fungi to enhance plant fitness is vast. Nonetheless, the potential benefits are contingent on host plant identity and genetics and the fungal functional guild observed [@kivlin2022; MORE CITE]. 
 
-Foliar endophytic fungi (FEF) are a diverse group that live within plant leaves visibly asymptomatically [@arnold2007], but can alter plants' response to stressful environments, such as drought [@giauque2019; @giauque2013; @aimone2023], herbivory [@mejia2008; CITE], and pathogen damage [@mejia2014; @busby2016]. Hence, effectively expanding the host plants' phenotype through genetic and metabolic pathways [@hawkes2021; @kaddes2019]. In turn, host phenotype and genetics shape the foliar microbiomes [@tellezTraits2022; @kivlin2022; @vanwallendael2022; @horton2014]. A significant part of our knowledge of horizontally transmitted FEF communities and leaf traits derives from studies focused on a few selected genera or species with varying leaf traits along a growth vs. persistence gradient [@tellezTraits2022; @kitajima2013; @poorter2006; @wright2004]. This has enabled a deeper understanding of how leaf traits interact with FEF communities, but the role FEF play in the local adaptation and phenotypic plasticity of their hosts is less clear [@cordovez2019]. The ability to have genetic adaptation or plastic response that increases the potential for establishing beneficial symbionts, above or below-ground, can be crucial for plant survival and adaptation to changing environments.
+The phyllosphere comprises of bacterial and fungal symbionts on the surface and inside leaf tissue. Foliar endophytic fungi (FEF) refer to are a diverse group that lives *within* leaves [@arnold2007]. They are mostly asymptomatic, but are known  to alter plants' response to stressful environments, such as drought [@giauque2019; @giauque2013; @aimone2023], herbivory [@mejia2008; CITE], and pathogen damage [@mejia2014; @busby2016]. The phyllosphere and rhizosphere can effectively expand the host plants' phenotype through genetic and metabolic pathways [reviewed in @hawkes2021; @kaddes2019]. In turn, host phenotype and genetics shape the phylosphere [@tellezTraits2022; @kivlin2022; @vanwallendael2022; @horton2014] to such degree that host genetics can predict rhizosphre communities [@horton2014; @deng2021]. The composition of the phyllosphere can also be altered throughout the growing season by host genetics [@vanwallendael2022]. A significant portion of our knowledge about the affinity of FEF communities to host genetics comes from studies focused on vertically transmitted endophytes (transferred from parent to offspring, e.g. *Epiclhöe* spp.) and horizontally transmitted endophytes (acquired from the environment, e.g. *Cladosporium* spp.) in grasses [@matthew2023; @song2016; @clay1996; @ranelli2015]. Concurrently, other studies focused on how leaf traits (e.g. leaf mass per area, leaf shape) along a growth versus persistence gradient in tropical tress can influence FEF community colonization [@tellezTraits2022; @kitajima2013; @poorter2006; @wright2004]. This has enabled a deeper understanding of how leaf traits interact with FEF communities, but the role FEF play in the local adaptation and phenotypic plasticity of their hosts is less clear [@cordovez2019] due to work on non-model systems. The ability to have a genetic adaptation or plastic response that increases the potential for establishing beneficial symbionts, above or below-ground, can be crucial for plant survival and adaptation to changing environments.
 
-The *Mimulus guttatus* species complex is an ideal system to study interactions between leaf phenotype, host genetics, and FEF communities [@twyford2015; @wu2008). It comprises about a dozen closely related species [@coughlan2021; @wu2008], two interfertile species, *M. guttatus* and *M. laciniatus*, exhibit strong differences in leaf morphology controlled by overlapping genetic regions, suggesting that large-effect loci underlie this trait [@ferris2015]. Additionally, the contrasting habitats of *M. guttatus*, moist seeps, and *M. laciniatus*, granite, outcrops throughout the Sierra Nevada mountain range in California provide an opportunity to explore the role of leaf shape and host genetics in conforming FEF communities [@tataru2023]. McIntosh et al., [-@mcintosh2024] found that coastal perennial and montane annual *M. guttatus* harbored distinct soil fungal communities, despite the absences of host local adaptation to underground conditions. This suggests that species divergence in life history and associated traits can shape responsiveness to symbionts [@mcintosh2024]. To our knowledge, no studies have considered FEF symbionts in leaf tissue of *Mimulus* spp. and host genetics and leaf shape influence FEF community composition.
+The *Mimulus guttatus* species complex is an ideal system to study interactions between leaf phenotype, host genetics, and FEF communities [@twyford2015; @wu2008). It comprises about a dozen closely related species [@coughlan2021; @wu2008], where two interfertile species, *M. guttatus* and *M. laciniatus*, exhibit strong differences in leaf morphology controlled by overlapping genetic regions, suggesting that large-effect loci underlie this trait [@ferris2015]. Additionally, the contrasting habitats of *M. guttatus*, moist seeps, and *M. laciniatus*, granite outcrops throughout the Sierra Nevada mountain range in California provide an opportunity to explore the role of leaf phenotype and host genetics in conforming FEF communities [@tataru2023]. Through a genome-wide association study (GWAS), Deng et al., [-@dengo2021] showed how the bacterial rhizosphere of *Sorghum bicolor* (L.) can be predicted based on host genetics. McIntosh et al., [-@mcintosh2024] found that coastal perennial and montane annual *M. guttatus* harbored distinct soil fungal communities, despite the absences of host local adaptation to underground conditions. This suggests that species divergence in life history and associated traits can shape responsiveness to microbial symbionts [@mcintosh2024]. The potential effects of FEF on *Mimulus* hosts have not been thoroughly investigated, despite the possibility that the microbiome-expanded phenotype may influence its response to selection pressures. To our knowledge, no studies have considered
+host genetics and leaf shape influence FEF community composition in *Mimulus* spp. leaf tissue.
 
-In this study, we asked: 1) How do sympatric populations of *M. guttatus* and *M. laciniatus* differ in diversity of FEF communities when grown in common gardens? 2) Does leaf morphology drive FEF colonization in *M. guttatus* and *M. laciniatus*? EXPLAIN COMMON GARDENS To answer these questions we conducted a reciprocal transplant experiment in Yosemite National Park, CA, USA. We used locally adapted genotypes of *Mimulus guttatus* (syn. *Erythranthe guttata* (Fisch. ex DC.) G.L. Nesom) and *Mimulus laciniatus* (syn. *Erythranthe laciniata* (Fisch. ex DC.) G.L. Nesom) as parental lines and their F~2~ hybrids to understand the contributions of host plant genetics and phenotype, and the environment to FEF community composition. Crossing parental lines and generating F~2~ hybrids allowed us to decouple leaf shape from host genetics and understand the relative importance of each component in shaping FEF communities. 
-
-PREDICTIONS 
- Locally adapted genotypes will have more FEF COMMUNITY COMPOSITION than non-locals 
- Laciniatus might recruit more endophytes due to local adaptation.
- Granite will have less abundance/diversity
-
-
-# Results
-How many individuals do we have LBI data, how many do we have genetic data (fungi and ddRAD)? 
-(*n* = `r sum(!is.na(plant_traits$logLBI))`) and `r sum(!is.na(ps_clean_3@sam_data[["logLBI"]]))`
-
-
-
+In this study, we asked: 1) How do FEF communities differ in sympatric populations of *M. guttatus* and *M. laciniatus* grown in common gardens; 2) What is the role of leaf morphology in FEF colonization of *M. guttatus* and *M. laciniatus*? 3) Are there specific genetic loci associated with FEF communities in *Mimulus* spp.? To answer these questions we conducted a reciprocal transplant experiment in Yosemite National Park, CA, USA. We used locally adapted genotypes of *Mimulus guttatus* (syn. *Erythranthe guttata* (Fisch. ex DC.) G.L. Nesom) and *Mimulus laciniatus* (syn. *Erythranthe laciniata* (Fisch. ex DC.) G.L. Nesom) as parental lines and their F~2~ hybrids to understand the contributions of host plant genetics and phenotype, and the environment to FEF community composition. Crossing parental lines and generating F~2~ hybrids allowed us to decouple leaf shape from host genetics and understand the relative importance of each component in shaping FEF communities. We predicted genotypes adapted to their local environment would harbor greater levels of FEF abundance and community composition than non-locals. We expected that granite outcrop sites would have less FEF abundance and diversity than meadow sites due to the harsher environmental conditions.
 
 # Materials and Methods
 
@@ -313,7 +301,7 @@ For beta diversity analyses, we performed a Hellinger transformation on the rare
 
 Our dbRDA model consisted of terms logLBI, genotype, and habitat type. The leaf shape data was not randomized or sub-sampled to match rarefied dataset, the original values applied to all 50 rarefied matrices. To select the best model, we evaluated the marginal significance of constraining variables after 999 permutations with function `anova.cca` [@legendre2011; @legendre2012; @oksanen2022]. We evaluated the homogeneous dispersion of variances with a permutational analysis of multivariate dispersion (PERMDISP) using the `betadisper` with parameter `type = "median"`, and `permutest` functions from `vegan`, the latter with 999 permutations [@oksanen2022]. We used a post-hoc Tukey's test to compare the differences in the dispersion of the FEF communities among genotypes and habitat types.
 <!-- We used the `simper` function from `vegan` to discriminate which species contribute the most to compositional differences between groups [@oksanen2022]. -->
-To determine if there is a core FEF community associated with host species or elevation categories, we conducted an indicators species analyses (ISA) using the `multipatt` function from the `indicspecies` package [@decaceres2009].
+To determine if there is a significant correlation of core FEF community with genotype and habitat type, we conducted an indicators species analyses (ISA) using the `multipatt` function from the `indicspecies` package [@decaceres2009].
 
 <!-- To assess correlations between pairwise FEF community dissimilarity and the geographical distance matrix per host species (Q4), we computed a Mantel tests with Spearman's rho and 999 permutations using the `mantel` function [@oksanen2022]. -->
 <!-- For this test, we opted for a less taxing computational approach and rarefied sequences with the same parameters as before and calculated Hellinger transformations with the `avgdist` function [@oksanen2022]. -->
@@ -330,17 +318,23 @@ We present FEF community data for 287 samples and SNPs data for NNNN samples. We
 
 # Results
 
-Our sequencing effort yielded 20,157,032 reads representing 532 ASVs from 287 samples after processing samples through the DADA2 pipeline. The raw reads obtained were composed of 69.1% Ascomycota, 31% Basidiomycota, 0.05% Chytridiomycota, 0.01% Mortierellomycota, \<0.01% Glomeromycota, \<0.01% Rozellomycota, \<0.001% Aphelidiomycota, and 0.23% missed hits. Following decontamination and removal of singletons we obtained 4,856,220 reads representing 231 ASVs from 157 samples composed of 69.1% Ascomycota, 31% Basidiomycota, 0.05% Chytridiomycota, 0.01% Mortierellomycota, 0.001% Glomeromycota, \<0.001% Rozellomycota, and 0.22% missed hits (Fig. 1 and Fig. S2). The presence of Ascomycota (100%) and Basidiomycota (99%) was consistent in samples across all sites and host species in the un-rarefied data (Fig. 1 and Fig. S2). We identified eighteen core taxa members in the un-rarefied data (Table 1) The following section reports on results from the rarefied data sets.
+Our sequencing effort yielded 20,157,032 reads representing 532 ASVs from 287 samples after processing through the DADA2 pipeline. The raw reads obtained were composed of 69.1% Ascomycota, 31% Basidiomycota, 0.05% Chytridiomycota, 0.01% Mortierellomycota, \<0.01% Glomeromycota, \<0.01% Rozellomycota, \<0.001% Aphelidiomycota, and 0.23% missed hits. Following decontamination and removal of singletons we obtained 4,856,220 reads representing 231 ASVs from 157 samples composed of 69.1% Ascomycota, 31% Basidiomycota, 0.05% Chytridiomycota, 0.01% Mortierellomycota, 0.001% Glomeromycota, \<0.001% Rozellomycota, and 0.22% missed hits (Fig. 1A and Fig. S2). The presence of Ascomycota (100%) and Basidiomycota (99%) was prevalent in samples across all genotypes and habitat types in the un-rarefied data (Fig. 1A). This points to core taxa associated with *Mimulus* spp. We identified eighteen core taxa members at a 1% detection threshold and 50% prevalence in samples from the un-rarefied data (Table 1). We found that 208 (39%) ASVs are shared across habitat types and 164 (31%) shared by genotypes in the un-rarified data (Fig. S2A - S2B). In the rarified data set we observed that 202 (38%) and 159 (30%) ASVs are shared across habitat types and genotypes, respectively (Fig. S2C - S2D). Within the ten most abundant genera, *Cladosporium*, *Vishiniacozyma*, and *Ramularia* are the most abundant across all samples (Fig. S3). The small differences in shared and unique ASVs provides confidence that the rarified data accurately represents the underlying dynamics of the system (Fig. 1 and Fig. S2 - S3). The following section reports on results from the rarefied data sets.
+The alpha diversity between genotypes was significantly different for all genotypes and Hill orders, with the exception of the Hill order 2 (𝑞 = 2, *p* \> .05) comparison of F2WY and G genotypes (Fig. 2C).  The parental lines had significantly greater levels observed richness (𝑞 = 0, *p* \<.001, Fig. 2A) when compared to their F2 progeny when accounting for all habitat types. We observed a similar pattern in beta diversity, all were significantly distinct from one another (Fig. 2D - 2F). Meadow 2 has consistently greater levels of beta diversity for all Hill orders, while Granite 1 has the lowest observed richness (𝑞 = 0), but not Hill order 1 or 2 (Fig. 2D - 2F). 
+To further understand beta diversity and FEF community composition we performed a distance-based Redundancy Analysis (dbRDA) modelling the relationship between FEF communities, leaf shape, and habitat type. The best fit model revealed that 15.72% of the overall variance in FEF communities was accounted for by log-transformed LBI, genotype, and habitat type, the constraining variables. The first axis (dbRDA1) explained 52.9% and the second axis (dbRDA2) explained 36.4% of the constrained variance (Fig. 4). We saw that Granite 1 and lobLBI, are opposite to Meadow 1 along dbRDA1.  When we visualize the ellipses for genotypes, we observed highly overlapping FEF communities in F2YW and F2WY genotypes (Fig. 3A), as well less overlap in groupings of G and L genotypes. In contrast, we note clear and little to non-overlapping FEF communities when results are visualized by habitat type (Fig. 3B). The marginal significance of constraining variables after permutational ANOVA revealed that all variables where significant at t ⍺ = 0.05, but varied in their explanatory power (Table 3). We saw evidence for strong habitat type effects on FEF communities.
+We performed permutational analysis of multivariate dispersion (PERMDISP) to test for homogeneity of variances of FEF communities from clustered in the dbRDA analyses. We found homogeneous variance of FEF communities across for all genotypes (*F*~3,14096~= 46.28, *p* \=.001). The post-hoc Tukey's test revealed that all genotype comparisons were significant different at ⍺ = 0.05. We also detected significant differences in FEF communities by habitat type (*F*~2,14097~= 2472.5, *p* \= .001). Our post-hoc Tukey's test showed that FEF communities from all habitat types had significant differences in the dispersion of variance at ⍺ = 0.05.
 
-The alpha diversity between genotypes was significantly different for all all genotypes and Hill orders, with the exception of the Hill order 2 (𝑞 = 2, *p* \> .05) comparison of F2WY and G genotypes (Fig. 2C).  The parental lines had significantly greater levels of Hill order 0 (𝑞 = 1, *p* \<.001, Fig. 2A) when compared to their F2 progeny across all habitats. We observed a similar pattern in beta diversity between habitats, all were significantly distinct from one another (Fig. 2D - 2F). Meadow 2 has consistently greater levels of beta diversity for all Hill orders, while Granite 1 has the lowest Hill order 0 (𝑞 = 0), but not Hill order 1 or 2 (Fig. 2D - 2F). 
+To understand how leaf shape influences FEF communities, we measured LBI and observed significant differences in G and L genotypes  in Meadow 1(*p* \=.05, Fig. 4A), but not Meadow 2 and Granite 1, an unexpected result since L genotype is locally adapted to granite habitat. The F2WY and F2YW progeny only had significant differences when compared to each other, and F2WY when compared to G in Meadow 2. In Granite 1, we saw the F2 progeny had significant differences compared to parental lines (*p* \=.05, Fig 4A), but not when compared to each other (Fig. 4A). The LBI differences across habitat types were significant for the F2 progeny (*p* \=.05), parental lines did not differ significantly in LBI across habitats (Fig. 4B). 
+**SNPs results coming here soon!**
 
-The differences in FEF community composition were observed with a distance-based Redundancy Analysis (dbRDA) to model the relationship between FEF communities, leaf shape, and habitat type. The best fit model revealed that 15.72% of the overall variance in FEF communities was accounted for by log-transformed LBI, genotype, and habitat type, the constraining variables. The first axis (dbRDA1) explained 52.9% and the second axis (dbRDA2) explained 36.4% of the constrained variance (Fig. 4). We saw that Granite 1 and lobLBI, ar opposite to Madow 1 along dbRDA1.  When we visualize the plotting the ellipses for genotypes, we observed highly overlapping groupings of FEF communities in F2YW and F2Wy genotypes (Fig. 3A), as well less overlap in groupings of G and L genotypes. We note clear and little to non-overlapping groupings of FEF communities when results are visualized by habitat type (Fig. 3B). 
-
-We found that FEF communities were homogeneous across for all genotypes (*F*~3,14096~= 46.28, *p* \=.001) by performing a permutational analysis of multivariate dispersion (PERMDISP) to test for homogeneity of variances. The post-hoc Tukey's test revealed that all genotype comparisons were significant different at ⍺ = 0.05. We also detected significant differences in FEF communities by habitat type (*F*~2,14097~= 2472.5, *p* \= .001). Our post-hoc Tukey's test showed that FEF communities from all genotypes and habitat types had significant differences in the dispersion of variance at ⍺ = 0.05.
-
-To understand how leaf shape influences FEF communities, we measured LBI and observed significant differences in G and L genotypes  in Meadow 1(*p* \=.05, Fig. 4A), but not Meadow 2 and Granite 1. The F2WY and F2YW progeny only had significant differences when compared to each other, and F2WY when compared to G in Meadow 2. In Granite 1 we saw the F2 progeny has significant differences with parental lines (*p* \=.05, Fig 4A), but not when compare to each other (Fig. 4A). The LBI differences in LBI compared across habitat types were significant for the F2 progeny, parental lines did not differ significantly in LBI across habitats (Fig. 4B). 
 
 # Discussion
+ **1) How do FEF communities differ in sympatric populations of *M. guttatus* and *M. laciniatus* grown in common gardens?; 2) What is the role of leaf morphology in FEF colonization of *M. guttatus* and *M. laciniatus*? 3) Are there specific genetic loci associated with FEF communities in *Mimulus* spp.? We predicted genotypes adapted to their local environment would harbor greater levels of FEF abundance and community composition than non-locals. We expected that granite outcrop sites would have less FEF abundance and diversity than meadow sites due to the harsher environmental conditions.**
+
+Our study provides a comprehensive analysis of the FEF communities associated with *Mimulus* spp. leaf tissue and the underlying genetic basis (MISSING PLANT GENOMIC DATA). We found that FEF diversity and community composition are significantly different between genotypes. These findings bring attention to symbiotic relationships in *Mimulus* that may be evolutionary adaptive. Fungal community differences between habitat types maybe due to distinct species pool regardless of habitat similarity (e.g., meadows). Our results suggest host genotype and habitat type are significant predictors of FEF colonization, with varying degrees of impact. Not surprising given the strong abiotic differences between meadow and granite habitat throughout the growing season (i.e. soil moisture) [@ferris2018; @tataru2023]. The differences between the meadow habitat could be explained by their recent fire history, which could cause a shift in the local FEF pool (CITE). Meadow 1 is generally drier and shrubbier than and burned in 2013 (CITE), while Meadow 2 has not burned in FFFF years (CITE). These potential sources of variation merit further investigation.   
+
+Exploring the FEF community of *Mimulus* in a reciprocal transplant experiment allowed us to delineate how genotype by environment interactions shape these communities.  The distance-based Redundancy Analysys revealed a clear clustering by habitat type along both dbRDA axes (Fig. 3B), while  genotypes showed less distinct clustering (Fig. 3A). The *Mimulus* parental lines hosted distinct FEF communities and differed significantly in alpha diversity levels regardless habitat. Bowsher et al., found a similar effect of environment and host identity when comparing the bacterial rhizosphere community of locally adapted *M. guttatus* ecotypes [-@bowsher2020].  SOMETHING ABOUTE THE GENTEIC SNP DATA THAT I DONT HAVE.
+
+We produced F2 progeny to decouple leaf shape from genetic host genetics and found that the FEF communities are significantly correlated with leaf lobe index (LBI). The capacity of the F2 progeny to host distinct FEF communities regardless of the genetic background provides strong evidence in support of the LBI functioning as an environmental filter (CITE). This adds to the suite of leaf functional traits that have been found to structure FEF communities (CITE).   
 
 
 
@@ -453,31 +447,35 @@ micro_psclean <- phyloseq2meco(ps_clean_3) # First convert phyloseq to meco
 
 
 t1 <- trans_abund$new(dataset = micro_psclean, taxrank = "Phylum", ntaxa = 8)
-t1gg <- t1$plot_bar(others_color = "grey70", facet = c("Species", "Elevation_cat"), xtext_keep = FALSE, legend_text_italic = FALSE, barwidth = 1, color_values = RColorBrewer::brewer.pal(8, "Set3"))
-t1gg <- t1gg +   labs(title = "Raw reads") +
+t1gg <- t1$plot_bar(others_color = "grey70", facet = c("Site", "Genotype"), xtext_keep = FALSE, legend_text_italic = FALSE, color_values = RColorBrewer::brewer.pal(8, "Set3"))
+t1gg <- t1gg + 
+  ggtitle("Un-rarified data") +
   theme(legend.title = element_text(face = "bold"),
-         strip.text = element_text(face = "italic", size = 10),
+         plot.title = element_text(face = "bold", size = 14),
+         strip.text = element_text(face = "bold", size = 12),
          panel.border = element_rect(linetype = "blank", fill = NA),
          axis.text.x = element_blank())
+
 #t1gg
 
-
-# Rarefied data
+# rarefied Abundance
 micro_rarefied_ps <- phyloseq2meco(rarefied_phyloseq) # First convert phyloseq to meco
 
 r1 <- trans_abund$new(dataset = micro_rarefied_ps, taxrank = "Phylum", ntaxa = 8)
-r1gg <- r1$plot_bar(others_color = "grey70", facet = c("Species", "Elevation_cat"), xtext_keep = FALSE, legend_text_italic = FALSE, barwidth = 1, color_values = RColorBrewer::brewer.pal(8, "Set3"))
-r1gg <- r1gg +
-  labs(title = "Rarefied reads") +
+r1gg <- r1$plot_bar(others_color = "grey70", facet = c("Site", "Genotype"), xtext_keep = FALSE, legend_text_italic = FALSE, color_values = RColorBrewer::brewer.pal(8, "Set3"))
+r1gg <- r1gg + 
+  ggtitle("Rarified data") +
   theme(legend.title = element_text(face = "bold"),
-         strip.text = element_text(face = "bold.italic", size = 10),
+         plot.title = element_text(face = "bold", size = 14),
+         strip.text = element_text(face = "bold", size = 12),
          panel.border = element_rect(linetype = "blank", fill = NA),
-         axis.text.x = element_blank()) 
+         axis.text.x = element_blank())
 #r1gg
 
 # Arrange plots
-ra_plots <- ggarrange(t1gg, r1gg,
-                          nrow = 2, ncol = 1,
+ra_plots <- ggarrange(t1gg, "", r1gg,
+                          nrow = 3, ncol = 1,
+                      heights = c(1, 0.1, 1),
                           common.legend = TRUE, legend = "bottom",
                           labels = c("A", "B"))
 ra_plots
@@ -1242,7 +1240,7 @@ ggsave(filename = file.path(path, "figures/figure4.png"), plot = lbis, dpi=300, 
 #| label: trait_correlation
 #| fig-cap: "Correlation matrix of log-transformed leaf functional traits by host species. The plot is based on the Spearman's rho. Significance levels are represented by ns (not significant) and asterisks [p < 0.05 (*), p < 0.01 (**), p < 0.001 (***), and p < 0.0001 (****)]."
 
-micro_psclean <- phyloseq2meco(ps_clean_3) # First convert phyloseq to meco
+#micro_psclean <- phyloseq2meco(ps_clean_3) # First convert phyloseq to meco
 
 t4 <- trans_env$new(dataset = micro_psclean, env_cols = c(12)) # 12 is the index for logLBI
 
@@ -1259,7 +1257,86 @@ ggplot2::ggsave(file.path(path, "figures/supp_fig1.png") , plot = t4gg, dpi=300,
 
 ## Figure S2
 
-```{r, supp_fig8}
+```{r, supp_fig2}
+#| echo: false
+#| eval: true
+#| tidy: true
+#| message: false
+#| fig-height: 6
+#| fig-width: 6
+#| label: venn_diagrams
+
+library("paletteer")
+# un-rarified data
+# Per site
+dataset1 <- micro_psclean$merge_samples(use_group = "Site")
+# create trans_venn object
+v1 <- trans_venn$new(dataset1, ratio = "numratio") # Percentage represent ratio of shared ASVs
+v1gg <- v1$plot_venn(color_circle = paletteer_d("MetBrewer::Tsimshian", 7,
+      direction = -1)) + #https://r-charts.com/color-palettes/#discrete
+  ggtitle("Un-rarified data") +
+  theme(plot.title = element_text(
+    face = "bold",
+    size = 16,
+    hjust = 0.5,
+    vjust = 0.5
+  ))
+v1gg 
+
+# Per genotype
+dataset2 <- micro_psclean$merge_samples(use_group = "Genotype")
+v2 <- trans_venn$new(dataset2, ratio = "numratio") 
+#v2$plot_venn()
+
+# rarified data
+#micro_rarefied_ps <- phyloseq2meco(rarefied_phyloseq) # First convert phyloseq to meco
+# Per site
+dataset3 <- micro_rarefied_ps$merge_samples(use_group = "Site") 
+# create trans_venn object
+v3 <- trans_venn$new(dataset3, ratio = "numratio")
+v3gg <- v3$plot_venn() +
+  ggtitle("Rarified data") +
+  theme(plot.title = element_text(
+    face = "bold",
+    size = 16,
+    hjust = 0.5,
+    vjust = 0.5
+  ))
+
+# Per genotype
+dataset4 <- micro_rarefied_ps$merge_samples(use_group = "Genotype")
+v4 <- trans_venn$new(dataset4, ratio = "numratio")
+#v4$plot_venn()
+
+                                        
+# joined plots
+
+
+venn_plots <-
+  ggarrange(
+    v1gg,
+    v3gg,
+    "", # Fake plot to create space
+    "",
+    v2$plot_venn(),
+    v4$plot_venn(),
+    ncol = 2,
+    nrow = 3,
+    common.legend = TRUE,
+    heights = c(1, 0.1, 1),
+    legend = "bottom",
+    labels = c("A", "C","", "", "B", "D")
+  )
+
+venn_plots
+
+# Save
+ggsave(filename = file.path(path, "figures/supp_fig2.png"), plot = venn_plots, dpi=300, units=c("mm"), width=300, height=300)
+```
+
+## Figure S3
+
+```{r, supp_fig3}
 #| echo: false
 #| eval: true
 #| tidy: true
@@ -1267,7 +1344,7 @@ ggplot2::ggsave(file.path(path, "figures/supp_fig1.png") , plot = t4gg, dpi=300,
 #| fig-width: 6
 #| fig-height: 6
 #| label: heatmap
-#| fig-cap: "Heatmap of the top 10 most abundant genera in the dataset. The heatmap shows the relative abundance of the top 10 most abundant genera in the dataset. The heatmap is faceted by host species and elevation category."
+#| fig-cap: "Heatmap of the top 10 most abundant genera in the dataset. The heatmap is faceted by habitat type and genotype."
 
 # Plot with micro_psclean
 t2 <- trans_abund$new(dataset = micro_psclean, taxrank = "Genus", ntaxa = 10) # 12 is the index for logLBI
@@ -1280,7 +1357,7 @@ t2gg <- t2$plot_heatmap(facet = c("Site", "Genotype"), xtext_keep = FALSE, withm
 t2gg
 
 
-micro_rarefied_ps <- phyloseq2meco(rarefied_phyloseq) # First convert phyloseq to meco
+
 
 r2 <- trans_abund$new(dataset = micro_rarefied_ps, taxrank = "Genus", ntaxa = 10)
 r2gg <- r2$plot_heatmap(facet = c("Site", "Genotype"), xtext_keep = FALSE, withmargin = FALSE) + theme(legend.title = element_text(face = "bold"),
@@ -1299,7 +1376,7 @@ heatplots <- ggarrange(t2gg, r2gg, ncol = 1, nrow = 2,
 heatplots
 
 # Save the plot
-ggplot2::ggsave(filename = file.path(path, "figures/supp_fig2.png"), plot = heatplots, dpi=300, units=c("mm"), width=300, height=250)
+ggplot2::ggsave(filename = file.path(path, "figures/supp_fig3.png"), plot = heatplots, dpi=300, units=c("mm"), width=300, height=250)
 ```
 
 
@@ -1310,11 +1387,7 @@ ggplot2::ggsave(filename = file.path(path, "figures/supp_fig2.png"), plot = heat
 
 ```{r, supp_table1}
 # Sites and Species sampled
-leaf_traits_noB |>
-  group_by(Site,Species, Longitude, Latitude) |>
-  summarise(n = as.integer(n()/3))|> # Dividing by 3 due to replicate measurements of each sample
-  pivot_wider(names_from = Species, values_from = n)|>
-  knitr::kable(caption = "Table 1: Number of individuals collected per population/site and species.")
+#The core taxa members are "ASV_1", "ASV_2", "ASV_3", "ASV_4", "ASV_5", "ASV_6", "ASV_7", "ASV_8", "ASV_9", "ASV_11", "ASV_12", "ASV_14", "ASV_16", "ASV_18", "ASV_19", "ASV_21", "ASV_23", "ASV_27". #Like in MIM2 project, we see *Cladosporium* spp. (ASV_1), *Vishniacozyma victoriae* (ASV_2), and *Cladosporium herbanum* (ASV_27) and. 
 ```
 
 ## Table 2
@@ -1333,6 +1406,12 @@ phyloseq_ntaxa_by_tax(
   summarise(Ocurrance = n()) |>
   knitr::kable(caption = "Table 2: Prevalence of phyla in samples per species.")
 ```
+
+## Table 3
+```{r}
+#dbRDA table
+```
+
 
 ## Supplementary methods
 
