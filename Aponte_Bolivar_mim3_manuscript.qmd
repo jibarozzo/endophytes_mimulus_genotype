@@ -1,5 +1,5 @@
 ---
-title: "[Working title]: Yellow monkeflower host genetics and phenotype interactions with foliar fungal symbionts in common gardens"
+title: "[Working title]: Yellow monkeYflower genotype and phenotype interactions with foliar fungal symbionts in common gardens"
 date: last-modified
 date-format: "MMMM D, YYYY"
 bibliography: references.bib
@@ -230,11 +230,11 @@ names_list <- colnames(ps_clean_3@otu_table) #List of samples
 
 # Introduction
 
-Evolutionary dynamics are significantly shaped by phenotypic plasticity and genetic adaptation, with both mechanisms playing crucial roles in facilitating plant survival and adaptation to a changing climate [@jump2005; @franks2013]. The effect of climate change on plastic and evolutionary responses is evident and accelerating [@franks2013; @ipcc2021]. Phenotypic plasticity and genetic adaptation are predicted to mitigate some of the effects of climate change, however, evidence supports that the rate of evolution may not keep pace, leading to the extinction of species [@urban2014]. The diversity and distribution of plants will be affected, resulting in "winners" and "losers" that are optimally or ill-adapted to an uncertain climate future [@pecl2017]. Local adaptation and genetic variation have been extensively studied in the context of spatial and temporal changes, but the role of symbiotic relationships in plant adaptation is less understood [@peay2016; @kivlin2022; @mojica2012; ADD OTHER CITES]. Plants' ability to adapt to novel environments has been facilitated by their symbiotic relationships with fungi and bacteria [reviewed in @peay2016; @remy1994]. From colonization of land by plants in consort with arbuscular mycorrhizal root mutualists aiding in nutrient acquisition [peay2016; @remy1994], to the benefits fungal symbionts provide against pathogen resistance [@mejia2008; @estrada2013; @rasmussen2008; @clay1996], and stress tolerance [@peay2016; @giauque2019], the potential for fungi to enhance plant fitness is vast. Nonetheless, the potential benefits are contingent on host plant identity and genetics and the fungal functional guild observed [@kivlin2022; MORE CITE]. 
+Evolutionary dynamics are significantly shaped by phenotypic plasticity and genetic adaptation, with both mechanisms playing crucial roles in facilitating plant survival and adaptation to a changing climate [@jump2005; @franks2014]. The effect of climate change on plastic and evolutionary responses is evident and accelerating [@franks2014; @ipcc2023]. Phenotypic plasticity and genetic adaptation are predicted to mitigate some of the effects of climate change, however, evidence supports that the rate of evolution may not keep pace, leading to the extinction of species [@urban2014]. The diversity and distribution of plants will be affected, resulting in "winners" and "losers" that are optimally or ill-adapted to an uncertain climate future [@pecl2017]. Local adaptation and genetic variation have been extensively studied in the context of spatial and temporal changes, but the role of symbiotic relationships in plant adaptation is less understood [@peay2016; @kivlin2022; @mojica2012; ADD OTHER CITES]. Plants' ability to adapt to novel environments has been facilitated by their symbiotic relationships with fungi and bacteria [reviewed in @peay2016; @remy1994]. From colonization of land by plants in consort with arbuscular mycorrhizal root mutualists aiding in nutrient acquisition [peay2016; @remy1994], to the benefits fungal symbionts provide against pathogen resistance [@mejia2008; @estrada2013; @rasmussen2008; @clay1996], and stress tolerance [@peay2016; @giauque2019], the potential for fungi to enhance plant fitness is vast. Nonetheless, the potential benefits are contingent on host plant identity and genetics and the fungal functional guild observed [@kivlin2022; MORE CITE]. 
 
-The phyllosphere comprises of bacterial and fungal symbionts on the surface and inside leaf tissue. Foliar endophytic fungi (FEF) refer to are a diverse group that lives *within* leaves [@arnold2007]. They are mostly asymptomatic, but are known  to alter plants' response to stressful environments, such as drought [@giauque2019; @giauque2013; @aimone2023], herbivory [@mejia2008; CITE], and pathogen damage [@mejia2014; @busby2016]. The phyllosphere and rhizosphere can effectively expand the host plants' phenotype through genetic and metabolic pathways [reviewed in @hawkes2021; @kaddes2019]. In turn, host phenotype and genetics shape the phylosphere [@tellezTraits2022; @kivlin2022; @vanwallendael2022; @horton2014] to such degree that host genetics can predict rhizosphre communities [@horton2014; @deng2021]. The composition of the phyllosphere can also be altered throughout the growing season by host genetics [@vanwallendael2022]. A significant portion of our knowledge about the affinity of FEF communities to host genetics comes from studies focused on vertically transmitted endophytes (transferred from parent to offspring, e.g. *Epiclhöe* spp.) and horizontally transmitted endophytes (acquired from the environment, e.g. *Cladosporium* spp.) in grasses [@matthew2023; @song2016; @clay1996; @ranelli2015]. Concurrently, other studies focused on how leaf traits (e.g. leaf mass per area, leaf shape) along a growth versus persistence gradient in tropical tress can influence FEF community colonization [@tellezTraits2022; @kitajima2013; @poorter2006; @wright2004]. This has enabled a deeper understanding of how leaf traits interact with FEF communities, but the role FEF play in the local adaptation and phenotypic plasticity of their hosts is less clear [@cordovez2019] due to work on non-model systems. The ability to have a genetic adaptation or plastic response that increases the potential for establishing beneficial symbionts, above or below-ground, can be crucial for plant survival and adaptation to changing environments.
+The phyllosphere comprises of bacterial and fungal symbionts on the surface and inside leaf tissue. Foliar endophytic fungi (FEF) refer to are a diverse group that lives *within* leaves [@arnold2007]. They are mostly asymptomatic, but are known  to alter plants' response to stressful environments, such as drought [@giauque2019; @giauque2013; @aimone2023], herbivory [@mejia2008; CITE], and pathogen damage [@mejia2014; @busby2016]. The phyllosphere and rhizosphere can effectively expand the host plants' phenotype through genetic and metabolic pathways [reviewed in @hawkes2021; @kaddes2019]. In turn, host phenotype and genetics shape the phylosphere [@tellezTraits2022; @kivlin2022; @vanwallendael2022; @horton2014] to such degree that host genetics can predict rhizosphre communities [@horton2014; @deng2021]. The composition of the phyllosphere can also be altered throughout the growing season by host genetics [@vanwallendael2022]. A significant portion of our knowledge about the affinity of FEF communities to host genetics comes from studies focused on vertically transmitted endophytes (transferred from parent to offspring, e.g. *Epiclhöe* spp.) and horizontally transmitted endophytes (acquired from the environment, e.g. *Cladosporium* spp.) in grasses [@mathew2023; @song2016; @clay1996; @ranelli2015]. Concurrently, other studies focused on how leaf traits (e.g. leaf mass per area, leaf shape) along a growth versus persistence gradient in tropical tress can influence FEF community colonization [@tellezTraits2022; @kitajima2013; @poorter2006; @wright2004]. This has enabled a deeper understanding of how leaf traits interact with FEF communities, but the role FEF play in the local adaptation and phenotypic plasticity of their hosts is less clear [@cordovez2019] due to work on non-model systems. The ability to have a genetic adaptation or plastic response that increases the potential for establishing beneficial symbionts, above or below-ground, can be crucial for plant survival and adaptation to changing environments. Studying the interaction between plant genotype and phenotype with FEF communities is essential in the fields of ecology and evolutionary biology.
 
-The *Mimulus guttatus* species complex is an ideal system to study interactions between leaf phenotype, host genetics, and FEF communities [@twyford2015; @wu2008). It comprises about a dozen closely related species [@coughlan2021; @wu2008], where two interfertile species, *M. guttatus* and *M. laciniatus*, exhibit strong differences in leaf morphology controlled by overlapping genetic regions, suggesting that large-effect loci underlie this trait [@ferris2015]. Additionally, the contrasting habitats of *M. guttatus*, moist seeps, and *M. laciniatus*, granite outcrops throughout the Sierra Nevada mountain range in California provide an opportunity to explore the role of leaf phenotype and host genetics in conforming FEF communities [@tataru2023]. Through a genome-wide association study (GWAS), Deng et al., [-@dengo2021] showed how the bacterial rhizosphere of *Sorghum bicolor* (L.) can be predicted based on host genetics. McIntosh et al., [-@mcintosh2024] found that coastal perennial and montane annual *M. guttatus* harbored distinct soil fungal communities, despite the absences of host local adaptation to underground conditions. This suggests that species divergence in life history and associated traits can shape responsiveness to microbial symbionts [@mcintosh2024]. The potential effects of FEF on *Mimulus* hosts have not been thoroughly investigated, despite the possibility that the microbiome-expanded phenotype may influence its response to selection pressures. To our knowledge, no studies have considered
+The *Mimulus guttatus* species complex is an ideal system to study interactions between leaf phenotype, host genetics, and FEF communities [@twyford2015; @wu2008). It comprises about a dozen closely related species [@coughlan2021; @wu2008], where two interfertile species, *M. guttatus* and *M. laciniatus*, exhibit strong differences in leaf morphology controlled by overlapping genetic regions, suggesting that large-effect loci underlie this trait [@ferris2015]. Additionally, the contrasting habitats of *M. guttatus*, moist seeps, and *M. laciniatus*, granite outcrops throughout the Sierra Nevada mountain range in California provide an opportunity to explore the role of leaf phenotype and host genetics in conforming FEF communities [@tataru2023]. Through a genome-wide association study (GWAS), Deng et al., [-@deng2021] showed how the bacterial rhizosphere of *Sorghum bicolor* (L.) can be predicted based on host genetics. McIntosh et al., [-@mcintosh2024] found that coastal perennial and montane annual *M. guttatus* harbored distinct soil fungal communities, despite the absences of host local adaptation to underground conditions. This suggests that species divergence in life history and associated traits can shape responsiveness to microbial symbionts [@mcintosh2024]. The potential effects of FEF on *Mimulus* hosts have not been thoroughly investigated, despite the possibility that the microbiome-expanded phenotype may influence its response to selection pressures. To our knowledge, no studies have considered
 host genetics and leaf shape influence FEF community composition in *Mimulus* spp. leaf tissue.
 
 In this study, we asked: 1) How do FEF communities differ in sympatric populations of *M. guttatus* and *M. laciniatus* grown in common gardens; 2) What is the role of leaf morphology in FEF colonization of *M. guttatus* and *M. laciniatus*? 3) Are there specific genetic loci associated with FEF communities in *Mimulus* spp.? To answer these questions we conducted a reciprocal transplant experiment in Yosemite National Park, CA, USA. We used locally adapted genotypes of *Mimulus guttatus* (syn. *Erythranthe guttata* (Fisch. ex DC.) G.L. Nesom) and *Mimulus laciniatus* (syn. *Erythranthe laciniata* (Fisch. ex DC.) G.L. Nesom) as parental lines and their F~2~ hybrids to understand the contributions of host plant genetics and phenotype, and the environment to FEF community composition. Crossing parental lines and generating F~2~ hybrids allowed us to decouple leaf shape from host genetics and understand the relative importance of each component in shaping FEF communities. We predicted genotypes adapted to their local environment would harbor greater levels of FEF abundance and community composition than non-locals. We expected that granite outcrop sites would have less FEF abundance and diversity than meadow sites due to the harsher environmental conditions.
@@ -301,7 +301,7 @@ For beta diversity analyses, we performed a Hellinger transformation on the rare
 
 Our dbRDA model consisted of terms logLBI, genotype, and habitat type. The leaf shape data was not randomized or sub-sampled to match rarefied dataset, the original values applied to all 50 rarefied matrices. To select the best model, we evaluated the marginal significance of constraining variables after 999 permutations with function `anova.cca` [@legendre2011; @legendre2012; @oksanen2022]. We evaluated the homogeneous dispersion of variances with a permutational analysis of multivariate dispersion (PERMDISP) using the `betadisper` with parameter `type = "median"`, and `permutest` functions from `vegan`, the latter with 999 permutations [@oksanen2022]. We used a post-hoc Tukey's test to compare the differences in the dispersion of the FEF communities among genotypes and habitat types.
 <!-- We used the `simper` function from `vegan` to discriminate which species contribute the most to compositional differences between groups [@oksanen2022]. -->
-To determine if there is a significant correlation of core FEF community with genotype and habitat type, we conducted an indicators species analyses (ISA) using the `multipatt` function from the `indicspecies` package [@decaceres2009].
+<!-- To determine if there is a significant correlation of core FEF community with genotype and habitat type, we conducted an indicators species analyses (ISA) using the `multipatt` function from the `indicspecies` package [@decaceres2009]. -->
 
 <!-- To assess correlations between pairwise FEF community dissimilarity and the geographical distance matrix per host species (Q4), we computed a Mantel tests with Spearman's rho and 999 permutations using the `mantel` function [@oksanen2022]. -->
 <!-- For this test, we opted for a less taxing computational approach and rarefied sequences with the same parameters as before and calculated Hellinger transformations with the `avgdist` function [@oksanen2022]. -->
@@ -317,9 +317,22 @@ All statistical analyses were performed in *R* programming language [v.4.3.3; @r
 We present FEF community data for 287 samples and SNPs data for NNNN samples. We present the log-transformed LBI from and samples from the larger common garden described above (*n* = `r sum(!is.na(plant_traits$logLBI))`), which include samples with FEF community data (*n* = `r sum(!is.na(ps_clean_3@sam_data[["logLBI"]]))`). The FEF community data is presented at the plant/sample level (*n* = `r sum(!is.na(plant_traits$Observed))`).
 
 # Results
+F2YW	hill_1	CF	LM	8.113958e-04	0.00490	0.00081	***	
+F2YW	hill_1	CF	OPN	5.310494e-05	0.00064	5.3e-05	****	
+F2YW	hill_1	LM	OPN	4.431599e-01	0.56000	0.44316	ns	
+F2WY	hill_1	CF	LM	8.765283e-02	0.23000	0.08765	ns	
+F2WY	hill_1	CF	OPN	4.706830e-01	0.56000	0.47068	ns	
+F2WY	hill_1	LM	OPN	1.914588e-02	0.07700	0.01915	*
+
+F2YW	hill_2	CF	LM	0.0026250178	0.016	0.00263	**	
+F2YW	hill_2	CF	OPN	0.0009710447	0.012	0.00097	***	
+F2YW	hill_2	LM	OPN	0.7456855979	0.800	0.74569	ns	
+F2WY	hill_2	CF	LM	0.2675822099	0.420	0.26758	ns	
+F2WY	hill_2	CF	OPN	0.4706830304	0.560	0.47068	ns	
+F2WY	hill_2	LM	OPN	0.0472186510	0.190	0.04722	*
 
 Our sequencing effort yielded 20,157,032 reads representing 532 ASVs from 287 samples after processing through the DADA2 pipeline. The raw reads obtained were composed of 69.1% Ascomycota, 31% Basidiomycota, 0.05% Chytridiomycota, 0.01% Mortierellomycota, \<0.01% Glomeromycota, \<0.01% Rozellomycota, \<0.001% Aphelidiomycota, and 0.23% missed hits. Following decontamination and removal of singletons we obtained 4,856,220 reads representing 231 ASVs from 157 samples composed of 69.1% Ascomycota, 31% Basidiomycota, 0.05% Chytridiomycota, 0.01% Mortierellomycota, 0.001% Glomeromycota, \<0.001% Rozellomycota, and 0.22% missed hits (Fig. 1A and Fig. S2). The presence of Ascomycota (100%) and Basidiomycota (99%) was prevalent in samples across all genotypes and habitat types in the un-rarefied data (Fig. 1A). This points to core taxa associated with *Mimulus* spp. We identified eighteen core taxa members at a 1% detection threshold and 50% prevalence in samples from the un-rarefied data (Table 1). We found that 208 (39%) ASVs are shared across habitat types and 164 (31%) shared by genotypes in the un-rarified data (Fig. S2A - S2B). In the rarified data set we observed that 202 (38%) and 159 (30%) ASVs are shared across habitat types and genotypes, respectively (Fig. S2C - S2D). Within the ten most abundant genera, *Cladosporium*, *Vishiniacozyma*, and *Ramularia* are the most abundant across all samples (Fig. S3). The small differences in shared and unique ASVs provides confidence that the rarified data accurately represents the underlying dynamics of the system (Fig. 1 and Fig. S2 - S3). The following section reports on results from the rarefied data sets.
-The alpha diversity between genotypes was significantly different for all genotypes and Hill orders, with the exception of the Hill order 2 (𝑞 = 2, *p* \> .05) comparison of F2WY and G genotypes (Fig. 2C).  The parental lines had significantly greater levels observed richness (𝑞 = 0, *p* \<.001, Fig. 2A) when compared to their F2 progeny when accounting for all habitat types. We observed a similar pattern in beta diversity, all were significantly distinct from one another (Fig. 2D - 2F). Meadow 2 has consistently greater levels of beta diversity for all Hill orders, while Granite 1 has the lowest observed richness (𝑞 = 0), but not Hill order 1 or 2 (Fig. 2D - 2F). 
+The alpha diversity between genotypes was significantly different between all genotypes, with the exception of the Hill order 2 (𝑞 = 2, *p* \> .05) comparison of F2WY and G genotypes (Fig. 2C).  The parental lines had significantly greater levels observed richness (𝑞 = 0, *p* \<.001, Fig. 2A) when compared to their F2 progeny when accounting for all habitat types. Only F2YW had significant differences (*p* \< .001) in observed richness at all habitats. For F2YW and F2WY, we saw significant differences Hill order 1 and 2 (𝑞 = 1, and 𝑞 = 2) when comparing Meadow 1 and Meadow 2 (*p* \<.001), and Granite 1 to Meadow 2 (*p* \< .001). Additionally, F2WY genotype also had significant differences for these Hill orders when compararing Meado1 and Granite 1 (*p* \<.05). We observed a similar pattern in beta diversity, habitats showed significant differences from one another (Fig. 2D - 2F). Meadow 2 has consistently greater levels of beta diversity for all Hill orders, while Granite 1 has the lowest observed richness (𝑞 = 0), but not Hill order 1 or 2 (Fig. 2D - 2F). 
 To further understand beta diversity and FEF community composition we performed a distance-based Redundancy Analysis (dbRDA) modelling the relationship between FEF communities, leaf shape, and habitat type. The best fit model revealed that 15.72% of the overall variance in FEF communities was accounted for by log-transformed LBI, genotype, and habitat type, the constraining variables. The first axis (dbRDA1) explained 52.9% and the second axis (dbRDA2) explained 36.4% of the constrained variance (Fig. 4). We saw that Granite 1 and lobLBI, are opposite to Meadow 1 along dbRDA1.  When we visualize the ellipses for genotypes, we observed highly overlapping FEF communities in F2YW and F2WY genotypes (Fig. 3A), as well less overlap in groupings of G and L genotypes. In contrast, we note clear and little to non-overlapping FEF communities when results are visualized by habitat type (Fig. 3B). The marginal significance of constraining variables after permutational ANOVA revealed that all variables where significant at t ⍺ = 0.05, but varied in their explanatory power (Table 3). We saw evidence for strong habitat type effects on FEF communities.
 We performed permutational analysis of multivariate dispersion (PERMDISP) to test for homogeneity of variances of FEF communities from clustered in the dbRDA analyses. We found homogeneous variance of FEF communities across for all genotypes (*F*~3,14096~= 46.28, *p* \=.001). The post-hoc Tukey's test revealed that all genotype comparisons were significant different at ⍺ = 0.05. We also detected significant differences in FEF communities by habitat type (*F*~2,14097~= 2472.5, *p* \= .001). Our post-hoc Tukey's test showed that FEF communities from all habitat types had significant differences in the dispersion of variance at ⍺ = 0.05.
 
@@ -328,27 +341,19 @@ To understand how leaf shape influences FEF communities, we measured LBI and obs
 
 
 # Discussion
- **1) How do FEF communities differ in sympatric populations of *M. guttatus* and *M. laciniatus* grown in common gardens?; 2) What is the role of leaf morphology in FEF colonization of *M. guttatus* and *M. laciniatus*? 3) Are there specific genetic loci associated with FEF communities in *Mimulus* spp.? We predicted genotypes adapted to their local environment would harbor greater levels of FEF abundance and community composition than non-locals. We expected that granite outcrop sites would have less FEF abundance and diversity than meadow sites due to the harsher environmental conditions.**
 
-Our study provides a comprehensive analysis of the FEF communities associated with *Mimulus* spp. leaf tissue and the underlying genetic basis (MISSING PLANT GENOMIC DATA). We found that FEF diversity and community composition are significantly different between genotypes. These findings bring attention to symbiotic relationships in *Mimulus* that may be evolutionary adaptive. Fungal community differences between habitat types maybe due to distinct species pool regardless of habitat similarity (e.g., meadows). Our results suggest host genotype and habitat type are significant predictors of FEF colonization, with varying degrees of impact. Not surprising given the strong abiotic differences between meadow and granite habitat throughout the growing season (i.e. soil moisture) [@ferris2018; @tataru2023]. The differences between the meadow habitat could be explained by their recent fire history, which could cause a shift in the local FEF pool (CITE). Meadow 1 is generally drier and shrubbier than and burned in 2013 (CITE), while Meadow 2 has not burned in FFFF years (CITE). These potential sources of variation merit further investigation.   
+Our study provides a comprehensive analysis of the FEF communities associated with *Mimulus* spp. leaf tissue and the underlying genetic basis (MISSING PLANT GENOMIC DATA). We found that FEF diversity and community composition are significantly different between genotypes. These findings bring attention to symbiotic relationships in *Mimulus* that may be evolutionary adaptive. Fungal community differences between habitat types maybe due to distinct species pool regardless of habitat similarity (e.g., meadows). Our results suggest host genotype and habitat type are significant predictors of FEF colonization, with varying degrees of impact. Granite 1 had lower ASV richness than Meadow 1-2, but increased Hill orders 1 and 2 compared to Meadow 1. This is not surprising, given the strong abiotic differences (i.e. soil moisture) meadow and granite habitats experience throughout the growing season [@ferris2018; @tataru2023] that could explain the the need for allocating a greater effective number of species[@chao2014]. The differences between the meadow habitat could be explained by their recent fire history, which could cause a shift in the local flora and FEF pool (CITE). Meadow 1 is generally drier and shrubbier than and burned in 2013 (CITE), while Meadow 2 has not burned in FFFF years (CITE). These potential sources of variation merit further investigation.   
 
-Exploring the FEF community of *Mimulus* in a reciprocal transplant experiment allowed us to delineate how genotype by environment interactions shape these communities.  The distance-based Redundancy Analysys revealed a clear clustering by habitat type along both dbRDA axes (Fig. 3B), while  genotypes showed less distinct clustering (Fig. 3A). The *Mimulus* parental lines hosted distinct FEF communities and differed significantly in alpha diversity levels regardless habitat. Bowsher et al., found a similar effect of environment and host identity when comparing the bacterial rhizosphere community of locally adapted *M. guttatus* ecotypes [-@bowsher2020].  SOMETHING ABOUTE THE GENTEIC SNP DATA THAT I DONT HAVE.
+Exploring the FEF community of *Mimulus* in a reciprocal transplant experiment allowed us to delineate how genotype by environment interactions shape these communities.  The constrained ordinantion analyses revealed a clear clustering by habitat type along both dbRDA axes (Fig. 3B), while  genotypes showed less distinct clustering (Fig. 3A). The *Mimulus* parental lines hosted distinct FEF communities and differed significantly in alpha diversity levels regardless habitat. Bowsher et al., found a similar effect of environment and host identity when comparing the bacterial rhizosphere community of locally adapted *M. guttatus* ecotypes [-@bowsher2020]. Similarly, in a greenhouse experiment McIntosh et al., [-@mcintosh2024] found that site, soil origin, and *M. guttatus* plant ecotypes (annual and perennial) were the most important factors determining the structure of root associated fungal communities. Despite experimental plants performing poorly when interacting with *Mimulus guttatus*-derived biota, McIntosh et al., [-@mcintosh2024] find that AMF communities were strongly differentiated in common garden conditions. While their results are focused on the root microbiota and under greenhouse, we consider, that our results show that the differences in FEF communities between *M. guttatus* and *M. laciniatus* add to the adaptive trait differences between these diverged species, meriting further investigation.  
+**SOMETHING ABOUTE THE GENETIC SNP DATA THAT I DONT HAVE.**
 
-We produced F2 progeny to decouple leaf shape from genetic host genetics and found that the FEF communities are significantly correlated with leaf lobe index (LBI). The capacity of the F2 progeny to host distinct FEF communities regardless of the genetic background provides strong evidence in support of the LBI functioning as an environmental filter (CITE). This adds to the suite of leaf functional traits that have been found to structure FEF communities (CITE).   
-
+We produced F2 progeny to decouple leaf shape from genetic host genetics and found that the FEF communities are significantly correlated with leaf lobe index (LBI). The capacity of the F2 progeny to host distinct FEF communities regardless of the genetic background provides strong evidence in support of the LBI functioning as an environmental filter (CITE). This adds to the suite of leaf functional traits that have been found to structure FEF communities [CITE]. The F2 progeny exhibited a higher number of unique ASVs compared to parental lines, suggesting that hybridization may increase the potential for novel FEF interactions (Fig. S2). The core taxa found in all samples includes *Vishiniacozyma victoriae* which has been shown to provide cold tolerance to their hosts [@vujanovic2021; @buzzini2018]. Expanding the breadth of associated FEF taxa could be a strategy for increase hybrid fitness in the face of environmental stressors. We do not have the the data to support this claim, but it is a potential avenue for future research.
 
 
 # Conclusions
 
-The *Mimulus guttatus* species complex serves as a robust ecological and evolutionary model system.
-The identification of FEF communities in *Mimulus* spp.
-leaf tissue represents a substantial contribution to this field of study, opening up new avenues or inquiry.
-Our study uncovers potential beneficial FEFs that may contribute to the species complex's adaptation to cold environments.
-Future research should focus on exploring the interactions of FEF communities and *Mimulus* host genotypes that contribute to the expanded phenotype.
-As well as, understanding how highly prevalent FEF taxa respond to seasonal and temporal changes and contribute to overall plant fitness.
-An experimental approach taking into consideration populations' phenotype and genotypes can help disentangle the effect of site and host species on FEF communities.
-To optimize microbial studies in *Mimulus*, it crucial to explore alternative sampling methods such as using fresh tissue or rapidly preserved tissue in liquid nitrogen, which is known to yield the best results.
-We also acknowledge our limited scope and urge future investigations to expand their sampling efforts per species and populations while prioritizing prompt DNA extraction to enhance FEF capture.
+Taking an experimental approach to explore the FEF communities in the  *Mimulus guttatus* species complex has yielded a diverse number of taxa that are influenced by the local environment, host genetics and phenotype. These findings emphasize the complex interactions of above ground fungal symbionts in a robust ecological and evolutionary model system. Our understanding of FEF communities in *Mimulus* spp. 
+leaf tissue opens new avenues for inquiry into the role of FEF in plant fitness and adaptation to local environments. Further research focused on how the temporal dynamics of FEF communities in *Mimulus* spp. impact plant fitness is needed to comprehend the potential role of FEF in local adaptation and phenotypic plasticity.
 
 # Author Contributions
 
@@ -394,7 +399,7 @@ theme_lfspp_continuous <- theme_classic(base_size = 16) +
 # Theme for species by diversity  plots: discrete
 theme_sppdiv_discrete <-    theme_classic(base_size = 16) +
    theme(legend.title = element_text(face = "bold"),
-         strip.text = element_text(face = "italic", size = 14),
+         strip.text = element_text(face = "bold", size = 14),
          panel.border = element_rect(linetype = "blank", fill = NA),
          #legend.text = element_text(face = "italic", size = 12), #Make legend text italic
          axis.text.x.bottom = element_blank(),
@@ -402,7 +407,7 @@ theme_sppdiv_discrete <-    theme_classic(base_size = 16) +
 
 theme_div_discrete <-    theme_classic(base_size = 16) +
    theme(legend.title = element_text(face = "bold"),
-         strip.text = element_text(face = "italic", size = 14),
+         strip.text = element_text(face = "bold", size = 14),
          panel.border = element_rect(linetype = "blank", fill = NA),
          axis.text.x.bottom = element_blank(),
          axis.title.x = element_blank())
@@ -533,10 +538,9 @@ hill0_species <- ggplot(data = plant_traits_rfy,
     direction = 1
   )) +
   #scale_color_manual(aes(color = "black")) +
-  theme_sppdiv_discrete +
+  theme_div_discrete +
   labs(y =  "\U1D492 = 0", x = "", col = "") +
   guides(color = guide_legend(title = "Genotype")) +
-  #facet_grid(~Site) +
   stat_compare_means(comparisons = my_comparisons,
                      method = "wilcox.test",
                      label = "p.signif")
@@ -809,8 +813,8 @@ ggsave(filename = file.path(path, "figures/figure2.png"), plot = alpha_beta_dive
 load("clean_data/statistics/m2_hell.rda")
 final_model <- m2_hell
 
-names(final_model)
-B <- summary(final_model)
+# names(final_model)
+# B <- summary(final_model)
 
 
 # Extracting scores for the plot
@@ -977,8 +981,7 @@ my_comparisons2 <- list(c("CF", "LM"), c("LM", "OPN"),c("CF", "OPN"))
 labels_habitat <- c("Meadow 1", "Meadow 2", "Granite 1")
 names(labels_habitat) <- c("CF", "LM", "OPN")
 
-lbi_genotype <- ggplot(plant_traits|>
-                         filter(Unique_ID %in% sample_names(ps_clean_3)), aes(y = logLBI, x = Genotype)) +
+lbi_genotype <- ggplot(plant_traits, aes(y = logLBI, x = Genotype)) +
   geom_point(
     aes(color = Genotype),
     alpha = 0.2,
@@ -1007,7 +1010,7 @@ lbi_genotype <- ggplot(plant_traits|>
                      label = "p.signif") +
   facet_wrap(~factor(Site, levels =  c('LM', 'CF', 'OPN'))) 
 
-lbi_genotype
+#lbi_genotype
 
 lbi_site <- ggplot(plant_traits, aes(y = logLBI, x = Site)) +
   geom_point(
@@ -1244,14 +1247,28 @@ ggsave(filename = file.path(path, "figures/figure4.png"), plot = lbis, dpi=300, 
 
 t4 <- trans_env$new(dataset = micro_psclean, env_cols = c(12)) # 12 is the index for logLBI
 
-t4gg <- t4$cal_autocor(group = c("Genotype"), upper = list(continuous = GGally::wrap("cor", method= "spearman"))) + 
+t4gg <-
+  t4$cal_autocor(group = c("Genotype"),
+                 upper = list(continuous = GGally::wrap("cor", method = "spearman"))) +
   theme(
     legend.title = element_text(face = "bold"),
-         strip.text = element_text(face = "bold", size = 12),
-         panel.border = element_rect(linetype = "blank", fill = NA)) +
-  scale_fill_manual(values = met.brewer("Johnson", n = 4, type = "discrete", direction = c(-1))) +
-  scale_color_manual(values = met.brewer("Johnson", n = 4, type = "discrete", direction = c(-1)))
+    strip.text = element_text(face = "bold", size = 12),
+    panel.border = element_rect(linetype = "blank", fill = NA)
+  ) +
+  scale_fill_manual(values = met.brewer(
+    "Johnson",
+    n = 4,
+    type = "discrete",
+    direction = c(-1)
+  )) +
+  scale_color_manual(values = met.brewer(
+    "Johnson",
+    n = 4,
+    type = "discrete",
+    direction = c(-1)
+  ))
 t4gg
+
 ggplot2::ggsave(file.path(path, "figures/supp_fig1.png") , plot = t4gg, dpi=300, units=c("mm"), width=300, height=300)
 ```
 
@@ -1271,9 +1288,10 @@ library("paletteer")
 # Per site
 dataset1 <- micro_psclean$merge_samples(use_group = "Site")
 # create trans_venn object
-v1 <- trans_venn$new(dataset1, ratio = "numratio") # Percentage represent ratio of shared ASVs
-v1gg <- v1$plot_venn(color_circle = paletteer_d("MetBrewer::Tsimshian", 7,
-      direction = -1)) + #https://r-charts.com/color-palettes/#discrete
+v1 <-
+  trans_venn$new(dataset1, ratio = "numratio") # Percentage represent ratio of shared ASVs
+v1gg <-
+  v1$plot_venn() + #https://r-charts.com/color-palettes/#discrete
   ggtitle("Un-rarified data") +
   theme(plot.title = element_text(
     face = "bold",
@@ -1281,7 +1299,7 @@ v1gg <- v1$plot_venn(color_circle = paletteer_d("MetBrewer::Tsimshian", 7,
     hjust = 0.5,
     vjust = 0.5
   ))
-v1gg 
+
 
 # Per genotype
 dataset2 <- micro_psclean$merge_samples(use_group = "Genotype")
@@ -1348,22 +1366,39 @@ ggsave(filename = file.path(path, "figures/supp_fig2.png"), plot = venn_plots, d
 
 # Plot with micro_psclean
 t2 <- trans_abund$new(dataset = micro_psclean, taxrank = "Genus", ntaxa = 10) # 12 is the index for logLBI
-t2gg <- t2$plot_heatmap(facet = c("Site", "Genotype"), xtext_keep = FALSE, withmargin = FALSE) + theme(legend.title = element_text(face = "bold"),
-         strip.text = element_text(face = "bold", size = 12),
-         panel.border = element_rect(linetype = "blank", fill = NA),
-         axis.text.x = element_blank())
-  #facet_nested(~factor(Site, levels =  c('LM', 'CF', 'OPN')),  nest_line = element_line(linetype = 2))
+t2gg <-
+  t2$plot_heatmap(
+    facet = c("Site", "Genotype"),
+    xtext_keep = FALSE,
+    withmargin = FALSE
+  ) + theme(
+    legend.title = element_text(face = "bold"),
+    strip.text = element_text(face = "bold", size = 12),
+    panel.border = element_rect(linetype = "blank", fill = NA),
+    axis.text.x = element_blank()
+  )
+#facet_nested(~factor(Site, levels =  c('LM', 'CF', 'OPN')),  nest_line = element_line(linetype = 2))
 
-t2gg
+#t2gg
 
 
 
 
-r2 <- trans_abund$new(dataset = micro_rarefied_ps, taxrank = "Genus", ntaxa = 10)
-r2gg <- r2$plot_heatmap(facet = c("Site", "Genotype"), xtext_keep = FALSE, withmargin = FALSE) + theme(legend.title = element_text(face = "bold"),
-         strip.text = element_text(face = "bold", size = 12),
-         panel.border = element_rect(linetype = "blank", fill = NA),
-         axis.text.x = element_blank())
+r2 <-
+  trans_abund$new(dataset = micro_rarefied_ps,
+                  taxrank = "Genus",
+                  ntaxa = 10)
+r2gg <-
+  r2$plot_heatmap(
+    facet = c("Site", "Genotype"),
+    xtext_keep = FALSE,
+    withmargin = FALSE
+  ) + theme(
+    legend.title = element_text(face = "bold"),
+    strip.text = element_text(face = "bold", size = 12),
+    panel.border = element_rect(linetype = "blank", fill = NA),
+    axis.text.x = element_blank()
+  )
 
 #r2gg
 
@@ -1379,6 +1414,332 @@ heatplots
 ggplot2::ggsave(filename = file.path(path, "figures/supp_fig3.png"), plot = heatplots, dpi=300, units=c("mm"), width=300, height=250)
 ```
 
+## Figure S4
+
+```{r, supp_fig4}
+
+#| echo: false
+#| eval: true
+#| tidy: true
+#| warning: false
+#| label: boxplot_hill_orders
+#| fig-cap: "Alpha and beta diversity means comparisons in genotypes by habitat types. Alpha diversity means comparisons; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2) per host species. A-C) Red filled boxplots correspond to F2YW, orange filled to G (*M. guttatus*), yellow to L (*M. laciniatus*), and teal to F2WY genotype. Beta diversity mean comparions; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2)per elevation category. D-F) Light teal filled boxplot corresponds to Meadow 1, purple to Meadow 2, and light maroon to Granite 1. Open shapes represent: squares (F2YW), circles (G), triangles (L), and crosses (F2WY).  Significance levels are represented by *ns* (not significant) and asterisks [*p* < 0.05 (\\*), *p* < 0.01 (\\**), *p* < 0.001 (\\***), and *p* < 0.0001 (\\****)]."
+
+############################################
+#### Alpha diversity ####
+#### At the species level ####
+############################################
+
+########## Labels ###########
+#Legend title label
+legend_title <- "Species"
+# Species labels
+labels_list <- c("M. laciniatus", "M. nasutus", "M. guttatus")
+names(labels_list) <- c("L", "N", "G")
+#############################
+compare_means(hill_2 ~ Site,
+         data = plant_traits,
+         group.by = "Genotype",
+         method = "wilcox.test",
+         p.adjust.method = "BH",
+  paired = FALSE,
+  alternative = "two.sided", 
+  mu = 0, 
+  var.equal = FALSE,
+  conf.level = 0.95)
+
+
+
+# Plot
+hill0_species <- ggplot(data = plant_traits_rfy,
+                        aes(x = Genotype, y = Observed)) +
+  geom_point(
+    aes(color = Site),
+    alpha = 0.2,
+    size = 1.7,
+    position = position_jitter(w = 0.2)
+  ) +
+  geom_boxplot(aes(color = Site), alpha = 0.5, outlier.alpha = 0.0) +
+  scale_color_manual(values = met.brewer(
+  "Tsimshian",
+       n = 4, 
+       type = "discrete", 
+       direction = -1 
+  ))  +
+  scale_fill_manual(values = met.brewer(
+   "Tsimshian",
+       n = 4, 
+       type = "discrete", 
+       direction = -1 
+  )) +
+  #scale_color_manual(aes(color = "black")) +
+  theme_div_discrete +
+  theme_classic(base_size = 16) +
+   theme(legend.title = element_text(face = "bold"),
+         strip.text = element_text(face = "bold", size = 14),
+         panel.border = element_rect(linetype = "blank", fill = NA)) +
+  labs(y =  "\U1D492 = 0", x = "", col = "") +
+  guides(color = guide_legend(title = "Site")) +
+  #facet_grid(~Site) +
+  stat_compare_means(comparisons = my_comparisons,
+                     method = "wilcox.test",
+                     label = "p.signif")
+
+hill0_species
+
+
+# Hill number 1
+# Shannon diversity or hill number 1
+# Plot
+hill1_species <- ggplot(data = plant_traits_rfy,
+                        aes(x = Genotype, y = hill_1)) +
+  geom_point(
+    aes(color = Genotype),
+    alpha = 0.2,
+    size = 1.7,
+    position = position_jitter(w = 0.2)
+  ) +
+  geom_boxplot(aes(color = Genotype), alpha = 0.5, outlier.alpha = 0.0) +
+  scale_color_manual(values = met.brewer(
+      "Johnson",
+      n = 4,
+      type = "discrete",
+      direction = 1
+    )
+  ) +
+  scale_fill_manual(values = met.brewer(
+    "Johnson",
+    n = 4,
+    type = "discrete",
+    direction = 1
+  )) +
+  #scale_color_manual(aes(color = "black")) +
+  theme_sppdiv_discrete +
+  theme(strip.text = element_blank()) +
+  labs(y =  "\U1D492 = 1", x = "", col = "") +
+  guides(color = guide_legend(title = "Genotype")) +
+  facet_grid(~Site) +
+  stat_compare_means(comparisons = my_comparisons,
+                     method = "wilcox.test",
+                     label = "p.signif")
+  
+#hill1_species
+
+
+# Hill number 2
+# Inverse Simpson diversity or hill number 2
+hill2_species <- ggplot(data = plant_traits_rfy,
+                        aes(x = Genotype, y = hill_2)) +
+  geom_point(
+    aes(color = Genotype),
+    alpha = 0.2,
+    size = 1.7,
+    position = position_jitter(w = 0.2)
+  ) +
+  geom_boxplot(aes(color = Genotype), alpha = 0.5, outlier.alpha = 0.0) +
+  # geom_crossbar(stat="summary",
+  #               fun = median,
+  #               fun.max = median,
+  #               fun.min = median,
+  #               fatten = 2,
+  #               width = 0.8,
+  #               color="black") +
+  scale_color_manual(values = met.brewer(
+      "Johnson",
+      n = 4,
+      type = "discrete",
+      direction = 1
+    )
+  ) +
+  scale_fill_manual(values = met.brewer(
+    "Johnson",
+    n = 4,
+    type = "discrete",
+    direction = 1
+  )) +
+  #scale_color_manual(aes(color = "black")) +
+  theme_sppdiv_discrete +
+  theme(strip.text = element_blank()) +
+  labs(y =  "\U1D492 = 2", x = "", col = "") +
+  guides(color = guide_legend(title = "Genotype")) +
+  facet_grid(~Site) +
+  stat_compare_means(comparisons = my_comparisons,
+                     method = "wilcox.test",
+                     label = "p.signif")
+  
+#hill2_species
+
+# Joined plots
+supp_fig4 <- ggarrange(hill0_species,"", hill1_species,"", hill2_species, 
+                                  nrow = 5, ncol = 1,
+                       heights = c(1, 0.1, 1, 0.1, 1),
+                                  common.legend = TRUE,
+                                  labels = c("A", "B", "C"),
+                                  legend = "bottom")
+
+supp_fig4
+ggsave(filename = file.path(path, "figures/supp_fig4.png"), plot = supp_fig4, dpi=300, units=c("mm"), width=250, height=275)
+
+```
+
+<!-- ## Figure S5 -->
+
+<!-- ```{r, supp_fig5} -->
+<!-- #| echo: false -->
+<!-- #| eval: true -->
+<!-- #| tidy: true -->
+<!-- #| warning: false -->
+<!-- #| label: boxplot_hill_orders -->
+<!-- #| fig-cap: "Alpha and beta diversity means comparisons in genotypes by habitat types. Alpha diversity means comparisons; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2) per host species. A-C) Red filled boxplots correspond to F2YW, orange filled to G (*M. guttatus*), yellow to L (*M. laciniatus*), and teal to F2WY genotype. Beta diversity mean comparions; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2)per elevation category. D-F) Light teal filled boxplot corresponds to Meadow 1, purple to Meadow 2, and light maroon to Granite 1. Open shapes represent: squares (F2YW), circles (G), triangles (L), and crosses (F2WY).  Significance levels are represented by *ns* (not significant) and asterisks [*p* < 0.05 (\\*), *p* < 0.01 (\\**), *p* < 0.001 (\\***), and *p* < 0.0001 (\\****)]." -->
+<!-- ################################# -->
+<!-- #### Beta diversity #### -->
+<!-- #### Across sites #### -->
+<!-- ################################# -->
+
+<!-- ########## Labels ########### -->
+<!-- #Legend title label -->
+<!-- legend_title <- "Species" -->
+<!-- # Species labels -->
+<!-- labels_list <- c("M. laciniatus", "M. nasutus", "M. guttatus") -->
+<!-- names(labels_list) <- c("L", "N", "G") -->
+<!-- ############################# -->
+
+<!-- # Observed richness -->
+<!-- # Hill number 0 -->
+<!-- hill0_beta <- -->
+<!--   ggplot(plant_traits_rfy, aes(x = Site, y = Observed)) + -->
+<!--   geom_point( -->
+<!--     aes(shape = Genotype, color = Site), -->
+<!--     alpha = 0.5, -->
+<!--     size = 1.7, -->
+<!--     position = position_jitter(w = 0.2) -->
+<!--   )+ -->
+<!--   geom_boxplot(aes(color = Site), alpha = 0.5, outlier.alpha = 0.0) + -->
+<!--   scale_color_manual( -->
+<!--     labels = c('Crane Flat', 'Little Meadow', 'Olmstead Point'), -->
+<!--     values = met.brewer( -->
+<!--      "Tsimshian", -->
+<!--       n = 4, -->
+<!--       type = "discrete", -->
+<!--       direction = -1 -->
+<!--     ) -->
+<!--   ) + -->
+<!--   scale_shape_manual( -->
+<!--     values = c(21:24), -->
+<!--   ) + -->
+<!--   theme_div_discrete + -->
+<!--   scale_x_discrete(labels = c('', '', '', '')) + -->
+<!--   stat_compare_means(comparisons = my_comparisons2, -->
+<!--                      method = "wilcox.test", -->
+<!--                      label = "p.signif") + -->
+<!--   labs(y = "\U1D492 = 0", x = "") + -->
+<!--   facet_grid(~Site) + -->
+<!--   guides(fill = guide_legend(title = "Site"), -->
+<!--          shape = guide_legend(title = "Genotype")) -->
+
+<!-- #hill0_beta -->
+
+
+
+<!-- # Hill number 1 -->
+<!-- # Shannon diversity or hill number 1 -->
+<!-- hill1_beta <- ggplot(plant_traits_rfy, aes(x = Site, y = hill_1)) + -->
+<!--   geom_point( -->
+<!--     aes(shape = Genotype, color = Site), -->
+<!--     alpha = 0.5, -->
+<!--     size = 1.7, -->
+<!--     position = position_jitter(w = 0.2) -->
+<!--   )+ -->
+<!--   geom_boxplot(aes(color = Site), alpha = 0.5, outlier.alpha = 0.0) + -->
+<!--   scale_color_manual( -->
+<!--     labels = c('Crane Flat', 'Little Meadow', 'Olmstead Point'), -->
+<!--     values = met.brewer( -->
+<!--       "Tsimshian", -->
+<!--       n = 4, -->
+<!--       type = "discrete", -->
+<!--       direction = -1 -->
+<!--     ) -->
+<!--   ) + -->
+<!--   scale_shape_manual( -->
+<!--     values = c(21:24), -->
+<!--   ) + -->
+<!--   theme_div_discrete + -->
+<!--   scale_x_discrete(labels = c('', '', '', '')) + -->
+<!--   stat_compare_means(comparisons = my_comparisons2, -->
+<!--                      method = "wilcox.test", -->
+<!--                      label = "p.signif") + -->
+<!--   labs(y = "\U1D492 = 1", x = "") + -->
+<!--   guides(fill = guide_legend(title = "Site"), -->
+<!--          shape = guide_legend(title = "Genotype")) + -->
+<!--     facet_grid(~Site)  -->
+
+<!-- #hill1_beta -->
+
+
+<!-- # Hill number 2 -->
+<!-- # Inverse Simpson diversity or hill number 2 -->
+
+<!-- hill2_beta <- ggplot(plant_traits_rfy, aes(x = Site, y = hill_2)) + -->
+<!--   geom_point( -->
+<!--     aes(shape = Genotype, color = Site), -->
+<!--     alpha = 0.5, -->
+<!--     size = 1.7, -->
+<!--     position = position_jitter(w = 0.2) -->
+<!--   ) + -->
+<!--   geom_boxplot(aes(color = Site), alpha = 0.5, outlier.alpha = 0.0) + -->
+<!--   # geom_crossbar(stat="summary", -->
+<!--   #               fun = mean, -->
+<!--   #               fun.max = mean, -->
+<!--   #               fun.min = mean, -->
+<!--   #               fatten = 2, -->
+<!--   #               width = 0.5, -->
+<!--   #               color="black") + -->
+<!--   scale_color_manual( -->
+<!--     labels = c('Crane Flat', 'Little Meadow', 'Olmstead Point'), -->
+<!--     values = met.brewer( -->
+<!--       "Tsimshian", -->
+<!--       n = 4, -->
+<!--       type = "discrete", -->
+<!--       direction = -1 -->
+<!--     ) -->
+<!--   ) + -->
+<!--    scale_fill_manual( -->
+<!--     #labels = c('Crane Flat', 'Little Meadow', 'Olmstead Point'), -->
+<!--     values = met.brewer( -->
+<!--       "Tsimshian", -->
+<!--       n = 4, -->
+<!--       type = "discrete", -->
+<!--       direction = -1 -->
+<!--     ) -->
+<!--   ) + -->
+<!--   scale_shape_manual( -->
+<!--     values = c(0:3), -->
+<!--   ) + -->
+<!--   theme_div_discrete + -->
+<!--   scale_x_discrete(labels = c('', '', '', '')) + -->
+<!--   stat_compare_means(comparisons = my_comparisons2, -->
+<!--                      method = "wilcox.test", -->
+<!--                      label = "p.signif") + -->
+<!--   labs(y = "\U1D492 = 2", x = "") + -->
+<!--   guides(fill = guide_legend(title = "Site"), -->
+<!--          shape = guide_legend(title = "Genotype", alpha = 1)) + -->
+<!--   facet_grid(~Site) -->
+
+
+<!-- #hill2_beta -->
+
+
+<!-- # Joining plots -->
+<!-- hill_beta <- ggarrange(hill0_beta, hill1_beta, hill2_beta, -->
+<!--           nrow = 1, ncol = 3, -->
+<!--           common.legend = TRUE, -->
+<!--           legend = "bottom", -->
+<!--           labels = c("D", "E", "F")) -->
+
+<!-- supp_fig5 -->
+
+<!-- ggsave(filename = file.path(path, "figures/supp_fig5.png"), plot = supp_fig5, dpi=300, units=c("mm"), width=300, height=275) -->
+<!-- ``` -->
 
 
 
@@ -1387,6 +1748,22 @@ ggplot2::ggsave(filename = file.path(path, "figures/supp_fig3.png"), plot = heat
 
 ```{r, supp_table1}
 # Sites and Species sampled
+core_tax <-
+  core_members(
+    ps_clean_3,
+    detection = 0.1 / 100,
+    prevalence = 50 / 100,
+    include.lowest = FALSE
+  )
+
+table1 <- metagMisc::phyloseq_to_df(ps_clean_3) |>
+  filter(OTU %in% core_tax) |>
+  mutate(across(Kingdom:Species, ~ str_remove(., "^.*?(_|-)."))) |>
+  select(OTU, Kingdom:Species) |>
+  knitr::kable(caption = "Table 1: Core taxa members in the dataset.")
+```
+
+```{r, supp_table1, eval = FALSE}
 #The core taxa members are "ASV_1", "ASV_2", "ASV_3", "ASV_4", "ASV_5", "ASV_6", "ASV_7", "ASV_8", "ASV_9", "ASV_11", "ASV_12", "ASV_14", "ASV_16", "ASV_18", "ASV_19", "ASV_21", "ASV_23", "ASV_27". #Like in MIM2 project, we see *Cladosporium* spp. (ASV_1), *Vishniacozyma victoriae* (ASV_2), and *Cladosporium herbanum* (ASV_27) and. 
 ```
 
@@ -1401,10 +1778,10 @@ phyloseq_ntaxa_by_tax(
 ) |>
   as.data.frame() |>
   mutate(sum = sum(N.OTU),
-          Phylum = str_remove(Phylum, "^.*?(_|-)")) |>
-  group_by(Species, Phylum) |>
-  summarise(Ocurrance = n()) |>
-  knitr::kable(caption = "Table 2: Prevalence of phyla in samples per species.")
+          Phylum = str_remove(Phylum, "^.*?(_|-).")) |>
+  group_by(Genotype, Phylum) |>
+  summarise("Ocurrance in samples" = n()) |>
+  knitr::kable(caption = "Table 2: Prevalence of phyla in samples per genotype.")
 ```
 
 ## Table 3
