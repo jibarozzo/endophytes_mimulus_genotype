@@ -89,13 +89,28 @@ imagej <- read_excel(file.path(path, "field_data/Mimulus_CH3_ImageJ_Data.xlsx"),
 # I suspect variables are not-normally distributed given work on Mim2. I proceed with a log transformation of the data.
 # Leaf traits transformed
 # Leaf level data set
-leaf_traits <-  left_join(traits, select(imagej, Unique_ID, ImageJ_1, ImageJ_2, Leaf_Lobe_Index), join_by(Unique_ID)) |>
+leaf_traits <-
+  left_join(
+    traits,
+    select(imagej, Unique_ID, ImageJ_1, ImageJ_2, Leaf_Lobe_Index),
+    join_by(Unique_ID)
+  ) |>
   select(-Notes) |>
-  mutate(logLBI = log10(Leaf_Lobe_Index),
-         logACI = log10(ACI),
-         logLT = log10(Leaf_thickness),
-         logLPS = log10(Leaf_toughness),
-         logLMA = log10(LMA))
+  mutate(
+    Habitat = case_match(Site, "LM" ~ "Meadow 1",
+                         "CF" ~ "Meadow 2",
+                         "OPN" ~ "Granite 1"),
+    logLBI = log10(Leaf_Lobe_Index),
+    logACI = log10(ACI),
+    logLT = log10(Leaf_thickness),
+    logLPS = log10(Leaf_toughness),
+    logLMA = log10(LMA)
+  ) |>
+  relocate(Habitat, .after = Site)
+
+# Setting levels for plotting purposes
+leaf_traits$Site <- factor(leaf_traits$Site, levels = c("LM", "CF", "OPN")) 
+leaf_traits$Habitat <- factor(leaf_traits$Habitat, levels = c("Meadow 1", "Meadow 2", "Granite 1"))
 
 # Matching pooled samples (e.g., CF_23_L_POOL) with original name
 # M. guttatus and M. laciniatus parentals
@@ -111,7 +126,7 @@ pooled_parental <- leaf_traits |>
 # Log transformed
 plant_traits <- leaf_traits |>
     bind_rows(pooled_parental) |> # Adding pooled samples. Samples that are part of the pool are still present. 
-  group_by(Unique_ID, Site, Block, Genotype)|>
+  group_by(Unique_ID, Site, Habitat, Block, Genotype)|>
   filter(!Site == "YCN") |> # Removing YCN site
   summarise(ACI = mean(ACI, na.rm = TRUE),
             LT = mean(Leaf_thickness, na.rm = TRUE),
@@ -121,6 +136,7 @@ plant_traits <- leaf_traits |>
             ImageJ_2 = mean(ImageJ_2, na.rm = TRUE),
             LBI = mean(Leaf_Lobe_Index, na.rm = TRUE)) |>
   mutate(Site = as.factor(Site),
+         Habitat = as.factor(Habitat),
          Block = as.factor(Block), 
          Genotype = as.factor(Genotype),
          logLBI = log10(LBI),
@@ -129,6 +145,9 @@ plant_traits <- leaf_traits |>
          logLPS = log10(LPS),
          logLMA = log10(LMA)) 
 
+# Setting levels for plotting purposes
+plant_traits$Site <- factor(plant_traits$Site, levels = c("LM", "CF", "OPN")) 
+plant_traits$Habitat <- factor(plant_traits$Habitat, levels = c("Meadow 1", "Meadow 2", "Granite 1"))
 
 # Save file
 # Leaf traits
@@ -176,6 +195,8 @@ plant_traits <- ps_clean_3 |> #Estimating community richness and shannon diversi
            hill_2,
            .after = logLMA) |>
   rename(Simpson_1minusD = Simpson)
+
+
 # See https://www.jak.bio/posts/me/20211227_simpson/simpson_diversity.html for a good explanation of Simpson's diversity index.
 
 
@@ -775,10 +796,10 @@ ggplot(plant_traits_rfy, aes(x = Genotype, y = shannon_, color = Genotype)) +
 Now let's clean it up, select the randomized subsamples, and start plotting.
 
 ##### Rarefied data frame
-Function alpha_rfy_DF() return a data frame with rarefied alpha diversity, BUT also rarefied leaf traits. Somehow it randomizes values and we end up with CF_5_4_F2WY matching with genotype G and corresponding data. Here I remove the randomized leaf trait data and assign the correct values to each sample. It needs to be the same for Unique_ID accrose rarefied data frames.
+Function alpha_rfy_DF() return a data frame with rarefied alpha diversity, BUT also rarefied leaf traits. Somehow it randomizes values and we end up with CF_5_4_F2WY matching with genotype G and corresponding data. Here I remove the randomized leaf trait data and assign the correct values to each sample. It needs to be the same for Unique_ID accros rarefied data frames.
 ```{r, rarefaction_output}
 plant_traits_rfy <- plant_traits_rfy |>
-  select(c(16:20)) |> # Removing variables calculated before rarefactions
+  select(c(17:21)) |> # Selecting variables calculated at rarefactions
   mutate(X = Unique_ID,
          Unique_ID =  str_remove(Unique_ID, "^.*?(_|-)"),
          hill_1 = exp(shannon_)) |> # Observed column is equivalent to hill_0
@@ -790,7 +811,8 @@ plant_traits_rfy <- plant_traits_rfy |>
     Simpson_1minusD = simpson_,
     hill_2 = invsimpson_
   ) |>
-  left_join(plant_traits, by = "Unique_ID") |> # Joining with plant_traits data frame
+  left_join(plant_traits|>
+              select(-c(18:22)), by = "Unique_ID")|> # Joining with plant_traits data frame
   relocate(Observed, Shannon, Simpson_1minusD, hill_1, hill_2, .after = logLMA)
 
 
@@ -819,7 +841,7 @@ All analyses for alpha and beta diversity below are completed with `plant_traits
 
 ```{r, rarefied_data}
 #Mirl object to phyloseq
-#Taking the mirl object from Method B (see Rarefied data frame Method B) and converting it to a phyloseq object
+#Taking the mirl object and converting it to a phyloseq object
 #Names of samples cleaned an filtered
 final_names <- sample_names(pseq_rrfa[[1]]) # Names of samples)
 
@@ -836,7 +858,7 @@ rrfy_asv_table <-
 #ASV table
 ASV <- rrfy_asv_table |>
   column_to_rownames(var = "X") |>
-  select(-c(1, 534:553))
+  select(-c(1, 534:554))
 
 ASV <- otu_table(t(ASV), taxa_are_rows = TRUE)
 taxa_names(ASV) #Should be ASV_#
@@ -851,7 +873,7 @@ TAXA <- TAXA|>
 
 # Sample data
 SAMP <- rrfy_asv_table |>
-  select(c(1:2, 534:554)) |>
+  select(c(1:2, 535:555)) |>
   as.data.frame() |>
   column_to_rownames(var = "X") |>
   sample_data()
@@ -928,8 +950,9 @@ rrfy_hell_matrix <- as.data.frame(rrfy_hell_matrix) |>
   mutate(Unique_ID =  X, # Copyin column to new column 
          Unique_ID =  str_remove(Unique_ID, "^.*?(_|-)")) |>
   relocate(Unique_ID, .after = X) |>
-  left_join(plant_traits, by = "Unique_ID") |>
-  relocate(c(535:549), .before = ASV_1)
+  left_join(plant_traits |>
+              select(-c(Observed:hill_2)), by = "Unique_ID") |> #Dropping alpha diversity measures, since this is for beta diversity
+  relocate(c(535:550), .before = ASV_1)
 
 # Save
 saveRDS(rrfy_hell_matrix, file = "clean_data/statistics/rrfy_hell_matrix.rds") 
@@ -998,19 +1021,15 @@ micro_psclean <- phyloseq2meco(ps_clean_3) # First convert phyloseq to meco
 t1 <-
   trans_abund$new(
     dataset = micro_psclean,
-    taxrank = "Class",
-    ntaxa = 10,
-    show = 0,
-    high_level = "Phylum",
-    high_level_fix_nsub = 3,
-    prefix = "\\|"
+    taxrank = "Phylum",
+    ntaxa = 10
   )
 t1gg <-
   t1$plot_bar(
-    ggnested = T,
+    #ggnested = T,
     #high_level_add_other = TRUE,
     others_color = "grey70",
-    facet = c("Site", "Genotype"),
+    facet = c("Habitat", "Genotype"),
     xtext_keep = FALSE,
     legend_text_italic = FALSE,
     color_values = RColorBrewer::brewer.pal(8, "Set3")

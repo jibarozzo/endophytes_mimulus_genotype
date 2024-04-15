@@ -1534,6 +1534,10 @@ ntaxa(ps_clean_3) # The result is 532 taxa in 287 samples.
 ps_clean_3 <- prune_samples(sample_sums(ps_clean_3) > 0, ps_clean_3)
 # Result: 532 taxa in 287 samples.
 
+# Reordering Habitat to make things nicer
+ps_clean_3@sam_data$Habitat <- factor(ps_clean_3@sam_data$Habitat, levels = c("Meadow 1", "Meadow 2", "Granite 1"))
+ps_clean_3@sam_data$Site <- factor(ps_clean_3@sam_data$Site, levels = c("LM", "CF", "OPN"))
+
 # Save file
 saveRDS(ps_clean_3, file.path(out_dir, "clean_data/taxonomy/ASV_8859_v2_phyloseq_nonsingletons.rds"))
 
