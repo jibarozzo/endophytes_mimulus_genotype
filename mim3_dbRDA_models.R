@@ -57,7 +57,8 @@ rrfy_hell_matrix <- readRDS("clean_data/statistics/rrfy_hell_matrix.rds")
 dbrda_hell_matrix <- readRDS("clean_data/statistics/dbrda_hell_matrix.rds")
 
 # dbrda_traits <- rrfy_hell_matrix |>
-#     select(X, Unique_ID, Site, Genotype, logLBI)
+#     select(X, Unique_ID, Site, Habitat, Genotype, logLBI) |>
+#     unite(Habitat_Genotype, Habitat, Genotype, sep = "_", remove = FALSE) # To model interactions
 dbrda_traits <- readRDS("clean_data/statistics/dbrda_traits.rds")
 
 #################################################################
@@ -105,13 +106,39 @@ dbrda_traits <- readRDS("clean_data/statistics/dbrda_traits.rds")
 #                            permutations = 999,
 #                            parallel = 10)
 # save(anova_m2_hell, file = "clean_data/statistics/anova_m2_hell.rda")
-# 
-# 
-# ### PERMDISP
-# 
-# #Analysis of multivariate homogeneity of group dispersions.
-# 
-# # By Genotype
+
+ 
+# Model with interactions between site/habitat and genotype
+m3_hell <-
+    dbrda(
+        dbrda_hell_matrix ~ logLBI + Habitat * Genotype,
+        distance = "bray",
+        dfun = vegdist,
+        data = dbrda_traits,
+        parallel = 20,
+        na.action = na.omit
+    )
+save(m3_hell, file = "clean_data/statistics/m3_hell.rda")
+
+#Anovas for m3
+set.seed(123)
+anova_m3_hell <- anova.cca(m3_hell,
+                           by = "margin",
+                           permutations = 999,
+                           parallel = 20)
+save(anova_m3_hell, file = "clean_data/statistics/anova_m3_hell.rda")
+
+
+#################################
+#### PERMDISP ####
+#################################
+#Analysis of multivariate homogeneity of group dispersions.
+
+##################################
+#### m2_hell model #####
+##################################
+
+# By Genotype
 # set.seed(123)
 # beta_dis1 <-
 #     betadisper(
@@ -121,15 +148,20 @@ dbrda_traits <- readRDS("clean_data/statistics/dbrda_traits.rds")
 #         sqrt.dist = FALSE
 #     )
 # save(beta_dis1, file = "clean_data/statistics/beta_dis1.rda")
+# load("clean_data/statistics/beta_dis1.rda")
 # 
 # ## Permutest
 # set.seed(123)
 # beta_perm1 <-
 #     permutest(beta_dis1,
-#               parallel = 10,
+#               parallel = 8,
 #               permutations = 999,
 #               by = "margin")
 # save(beta_perm1, file = "clean_data/statistics/beta_perm1.rda")
+# load("clean_data/statistics/beta_perm1.rda")
+# 
+# anova(beta_dis1)
+# TukeyHSD(beta_dis1)
 # 
 # 
 # # By Site
@@ -141,15 +173,94 @@ dbrda_traits <- readRDS("clean_data/statistics/dbrda_traits.rds")
 #     sqrt.dist = FALSE
 # )
 # save(beta_dis2, file = "clean_data/statistics/beta_dis2.rda")
+# load("clean_data/statistics/beta_dis2.rda")
 # 
 # ## Permutest
 # set.seed(123)
 # beta_perm2 <-
 #     permutest(beta_dis2,
-#               parallel = 10,
+#               parallel = 8,
 #               permutations = 999,
 #               by = "margin")
 # save(beta_perm2, file = "clean_data/statistics/beta_perm2.rda")
+# load("clean_data/statistics/beta_perm2.rda")
+# 
+# anova(beta_dis2)
+# TukeyHSD(beta_dis2)
+# 
+
+
+##################################
+#### m3_hell model #####
+##################################
+
+# By Genotype
+set.seed(123)
+beta_dis3 <-
+    betadisper(
+        vegdist(dbrda_hell_matrix, method = "bray"), # Matrix of Hellinger transformed data rarefied
+        dbrda_traits$Genotype,
+        type = "median",
+        sqrt.dist = FALSE
+    )
+save(beta_dis3, file = "clean_data/statistics/beta_dis3.rda")
+#load("clean_data/statistics/beta_dis3.rda")
+
+## Permutest
+set.seed(123)
+beta_perm3 <-
+    permutest(beta_dis3,
+              parallel = 20,
+              permutations = 999,
+              by = "margin")
+save(beta_perm3, file = "clean_data/statistics/beta_perm3.rda")
+#load("clean_data/statistics/beta_perm1.rda")
+
+anova(beta_dis1)
+TukeyHSD(beta_dis1)
+
+
+# By Habitat
+set.seed(123)
+beta_dis4 <- betadisper(
+    vegdist(dbrda_hell_matrix, method = "bray"),
+    dbrda_traits$Habitat,
+    type = "median",
+    sqrt.dist = FALSE
+)
+save(beta_dis4, file = "clean_data/statistics/beta_dis4.rda")
+load("clean_data/statistics/beta_dis2.rda")
+
+## Permutest
+set.seed(123)
+beta_perm4 <-
+    permutest(beta_dis4,
+              parallel = 20,
+              permutations = 999,
+              by = "margin")
+save(beta_perm4, file = "clean_data/statistics/beta_perm4.rda")
+load("clean_data/statistics/beta_perm2.rda")
+
+
+# By Habitat*Genotype
+set.seed(123)
+beta_dis5 <- betadisper(
+    vegdist(dbrda_hell_matrix, method = "bray"),
+    dbrda_traits$Habitat_Genotype,
+    type = "median",
+    sqrt.dist = FALSE
+)
+save(beta_dis5, file = "clean_data/statistics/beta_dis5.rda")
+
+## Permutest
+set.seed(123)
+beta_perm5 <-
+    permutest(beta_dis5,
+              parallel = 20,
+              permutations = 999,
+              by = "margin")
+save(beta_perm5, file = "clean_data/statistics/beta_perm5.rda")
+#load("clean_data/statistics/beta_perm5.rda")
 
 #################################################################
 #### dbRDA modelling for all samples: hybrids ONLY ####
@@ -165,7 +276,7 @@ dbrda_traits <- readRDS("clean_data/statistics/dbrda_traits.rds")
 #     t() |>
 #     as.data.frame()
 #dbrda_hell_matrix <- readRDS("clean_data/statistics/dbrda_hell_matrix.rds")
-load("clean_data/statistics/dbrda_hybrids_matrix.rds") # readRDS does not work with with this object on HPC cluster
+#load("clean_data/statistics/dbrda_hybrids_matrix.rds") # readRDS does not work with with this object on HPC cluster
 
 
 # dbrda_hybrids_traits <- rrfy_hell_matrix |>
@@ -173,98 +284,98 @@ load("clean_data/statistics/dbrda_hybrids_matrix.rds") # readRDS does not work w
 #     filter(X %in% rownames(dbrda_hybrids_matrix))
 # dbrda_hybrids_traits <-
 #     readRDS("clean_data/statistics/dbrda_hybrids_traits.rds")
-load("clean_data/statistics/dbrda_hybrids_traits.rds") # readRDS does not work with with this object on HPC cluster
+#load("clean_data/statistics/dbrda_hybrids_traits.rds") # readRDS does not work with with this object on HPC cluster
 
 
 # Model with intercept only ####
 # Using rrfy_hell_matrix as the distance matrix
-m0_hybrids_hell <- dbrda(
-    dbrda_hybrids_matrix ~ 1,
-    distance = "bray",
-    dfun = vegdist,
-    data = dbrda_hybrids_traits,
-    parallel = 10, #Passes parallelization to metaMDS function
-    na.action = na.omit
-) #Model with intercept only.
-save(m0_hybrids_hell, file = "clean_data/statistics/m0_hybrids_hell.rda")
+# m0_hybrids_hell <- dbrda(
+#     dbrda_hybrids_matrix ~ 1,
+#     distance = "bray",
+#     dfun = vegdist,
+#     data = dbrda_hybrids_traits,
+#     parallel = 10, #Passes parallelization to metaMDS function
+#     na.action = na.omit
+#) #Model with intercept only.
+#save(m0_hybrids_hell, file = "clean_data/statistics/m0_hybrids_hell.rda")
 
-m1_hybrids_hell <- dbrda(
-    dbrda_hybrids_matrix ~ .,
-    distance = "bray",
-    dfun = vegdist,
-    data = dbrda_hybrids_traits,
-    parallel = 10,
-    na.action = na.omit
-) # Model with all explanatory variables.
-save(m1_hybrids_hell, file = "clean_data/statistics/m1_hybrids_hell.rda")
+# m1_hybrids_hell <- dbrda(
+#     dbrda_hybrids_matrix ~ .,
+#     distance = "bray",
+#     dfun = vegdist,
+#     data = dbrda_hybrids_traits,
+#     parallel = 10,
+#     na.action = na.omit
+# ) # Model with all explanatory variables.
+#save(m1_hybrids_hell, file = "clean_data/statistics/m1_hybrids_hell.rda")
 
 
 # Model with species, site, leaf traits and elevation. ####
-m2_hybrids_hell <-
-    dbrda(
-        dbrda_hybrids_matrix ~ logLBI + Site + Genotype,
-        distance = "bray",
-        dfun = vegdist,
-        data = dbrda_hybrids_traits,
-        #parallel = 10,
-        na.action = na.omit
-    )
-save(m2_hybrids_hell, file = "clean_data/statistics/m2_hybrids_hell.rda")
+# m2_hybrids_hell <-
+#     dbrda(
+#         dbrda_hybrids_matrix ~ logLBI + Site + Genotype,
+#         distance = "bray",
+#         dfun = vegdist,
+#         data = dbrda_hybrids_traits,
+#         #parallel = 10,
+#         na.action = na.omit
+#     )
+# save(m2_hybrids_hell, file = "clean_data/statistics/m2_hybrids_hell.rda")
 
 #Anovas for m2
-set.seed(123)
-anova_m2_hybrids_hell <- anova.cca(
-    m2_hybrids_hell,
-    by = "margin",
-    permutations = 999,
-    parallel = 10
-)
-save(anova_m2_hybrids_hell, file = "clean_data/statistics/anova_m2_hybrids_hell.rda")
+# set.seed(123)
+# anova_m2_hybrids_hell <- anova.cca(
+#     m2_hybrids_hell,
+#     by = "margin",
+#     permutations = 999,
+#     parallel = 10
+# )
+# save(anova_m2_hybrids_hell, file = "clean_data/statistics/anova_m2_hybrids_hell.rda")
 
 
 ### PERMDISP
 
 #Analysis of multivariate homogeneity of group dispersions.
 
-# By Genotype
-set.seed(123)
-beta_hybrids_dis1 <-
-    betadisper(
-        vegdist(dbrda_hybrids_matrix, method = "bray"), # Matrix of Hellinger transformed data rarefied
-        dbrda_hybrids_traits$Genotype,
-        type = "median",
-        sqrt.dist = FALSE
-    )
-save(beta_hybrids_dis1, file = "clean_data/statistics/beta_hybrids_dis1.rda")
-
-## Permutest
-set.seed(123)
-beta_hybrids_perm1 <-
-    permutest(beta_hybrids_dis1,
-              parallel = 10,
-              permutations = 999,
-              by = "margin")
-save(beta_hybrids_perm1, file = "clean_data/statistics/beta_hybrids_perm1.rda")
-
-
-# By Site
-set.seed(123)
-beta_hybrids_dis2 <- betadisper(
-    vegdist(dbrda_hybrids__matrix, method = "bray"),
-    dbrda_traits$Site,
-    type = "median",
-    sqrt.dist = FALSE
-)
-save(beta_hybrids_dis2, file = "clean_data/statistics/beta_hybrids_dis2.rda")
-
-## Permutest
-set.seed(123)
-beta_hybrids_perm2 <-
-    permutest(beta_dis2,
-              parallel = 10,
-              permutations = 999,
-              by = "margin")
-save(beta_hybrids_perm2, file = "clean_data/statistics/beta_hybrids_perm2.rda")
+# # By Genotype
+# set.seed(123)
+# beta_hybrids_dis1 <-
+#     betadisper(
+#         vegdist(dbrda_hybrids_matrix, method = "bray"), # Matrix of Hellinger transformed data rarefied
+#         dbrda_hybrids_traits$Genotype,
+#         type = "median",
+#         sqrt.dist = FALSE
+#     )
+# save(beta_hybrids_dis1, file = "clean_data/statistics/beta_hybrids_dis1.rda")
+# 
+# ## Permutest
+# set.seed(123)
+# beta_hybrids_perm1 <-
+#     permutest(beta_hybrids_dis1,
+#               parallel = 10,
+#               permutations = 999,
+#               by = "margin")
+# save(beta_hybrids_perm1, file = "clean_data/statistics/beta_hybrids_perm1.rda")
+# 
+# 
+# # By Site
+# set.seed(123)
+# beta_hybrids_dis2 <- betadisper(
+#     vegdist(dbrda_hybrids__matrix, method = "bray"),
+#     dbrda_traits$Site,
+#     type = "median",
+#     sqrt.dist = FALSE
+# )
+# save(beta_hybrids_dis2, file = "clean_data/statistics/beta_hybrids_dis2.rda")
+# 
+# ## Permutest
+# set.seed(123)
+# beta_hybrids_perm2 <-
+#     permutest(beta_dis2,
+#               parallel = 10,
+#               permutations = 999,
+#               by = "margin")
+# save(beta_hybrids_perm2, file = "clean_data/statistics/beta_hybrids_perm2.rda")
 
 
 ### Finalize MPI (Rmpi) ###
