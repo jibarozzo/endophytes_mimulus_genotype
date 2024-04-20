@@ -1799,15 +1799,25 @@ m2_hell <-
         na.action = na.omit
     )
 save(m2_hell, file = "clean_data/statistics/m2_hell.rda")
+load("clean_data/statistics/m2_hell.rda")
 
 #Anovas for m2
+#Margins
 set.seed(123)
-anova_m2_hell <- anova.cca(m2_hell,
+anova_m2_hell_margin <- anova.cca(m2_hell,
                            by = "margin",
                            permutations = 999,
                            parallel = 10)
-save(anova_m2_hell, file = "clean_data/statistics/anova_m2_hell.rda")
+save(anova_m2_hell, file = "clean_data/statistics/anova_m2_hell_margin.rda")
 load("clean_data/statistics/anova_m2_hell.rda")
+
+#Terms
+set.seed(123)
+anova_m2_hell_terms <- anova.cca(m2_hell,
+                                 by = "terms",
+                                 permutations = 999,
+                                 parallel = 10)
+save(anova_m2_hell_term, file = "clean_data/statistics/anova_m2_hell_term.rda")
 
 # Model with interactions between site/habitat and genotype
 m3_hell <-
@@ -1822,12 +1832,21 @@ m3_hell <-
 save(m3_hell, file = "clean_data/statistics/m3_hell.rda")
 
 #Anovas for m3
+#Margins
 set.seed(123)
-anova_m3_hell <- anova.cca(m3_hell,
+anova_m3_hell_margin <- anova.cca(m3_hell,
                            by = "margin",
                            permutations = 999,
                            parallel = 20)
-save(anova_m3_hell, file = "clean_data/statistics/anova_m3_hell.rda")
+save(anova_m3_hell, file = "clean_data/statistics/anova_m3_hell_margin.rda")
+
+#Terms
+set.seed(123)
+anova_m3_hell_term <- anova.cca(m3_hell,
+                                 by = "terms",
+                                 permutations = 999,
+                                 parallel = 20)
+save(anova_m3_hell_term, file = "clean_data/statistics/anova_m3_hell_term.rda")
 
 
 #################################

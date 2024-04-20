@@ -98,35 +98,55 @@ dbrda_traits <- readRDS("clean_data/statistics/dbrda_traits.rds")
 #         na.action = na.omit
 #     )
 # save(m2_hell, file = "clean_data/statistics/m2_hell.rda")
-# 
-# #Anovas for m2
-# set.seed(123)
-# anova_m2_hell <- anova.cca(m2_hell,
-#                            by = "margin",
-#                            permutations = 999,
-#                            parallel = 10)
-# save(anova_m2_hell, file = "clean_data/statistics/anova_m2_hell.rda")
+load("clean_data/statistics/m2_hell.rda")
 
- 
+#Anovas for m2
+#Margins
+# set.seed(123)
+# anova_m2_hell_margin <- anova.cca(m2_hell,
+#                                   by = "margin",
+#                                   permutations = 999,
+#                                   parallel = 10)
+# save(anova_m2_hell, file = "clean_data/statistics/anova_m2_hell_margin.rda")
+# load("clean_data/statistics/anova_m2_hell.rda")
+
+#Terms
+set.seed(123)
+anova_m2_hell_terms <- anova.cca(m2_hell,
+                                 by = "terms",
+                                 permutations = 999,
+                                 parallel = 20)
+save(anova_m2_hell_term, file = "clean_data/statistics/anova_m2_hell_term.rda")
+
 # Model with interactions between site/habitat and genotype
-m3_hell <-
-    dbrda(
-        dbrda_hell_matrix ~ logLBI + Habitat * Genotype,
-        distance = "bray",
-        dfun = vegdist,
-        data = dbrda_traits,
-        parallel = 20,
-        na.action = na.omit
-    )
-save(m3_hell, file = "clean_data/statistics/m3_hell.rda")
+# m3_hell <-
+#     dbrda(
+#         dbrda_hell_matrix ~ logLBI + Habitat * Genotype,
+#         distance = "bray",
+#         dfun = vegdist,
+#         data = dbrda_traits,
+#         parallel = 20,
+#         na.action = na.omit
+#     )
+#save(m3_hell, file = "clean_data/statistics/m3_hell.rda")
+load("clean_data/statistics/m3_hell.rda")
 
 #Anovas for m3
+#Margins
+# set.seed(123)
+# anova_m3_hell_margin <- anova.cca(m3_hell,
+#                                   by = "margin",
+#                                   permutations = 999,
+#                                   parallel = 20)
+# save(anova_m3_hell_margin, file = "clean_data/statistics/anova_m3_hell_margin.rda")
+
+#Terms
 set.seed(123)
-anova_m3_hell <- anova.cca(m3_hell,
-                           by = "margin",
-                           permutations = 999,
-                           parallel = 20)
-save(anova_m3_hell, file = "clean_data/statistics/anova_m3_hell.rda")
+anova_m3_hell_term <- anova.cca(m3_hell,
+                                by = "terms",
+                                permutations = 999,
+                                parallel = 20)
+save(anova_m3_hell_term, file = "clean_data/statistics/anova_m3_hell_term.rda")
 
 
 #################################
@@ -216,9 +236,6 @@ beta_perm3 <-
 save(beta_perm3, file = "clean_data/statistics/beta_perm3.rda")
 #load("clean_data/statistics/beta_perm1.rda")
 
-anova(beta_dis1)
-TukeyHSD(beta_dis1)
-
 
 # By Habitat
 set.seed(123)
@@ -229,7 +246,7 @@ beta_dis4 <- betadisper(
     sqrt.dist = FALSE
 )
 save(beta_dis4, file = "clean_data/statistics/beta_dis4.rda")
-load("clean_data/statistics/beta_dis2.rda")
+#load("clean_data/statistics/beta_dis2.rda")
 
 ## Permutest
 set.seed(123)
@@ -239,7 +256,7 @@ beta_perm4 <-
               permutations = 999,
               by = "margin")
 save(beta_perm4, file = "clean_data/statistics/beta_perm4.rda")
-load("clean_data/statistics/beta_perm2.rda")
+#load("clean_data/statistics/beta_perm2.rda")
 
 
 # By Habitat*Genotype
@@ -251,6 +268,7 @@ beta_dis5 <- betadisper(
     sqrt.dist = FALSE
 )
 save(beta_dis5, file = "clean_data/statistics/beta_dis5.rda")
+#load("clean_data/statistics/beta_dis5.rda")
 
 ## Permutest
 set.seed(123)
