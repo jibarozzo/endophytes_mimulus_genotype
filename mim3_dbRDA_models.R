@@ -112,7 +112,7 @@ load("clean_data/statistics/m2_hell.rda")
 
 #Terms
 set.seed(123)
-anova_m2_hell_terms <- anova.cca(m2_hell,
+anova_m2_hell_term <- anova.cca(m2_hell,
                                  by = "terms",
                                  permutations = 999,
                                  parallel = 20)
