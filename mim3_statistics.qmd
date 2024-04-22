@@ -18,6 +18,7 @@ library("ggpubr")
 library("ggfortify")
 library("ggtext")
 library("ggpmisc")
+library("ggrepel")
 library("broom")
 library("MetBrewer")
 library("rstatix")
@@ -1038,6 +1039,7 @@ t1gg <- t1gg + theme(legend.title = element_text(face = "bold"),
          strip.text = element_text(face = "bold.italic", size = 12),
          panel.border = element_rect(linetype = "blank", fill = NA),
          axis.text.x = element_blank())
+
 t1gg
 #ggsave(file.path(path, "figures/figure3.png") , plot = t1gg, dpi=300, units=c("mm"), width=200, height=250)
 
@@ -1809,7 +1811,7 @@ anova_m2_hell_margin <- anova.cca(m2_hell,
                            permutations = 999,
                            parallel = 10)
 save(anova_m2_hell, file = "clean_data/statistics/anova_m2_hell_margin.rda")
-load("clean_data/statistics/anova_m2_hell.rda")
+load("clean_data/statistics/anova_m2_hell_margin.rda")
 
 #Terms
 set.seed(123)
@@ -1818,6 +1820,7 @@ anova_m2_hell_terms <- anova.cca(m2_hell,
                                  permutations = 999,
                                  parallel = 10)
 save(anova_m2_hell_term, file = "clean_data/statistics/anova_m2_hell_term.rda")
+
 
 # Model with interactions between site/habitat and genotype
 m3_hell <-
@@ -1838,7 +1841,8 @@ anova_m3_hell_margin <- anova.cca(m3_hell,
                            by = "margin",
                            permutations = 999,
                            parallel = 20)
-save(anova_m3_hell, file = "clean_data/statistics/anova_m3_hell_margin.rda")
+save(anova_m3_hell_margin, file = "clean_data/statistics/anova_m3_hell_margin.rda")
+load("clean_data/statistics/anova_m3_hell_margin.rda")
 
 #Terms
 set.seed(123)
@@ -1847,7 +1851,7 @@ anova_m3_hell_term <- anova.cca(m3_hell,
                                  permutations = 999,
                                  parallel = 20)
 save(anova_m3_hell_term, file = "clean_data/statistics/anova_m3_hell_term.rda")
-
+load("clean_data/statistics/anova_m3_hell_term.rda")
 
 #################################
 #### PERMDISP ####
@@ -1934,7 +1938,7 @@ beta_perm3 <-
               permutations = 999,
               by = "margin")
 save(beta_perm3, file = "clean_data/statistics/beta_perm3.rda")
-#load("clean_data/statistics/beta_perm1.rda")
+load("clean_data/statistics/beta_perm3.rda")
 
 anova(beta_dis1)
 TukeyHSD(beta_dis1)
@@ -1949,7 +1953,7 @@ beta_dis4 <- betadisper(
     sqrt.dist = FALSE
 )
 save(beta_dis4, file = "clean_data/statistics/beta_dis4.rda")
-load("clean_data/statistics/beta_dis2.rda")
+load("clean_data/statistics/beta_dis4.rda")
 
 ## Permutest
 set.seed(123)
@@ -1959,7 +1963,7 @@ beta_perm4 <-
               permutations = 999,
               by = "margin")
 save(beta_perm4, file = "clean_data/statistics/beta_perm4.rda")
-load("clean_data/statistics/beta_perm2.rda")
+load("clean_data/statistics/beta_perm4.rda")
 
 
 # By Habitat*Genotype
@@ -1971,7 +1975,8 @@ beta_dis5 <- betadisper(
     sqrt.dist = FALSE
 )
 save(beta_dis5, file = "clean_data/statistics/beta_dis5.rda")
-
+load("clean_data/statistics/beta_dis5.rda")
+anova(beta_dis5)
 ## Permutest
 set.seed(123)
 beta_perm5 <-
@@ -1980,9 +1985,10 @@ beta_perm5 <-
               permutations = 999,
               by = "margin")
 save(beta_perm5, file = "clean_data/statistics/beta_perm5.rda")
-#load("clean_data/statistics/beta_perm5.rda")
+load("clean_data/statistics/beta_perm5.rda")
+beta_perm5
 ```
-
+The groups interacting with the environment (Habitat_Genotype) show significant differences in multivariate dispersion (p \< 0.05). The PERMDISP analysis shows that the groups are significantly different in their multivariate dispersion.Group differences are due to dispersion differences between groups, not due to differences in the centroid of the groups.
 
 
 ```{r}
@@ -2193,6 +2199,233 @@ full_final_model$layers <- c(full_final_model$layers,full_final_model$layers[[2]
 full_final_model
 
 ggsave(filename=file.path(path, "figures/dbRDA_full_model.png"), plot = full_final_model, dpi=600, units=c("mm"), width=150, height=150)
+
+
+######################################
+#### Full model with interactions ####
+######################################
+load("clean_data/statistics/m3_hell.rda")
+final_model <- m3_hell
+
+names(final_model)
+B <- summary(final_model)
+
+
+# Extracting scores for the plot
+ordination_scores <- as.data.frame(vegan::scores(final_model)$sites)
+
+# Extracting names for the plot
+ordination_names <- rownames(ordination_scores)
+
+# Row names to column
+ordination_scores$Unique_ID <- rownames(ordination_scores)
+
+# Subset for the plot
+dbrda_df <- plant_traits_rfy 
+
+# Merge scores with trait data
+merged_data <- right_join(ordination_scores, dbrda_df, by = c("Unique_ID" = "X"))
+
+# Extracting scores for arrows
+arrow_scores <- as.data.frame(vegan::scores(final_model, display = "bp"))
+
+# Define the arrow aesthetic mapping
+arrow_map <- aes(xend = (dbRDA1*2), yend = (dbRDA2*2), x = 0, y = 0, shape = NULL, color = NULL, fill = NULL)
+label_map <- aes(x = 2*dbRDA1, y = 2*dbRDA2, label = row.names(arrow_scores), shape = NULL, color = NULL, fill = NULL)
+arrowhead = arrow(length = unit(0.02, "npc"))
+#subset A4 for labeling
+arrow_scores <- arrow_scores[order(rownames(arrow_scores)), ]
+A4 <- lapply(1:12, function(i) arrow_scores[i, ])
+
+# A4.sub1 <- arrow_scores[1,] #Elevation
+# A4.sub2 <- arrow_scores[2,] #ACi
+# A4.sub3 <- arrow_scores[3,] #LBI
+A4.sub4 <- arrow_scores[4,] #logLBI
+# A4.sub5 <- arrow_scores[5,] #LPS
+# A4.sub6 <- arrow_scores[6,] #LT.
+
+# dbRDA plot based on species
+full_final_model <-
+  ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
+  geom_point(
+    data = merged_data,
+    aes(color = Genotype, shape = Habitat),
+    size = rel(4),
+    alpha = 0.2,
+    stroke = 1
+  ) +
+  stat_ellipse(
+    aes(color = Genotype),
+    geom = "path",
+    linewidth = 1.7,
+    position = "identity",
+    type = "t",
+    linetype = 1,
+    level = 0.95,
+    segments = 51,
+    na.rm = FALSE,
+    show.legend = NA,
+    inherit.aes = TRUE
+  ) +
+  geom_segment(
+    arrow_map,
+    size = rel(.8),
+    data = arrow_scores,
+    color = "black",
+    arrow = arrowhead
+  )+
+  geom_vline(xintercept = 0,
+             color = "grey30",
+             linetype = "dashed") + # plot vertical line
+  geom_hline(yintercept = 0,
+             color = "grey30",
+             linetype = "dashed") + # plot horizontal line
+  geom_text_repel(
+    label_map,
+    size = rel(4),
+    data = A4[[1]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("F2xLG")
+  ) +
+  geom_text_repel(
+    label_map,
+    size = rel(4),
+    data = A4[[2]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("G")
+  ) +
+  geom_text_repel(
+    label_map,
+    size = rel(4),
+    data = A4[[3]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("L")
+  ) +
+  geom_text_repel(
+    label_map,
+    size = rel(4),
+    data = A4[[4]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("Granite 1")
+  ) +
+  geom_text_repel(
+    label_map,
+    size = rel(4),
+    data = A4[[5]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("G1:F2xLG")
+  ) +
+  geom_text_repel(
+    label_map,
+    size = rel(4),
+    data = A4[[6]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("G1:G")
+  ) +
+  geom_text_repel(
+    label_map,
+    size = rel(4),
+    data = A4[[7]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("G1:L")
+  ) +
+  geom_text_repel(
+    label_map,
+    size = rel(4),
+    data = A4[[8]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("Meadow 2")
+  ) +
+  geom_text_repel(
+    label_map,
+    size = rel(4),
+    data = A4[[9]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("M2:F2xLG")
+  ) +
+  geom_text_repel(
+    label_map,
+    size = rel(4),
+    data = A4[[10]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("M2:G")
+  ) +
+  geom_text_repel(
+    label_map,
+    size = rel(4),
+    data = A4[[11]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("M2:L")
+  ) +
+  geom_text_repel(
+    label_map,
+    size = rel(4),
+    data = A4[[12]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("logLBI")
+  ) +
+  xlab(label = paste(
+    "dbRDA1 (",
+    round(B$concont$importance[2, 1] * 100, digits = 1),
+    "%)",
+    sep = ""
+  )) +
+  ylab(label = paste(
+    "dbRDA2 (",
+    round(B$concont$importance[2, 2] * 100, digits = 1),
+    "%)",
+    sep = ""
+  )) +
+  scale_color_manual(
+    labels = c("F2xGL", "G", "L", "F2xLG"),
+    values = met.brewer(
+      "Johnson",
+      n = 4,
+      type = "discrete",
+      direction = 1
+    )
+  ) +
+  scale_shape_manual(values = c(0:3)) +
+  #scale_x_continuous(limits = c(-2, 2)) + # Needed to scale points the sames as when ellipses are present.
+  theme_classic(base_size = 16) +
+  theme(
+    legend.title = element_text(face = "bold"),
+    legend.text = element_markdown(),
+    plot.caption = element_markdown(),
+    strip.text = element_text(face = "bold")
+  ) +
+  labs(caption = "PERMDISP: *F*<sub>11,14088</sub> = 471.62, *p* = .001") +
+  facet_wrap( ~ Habitat) +
+  guides(shape = guide_legend(ncol = 1))
+
+     
+# Rearranging the order of layers so arrows are above the points.
+# full_final_model$layers <- c(full_final_model$layers,full_final_model$layers[[2]], full_final_model$layers[[5]], full_final_model$layers[[6]], full_final_model$layers[[7]], full_final_model$layers[[8]], full_final_model$layers[[9]], full_final_model$layers[[10]], full_final_model$layers[[11]])
+full_final_model
+
+# Saving by layers for PowerPoint presentation
+
+# Just points
+# ggsave(filename=file.path(path, "figures/dbRDA_full_model_points.png"), plot = full_final_model, dpi=300, units=c("mm"), width=250, height=150)
+# 
+# # Adding ellipses
+# ggsave(filename=file.path(path, "figures/dbRDA_full_model_ellipses.png"), plot = full_final_model, dpi=300, units=c("mm"), width=250, height=150)
+# 
+# # Adding arros and labels (points at aplha = 0.05)
+ ggsave(filename=file.path(path, "figures/dbRDA_full_model_labels.png"), plot = full_final_model, dpi=300, units=c("mm"), width=250, height=150)
+
 ```
 
 ##### Hybrid model
