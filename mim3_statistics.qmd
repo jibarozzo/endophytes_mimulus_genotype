@@ -2063,6 +2063,7 @@ anova_m2_hybrids_hell <- anova.cca(
 )
 save(anova_m2_hybrids_hell, file = "clean_data/statistics/anova_m2_hybrids_hell.rda")
 load("clean_data/statistics/anova_m2_hybrids_hell.rda")
+anova_m2_hybrids_hell
 
 
 ### PERMDISP
@@ -2251,7 +2252,7 @@ full_final_model <-
     data = merged_data,
     aes(color = Genotype, shape = Habitat),
     size = rel(4),
-    alpha = 0.2,
+    alpha = 0.05,
     stroke = 1
   ) +
   stat_ellipse(
@@ -2424,7 +2425,7 @@ full_final_model
 # ggsave(filename=file.path(path, "figures/dbRDA_full_model_ellipses.png"), plot = full_final_model, dpi=300, units=c("mm"), width=250, height=150)
 # 
 # # Adding arros and labels (points at aplha = 0.05)
- ggsave(filename=file.path(path, "figures/dbRDA_full_model_labels.png"), plot = full_final_model, dpi=300, units=c("mm"), width=250, height=150)
+ ggsave(filename=file.path(path, "figures/dbRDA_full_model_labels.svg"), plot = full_final_model, dpi=300, units=c("mm"), width=250, height=150)
 
 ```
 
@@ -2509,7 +2510,7 @@ hybrid_final_model$layers
 hybrid_final_model$layers <- c(hybrid_final_model$layers,hybrid_final_model$layers[[2]], hybrid_final_model$layers[[5]], hybrid_final_model$layers[[6]], hybrid_final_model$layers[[7]], hybrid_final_model$layers[[8]], hybrid_final_model$layers[[9]], hybrid_final_model$layers[[10]])
 hybrid_final_model
 
-ggsave(filename=file.path(path, "figures/dbRDA_hybrid model.png"), plot = hybrid_final_model, dpi=600, units=c("mm"), width=150, height=150)
+#ggsave(filename=file.path(path, "figures/dbRDA_hybrid model.png"), plot = hybrid_final_model, dpi=600, units=c("mm"), width=150, height=150)
 ```
 
 ### PERMANOVA
@@ -2526,7 +2527,7 @@ perma <- adonis2(
   na.action = na.omit,
   strata = NULL
 )
-print(perma)
+print(perma)#
 
 # Rarefied data
 set.seed(123)
