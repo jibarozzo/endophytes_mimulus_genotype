@@ -16,6 +16,7 @@ module load gnuparallel
 module load anaconda3/2023.07
 #unset PYTHONPATH
 
+#source activate /lustre/project/kferris/conda/conda-envs/qc_env # This is to load a virtual environment from which to load 'multiqc'
 
 conda activate py310 # This is to load a virtual environment (py310) from which to load 'multiqc'
 ###########################################################################################
@@ -45,6 +46,7 @@ Note_toUser
 echo "Start Job"
 
 ### Variables for the fastq working directory and the input files directory ###
+### Change directory paths as needed ###
 echo "Setting variables"
 
 WD="/lustre/project/svanbael/bolivar/Mimulus_sequences/mim3_bioinformatics/ddRAD/2_fastQC/"
@@ -57,9 +59,9 @@ echo "Setting working directory"
 cd $WD
 
 ### Creating softlinks for fastq files to current directory ###
-echo "Creating softlinks"
+#echo "Creating softlinks"
 
-ln -s $INPUT* .
+#ln -s $INPUT* .
 
 ### Running FastQC ###
 ### Original code ###
@@ -71,19 +73,19 @@ ln -s $INPUT* .
 
 ### Running FastQC ###
 ### Alternative code ###
-echo "Start FastQC"
-for i in *.fq.gz; do
-    fastq=$WD$i
-    fastqc $fastq -o $OUTPUT
-done
+#echo "Start FastQC"
+#for i in *.fq.gz; do
+#    fastq=$WD$i
+#    fastqc $fastq -o $OUTPUT
+#done
 
-echo "End FastQC"
+#echo "End FastQC"
 
 
 ### running MultiQC (using Fastqc files) ###
 
 echo "Start MultiQC"
-multiqc . -o $MULTIQC
+multiqc $OUTPUT* -o $MULTIQC
 echo "End MultiQC"
 
 ### Unsetting environmentc ###
