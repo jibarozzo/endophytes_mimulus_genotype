@@ -13,9 +13,9 @@
 
 
 ### LOAD MODULES ###
-module load bwa
-module load samtools/1.10
-module load java-openjdk
+module load bwa/0.7.17 
+module load samtools/1.16.1
+module load java-openjdk/1.8.0
 
 #####################################################################
 <<Simple_pre_processing_workflow
@@ -23,8 +23,15 @@ SIMPLE WORKFLOW- samples not split across lanes
 
 Modified by BAR 2024-06-03
 Major changes include:
+- Optimizing the alignment workflow by piping the output of samtools `sort` directly into `fixmate`.
 - Adding alternative alignment workflow with bwa, samtools and picard.
 - Adding read group information using picard.jar::AddOrRepleaceReadGRoups as opossed to bwa mem in hopes of reducing errors.
+
+Minor changes include:
+- Using samtools v.1.16.1 as opposed to v.1.10
+- bwa/0.7.17 as opposed to bwa
+- java-openjdk/1.8.0 as opposed to java-openjdk
+
 
 This script is designed to prepare samples for GATK varient calling. 
 It begins with sequence files in seqdata.fq.gz or seqdata.fq format
@@ -130,11 +137,11 @@ echo "Start Alignment"
 ### BWA alignment and SAMTOOLS use for read group information ###
 #################################################################
 #ORIGINAL CODE
-bwa mem -R '@RG\tID:'${SEQID}'\tSM:'${SAMPLE}'\tLB:lib1' -t ${THREADS} ${REF} ${R1} ${R2} \  # Aligning and adding read group information
-| samtools view -hb -@ ${THREADS} - \
-| samtools sort -n -T $TMPDIR -@ ${THREADS} - -o ${HEADER}/${SAMPLE}_aln_pe_sorted.bam \
-| samtools fixmate -rm -@ ${THREADS} ${HEADER}/${SAMPLE}_aln_pe_sorted.bam - \
-| samtools sort -T $TMPDIR -@ ${THREADS} - -o ${HEADER}/${SAMPLE}_aln_pe_fm_sorted.bam
+#bwa mem -R '@RG\tID:'${SEQID}'\tSM:'${SAMPLE}'\tLB:lib1' -t ${THREADS} ${REF} ${R1} ${R2} \  # Aligning and adding read group information
+#| samtools view -hb -@ ${THREADS} - \
+#| samtools sort -n -T $TMPDIR -@ ${THREADS} - -o ${HEADER}/${SAMPLE}_aln_pe_sorted.bam \
+#| samtools fixmate -rm -@ ${THREADS} ${HEADER}/${SAMPLE}_aln_pe_sorted.bam - \
+#| samtools sort -T $TMPDIR -@ ${THREADS} - -o ${HEADER}/${SAMPLE}_aln_pe_fm_sorted.bam
 
 # OPTIMIZED CODE -BAR 2024-05-22
 # We avoid unnecessary writing and reading from disk by piping the output of samtools `sort` directly into `fixmate`.

@@ -40,6 +40,6 @@ PICARD="/share/apps/picard/2.20.7/picard.jar"
 ### FIXING MATE INFORMATION IN BAM FILES ###
 echo "Fixing mate information in ${SAMPLE} bam file"
  java -jar $PICARD FixMateInformation \
-       --INPUT ${SAMPLE}/${SAMPLE}_markdup_rrg.bam \
-       --OUTPUT ${SAMPLE}/${SAMPLE}_markdup_rrg_fm.bam \
-       --ADD_MATE_CIGAR true
+       -I ${SAMPLE}/${SAMPLE}_markdup_rrg.bam \
+       -O ${SAMPLE}/${SAMPLE}_markdup_rrg_fm.bam \
+       -ADD_MATE_CIGAR true

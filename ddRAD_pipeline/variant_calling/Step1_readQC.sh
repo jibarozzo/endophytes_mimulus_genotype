@@ -31,31 +31,59 @@ fastq or fastq.gz files.
 
 FastQC will generate QC reports for each sequence file. This step is very slow to run.
 MultiQC will then take the fastQC output files and compile them into a single QC report.
+
+### Create folders `fastQC_files` and `multiqc` in `2_fastQC` FIRST ###
+It should look like this:
+
+    2_fastQC/
+    ├── fastQC_files/
+    └── multiqc/
+
 Note_toUser
 ###########################################################################################
 
 echo "Start Job"
 
-### Create folders fastQC_files and multiqc in 2_fastQC FIRST
-### set working directory (file output directory) ###
 ### Variables for the fastq working directory and the input files directory ###
+echo "Setting variables"
+
 WD="/lustre/project/svanbael/bolivar/Mimulus_sequences/mim3_bioinformatics/ddRAD/2_fastQC/"
 INPUT="/lustre/project/svanbael/bolivar/Mimulus_sequences/mim3_bioinformatics/ddRAD/1_data/"
+OUTPUT="/lustre/project/svanbael/bolivar/Mimulus_sequences/mim3_bioinformatics/ddRAD/2_fastQC/fastQC_files/"
+MULTIQC="/lustre/project/svanbael/bolivar/Mimulus_sequences/mim3_bioinformatics/ddRAD/2_fastQC/multiqc/"
+
+### Set working directory (file output directory) ###
+echo "Setting working directory"
 cd $WD
 
-### creating softlinks for fastq files to current directory ###
-ln -s =/lustre/project/svanbael/bolivar/Mimulus_sequences/mim3_bioinformatics/ddRAD/1_data/* .
+### Creating softlinks for fastq files to current directory ###
+echo "Creating softlinks"
 
-### running FastQC ###
+ln -s $INPUT* .
+
+### Running FastQC ###
+### Original code ###
+#echo "Start FastQC"
+#for fastq in /lustre/project/svanbael/bolivar/Mimulus_sequences/mim3_bioinformatics/ddRAD/2_fastQC/*;do
+#fastqc $fastq -o /lustre/project/svanbael/bolivar/Mimulus_sequences/mim3_bioinformatics/ddRAD/2_fastQC/fastQC_files/
+#done
+#echo "End FastQC"
+
+### Running FastQC ###
+### Alternative code ###
 echo "Start FastQC"
-for fastq in /lustre/project/svanbael/bolivar/Mimulus_sequences/mim3_bioinformatics/ddRAD/2_fastQC/*;do
-fastqc $fastq -o /lustre/project/svanbael/bolivar/Mimulus_sequences/mim3_bioinformatics/ddRAD/2_fastQC/fastQC_files/
+for i in *.fq.gz; do
+    fastq=$WD$i
+    fastqc $fastq -o $OUTPUT
 done
+
 echo "End FastQC"
 
+
 ### running MultiQC (using Fastqc files) ###
+
 echo "Start MultiQC"
-multiqc . -o /lustre/project/svanbael/bolivar/Mimulus_sequences/mim3_bioinformatics/ddRAD/2_fastQC/multiqc
+multiqc . -o $MULTIQC
 echo "End MultiQC"
 
 ### Unsetting environmentc ###
