@@ -243,9 +243,9 @@ In this study, we asked: 1) How do FEF communities differ in sympatric populatio
 
 ### Field experiment design 
 
-The reciprocal transplant was conducted in Yosemite National Park, CA, USA from May to July 2021. It involved arranging 24 individuals into 25 randomized blocks in an 8 x 15 cm formation with a separation of 2.5 cm. Our study closely replicated experiments carried out in the years 2013 and 2019 by Ferris and Willis [-@ferris2018] as well as Tataru and Ferris [-@tataru2023]. The experiment utilized four different study sites: two meadows where native *M. guttatus* grows near a standing seep (Little Meadow "Meadow 1" [37.767781, -119.772720; elevation: 2013 m a.s.l.], Crane Flat "Meadow 2" [37.755968, -119.803031; elevation: 1879 m a.s.l.) and two granite outcrops hosting native *M.laciniatus* (Olmstead Point "Granite 1" [37.810700, -119485200; elevation: 2572 m a.s.l.), Yosemite Creek "Granite 2" [37843702, -119573120; elevation: 2424 m a.s.l.]).
+The reciprocal transplant was conducted in Yosemite National Park, CA, USA from May to July 2021. It involved arranging 24 individuals into 25 randomized blocks in an 8 x 15 cm formation with a separation of 2.5 cm. Our study closely replicated experiments carried out in the years 2013 and 2019 by Ferris and Willis [-@ferris2018] as well as Tataru et al., [-@tataru2023]. The experiment utilized four different study sites: two meadows where native *M. guttatus* grows near a standing seep (Little Meadow "Meadow 1" [37.767781, -119.772720; elevation: 2013 m a.s.l.], Crane Flat "Meadow 2" [37.755968, -119.803031; elevation: 1879 m a.s.l.) and two granite outcrops hosting native *M.laciniatus* (Olmstead Point "Granite 1" [37.810700, -119485200; elevation: 2572 m a.s.l.), Yosemite Creek "Granite 2" [37843702, -119573120; elevation: 2424 m a.s.l.]).
 
-The reciprocal transplants used generations of hybrids created from inbred *M. guttatus* (YVO 18; 37.723366, -119.746433; elevation: 1645 m a.s.l.) and *M. laciniatus* lines (WLF 47; 37.841533, -119.59385; elevation: 2436 m a.s.l.). Parental lines were locally adapted to moist seep/meadow and granite outcrops, respectively, not the experimental sites. Hybrids were created by crossing the parental inbred lines to generate F1 hybrids, which were then self-fertilized to generate F2 seeds used in this study. Plant breeding was conducted in the greenhouse at Tulane University (New Orleans, LA, USA). We incorporated both reciprocal hybrid crosses: F2 WLF 47 maternal x YVO 18 paternal (F2WY) and F2 YVO 18 maternal x WLF 47 paternal (F2YW). Each block was composed of 6 of each reciprocal F2 hybrid and 6 of each parent, totaling 150 of each genotype per habitat (i.e., meadow and granite) and 2,400 overall experimental plants.
+The reciprocal transplants used generations of hybrids created from inbred *M. guttatus* (YVO 18; 37.723366, -119.746433; elevation: 1645 m a.s.l.) and *M. laciniatus* lines (WLF 47; 37.841533, -119.59385; elevation: 2436 m a.s.l.). Parental lines were locally adapted to moist seep/meadow and granite outcrops, respectively, not the experimental sites. Hybrids were created by crossing the parental inbred lines to generate F1 hybrids, which were then self-fertilized to generate F~2~ seeds used in this study. Plant breeding was conducted in the greenhouse at Tulane University (New Orleans, LA, USA). We incorporated both reciprocal hybrid crosses: F~2~ WLF 47 maternal x YVO 18 paternal (F~2~WY) and F~2~ YVO 18 maternal x WLF 47 paternal (F~2~YW). Each block was composed of 6 of each reciprocal F~2~ hybrid and 6 of each parent, totaling 150 of each parental line and cross-type per habitat (i.e., meadow and granite) (150 × 4  = 600) and 2,400 overall experimental plants (600 × 4 = 2400) (Fig. S1).
 
 ### Seed preparation and germination
 
@@ -322,11 +322,14 @@ We present the log-transformed LBI from and samples from the larger common garde
 
 Our sequencing effort yielded 20,685,544 reads representing 1291 ASVs from 318 samples after processing through the DADA2 pipeline. The raw reads obtained were composed of 69.1% Ascomycota, 31% Basidiomycota, 0.05% Chytridiomycota, 0.01% Mortierellomycota, \<0.01% Glomeromycota, \<0.01% Rozellomycota, \<0.001% Aphelidiomycota, and 0.23% missed hits.
 Following decontamination and removal of singletons we obtained 20,157,032 reads representing 532 ASVs from 287 samples composed of 69.1% Ascomycota, 31% Basidiomycota, 0.05% Chytridiomycota, \<0.01% Mortierellomycota, 0.001% Glomeromycota, \<0.001% Rozellomycota, and 0.25% missed hits (Fig. 1A and Fig. S2). The presence of Ascomycota (100%) and Basidiomycota (99%) was prevalent in samples across all genotypes and habitat types in the un-rarefied data (Fig. 1A). This points to core taxa associated with *Mimulus* spp. We identified eighteen core taxa members at a 1% detection threshold and 50% prevalence in samples from the un-rarefied data (Table 1). We found that 208 (39%) ASVs are shared across habitat types and 164 (31%) shared by cross-types in the un-rarified data (Fig. S2A - S2B). In the rarified data set we observed that 202 (38%) and 159 (30%) ASVs are shared across habitat types and genotypes, respectively (Fig. S2C - S2D). Within the ten most abundant genera, *Cladosporium*, *Vishiniacozyma*, and *Ramularia* are the most abundant across all samples (Fig. S3). The small differences in shared and unique ASVs provides confidence that the rarified data accurately represents the underlying dynamics of the system (Fig. 1 and Fig. S2 - S3). The following section reports on results from the rarefied data sets.
-Alpha diversity was significantly different between all parental lines and hybrid crosses, with the exception of the Hill order 2 (𝑞 = 2, *p* \> .05) comparison of F2WY and G parental line (Fig. 2C). The parental lines had significantly greater levels observed richness (𝑞 = 0, *p* \< .001, Fig. 2A) when compared to their F~2~ progeny when accounting for all habitat types. Only F2YW had significant differences (*p* \< .001) in observed richness at all habitats. For F2YW and F2WY, we saw significant differences Hill order 1 and 2 (𝑞 = 1, and 𝑞 = 2) when comparing Meadow 1 and Meadow 2 (*p* \< .001), and Granite 1 to Meadow 2 (*p* \< .001). Additionally, F2WY genotype also had significant differences for these Hill orders when comparing Meadow 1 and Granite 1 (*p* \< .05). We observed a similar pattern in beta diversity, habitats showed significant differences from one another (Fig. 2D - 2F). Meadow 2 has consistently greater levels of beta diversity for all Hill orders, while Granite 1 has the lowest observed richness (𝑞 = 0), but not Hill order 1 or 2 (Fig. 2D - 2F). 
-To further understand beta diversity and FEF community composition we performed two distance-based Redundancy Analysis (dbRDA) modelling the relationship between FEF communities, leaf shape, cross-type, and habitat type: the fist accounting for individuals from parental lines and hybrids, and a second only with hybrids. The best fit model accounting all individuals and cross-types revealed that 15.72% of the overall variance in FEF communities was accounted for by log-transformed LBI, cross-type, and habitat type, the constraining variables. The first axis (dbRDA1) explained 52.9% and the second axis (dbRDA2) explained 36.4% of the constrained variance (Fig. 4). We saw that Granite 1 and lobLBI, are opposite to Meadow 1 along dbRDA1.  When we visualize the ellipses for genotypes, we observed highly overlapping FEF communities in F2YW and F2WY genotypes (Fig. 3A), as well less overlap in groupings of G and L genotypes. In contrast, we note clear and little to non-overlapping FEF communities when results are visualized by habitat type (Fig. 3B). The marginal significance of constraining variables after permutational ANOVA revealed that all variables where significant at ⍺ = 0.05 but varied in their explanatory power (Table 3). We saw evidence for strong habitat type effects on FEF communities.
-We performed permutational analysis of multivariate dispersion (PERMDISP) to test for homogeneity of variances of FEF communities from clustered in the dbRDA analyses. We found homogeneous variance of FEF communities across for all genotypes (*F*~3,14096~= 46.28, *p* \=.001). The post-hoc Tukey's test revealed that all genotype comparisons were significant different at ⍺ = 0.05. We also detected significant differences in FEF communities by habitat type (*F*~2,14097~= 2472.5, *p* \= .001). Our post-hoc Tukey's test showed that FEF communities from all habitat types had significant differences in the dispersion of variance at ⍺ = 0.05.
 
-To understand how leaf shape influences FEF communities, we measured LBI and observed significant differences in G and L genotypes  in Meadow 1(*p* \=.05, Fig. 4A), but not Meadow 2 and Granite 1, an unexpected result since L genotype is locally adapted to granite habitat. The F2WY and F2YW progeny only had significant differences when compared to each other, and F2WY when compared to G in Meadow 2. In Granite 1, we saw the F2 progeny had significant differences compared to parental lines (*p* \=.05, Fig 4A), but not when compared to each other (Fig. 4A). The LBI differences across habitat types were significant for the F2 progeny (*p* \=.05), parental lines did not differ significantly in LBI across habitats (Fig. 4B). 
+Alpha diversity was significantly different between all parental lines and hybrid crosses, with the exception of the Hill order 2 (𝑞 = 2, *p* \> .05) comparison of F2WY and G parental line (Fig. 2C). The parental lines had significantly greater levels observed richness (𝑞 = 0, *p* \< .001, Fig. 2A) when compared to their F~2~ progeny when accounting for all habitat types. Only F2YW had significant differences (*p* \< .001) in observed richness at all habitats. For F2YW and F2WY, we saw significant differences Hill order 1 and 2 (𝑞 = 1, and 𝑞 = 2) when comparing Meadow 1 and Meadow 2 (*p* \< .001), and Granite 1 to Meadow 2 (*p* \< .001). Additionally, F2WY cross-type also had significant differences for these Hill orders when comparing Meadow 1 and Granite 1 (*p* \< .05). We observed a similar pattern in beta diversity, habitats showed significant differences from one another (Fig. 2D - 2F). Meadow 2 has consistently greater levels of beta diversity for all Hill orders, while Granite 1 has the lowest observed richness (𝑞 = 0), but not Hill order 1 or 2 (Fig. 2D - 2F).
+
+To further understand beta diversity and FEF community composition we performed two distance-based Redundancy Analysis (dbRDA) modelling the relationship between FEF communities, leaf shape, cross-type, and habitat type: the fist accounting for individuals from parental lines and hybrids, and a second only with hybrids. The best fit model accounting all individuals and cross-types revealed that 15.72% of the overall variance in FEF communities was accounted for by log-transformed LBI, cross-type, and habitat type, the constraining variables. The first axis (dbRDA1) explained 52.9% and the second axis (dbRDA2) explained 36.4% of the constrained variance (Fig. 4). We saw that Granite 1 and lobLBI, are opposite to Meadow 1 along dbRDA1.  When we visualize the ellipses for genotypes, we observed highly overlapping FEF communities in F~2~YW and F~2~WY genotypes (Fig. 3A), as well less overlap in groupings of G and L parantal lines. In contrast, we note clear and little to non-overlapping FEF communities when results are visualized by habitat type (Fig. 3B). The marginal significance of constraining variables after permutational ANOVA revealed that all variables where significant at ⍺ = 0.05 but varied in their explanatory power (Table 3). We saw evidence for strong habitat type effects on FEF communities.
+
+We performed permutational analysis of multivariate dispersion (PERMDISP) to test for homogeneity of variances of FEF communities from clustered in the dbRDA analyses. We found homogeneous variance of FEF communities across for all parental lines and crosses (*F*~3, 14096~= 46.28, *p* \=.001). The post-hoc Tukey's test revealed that all parental lines and crosses comparisons were significant different at ⍺ = 0.05. We also detected significant differences in FEF communities by habitat type (*F*~2, 14097~= 2472.5, *p* \= .001). Our post-hoc Tukey's test showed that FEF communities from all habitat types had significant differences in the dispersion of variance at ⍺ = 0.05.
+
+To understand how leaf shape influences FEF communities, we measured LBI and observed significant differences in G and L parental lines in Meadow 1(*p* \=.05, Fig. 4A), but not Meadow 2 and Granite 1, an unexpected result since L parental line is locally adapted to granite habitat. The F~2~WY and F~2~YW progeny only had significant differences when compared to each other, and F~2~WY when compared to G in Meadow 2. In Granite 1, we saw the F~2~ progeny had significant differences compared to parental lines (*p* \=.05, Fig 4A), but not when compared to each other (Fig. 4A). The LBI differences across habitat types were significant for the F~2~ progeny (*p* \=.05), parental lines did not differ significantly in LBI across habitats (Fig. 4B). 
 <!-- **SNPs results coming here soon!** -->
 
 
@@ -415,7 +418,7 @@ theme_lfdiv_continuous <- theme_classic(base_size = 16) +
 
 <!-- Seems weird to have so much Basidiomycota - how many taxa does this represent? -->
 
-```{r, figure3}
+```{r, figure1}
 #| echo: false
 #| eval: true
 #| tidy: true
@@ -837,7 +840,7 @@ ordination_names <- rownames(ordination_scores)
 ordination_scores$Unique_ID <- rownames(ordination_scores)
 
 # Subset for the plot
-dbrda_df <- plant_traits_rfy 
+dbrda_df <- plant_traits_rfy
 
 # Merge scores with trait data
 merged_data <- right_join(ordination_scores, dbrda_df, by = c("Unique_ID" = "X"))
@@ -846,13 +849,29 @@ merged_data <- right_join(ordination_scores, dbrda_df, by = c("Unique_ID" = "X")
 arrow_scores <- as.data.frame(vegan::scores(final_model, display = "bp"))
 
 # Define the arrow aesthetic mapping
-arrow_map <- aes(xend = (dbRDA1*2), yend = (dbRDA2*2), x = 0, y = 0, shape = NULL, color = NULL, fill = NULL)
-label_map <- aes(x = 2*dbRDA1, y = 2*dbRDA2, label = row.names(arrow_scores), shape = NULL, color = NULL, fill = NULL)
+arrow_map <- aes(
+  xend = (dbRDA1 * 2),
+  yend = (dbRDA2 * 2),
+  x = 0,
+  y = 0,
+  shape = NULL,
+  color = NULL,
+  fill = NULL
+)
+label_map <- aes(
+  x = 2 * dbRDA1,
+  y = 2 * dbRDA2,
+  label = row.names(arrow_scores),
+  shape = NULL,
+  color = NULL,
+  fill = NULL
+)
 arrowhead = arrow(length = unit(0.02, "npc"))
 
 #subset A4 for labeling
 arrow_scores <- arrow_scores[order(rownames(arrow_scores)), ]
-A4 <- lapply(1:6, function(i) arrow_scores[i, ])
+A4 <- lapply(1:6, function(i)
+  arrow_scores[i, ])
 
 # A4.sub1 <- arrow_scores[1,] #Elevation
 # A4.sub2 <- arrow_scores[2,] #ACi
@@ -863,37 +882,135 @@ A4.sub4 <- arrow_scores[4,] #logLBI
 
 # dbRDA plot based on species
 full_final_model <- ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
-  geom_point(data = merged_data, aes(color = Genotype, shape= Habitat), size = rel(4), alpha = 0.2, stroke = 1) +
-  geom_segment(arrow_map, size = rel(.8), data = arrow_scores, color = "black", arrow = arrowhead) +
-  geom_vline(xintercept = 0, color = "grey30", linetype = "dashed") + # plot vertical line
-  geom_hline(yintercept = 0, color = "grey30", linetype = "dashed") + # plot horizontal line
-  geom_text(label_map, size = rel(4), data = A4[[1]], fontface = "bold", show.legend = FALSE, label = c("F2WY"), hjust = 1.2 ) +
-  geom_text(label_map, size = rel(4), data = A4[[2]], fontface = "bold", show.legend = FALSE, label = c("G"),  vjust = 1.3 ) +
-  geom_text(label_map, size = rel(4), data = A4[[3]], fontface = "bold", show.legend = FALSE, label = c("L"), vjust = -0.6) +
-  geom_text(label_map, size = rel(4), data = A4[[4]], fontface = "bold", show.legend = FALSE, label = c("logLBI"), vjust = -0.3,  hjust = 0.1) +
-  geom_text(label_map, size = rel(4), data = A4[[5]], fontface = "bold", show.legend = FALSE, label = c("Meadow 1"), hjust = -0.2 ) +
-  geom_text(label_map, size = rel(4), data = A4[[6]], fontface = "bold", show.legend = FALSE, label = c("Granite 1"), vjust = -0.3, hjust = 1.2 ) +
-  xlab(label = paste("dbRDA1 (", round(B$concont$importance[2,1]*100, digits = 1), "%)", sep="")) +
-  ylab(label = paste("dbRDA2 (", round(B$concont$importance[2,2]*100, digits = 1), "%)", sep="")) + 
-  scale_color_manual(values= met.brewer("Johnson", n = 4, type = "discrete", direction = 1)) +
-  scale_shape_manual(values=c(0:3)) +
-  stat_ellipse(aes(color = Genotype),
-               geom = "path",
-               linewidth = 1.7,
-               position = "identity",
-               type = "t", linetype = 1,
-               level = 0.95,
-               segments = 51,
-               na.rm = FALSE,
-               show.legend = NA, inherit.aes = TRUE) +
+  geom_point(
+    data = merged_data,
+    aes(color = Genotype, shape = Habitat),
+    size = rel(4),
+    alpha = 0.2,
+    stroke = 1
+  ) +
+  geom_segment(
+    arrow_map,
+    size = rel(.8),
+    data = arrow_scores,
+    color = "black",
+    arrow = arrowhead
+  ) +
+  geom_vline(xintercept = 0,
+             color = "grey30",
+             linetype = "dashed") + # plot vertical line
+  geom_hline(yintercept = 0,
+             color = "grey30",
+             linetype = "dashed") + # plot horizontal line
+  geom_text(
+    label_map,
+    size = rel(4),
+    data = A4[[1]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("F2LG"),
+    hjust = 1.2
+  ) +
+  geom_text(
+    label_map,
+    size = rel(4),
+    data = A4[[2]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("G"),
+    vjust = 1.3
+  ) +
+  geom_text(
+    label_map,
+    size = rel(4),
+    data = A4[[3]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("L"),
+    vjust = -0.6
+  ) +
+  geom_text(
+    label_map,
+    size = rel(4),
+    data = A4[[4]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("logLBI"),
+    vjust = -0.3,
+    hjust = 0.1
+  ) +
+  geom_text(
+    label_map,
+    size = rel(4),
+    data = A4[[5]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("Meadow 1"),
+    hjust = -0.2
+  ) +
+  geom_text(
+    label_map,
+    size = rel(4),
+    data = A4[[6]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("Granite 1"),
+    vjust = -0.3,
+    hjust = 1.2
+  ) +
+  xlab(label = paste(
+    "dbRDA1 (",
+    round(B$concont$importance[2, 1] * 100, digits = 1),
+    "%)",
+    sep = ""
+  )) +
+  ylab(label = paste(
+    "dbRDA2 (",
+    round(B$concont$importance[2, 2] * 100, digits = 1),
+    "%)",
+    sep = ""
+  )) +
+  scale_color_manual(
+    labels = c("F~2~GL", "G", "L", "F~2~LG"),
+    values = met.brewer(
+      "Johnson",
+      n = 4,
+      type = "discrete",
+      direction = 1
+    )
+  ) +
+  scale_shape_manual(values = c(0:3)) +
+  stat_ellipse(
+    aes(color = Genotype),
+    geom = "path",
+    linewidth = 1.7,
+    position = "identity",
+    type = "t",
+    linetype = 1,
+    level = 0.95,
+    segments = 51,
+    na.rm = FALSE,
+    show.legend = NA,
+    inherit.aes = TRUE
+  ) +
   theme_classic(base_size = 16) +
-  theme(legend.title = element_text(face = "bold")) +
-  guides(shape = guide_legend(ncol=1))
+  theme(legend.title = element_text(face = "bold"),
+        legend.text = element_markdown()) +
+  guides(shape = guide_legend(ncol = 1))
 
-     
+
 # Rearranging the order of layers so arrows are above the points.
-full_final_model$layers <- c(full_final_model$layers,full_final_model$layers[[2]], full_final_model$layers[[5]], full_final_model$layers[[6]], full_final_model$layers[[7]], full_final_model$layers[[8]], full_final_model$layers[[9]], full_final_model$layers[[10]])
-# full_final_model
+full_final_model$layers <- c(
+  full_final_model$layers,
+  full_final_model$layers[[2]],
+  full_final_model$layers[[5]],
+  full_final_model$layers[[6]],
+  full_final_model$layers[[7]],
+  full_final_model$layers[[8]],
+  full_final_model$layers[[9]],
+  full_final_model$layers[[10]]
+)
+#full_final_model
 
 #ggsave(filename=file.path(path, "figures/dbRDA_full_model.png"), plot = full_final_model, dpi=600, units=c("mm"), width=150, height=150)
 
@@ -903,56 +1020,156 @@ full_final_model$layers <- c(full_final_model$layers,full_final_model$layers[[2]
 
 # dbRDA plot based on elevation
 full_site_model <-  ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
-  geom_point(data = merged_data, aes(color = Habitat, shape = Genotype), size = rel(4), alpha = 0.2, stroke = 1) +
-  geom_segment(arrow_map, size = rel(.8), data = arrow_scores, color = "black", arrow = arrowhead) +
-  geom_vline(xintercept = 0, color = "grey30", linetype = "dashed") + # plot vertical line
-  geom_hline(yintercept = 0, color = "grey30", linetype = "dashed") + # plot horizontal line
-  geom_text(label_map, size = rel(4), data = A4[[1]], fontface = "bold", show.legend = FALSE, label = c("F2WY"), hjust = 1.2 ) +
-  geom_text(label_map, size = rel(4), data = A4[[2]], fontface = "bold", show.legend = FALSE, label = c("G"),  vjust = 1.3 ) +
-  geom_text(label_map, size = rel(4), data = A4[[3]], fontface = "bold", show.legend = FALSE, label = c("L"), vjust = -0.6) +
-  geom_text(label_map, size = rel(4), data = A4[[4]], fontface = "bold", show.legend = FALSE, label = c("logLBI"), vjust = -0.3,  hjust = 0.1 ) +
-  geom_text(label_map, size = rel(4), data = A4[[5]], fontface = "bold", show.legend = FALSE, label = c("Meadow 1"), hjust = -0.2 ) +
-  geom_text(label_map, size = rel(4), data = A4[[6]], fontface = "bold", show.legend = FALSE, label = c("Granite1"), vjust = -0.3, hjust = 1.2 ) +
-  xlab(label = paste("dbRDA1 (", round(B$concont$importance[2,1]*100, digits = 1), "%)", sep="")) +
-  ylab(label = paste("dbRDA2 (", round(B$concont$importance[2,2]*100, digits = 1), "%)", sep="")) + 
-  scale_color_manual(values= met.brewer("Tsimshian",
-      n = 4,
-      type = "discrete",
-      direction = -1)) +
-  scale_shape_manual(values=c(0:3)) +
-  stat_ellipse(aes(color = Habitat),
-               geom = "path",
-               linewidth = 1.3,
-               position = "identity",
-               type = "t", linetype = 1,
-               level = 0.95,
-               segments = 51,
-               na.rm = FALSE,
-               show.legend = NA, inherit.aes = TRUE) +
+  geom_point(
+    data = merged_data,
+    aes(color = Habitat, shape = Genotype),
+    size = rel(4),
+    alpha = 0.2,
+    stroke = 1
+  ) +
+  geom_segment(
+    arrow_map,
+    size = rel(.8),
+    data = arrow_scores,
+    color = "black",
+    arrow = arrowhead
+  ) +
+  geom_vline(xintercept = 0,
+             color = "grey30",
+             linetype = "dashed") + # plot vertical line
+  geom_hline(yintercept = 0,
+             color = "grey30",
+             linetype = "dashed") + # plot horizontal line
+  geom_text(
+    label_map,
+    size = rel(4),
+    data = A4[[1]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("F2LG"),
+    hjust = 1.2
+  ) +
+  geom_text(
+    label_map,
+    size = rel(4),
+    data = A4[[2]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("G"),
+    vjust = 1.3
+  ) +
+  geom_text(
+    label_map,
+    size = rel(4),
+    data = A4[[3]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("L"),
+    vjust = -0.6
+  ) +
+  geom_text(
+    label_map,
+    size = rel(4),
+    data = A4[[4]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("logLBI"),
+    vjust = -0.3,
+    hjust = 0.1
+  ) +
+  geom_text(
+    label_map,
+    size = rel(4),
+    data = A4[[5]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("Meadow 1"),
+    hjust = -0.2
+  ) +
+  geom_text(
+    label_map,
+    size = rel(4),
+    data = A4[[6]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("Granite1"),
+    vjust = -0.3,
+    hjust = 1.2
+  ) +
+  xlab(label = paste(
+    "dbRDA1 (",
+    round(B$concont$importance[2, 1] * 100, digits = 1),
+    "%)",
+    sep = ""
+  )) +
+  ylab(label = paste(
+    "dbRDA2 (",
+    round(B$concont$importance[2, 2] * 100, digits = 1),
+    "%)",
+    sep = ""
+  )) +
+  scale_color_manual(values = met.brewer(
+    "Tsimshian",
+    n = 4,
+    type = "discrete",
+    direction = -1
+  )) +
+  scale_shape_manual(labels = c("F~2~GL", "G", "L", "F~2~LG"),
+                     values = c(0:3)) +
+  stat_ellipse(
+    aes(color = Habitat),
+    geom = "path",
+    linewidth = 1.3,
+    position = "identity",
+    type = "t",
+    linetype = 1,
+    level = 0.95,
+    segments = 51,
+    na.rm = FALSE,
+    show.legend = NA,
+    inherit.aes = TRUE
+  ) +
   theme_classic(base_size = 16) +
-  theme(legend.title = element_text(face = "bold")) +
+  theme(legend.title = element_markdown(face = "bold"),
+        legend.text = element_markdown()) +
   scale_x_continuous(limits = c(-2.4, 3), breaks = c(-2:3)) +
-  guides(shape = guide_legend(ncol=1))
+  guides(shape = guide_legend(ncol = 1))
 
-     
+
 # Rearranging the order of layers so arrows are above the points.
-full_site_model$layers <- c(full_site_model$layers, full_site_model$layers[[2]], full_site_model$layers[[5]], full_site_model$layers[[6]], full_site_model$layers[[7]], full_site_model$layers[[8]], full_site_model$layers[[9]], full_site_model$layers[[10]])
+full_site_model$layers <- c(
+  full_site_model$layers,
+  full_site_model$layers[[2]],
+  full_site_model$layers[[5]],
+  full_site_model$layers[[6]],
+  full_site_model$layers[[7]],
+  full_site_model$layers[[8]],
+  full_site_model$layers[[9]],
+  full_site_model$layers[[10]]
+)
 #full_site_model
 
 # Joining plots
-double_dbrda <- ggarrange(full_final_model,"", full_site_model, ncol = 1, nrow = 3, 
-                          heights = c(1, 0.1, 1),
-                          widths = c(1, 0.1, 1),
-          labels = c("A", "B"),
-          common.legend = F, legend = "right")
+double_dbrda <- ggarrange(
+  full_final_model,
+  "",
+  full_site_model,
+  ncol = 1,
+  nrow = 3,
+  heights = c(1, 0.1, 1),
+  widths = c(1, 0.1, 1),
+  labels = c("A", "B"),
+  common.legend = F,
+  legend = "right"
+)
 
 double_dbrda
 #Save the plot
-ggsave(file.path(path, "figures/figure3.png"), plot = double_dbrda, dpi=300, units=c("mm"), width=200, height=250)
+#ggsave(file.path(path, "figures/figure3.png"), plot = double_dbrda, dpi=300, units=c("mm"), width=200, height=250)
 ```
 
 
-## Figure 4
+## Figure 4 > 5
 
 ```{r, figure4}
 #| echo: false
@@ -1265,8 +1482,14 @@ ggsave(filename = file.path(path, "figures/figure4.png"), plot = lbis, dpi=300, 
 
 
 # Supplementary Material
-
 ## Figure S1
+
+::: {#fig-S1}
+![Greenhouse cross-type design and reciprocal transplant design. Greenhouse hybrid crosses from parental lines in dashed line box. Reciprocal transplant design at each site in solid line boxes and ovals. Red squares represent F~2~GL hybrid cross. Light blue represents F~2~LG hybrid cross. Yellow represents *M. laciniatus* parental line, and organge representes *M. guttatus* parental line.  ](figures/supp_fig1_diagram.png){width="6in"}
+:::
+
+
+## Figure S1 > S2
 
 ```{r}
 #| echo: false
@@ -1307,7 +1530,7 @@ t4gg
 ggplot2::ggsave(file.path(path, "figures/supp_fig1.png") , plot = t4gg, dpi=300, units=c("mm"), width=300, height=300)
 ```
 
-## Figure S2
+## Figure S2 > S3
 
 ```{r, supp_fig2}
 #| echo: false
@@ -1388,7 +1611,7 @@ venn_plots
 ggsave(filename = file.path(path, "figures/supp_fig2.png"), plot = venn_plots, dpi=300, units=c("mm"), width=300, height=300)
 ```
 
-## Figure S3
+## Figure S3 > S4
 
 ```{r, supp_fig3}
 #| echo: false
@@ -1455,7 +1678,7 @@ heatplots
 ggplot2::ggsave(filename = file.path(path, "figures/supp_fig3.png"), plot = heatplots, dpi=300, units=c("mm"), width=300, height=250)
 ```
 
-## Figure S4
+## Figure S4 > S5
 
 ```{r, supp_fig4}
 
