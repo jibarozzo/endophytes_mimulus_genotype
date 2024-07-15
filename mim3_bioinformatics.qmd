@@ -1,5 +1,5 @@
 ---
-title: "DADA2 bioinformatic pipeline for the Mimulus ITS sequence <b>
+title: "DADA2 bioinformatic pipeline for the Mimulus ITS sequence
 from Illiumina NextSeq 150 bp PE platform"
 author: "Bolívar Aponte Rolón and Mareli Sánchez Juliá"
 date: "Last edited: `r format(Sys.time(), '%B %d, %Y')`"
@@ -1032,13 +1032,18 @@ summarize_phyloseq(psraw) #Microbiome package summary
 ## This summary does not include the relative abundance of phyla represented in the total reads. We will calculate this below. ###
 
 # Relative abundance of Phyla based on the total reads
-raw_relabundance_phyla <- tax_glom(psraw, 
-                 taxrank = "Phylum", 
-                 NArm = FALSE, bad_empty=c(NA, "", " ", "\t")) |>
+raw_relabundance_phyla <- tax_glom(
+  psraw,
+  taxrank = "Phylum",
+  NArm = FALSE,
+  bad_empty = c(NA, "", " ", "\t")
+) |>
   metagMisc::phyloseq_to_df() |>
   dplyr::select(-OTU) |> #Remove OTU column. It represents the first ASV of Phylum
-  mutate(total_reads_phy = rowSums(across(where(is.numeric))),
-         relabun_reads_phy = total_reads_phy/sum(total_reads_phy)*100) |> #Relative abundance of phyla
+  mutate(
+    total_reads_phy = rowSums(across(where(is.numeric))),
+    relabun_reads_phy = total_reads_phy / sum(total_reads_phy) * 100
+  ) |> #Relative abundance of phyla
   dplyr::select(Kingdom, Phylum, total_reads_phy, relabun_reads_phy) #Select columns of interest)
 
 
@@ -1559,13 +1564,18 @@ summarize_phyloseq(ps_clean_3) #Microbiome package summary
 ## This summary does not include the relative abundance (compositional) of phyla represented in the total reads. We will calculate this below. ###
 
 # Relative abundance of Phyla based on the total reads
-clean_relabundance_phyla <- tax_glom(ps_clean_3, 
-                                     taxrank = "Phylum", 
-                                     NArm = FALSE, bad_empty=c(NA, "", " ", "\t")) |>
+clean_relabundance_phyla <- tax_glom(
+  ps_clean_3,
+  taxrank = "Phylum",
+  NArm = FALSE,
+  bad_empty = c(NA, "", " ", "\t")
+) |>
   metagMisc::phyloseq_to_df() |>
   select(-OTU) |> #Remove OTU column. It represents the first ASV of Phylum
-  mutate(total_reads_phy = rowSums(across(where(is.numeric))),
-         relabun_reads_phy = total_reads_phy/sum(total_reads_phy)*100) |> #Relative abundance of phyla
+  mutate(
+    total_reads_phy = rowSums(across(where(is.numeric))),
+    relabun_reads_phy = total_reads_phy / sum(total_reads_phy) * 100
+  ) |> #Relative abundance of phyla
   select(Kingdom, Phylum, total_reads_phy, relabun_reads_phy) #Select columns of interest)
 
 
