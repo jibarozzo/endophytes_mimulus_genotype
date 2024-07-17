@@ -5,8 +5,9 @@
 ########################################
 ### Package installation and loading ###
 ########################################
-if (!requireNamespace(c("BiocManager", "vegan","doParallel"), quietly = TRUE))
-    install.packages(c("BiocManager", "vegan","doParallel"))
+if (!requireNamespace(c("vegan", "doParallel"), quietly = TRUE))
+    install.packages(c("vegan", "doParallel")
+    )
 
 ########################################
 ########### Parallel jobs ##############
@@ -50,45 +51,46 @@ rrfy_hell_matrix <- readRDS("clean_data/statistics/rrfy_hell_matrix.rds")
 # Traits for dbRDA
 ##### Hellinger transformed rarefied data
 # All samples
-dbrda_hell_matrix <- rrfy_hell_matrix |>
-    column_to_rownames(var = "X") |>
-    select(-c(1, 2:17))
+# dbrda_hell_matrix <- rrfy_hell_matrix |>
+#     column_to_rownames(var = "X") |>
+#     select(-c(1, 2:17))
 
-saveRDS(dbrda_hell_matrix, file = "clean_data/statistics/dbrda_hell_matrix.rds")
+#saveRDS(dbrda_hell_matrix, file = "clean_data/statistics/dbrda_hell_matrix.rds")
 dbrda_hell_matrix <- readRDS("clean_data/statistics/dbrda_hell_matrix.rds")
 
 
-dbrda_traits <- rrfy_hell_matrix |>
-    select(X, Unique_ID, Site, Habitat, Genotype, logLBI) |>
-    unite(Habitat_Genotype,
-          Habitat,
-          Genotype,
-          sep = "_",
-          remove = FALSE) # To model interactions
-saveRDS(dbrda_traits, file = "clean_data/statistics/dbrda_traits.rds")
+# dbrda_traits <- rrfy_hell_matrix |>
+#     select(X, Unique_ID, Site, Habitat, Genotype, logLBI) |>
+#     unite(Habitat_Genotype,
+#           Habitat,
+#           Genotype,
+#           sep = "_",
+#           remove = FALSE) # To model interactions
+#saveRDS(dbrda_traits, file = "clean_data/statistics/dbrda_traits.rds")
+dbrda_traits <- readRDS("clean_data/statistics/dbrda_traits.rds")
 
 # Model with intercept only ####
 # Using rrfy_hell_matrix as the distance matrix
-m0_hell <- dbrda(
-    dbrda_hell_matrix ~ 1,
-    distance = "bray",
-    dfun = vegdist,
-    data = dbrda_traits,
-    parallel = 20,
-    #Passes parallelization to metaMDS function # Do not use when using Rmpi
-    na.action = na.omit
-) #Model with intercept only.
-saveRDS(m0_hell, file = "clean_data/statistics/m0_hell.rds")
-
-m1_hell <- dbrda(
-    dbrda_hell_matrix ~ .,
-    distance = "bray",
-    dfun = vegdist,
-    data = dbrda_traits,
-    parallel = 20,
-    na.action = na.omit
-) # Model with all explanatory variables.
-saveRDS(m1_hell, file = "clean_data/statistics/m1_hell.rds")
+# m0_hell <- dbrda(
+#     dbrda_hell_matrix ~ 1,
+#     distance = "bray",
+#     dfun = vegdist,
+#     data = dbrda_traits,
+#     parallel = 20,
+#     #Passes parallelization to metaMDS function # Do not use when using Rmpi
+#     na.action = na.omit
+# ) #Model with intercept only.
+# saveRDS(m0_hell, file = "clean_data/statistics/m0_hell.rds")
+# 
+# m1_hell <- dbrda(
+#     dbrda_hell_matrix ~ .,
+#     distance = "bray",
+#     dfun = vegdist,
+#     data = dbrda_traits,
+#     parallel = 20,
+#     na.action = na.omit
+# ) # Model with all explanatory variables.
+# saveRDS(m1_hell, file = "clean_data/statistics/m1_hell.rds")
 
 # Model with species, site, leaf traits and elevation. ####
 m2_hell <-
@@ -328,52 +330,52 @@ saveRDS(beta_perm5_terms, file = "clean_data/statistics/beta_perm5_terms.rds")
 #################################################################
 
 ##### Hellinger transformed rarefied data
-dbrda_hybrids_matrix <- rrfy_hell_matrix |>
-    column_to_rownames(var = "X") |>
-    select(-c(1, 2:17)) |>
-    t() |>
-    as.data.frame() |>
-    select(contains(c("F2WY", "F2YW"))) |>
-    t() |>
-    as.data.frame()
-
-saveRDS(dbrda_hybrids_matrix, file = "clean_data/statistics/dbrda_hybrids_matrix.rds")
+# dbrda_hybrids_matrix <- rrfy_hell_matrix |>
+#     column_to_rownames(var = "X") |>
+#     select(-c(1, 2:17)) |>
+#     t() |>
+#     as.data.frame() |>
+#     select(contains(c("F2WY", "F2YW"))) |>
+#     t() |>
+#     as.data.frame()
+# 
+# saveRDS(dbrda_hybrids_matrix, file = "clean_data/statistics/dbrda_hybrids_matrix.rds")
 dbrda_hybrids_matrix <- readRDS(file.path(path,"clean_data/statistics/dbrda_hybrids_matrix.rds"))
 
 
-dbrda_hybrids_traits <- rrfy_hell_matrix |>
-    select(X, Unique_ID, Site, Habitat, Genotype, logLBI) |>
-    filter(X %in% rownames(dbrda_hybrids_matrix)) |>
-    unite(Habitat_Genotype,
-          Habitat,
-          Genotype,
-          sep = "_",
-          remove = FALSE) # To model interactions
-saveRDS(dbrda_hybrids_traits, file = "clean_data/statistics/dbrda_hybrids_traits.rds")
+# dbrda_hybrids_traits <- rrfy_hell_matrix |>
+#     select(X, Unique_ID, Site, Habitat, Genotype, logLBI) |>
+#     filter(X %in% rownames(dbrda_hybrids_matrix)) |>
+#     unite(Habitat_Genotype,
+#           Habitat,
+#           Genotype,
+#           sep = "_",
+#           remove = FALSE) # To model interactions
+# saveRDS(dbrda_hybrids_traits, file = "clean_data/statistics/dbrda_hybrids_traits.rds")
 dbrda_hybrids_traits <- readRDS(file.path(path, "clean_data/statistics/dbrda_hybrids_traits.rds"))
 
 
 # Model with intercept only ####
 # Using rrfy_hell_matrix as the distance matrix
-m0_hybrids_hell <- dbrda(
-    dbrda_hybrids_matrix ~ 1,
-    distance = "bray",
-    dfun = vegdist,
-    data = dbrda_hybrids_traits,
-    parallel = 20, #Passes parallelization to metaMDS function
-    na.action = na.omit
-) #Model with intercept only.
-saveRDS(m0_hybrids_hell, file = "clean_data/statistics/m0_hybrids_hell.rds")
-
-m1_hybrids_hell <- dbrda(
-    dbrda_hybrids_matrix ~ .,
-    distance = "bray",
-    dfun = vegdist,
-    data = dbrda_hybrids_traits,
-    parallel = 20,
-    na.action = na.omit
-) # Model with all explanatory variables.
-saveRDS(m1_hybrids_hell, file = "clean_data/statistics/m1_hybrids_hell.rds")
+# m0_hybrids_hell <- dbrda(
+#     dbrda_hybrids_matrix ~ 1,
+#     distance = "bray",
+#     dfun = vegdist,
+#     data = dbrda_hybrids_traits,
+#     parallel = 20, #Passes parallelization to metaMDS function
+#     na.action = na.omit
+# ) #Model with intercept only.
+# saveRDS(m0_hybrids_hell, file = "clean_data/statistics/m0_hybrids_hell.rds")
+# 
+# m1_hybrids_hell <- dbrda(
+#     dbrda_hybrids_matrix ~ .,
+#     distance = "bray",
+#     dfun = vegdist,
+#     data = dbrda_hybrids_traits,
+#     parallel = 20,
+#     na.action = na.omit
+# ) # Model with all explanatory variables.
+# saveRDS(m1_hybrids_hell, file = "clean_data/statistics/m1_hybrids_hell.rds")
 
 # Model with species, site, leaf traits and elevation. ####
 m2_hybrids_hell <-

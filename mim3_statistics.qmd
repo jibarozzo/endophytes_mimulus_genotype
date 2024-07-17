@@ -12,28 +12,40 @@ knitr::opts_chunk$set(out.width ='70%', fig_align = 'center', echo = TRUE, colla
 ## Packages
 
 ```{r}
+# Core packages
 library("tidyverse")
 library("data.table")
 library("ggpubr")
 library("ggfortify")
-library("ggtext")
-library("ggpmisc")
-library("ggrepel")
-library("broom")
-library("MetBrewer")
 library("rstatix")
-library("readxl")
+library("broom")
 
-# Models
+# Linear Models
 library("car")
 library("nlme")
+library("MASS")
+library("MuMIn")
+library("sjPlot")
+library("class")
+#library("caret")
 
-# Diversity
+# Community Diversity
 library("vegan")
 library("hillR")
-library("iNEXT")
 library("geosphere")
 library("indicspecies")
+
+# ggplot2 extensions
+library("ggtext")
+library("ggpmisc")
+library("MetBrewer")
+
+# Tables
+library("huxtable")
+library("flextable")
+library("broom.mixed")
+library("officer")
+library("knitr")
 
 # Phyloseq friendly
 #Some of these are redundant and have conflicts, but have functions that I like better than others or compliment each other.
@@ -44,9 +56,13 @@ library("metagMisc") # Miscellaneous functions
 library("microbiome") # Expands phyloseq 
 library("mirlyn")
 
+# Parallel processing
 library("parallelly")
+
+# Misc
 library("conflicted")
 conflict_prefer("select", "dplyr")
+conflict_prefer("desc", "dplyr")
 conflict_prefer("filter", "dplyr")
 conflict_prefer("alpha", "ggplot2")
 ```
@@ -948,7 +964,8 @@ rrfy_hell_matrix <- decostand(as.matrix(t(rep_otu_df(pseq_rrfa))), MARGIN = 1, m
 # Cleaning row names
 rrfy_hell_matrix <- as.data.frame(rrfy_hell_matrix) |>
   rownames_to_column(var = "X") |>
-  mutate(Unique_ID =  X, # Copyin column to new column 
+  mutate(Unique_ID =  X,
+         # Copying column to new column
          Unique_ID =  str_remove(Unique_ID, "^.*?(_|-)")) |>
   relocate(Unique_ID, .after = X) |>
   left_join(plant_traits |>
@@ -2709,8 +2726,8 @@ ordination_scores$Unique_ID <- rownames(ordination_scores)
 
 # Subset for the plot
 dbrda_df <- plant_traits_rfy |>
-   filter(X %in% ordination_names,
-         Genotype == "F2WY" | Genotype == "F2YW") # Extra filtering to remove parentals
+  filter(X %in% ordination_names, Genotype == "F2WY" |
+           Genotype == "F2YW") # Extra filtering to remove parentals
 
 # Merge scores with trait data
 merged_data <- right_join(ordination_scores, dbrda_df, by = c("Unique_ID" = "X"))
@@ -2719,54 +2736,147 @@ merged_data <- right_join(ordination_scores, dbrda_df, by = c("Unique_ID" = "X")
 arrow_scores <- as.data.frame(vegan::scores(final_model, display = "bp"))
 
 # Define the arrow aesthetic mapping
-arrow_map <- aes(xend = (dbRDA1*2), yend = (dbRDA2*2), x = 0, y = 0, shape = NULL, color = NULL, fill = NULL)
-label_map <- aes(x = 2*dbRDA1, y = 2*dbRDA2, label = row.names(arrow_scores), shape = NULL, color = NULL, fill = NULL)
+arrow_map <- aes(
+  xend = (dbRDA1 * 2),
+  yend = (dbRDA2 * 2),
+  x = 0,
+  y = 0,
+  shape = NULL,
+  color = NULL,
+  fill = NULL
+)
+label_map <- aes(
+  x = 2 * dbRDA1,
+  y = 2 * dbRDA2,
+  label = row.names(arrow_scores),
+  shape = NULL,
+  color = NULL,
+  fill = NULL
+)
 arrowhead = arrow(length = unit(0.02, "npc"))
 
 #subset A4 for labeling
 arrow_scores <- arrow_scores[order(rownames(arrow_scores)), ]
-A4 <- lapply(1:6, function(i) arrow_scores[i, ])
+A4 <- lapply(1:6, function(i)
+  arrow_scores[i, ])
 
 # A4.sub1 <- arrow_scores[1,] #Elevation
 # A4.sub2 <- arrow_scores[2,] #ACi
 # A4.sub3 <- arrow_scores[3,] #LBI
-A4.sub4 <- arrow_scores[4,] #logLBI
+A4.sub4 <- arrow_scores[4, ] #logLBI
 # A4.sub5 <- arrow_scores[5,] #LPS
 # A4.sub6 <- arrow_scores[6,] #LT.
 
 # dbRDA plot based on species
 hybrid_final_model <- ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
-  geom_point(data = merged_data, aes(color = Genotype, shape= Site), size = rel(4), alpha = 0.2, stroke = 1) +
-  geom_segment(arrow_map, size = rel(.8), data = arrow_scores, color = "black", arrow = arrowhead) +
-  geom_vline(xintercept = 0, color = "grey30", linetype = "dashed") + # plot vertical line
-  geom_hline(yintercept = 0, color = "grey30", linetype = "dashed") + # plot horizontal line
-  geom_text(label_map, size = rel(4), data = A4[[1]], fontface = "bold", show.legend = FALSE, label = c("F2WY"), hjust = 1.2 ) +
+  geom_point(
+    data = merged_data,
+    aes(color = Genotype, shape = Site),
+    size = rel(4),
+    alpha = 0.2,
+    stroke = 1
+  ) +
+  geom_segment(
+    arrow_map,
+    size = rel(.8),
+    data = arrow_scores,
+    color = "black",
+    arrow = arrowhead
+  ) +
+  geom_vline(xintercept = 0,
+             color = "grey30",
+             linetype = "dashed") + # plot vertical line
+  geom_hline(yintercept = 0,
+             color = "grey30",
+             linetype = "dashed") + # plot horizontal line
+  geom_text(
+    label_map,
+    size = rel(4),
+    data = A4[[1]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("F2WY"),
+    hjust = 1.2
+  ) +
   # geom_text(label_map, size = rel(4), data = A4[[2]], fontface = "bold", show.legend = FALSE, label = c("G"),  vjust = 1.3 ) +
   # geom_text(label_map, size = rel(4), data = A4[[3]], fontface = "bold", show.legend = FALSE, label = c("L"), vjust = -0.6) +
-  geom_text(label_map, size = rel(4), data = A4[[4]], fontface = "bold", show.legend = FALSE, label = c("logLBI"), hjust = -0.1 ) +
-  geom_text(label_map, size = rel(4), data = A4[[5]], fontface = "bold", show.legend = FALSE, label = c("LM"), hjust = -0.2 ) +
-  geom_text(label_map, size = rel(4), data = A4[[6]], fontface = "bold", show.legend = FALSE, label = c("OPN"), vjust = -0.3, hjust = 1.2 ) +
-  xlab(label = paste("dbRDA1 (", round(B$concont$importance[2,1]*100, digits = 1), "%)", sep="")) +
-  ylab(label = paste("dbRDA2 (", round(B$concont$importance[2,2]*100, digits = 1), "%)", sep="")) + 
-  scale_color_manual(values= met.brewer("Johnson", n = 4, type = "discrete", direction = 1)) +
-  scale_shape_manual(values=c(1:22)) +
-  stat_ellipse(aes(color = Genotype),
-               geom = "path",
-               linewidth = 1.7,
-               position = "identity",
-               type = "t", linetype = 1,
-               level = 0.95,
-               segments = 51,
-               na.rm = FALSE,
-               show.legend = NA, inherit.aes = TRUE) +
+  geom_text(
+    label_map,
+    size = rel(4),
+    data = A4[[4]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("logLBI"),
+    hjust = -0.1
+  ) +
+  geom_text(
+    label_map,
+    size = rel(4),
+    data = A4[[5]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("LM"),
+    hjust = -0.2
+  ) +
+  geom_text(
+    label_map,
+    size = rel(4),
+    data = A4[[6]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("OPN"),
+    vjust = -0.3,
+    hjust = 1.2
+  ) +
+  xlab(label = paste(
+    "dbRDA1 (",
+    round(B$concont$importance[2, 1] * 100, digits = 1),
+    "%)",
+    sep = ""
+  )) +
+  ylab(label = paste(
+    "dbRDA2 (",
+    round(B$concont$importance[2, 2] * 100, digits = 1),
+    "%)",
+    sep = ""
+  )) +
+  scale_color_manual(values = met.brewer(
+    "Johnson",
+    n = 4,
+    type = "discrete",
+    direction = 1
+  )) +
+  scale_shape_manual(values = c(1:22)) +
+  stat_ellipse(
+    aes(color = Genotype),
+    geom = "path",
+    linewidth = 1.7,
+    position = "identity",
+    type = "t",
+    linetype = 1,
+    level = 0.95,
+    segments = 51,
+    na.rm = FALSE,
+    show.legend = NA,
+    inherit.aes = TRUE
+  ) +
   theme_classic(base_size = 16) +
   theme(legend.title = element_text(face = "bold")) +
-  guides(shape = guide_legend(ncol=2))
+  guides(shape = guide_legend(ncol = 2))
 
-     
+
 # Rearranging the order of layers so arrows are above the points.
 hybrid_final_model$layers
-hybrid_final_model$layers <- c(hybrid_final_model$layers,hybrid_final_model$layers[[2]], hybrid_final_model$layers[[5]], hybrid_final_model$layers[[6]], hybrid_final_model$layers[[7]], hybrid_final_model$layers[[8]], hybrid_final_model$layers[[9]], hybrid_final_model$layers[[10]])
+hybrid_final_model$layers <- c(
+  hybrid_final_model$layers,
+  hybrid_final_model$layers[[2]],
+  hybrid_final_model$layers[[5]],
+  hybrid_final_model$layers[[6]],
+  hybrid_final_model$layers[[7]],
+  hybrid_final_model$layers[[8]],
+  hybrid_final_model$layers[[9]],
+  hybrid_final_model$layers[[10]]
+)
 hybrid_final_model
 
 #ggsave(filename=file.path(path, "figures/dbRDA_hybrid model.png"), plot = hybrid_final_model, dpi=600, units=c("mm"), width=150, height=150)
@@ -2826,6 +2936,547 @@ Who contributes more to differences in the community composition?
 (sim <- with(dbrda_traits, simper(dbrda_hell_matrix, Species, permutations = 9999, parallel = 8)))
 summary(sim)
 ```
+
+## GLMMs
+
+### Beta Diversity
+
+using `dbrda_traits` dataset for GLMMs. It's a subset of the `rrfy_hell_matrix` (`plant_traits_rfy` + community matrix) dataset.
+```{r}
+# Bray-Curtis dissimilarity vs. Elevation
+
+# Mean-Bray-Curtis dissimilarity
+mean_bray <- vegdist(dbrda_hell_matrix, method = "bray") |>
+  as.matrix() |>
+  as.data.frame()
+saveRDS(mean_bray, file = "clean_data/statistics/mean_bray.rds")
+
+mean_bray <- rownames_to_column(mean_bray, var = "Unique_ID") |>
+  mutate(mean_bray = rowMeans(mean_bray)) |>
+  select(Unique_ID, mean_bray)
+
+# Joining to dbrda_traits to avoid duplicate DFs 
+dbrda_traits <- left_join(dbrda_traits, mean_bray, by = c("X"= "Unique_ID"))
+```
+
+
+#### Selecting fixed terms
+```{r, glm}
+# GLMs with Beta Diversity
+
+b1 <- glm(
+  mean_bray ~ Habitat + logLBI,
+  data = dbrda_traits,
+  family = gaussian
+) # Gaussian/Normal distribution
+plot(b1)
+anova(b1)
+
+# Model with intercept only
+B0 <- lm(mean_bray ~ 1, data = dbrda_traits_imp, na.action = na.exclude)
+anova(B0)
+AIC(B0)
+plot(B0)
+
+
+################################################
+# B1 Model with Elevation, Species and Site
+################################################
+B1 <- lm(
+  mean_bray ~ Elevation_m + Species + Site + logACI + logLT + logLPS + logLMA + logLBI,
+  data = dbrda_traits_imp,
+  na.action = na.exclude
+)
+anova(B1)
+AIC(B1) # -13617.24
+
+# Model validation
+# Residuals
+B1_resid <- resid(B1, type = "response")
+B1_fitted <- fitted(B1)
+
+#Histograms
+hist(B1_resid)
+hist(B1_fitted)
+
+# predicted vs. actual values
+plot(
+  x = predict(B1),
+  y = dbrda_traits_imp$mean_bray,
+  xlab = 'Predicted Values',
+  ylab = 'Actual Values',
+  main = 'B1 Predicted vs. Actual Values'
+)
+abline(a = 0, b = 1)
+
+anova(B1, type="marginal")
+Anova(B1, type = 3)
+#drop1(B1, . ~ ., test = "F", trace = TRUE)
+
+# Stepwise selection of linear model (lm())
+B1AIC <- stepAIC(update(B1, . ~ .), direction = "both", k = 2)
+B1AIC$anova
+
+#Final Model:
+#mean_bray ~ Species + Site + logACI + logLT + logLPS + logLMA + logLBI
+
+
+################################################
+# B2 Model with Species and Site
+################################################
+B2 <- lm(
+  mean_bray ~ Species + Site + logACI + logLT + logLPS + logLMA + logLBI,
+  data = dbrda_traits_imp,
+  na.action = na.exclude
+)
+
+anova(B2)
+Anova(B2, type = 3)
+AIC(B2) #-13617.24
+
+# Residuals
+B2_resid <- resid(B2, type = "response")
+B2_fitted <- fitted(B2)
+
+#Histograms
+hist(B2_resid)
+hist(B2_fitted)
+
+# predicted vs. actual values
+plot(
+  x = predict(B2),
+  y = dbrda_traits_imp$mean_bray,
+  xlab = 'Predicted Values',
+  ylab = 'Actual Values',
+  main = 'B2 Predicted vs. Actual Values'
+)
+abline(a = 0, b = 1)
+
+# Stepwise selection of linear model 
+B2AIC <- stepAIC(update(B2, . ~ .), trace = TRUE, direction = "both", k = 2)
+B2AIC$anova
+
+# No fixed term removed.
+```
+
+B1 and B2 models have the same AIC score but they do not have the same fixed terms. I believe this is due to the minimal effect that Elevation has on the model (Estimates).
+
+
+#### Modelling random effects with "ML" method
+
+Starting with fixed terms selected above.
+
+```{r, random_effects}
+################################################
+# B3 Model with Species as fixed term and site as random effect
+################################################
+#B3
+B3 <- lme(
+  mean_bray ~ Species + logACI + logLT + logLPS + logLMA + logLBI,
+  random = ~ 1 | Site,
+  method = "ML",
+  data = na.omit(dbrda_traits_imp)) 
+
+Anova(B3, type = 3)
+AIC(B3) #  -13522.89 Increased AIC score compared to B1 and B2.
+
+# Residuals histograms and plots ####
+B3_resid <- resid(B3, type = "response")
+B3_fitted <- fitted(B3)
+
+# Histograms
+hist(B3_resid)
+hist(B3_fitted)
+
+# Plots
+plot(
+  x = predict(B3),
+  y = dbrda_traits_imp$mean_bray,
+  xlab = 'Predicted Values',
+  ylab = 'Actual Values',
+  main = 'B3 Predicted vs. Actual Values'
+)
+abline(a = 0, b = 1)
+
+plot_model(B3, type = "diag")
+
+# Stepwise selection of terms
+B3AIC <- stepAIC(update(B3, . ~ ., -1), direction = "both", k = 2)
+B3AIC$anova
+B3drop <- drop1(B3, . ~ ., test = "Chisq", trace = TRUE)
+
+# No stepwise term deletion or dropping of terms.
+```
+
+The GLMMs with "ML" methods and "Site" as a random effects has a greater AIC value than B1 model. The stepwise selection eliminated "Elevation" as a fixed term in the model. The final model is `mean_bray ~ Species + Site`. There could be some variance structure that needs to be modeled. We will still keep "Elevation" while we focus in nestedness in the variance structure. Let's see. 
+
+```{r, random_effects2}
+# B5 
+B4 <- lme(
+  mean_bray ~ logACI + logLT + logLPS + logLMA + logLBI,
+  random = ~ 1 |
+    Site / Species,
+  method = "ML",
+  data = na.omit(dbrda_traits_imp)
+)
+Anova(B4, type = 3)
+AIC(B4) # -13717.34 is a higher AIC score than B3.
+
+# Residuals histograms and plots ####
+B4_resid <- resid(B4, type = "response")
+B4_fitted <- fitted(B4)
+
+# Histograms
+hist(B4_resid)
+hist(B4_fitted)
+
+# Plots
+plot(
+  x = predict(B4),
+  y = dbrda_traits_imp$mean_bray,
+  xlab = 'Predicted Values',
+  ylab = 'Actual Values',
+  main = 'B4 Predicted vs. Actual Values'
+)
+abline(a = 0, b = 1)
+
+plot_model(B4, type = "diag")
+
+# Stepwise selection of terms
+B4AIC <- stepAIC(update(B4, . ~ ., -1),
+                 trace = TRUE,
+                 direction = "both",
+                 k = 2)
+B4AIC$anova
+drop1(B4, . ~ ., test = "Chisq", trace = TRUE)
+
+# logLT and logLBI eliminated from the model.
+```
+The B4AIC model has a lower AIC score. We seem to have hit a good model. The fixed terms are `mean_bray ~ logACI + logLPS + logLMA`. The delta AIC is ~2.5. I say we keep the terms since it is not a huge improvement and model random effects. Let's take that an model random effects taking into account variance structure. 
+
+I will keep `Species` as a fixed term. Only `Site` as random effect. Maybe `Sampling_date` could be a random effect.
+
+
+#### REML modelling
+
+Using Restricted Maximum Likelihood (REML) to model. Maximum likelihood tends to be biased with high dimensional data. No interactions yet, checking random effects. Cannot use `stepAIC` with `REML` models.
+
+```{r, reml_models}
+# REML
+# B1REM All fixed terms
+B1REM <- lme(
+  mean_bray ~ Elevation_m +  Species + logACI + logLT + logLPS + logLMA + logLBI,
+  random = ~ 1 |
+    Site,
+  method = "REML",
+  data = na.omit(dbrda_traits_imp))
+
+Anova(B1REM, type = 3)
+AIC(B1REM) # -13437.7 This is a higher score than B4AIC.
+
+
+B1_gls <- gls(
+  mean_bray ~ Elevation_m +  Species + logACI + logLT + logLPS + logLMA + logLBI,
+  method = "REML",
+  data = na.omit(dbrda_traits_imp)
+)
+
+anova(B1_gls, type = "marginal")
+#Anova(B1_gls, type = 3)
+AIC(B1_gls) # -11858 is a higher AIC score. Site as a random effect is important.
+
+plot_model(B1REM, type = "diag")
+
+# Model comparison
+model.sel(B1, B2, B3, B4, B4AIC, B1REM, B1_gls)[, c("df", "logLik", "AICc", "delta")]
+
+# Model B1 and B2 are the best models. B1 has a lower AIC score.
+```
+
+The REML model with Elevation and Species as fixed terms has a higher AIC score than the `gls` model without random effects. Site as a random effect is important. Now, playing around with the method, I observed that "ML" models the data better than "REML". The AIC scores are lower.
+
+A brief online search explain these differences. REML is better at estimating random effect variance components, while ML is better at estimating fixed effects. Because we have a nested structure in this experiment we will continue with REML. 
+*"When there is no model comparison, the difference between restricted (or residual) maximum likelihood (REML) and maximum likelihood (ML) is that, REML can give you unbiased estimates of the variance parameters."*
+https://stats.stackexchange.com/questions/91652/when-no-model-comparison-should-i-use-reml-vs-ml
+
+
+```{r, reml_models2}
+# Modelling variance structure.
+#Optimizers
+ctrl <- lmeControl(opt='optim')
+ctrl2 <- lmeControl(opt = "nlminb")
+
+#B3REM
+B3REM <- lme(
+  mean_bray ~ Elevation_m + Species + logACI + logLT + logLPS + logLMA + logLBI,
+  weights = varIdent(form = ~ 1 | Site),
+  random = ~ 1 |
+    Site,
+  method = "REML",
+  control = ctrl,
+  data = na.omit(dbrda_traits_imp)
+)
+
+Anova(B3REM, type = 3)
+AIC(B3REM) # -16249.18 is  a lower AIC score than B1REM
+
+# Residuals histograms and plots ####
+B3REM_resid <- resid(B3REM, type = "response")
+B3REM_fitted <- fitted(B3REM)
+
+# Histograms
+hist(B3REM_resid)
+hist(B3REM_fitted)
+
+# Plots
+plot(B3REM)
+plot(
+  x = predict(B3REM),
+  y = dbrda_traits_imp$mean_bray,
+  xlab = 'Predicted Values',
+  ylab = 'Actual Values',
+  main = 'Predicted vs. Actual Values'
+)
+abline(a = 0, b = 1)
+plot_model(B3REM, type = "diag")
+
+# Stepwise selection of terms
+#drop1(B3REM, . ~ ., test = "Chisq", trace = TRUE)
+```
+
+The B3REM model has the lowest AIC score yet. The the fixed terms are `mean_bray ~ Elvation + Species + logACI + logLT + logLPS + logLMA + logLBI,` with a variance structure `weights = varIdent(form = ~ 1 | Site)`. The random effects are nested `random = 1 | Site`. It seems to be a good fit for the data. Now I eliminate `Elevation` and model with the remaining fixed terms ` Species + logACI + logLT + logLPS + logLMA + logLBI`.
+
+```{r, reml_models3}
+# Modelling variance structure better
+# B4REM
+B4REM <- lme(
+  mean_bray ~ Species + logACI + logLT + logLPS + logLMA + logLBI,
+  weights = varIdent(form = ~ 1 | Site),
+  random = ~ 1 |
+    Site,
+  method = "REML",
+  control = ctrl,
+  data = na.omit(dbrda_traits_imp)
+)
+
+anova(B4REM) # Adding Species as a random effect DECREASES AIC score.
+Anova(B4REM, type = 3)
+AIC(B4REM) # -10690.23 the lowest AIC score
+
+# Residuals histograms and plots ####
+B4REM_resid <- resid(B4REM, type = "response")
+B4REM_fitted <- fitted(B4REM)
+
+# Histograms
+hist(B4REM_resid)
+hist(B4REM_fitted)
+
+# Plots
+plot(B4REM)
+plot_model(B4REM, type = "diag")
+
+# B5REM
+B5REM <- lme(
+  mean_bray ~ logACI + logLT + logLMA + logLBI,
+  weights = varComb(varIdent(form = ~ 1 | Site), varIdent(form = ~ 1 | Species)),
+  random = ~ 1 |
+    Site/Species,
+  method = "REML",
+  control = ctrl,
+  data = na.omit(dbrda_traits_imp)
+)
+
+Anova(B5REM, type = 3)
+AIC(B5REM) # -16603.6 the lowest AIC score
+
+# Residuals histograms and plots ####
+B5REM_resid <- resid(B5REM, type = "response")
+B5REM_fitted <- fitted(B5REM)
+
+# Histograms
+hist(B5REM_resid)
+hist(B5REM_fitted)
+
+# Plots
+plot(B5REM)
+plot_model(B5REM, type = "diag")
+```
+
+#### Model comparisons
+
+```{r}
+# Saving model objects
+save(B1, B2, B3, B4, B4AIC, B1REM, B3REM, B4REM, B5REM, file = "clean_data/statistics/glmm_models.rda")
+
+load("clean_data/statistics/glmm_models.rda")
+
+#Model comparison and selection
+model.sel(B1, B2, B3, B1REM, B3REM, B4AIC, B4REM, B5REM)[, c("df", "logLik", "AICc", "delta")]
+```
+
+
+```{r, reml_models4}
+# Model estimate plot
+model_plots <- plot_models(
+  #B1,
+  #B2,
+  B3,
+  B1REM,
+  B3REM,
+  B4REM,
+  B5REM,
+  legend.title = "Models",
+  show.values = TRUE,
+  show.p = FALSE,
+  p.shape = TRUE,
+  dot.size = 5,
+  std.est = NULL
+) +
+  
+  #theme_classic(base_size = 16) +
+  ylim(-0.15, 0.15) +
+  geom_hline(yintercept = 0,
+             color = "grey30",
+             linetype = "dashed") # plot vertical line
+model_plots
+
+ggsave(file.path(path, "figures/model_plots.png"), plot = model_plots, dpi=300, units=c("mm"), width=300, height=300)
+```
+
+```{r}
+# Model table comparisons
+model_tables <- tab_model(
+  B1REM,
+  B3REM,
+  B4REM,
+  B5REM,
+  show.aic = TRUE,
+  show.intercept = TRUE,
+  show.df = FALSE,
+  show.ci = 0.95,
+  title = "Linear mixed effects models for predicting FEF mean Beta diversity",
+  CSS = list(
+    css.depvarhead = 'font-weight:bold;',
+    css.centeralign = 'text-align: left;',
+    css.firsttablecol = 'font-weight: bold;',
+    css.summary = 'color: grey; font-weight: bold;',
+    p.style = "numeric_stars")
+    #file = file.path(path, "tables/model_tables.html")
+)
+
+
+model_tables
+
+
+# Huxtable
+table1 <- huxreg(
+  "Model 1" = B1REM,
+  "Model 2" = B3REM,
+  "Model 3" = B4REM,
+  "Model 4" = B5REM,
+  coefs = c(
+    "Intercept" = "(Intercept)",
+    "M. nasutus" = "SpeciesM. nasutus",
+  "M. guttatus" = "SpeciesM. guttatus",
+    "Elevation" = "Elevation_m",
+    "ACI" = "logACI",
+    "LT" = "logLT",
+    "LPS" = "logLPS",
+    "LMA" = "logLMA",
+    "LBI" = "logLBI"
+  ),
+  error_pos = "right",
+  error_format = "({conf.low} - {conf.high} ) [{statistic}]",
+  number_format = "%.3f",
+  align = ".",
+  ci_level = 0.95,
+  stars = c(`***` = 0.001, `**` = 0.01, `*` = 0.05),
+  bold_signif = 0.05,
+  borders = 0.4,
+  outer_borders = 0.8,
+  note = "Significance levels are represented by asterisks [p < 0.05 (*), p < 0.01 (**), p < 0.001 (***), and p < 0.0001 (****)]. T statistics in brackets.",
+  statistics = c("N" = "nobs", "logLik", "AIC")
+) |>
+  insert_row("Predictors",
+             "Estimate",
+             "CI [t-statistic]",
+             "Estimate",
+             "CI [t-statistic]",
+             "Estimate",
+             "CI [t-statistic]",
+             "Estimate",
+             "CI [t-statistic]",
+             after = 1) |>
+  insert_row("Random effects", "", "", "", "", "", "", "", "", after = 11) |>
+  set_all_padding(10) |>
+  set_outer_padding(0) |>
+  set_bold(row = 1, col = everywhere) |>
+  #set_bottom_border(row = 1, col = everywhere) |>
+  set_width(1.1) |>
+  theme_article() |> #flextable::theme_apa() is good too.
+  huxtable::as_flextable(column_to_header = TRUE) |>
+  hline(12,
+        part = "all",
+        border = fp_border(
+          color = "black",
+          style = "solid",
+          width = 1
+        )) |> 
+  hline(15,
+        part = "all",
+        border = fp_border(
+          color = "black",
+          style = "solid",
+          width = 1.25
+        )) |>
+  hline(
+    i = 1,
+    j = c(2:9),
+    part = "body",
+    border = fp_border(
+      color = "black",
+      style = "solid",
+      width = 1
+    )
+  ) |>
+  flextable::align(
+    i = 1:14,
+    j = 2:9,
+    align = "center",
+    part = "body"
+  ) |>
+  flextable::style(i = c(1:16),
+                   j = 1,
+                   pr_t = fp_text(bold = FALSE)) |> 
+  flextable::italic(
+    i = c(4, 5, 12, 15),
+    j = 1,
+    italic = TRUE,
+    part = "body"
+  ) |>
+  flextable::bold(
+    i = c(2, 12),
+    j = 1,
+    bold = TRUE,
+    part = "body"
+  ) |>
+  flextable::set_caption("Generalized linear mixed models (GLMMs) for predicting mean Bray-Curtis dissimilarity") |>
+  flextable::font(
+    i = NULL,
+    j = NULL,
+    fontname = "Tex Gyre Termes",
+    part = "all",
+    cs.family = fontname,
+    hansi.family = fontname,
+    eastasia.family = fontname
+  )
+
+knitr::knit_print(table1)
+
+#save_as_docx(table1, path = "tables/model_comparison.docx")
+#save_as_image(table1, path = "tables/model_comparison.svg")
+```
+
 
 # Indicator species analysis
 
