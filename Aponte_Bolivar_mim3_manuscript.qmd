@@ -89,6 +89,7 @@ library("broom")
 library("MetBrewer")
 library("rstatix")
 library("readxl")
+library("paletteer")
 
 # Models
 library("car")
@@ -276,9 +277,9 @@ We stored leaf tissue in CTAB solution for 12 months at 20°C before extracting 
 
 <!-- We used a DNA extraction protocol for high-molecular weight DNA extraction adapted from Russo et al., [-@russo2022]. Briefly, it is a CTAB:chloroform:isoamyl extraction combined with a solid-phase reversible immobilization (SPRI) bead step [@russo2022; @rohland2012; @liu2023]. Protocol modifications allowed us to optimize extractions for fungal DNA from preserved leaf tissue [see details in @aponterolon2023]. After all genomic DNA was extracted, we quantified the DNA using Quant-iT® dsDNA HS Assay kit with Qubit Flourometer (Thermo Fisher Scientific, Waltham, MA, USA., Cat# Q33120) and followed a two-step amplification approach described by Sarmiento et al. [-@sarmiento2017] and U'Ren & Arnold [-@uren2017]. We used standard primers ITS1F [@gardes1993] and ITS2 [@inbook] modified with the Illumina TruSeq adaptor (see Supplementary Material). Every sample was amplified in three parallel reactions at the annealing temperatures 52 ℃, 54 ℃, and 56 ℃ to amplify a wide range of fungal taxa and reduce amplification bias for short ITS sequences [@uren2017; @lumibao2018]. Each PCR (PCR1) reaction contained 2 µL of sample DNA template. We visualized PCR1 reactions with SYBR™ Safe DNA Gel Stain (Thermo Fisher Scientific, Waltham, MA, USA., Cat# S33102) on 2% agarose gel [@oita2021]. We combined 5 µL of amplicon product from parallel reactions into a single tube per sample and purified using Sera-Mag™ SpeedBead Carboxylate-Modified Magnetic Particles (Hydrophobic) (Thermo Fisher Scientific, Waltham, MA, USA., Cat#09-981-123) prepared as per [-@rohland2012 and -@liu2023] and used a ratio of 1.2x:1 with 80% EtOH following manufacturer's instructions. We used 3 µL of PCR1 product from samples, DNA extraction controls, and PCR1 negative controls for a second PCR (PCR2) with barcoded adapters (IDT, Coralville, Iowa, USA). Each PCR2 reaction (total 30 µL) contained 1X Phusion Flash High Fidelity PCR Master Mix (Thermo Fisher Scientific, Waltham, MA, USA., Cat# F548L), 0.075 µM of barcoded primers (forward and reverse pooled at an initial concentration of 2 µM) and 0.20mg/mL of BSA (Thermo Fisher Scientific, Waltham, MA, USA., Cat# B14) following [-@sarmiento2017 and -@uren2017]. Before final pooling for sequencing, we purified and concentrated amplicons using SPRI beads to a total volume of 20 µL. We quantified PCR2 product with Quant-iT™ PicoGreen™ dsDNA Assay Kit (Thermo Fisher Scientific, Waltham, MA, USA., Cat# P7589) with the BioTek Synergy LX plate reader (Agilent, Santa Clara, CA) and combined equimolar amounts of libraries, including DNA extraction controls, PCR1, and PCR2 negative controls into a 10nM library pool. We did not detect any contamination visually or fluorometrically. Libraries were sequenced on the Illumina MiSeq platform with Reagent Kit v3 (2 \u00D7 300 bp) at Duke Genome Sequencing and Analysis Core Facility (Durham, NC, USA). Throughout all these steps, we used a separate set of sterile pipettes, tips, and equipment to reduce contamination in a designated PCR area to restrict contact with pre-PCR materials [@oita2021]. -->
 
-### Sequence-based genotyping
+<!-- ### Sequence-based genotyping -->
 
-We genotyped individuals following a modified ddRADseq protocol, Rapture [@ali2016; @nelson2019], for the identification of single nucleotide polymorphisms (SNPs). We allotted the remaining DNA extracted from leaf tissue to the ddRADseq library preparation. The Rapture protocol call for a two step digestion process, for which we used the restriction enzyme *Bfal-HF* (R0568S, New England Biolabs, Ipswich, MA, USA) in the first DNA digestion, and  *PstI* (R0140L, New England Biolabs, Ipswich, MA, USA) in the second digestion. We then ligated annealed oligos to each sample. We prepared ddRAD libraries using the NEBNext® Ultra™ II DNA Library Prep Kit for Illumina® (E7645S, New England Biolabs, Ipswich, MA, USA) with the *i7* oligos from NEBNext® Multiplex Oligos for Illumina® (E7335S, New England Biolabs, Ipswich, MA, USA) and a custom *i5* barcoded oligos (IDT, Coralville, Iowa, USA; see Supplementary Materials). We sequenced the library on the Illumina NovaSeq X Plus platform at Duke Genome Sequencing and Analysis Core Facility (Durham, NC, USA). 
+<!-- We genotyped individuals following a modified ddRADseq protocol, Rapture [@ali2016; @nelson2019], for the identification of single nucleotide polymorphisms (SNPs). We allotted the remaining DNA extracted from leaf tissue to the ddRADseq library preparation. The Rapture protocol call for a two step digestion process, for which we used the restriction enzyme *Bfal-HF* (R0568S, New England Biolabs, Ipswich, MA, USA) in the first DNA digestion, and  *PstI* (R0140L, New England Biolabs, Ipswich, MA, USA) in the second digestion. We then ligated annealed oligos to each sample. We prepared ddRAD libraries using the NEBNext® Ultra™ II DNA Library Prep Kit for Illumina® (E7645S, New England Biolabs, Ipswich, MA, USA) with the *i7* oligos from NEBNext® Multiplex Oligos for Illumina® (E7335S, New England Biolabs, Ipswich, MA, USA) and a custom *i5* barcoded oligos (IDT, Coralville, Iowa, USA; see Supplementary Materials). We sequenced the library on the Illumina NovaSeq X Plus platform at Duke Genome Sequencing and Analysis Core Facility (Durham, NC, USA).  -->
 
 
 ### Bioinformatic analyses
@@ -304,9 +305,9 @@ Next, we computed alpha diversity per sample as Hill orders -observed richness (
 
 For beta diversity analyses, we performed a Hellinger transformation on the rarefied abundance matrices and calculated a Bray-Curtis dissimilarity matrix for each, then we applied a distance-based Redundancy Analysis (dbRDA) on dissimilarities to statistically compare similarities within each host species per site [@anderson2017; @legendre1999; @mcardle2001].
 
-Our dbRDA model consisted of terms logLBI, genotype, and habitat type. The leaf shape data was not randomized or sub-sampled to match rarefied dataset, the original values applied to all 50 rarefied matrices. To select the best model, we evaluated the marginal significance of constraining variables after 999 permutations with function `anova.cca` [@legendre2011; @legendre2012; @oksanen2022]. We evaluated the homogeneous dispersion of variances with a permutational analysis of multivariate dispersion (PERMDISP) using the `betadisper` with parameter `type = "median"`, and `permutest` functions from `vegan`, the latter with 999 permutations [@oksanen2022]. We used a post-hoc Tukey's test to compare the differences in the dispersion of the FEF communities among genotypes and habitat types.
+Our dbRDA model consisted of terms logLBI, cross-type, and habitat type. The leaf shape data was not randomized or sub-sampled to match rarefied dataset, the original values applied to all 50 rarefied matrices. To select the best model, we evaluated the marginal significance of constraining variables after 999 permutations with function `anova.cca` [@legendre2011; @legendre2012; @oksanen2022]. We evaluated the homogeneous dispersion of variances with a permutational analysis of multivariate dispersion (PERMDISP) using the `betadisper` with parameter `type = "median"`, and `permutest` functions from `vegan`, the latter with 999 permutations [@oksanen2022]. We used a post-hoc Tukey's test to compare the differences in the dispersion of the FEF communities among cross-types and habitat types.
 <!-- We used the `simper` function from `vegan` to discriminate which species contribute the most to compositional differences between groups [@oksanen2022]. -->
-<!-- To determine if there is a significant correlation of core FEF community with genotype and habitat type, we conducted an indicators species analyses (ISA) using the `multipatt` function from the `indicspecies` package [@decaceres2009]. -->
+<!-- To determine if there is a significant correlation of core FEF community with cross-type and habitat type, we conducted an indicators species analyses (ISA) using the `multipatt` function from the `indicspecies` package [@decaceres2009]. -->
 
 <!-- To assess correlations between pairwise FEF community dissimilarity and the geographical distance matrix per host species (Q4), we computed a Mantel tests with Spearman's rho and 999 permutations using the `mantel` function [@oksanen2022]. -->
 <!-- For this test, we opted for a less taxing computational approach and rarefied sequences with the same parameters as before and calculated Hellinger transformations with the `avgdist` function [@oksanen2022]. -->
@@ -316,7 +317,7 @@ Our dbRDA model consisted of terms logLBI, genotype, and habitat type. The leaf 
 ### Leaf shape
 
 We checked for normality and homoscedasticity of the LBI measurements.
-We used Shapiro-Wilk and Fligner-Killen tests from the `stats` package [@rcoreteam2024] to check for normality and homoscedasticity, respectively. We established that the leaf lobe index data was not normally distributed and not homoscedastic and performed log-transformation. We then used non-parametric tests, the Wilcoxon Rank Sum test, to compare LBI means among genotypes. We used the `compare_means` and `stat_compare_means`functions from the `ggpubr` package [@kassambara2023] to perform these tests and properly visualize them. We adjusted *p* values to account for false discovery rates in multiple comparisons by using “BH” method [@benjamini1995].
+We used Shapiro-Wilk and Fligner-Killen tests from the `stats` package [@rcoreteam2024] to check for normality and homoscedasticity, respectively. We established that the leaf lobe index data was not normally distributed and not homoscedastic and performed log-transformation. We then used non-parametric tests, the Wilcoxon Rank Sum test, to compare LBI means among cross-types. We used the `compare_means` and `stat_compare_means`functions from the `ggpubr` package [@kassambara2023] to perform these tests and properly visualize them. We adjusted *p* values to account for false discovery rates in multiple comparisons by using “BH” method [@benjamini1995].
 
 All statistical analyses were performed in *R* programming language [v.4.3.3; @rcoreteam2024].
 We present FEF community data for 287 samples.
@@ -326,26 +327,30 @@ We present the log-transformed LBI from and samples from the larger common garde
 # Results
 
 Our sequencing effort yielded 20,685,544 reads representing 1291 ASVs from 318 samples after processing through the DADA2 pipeline. The raw reads obtained were composed of 69.1% Ascomycota, 31% Basidiomycota, 0.05% Chytridiomycota, 0.01% Mortierellomycota, \<0.01% Glomeromycota, \<0.01% Rozellomycota, \<0.001% Aphelidiomycota, and 0.23% missed hits.
-Following decontamination and removal of singletons we obtained 20,157,032 reads representing 532 ASVs from 287 samples composed of 69.1% Ascomycota, 31% Basidiomycota, 0.05% Chytridiomycota, \<0.01% Mortierellomycota, 0.001% Glomeromycota, \<0.001% Rozellomycota, and 0.25% missed hits (Fig. 1A and Fig. S2). The presence of Ascomycota (100%) and Basidiomycota (99%) was prevalent in samples across all genotypes and habitat types in the un-rarefied data (Fig. 1A). This points to core taxa associated with *Mimulus* spp. We identified eighteen core taxa members at a 1% detection threshold and 50% prevalence in samples from the un-rarefied data (Table 1). We found that 208 (39%) ASVs are shared across habitat types and 164 (31%) shared by cross-types in the un-rarified data (Fig. S2A - S2B). In the rarified data set we observed that 202 (38%) and 159 (30%) ASVs are shared across habitat types and genotypes, respectively (Fig. S2C - S2D). Within the ten most abundant genera, *Cladosporium*, *Vishiniacozyma*, and *Ramularia* are the most abundant across all samples (Fig. S3). The small differences in shared and unique ASVs provides confidence that the rarified data accurately represents the underlying dynamics of the system (Fig. 1 and Fig. S2 - S3). The following section reports on results from the rarefied data sets.
+Following decontamination and removal of singletons we obtained 20,157,032 reads representing 532 ASVs from 287 samples composed of 69.1% Ascomycota, 31% Basidiomycota, 0.05% Chytridiomycota, \<0.01% Mortierellomycota, 0.001% Glomeromycota, \<0.001% Rozellomycota, and 0.25% missed hits (Fig. 1A and Fig. 2). The presence of Ascomycota (100%) and Basidiomycota (99%) was prevalent in samples across all cross-types and habitat types in the un-rarefied data (Fig. 1A). This points to core taxa associated with *Mimulus* spp. We identified eighteen core taxa members at a 1% detection threshold and 50% prevalence in samples from the un-rarefied data (Table 1). 
+<!-- We found that 208 (39%) ASVs are shared across habitat types and 164 (31%) shared by cross-types in the un-rarified data (Fig. 2A - 2B).  -->
+In the rarified data set we comprised of 282 samples were we observed that 202 (38%) and 159 (30%) ASVs are shared across habitat types and cross-types, respectively (Fig. 2A - 2B). Within the ten most abundant genera, *Cladosporium*, *Vishiniacozyma*, and *Ramularia* are the most abundant across all samples (Fig. S2). 
+<!-- The small differences in shared and unique ASVs provides confidence that the rarified data accurately represents the underlying dynamics of the system (Fig. 1 - 2 and Fig. S2).  -->
+The following section reports on results from the rarefied data sets.
 
-Alpha diversity was significantly different between all parental lines and hybrid crosses, with the exception of the Hill order 2 (𝑞 = 2, *p* \> .05) comparison of F2WY and G parental line (Fig. 2C). The parental lines had significantly greater levels observed richness (𝑞 = 0, *p* \< .001, Fig. 2A) when compared to their F~2~ progeny when accounting for all habitat types. Only F2YW had significant differences (*p* \< .001) in observed richness at all habitats. For F2YW and F2WY, we saw significant differences Hill order 1 and 2 (𝑞 = 1, and 𝑞 = 2) when comparing Meadow 1 and Meadow 2 (*p* \< .001), and Granite 1 to Meadow 2 (*p* \< .001). Additionally, F2WY cross-type also had significant differences for these Hill orders when comparing Meadow 1 and Granite 1 (*p* \< .05). We observed a similar pattern in beta diversity, habitats showed significant differences from one another (Fig. 2D - 2F). Meadow 2 has consistently greater levels of beta diversity for all Hill orders, while Granite 1 has the lowest observed richness (𝑞 = 0), but not Hill order 1 or 2 (Fig. 2D - 2F).
+Alpha diversity was significantly different between all parental lines and hybrid crosses, with the exception of the Hill order 2 (𝑞 = 2, *p* \> .05) comparison of F2WY and G parental line (Fig. 3C). The parental lines had significantly greater levels observed richness (𝑞 = 0, *p* \< .001, Fig. 3A) when compared to their F~2~ progeny when accounting for all habitat types. Only F2YW had significant differences (*p* \< .001) in observed richness at all habitats. For F2YW and F2WY, we saw significant differences Hill order 1 and 2 (𝑞 = 1, and 𝑞 = 2) when comparing Meadow 1 and Meadow 2 (*p* \< .001), and Granite 1 to Meadow 2 (*p* \< .001). Additionally, F2WY cross-type also had significant differences for these Hill orders when comparing Meadow 1 and Granite 1 (*p* \< .05). We observed a similar pattern in beta diversity, habitats showed significant differences from one another (Fig. 3D - 3F). Meadow 2 has consistently greater levels of beta diversity for all Hill orders, while Granite 1 has the lowest observed richness (𝑞 = 0), but not Hill order 1 or 2 (Fig. 3D - 3F).
 
-To further understand beta diversity and FEF community composition we performed two distance-based Redundancy Analysis (dbRDA) modelling the relationship between FEF communities, leaf shape, cross-type, and habitat type: the fist accounting for individuals from parental lines and hybrids, and a second only with hybrids. The best fit model accounting all individuals and cross-types revealed that 15.72% of the overall variance in FEF communities was accounted for by log-transformed LBI, cross-type, and habitat type, the constraining variables. The first axis (dbRDA1) explained 52.9% and the second axis (dbRDA2) explained 36.4% of the constrained variance (Fig. 4). We saw that Granite 1 and lobLBI, are opposite to Meadow 1 along dbRDA1.  When we visualize the ellipses for genotypes, we observed highly overlapping FEF communities in F~2~YW and F~2~WY genotypes (Fig. 3A), as well less overlap in groupings of G and L parantal lines. In contrast, we note clear and little to non-overlapping FEF communities when results are visualized by habitat type (Fig. 3B). The marginal significance of constraining variables after permutational ANOVA revealed that all variables where significant at ⍺ = 0.05 but varied in their explanatory power (Table 3). We saw evidence for strong habitat type effects on FEF communities.
+To further understand beta diversity and FEF community composition we performed two distance-based Redundancy Analysis (dbRDA) modelling the relationship between FEF communities, leaf shape, cross-type, and habitat type: the fist accounting for individuals from parental lines and hybrids, and a second only with hybrids. The best fit model accounting all individuals and cross-types revealed that 15.72% of the overall variance in FEF communities was accounted for by log-transformed LBI, cross-type, and habitat type, the constraining variables. The first axis (dbRDA1) explained 52.9% and the second axis (dbRDA2) explained 36.4% of the constrained variance (Fig. 4). We saw that Granite 1 and lobLBI, are opposite to Meadow 1 along dbRDA1.  When we visualize the ellipses for cross-types, we observed highly overlapping FEF communities in F~2~YW and F~2~WY cross-types (Fig. 4A), as well less overlap in groupings of G and L parantal lines. In contrast, we note clear and little to non-overlapping FEF communities when results are visualized by habitat type (Fig. 4B). The marginal significance of constraining variables after permutational ANOVA revealed that all variables where significant at ⍺ = 0.05 but varied in their explanatory power (Table 3). We saw evidence for strong habitat type effects on FEF communities.
 
 We performed permutational analysis of multivariate dispersion (PERMDISP) to test for homogeneity of variances of FEF communities from clustered in the dbRDA analyses. We found homogeneous variance of FEF communities across for all parental lines and crosses (*F*~3, 14096~= 46.28, *p* \=.001). The post-hoc Tukey's test revealed that all parental lines and crosses comparisons were significant different at ⍺ = 0.05. We also detected significant differences in FEF communities by habitat type (*F*~2, 14097~= 2472.5, *p* \= .001). Our post-hoc Tukey's test showed that FEF communities from all habitat types had significant differences in the dispersion of variance at ⍺ = 0.05.
 
-To understand how leaf shape influences FEF communities, we measured LBI and observed significant differences in G and L parental lines in Meadow 1(*p* \=.05, Fig. 4A), but not Meadow 2 and Granite 1, an unexpected result since L parental line is locally adapted to granite habitat. The F~2~WY and F~2~YW progeny only had significant differences when compared to each other, and F~2~WY when compared to G in Meadow 2. In Granite 1, we saw the F~2~ progeny had significant differences compared to parental lines (*p* \=.05, Fig 4A), but not when compared to each other (Fig. 4A). The LBI differences across habitat types were significant for the F~2~ progeny (*p* \=.05), parental lines did not differ significantly in LBI across habitats (Fig. 4B). 
+To understand how leaf shape influences FEF communities, we measured LBI and observed significant differences in G and L parental lines in Meadow 1(*p* \=.05, Fig. 6A), but not Meadow 2 and Granite 1, an unexpected result since L parental line is locally adapted to granite habitat. The F~2~WY and F~2~YW progeny only had significant differences when compared to each other, and F~2~WY when compared to G in Meadow 2. In Granite 1, we saw the F~2~ progeny had significant differences compared to parental lines (*p* \=.05, Fig 6A), but not when compared to each other (Fig. 6A). The LBI differences across habitat types were significant for the F~2~ progeny (*p* \=.05), parental lines did not differ significantly in LBI across habitats (Fig. 6B). 
 <!-- **SNPs results coming here soon!** -->
 
 
 # Discussion
 
-Our study provides a comprehensive analysis of the FEF communities associated with *Mimulus* spp. leaf tissue and the underlying genetic basis (MISSING PLANT GENOMIC DATA). We found that FEF diversity and community composition are significantly different between genotypes. These findings bring attention to symbiotic relationships in *Mimulus* that may be evolutionary adaptive. Fungal community differences between habitat types maybe due to distinct species pool regardless of habitat similarity (e.g.,, meadows). Our results suggest host genotype and habitat type are significant predictors of FEF colonization, with varying degrees of impact. Granite 1 had lower ASV richness than Meadow 1-2, but increased Hill orders 1 and 2 compared to Meadow 1. This is not surprising, given the strong abiotic differences (i.e. soil moisture) meadow and granite habitats experience throughout the growing season [@ferris2018; @tataru2023] that could explain the need for allocating a greater effective number of species[@chao2014]. The differences between the meadow habitat could be explained by their recent fire history, Meadow 1 burned in 2013 during the Rim Fire, which could have caused a shift in the local flora and evapotranspirations rates experienced at the site leading to changes in and FEF pool [@bowman2021; @nationalparkservice2023; @giauque2016]. Meadow 1 is generally drier and shrubbier than Meadow 2, which did not has not burn in 2013. These potential sources of variation merit further investigation.   
+Our study provides a comprehensive analysis of the FEF communities associated with *Mimulus* spp. leaf tissue and the underlying genetic dynamics. We found that FEF diversity and community composition are significantly different between cross-types. These findings bring attention to symbiotic relationships in *Mimulus* that may be evolutionary adaptive. Fungal community differences between habitat types maybe due to distinct species pool regardless of habitat similarity (e.g.,, meadows). Our results suggest host cross-type and habitat type are significant predictors of FEF colonization, with varying degrees of impact. Granite 1 had lower ASV richness than Meadow 1-2, but increased Hill orders 1 and 2 compared to Meadow 1. This is not surprising, given the strong abiotic differences (i.e. soil moisture) meadow and granite habitats experience throughout the growing season [@ferris2018; @tataru2023] that could explain the need for allocating a greater effective number of species[@chao2014]. The differences between the meadow habitat could be explained by their recent fire history, Meadow 1 burned in 2013 during the Rim Fire, which could have caused a shift in the local flora and evapotranspirations rates experienced at the site leading to changes in and FEF pool [@bowman2021; @nationalparkservice2023; @giauque2016]. Meadow 1 is generally drier and shrubbier than Meadow 2, which did not has not burn in 2013. These potential sources of variation merit further investigation.   
 
-Exploring the FEF community of *Mimulus* in a reciprocal transplant experiment allowed us to delineate how genotype by environment interactions shape these communities.  The constrained ordination analyses revealed a clear clustering by habitat type along both dbRDA axes (Fig. 3B), while  genotypes showed less distinct clustering (Fig. 3A). The *Mimulus* parental lines hosted distinct FEF communities and differed significantly in alpha diversity levels regardless habitat. Bowsher et al., found a similar effect of environment and host identity when comparing the bacterial rhizosphere community of locally adapted *M. guttatus* ecotypes [-@bowsher2020]. Similarly, in a greenhouse experiment McIntosh et al., [-@mcintosh2024] found that site, soil origin, and *M. guttatus* plant ecotypes (annual and perennial) were the most important factors determining the structure of root associated fungal communities. Despite experimental plants performing poorly when interacting with *Mimulus guttatus*-derived biota, McIntosh et al., [-@mcintosh2024] find that AMF communities were strongly differentiated in common garden conditions. While their results are focused on the root microbiota and under greenhouse, we consider, that our results show that the differences in FEF communities between *M. guttatus* and *M. laciniatus* add to the adaptive trait differences between these diverged species, meriting further investigation.  
+Exploring the FEF community of *Mimulus* in a reciprocal transplant experiment allowed us to delineate how cross-type by environment interactions shape these communities.  The constrained ordination analyses revealed a clear clustering by habitat type along both dbRDA axes (Fig. 4B), while  cross-types showed less distinct clustering (Fig. 4A). The *Mimulus* parental lines hosted distinct FEF communities and differed significantly in alpha diversity levels regardless habitat. Bowsher et al., found a similar effect of environment and host identity when comparing the bacterial rhizosphere community of locally adapted *M. guttatus* ecotypes [-@bowsher2020]. Similarly, in a greenhouse experiment McIntosh et al., [-@mcintosh2024] found that site, soil origin, and *M. guttatus* plant ecotypes (annual and perennial) were the most important factors determining the structure of root associated fungal communities. Despite experimental plants performing poorly when interacting with *Mimulus guttatus*-derived biota, McIntosh et al., [-@mcintosh2024] find that AMF communities were strongly differentiated in common garden conditions. While their results are focused on the root microbiota and under greenhouse, we consider, that our results show that the differences in FEF communities between *M. guttatus* and *M. laciniatus* add to the adaptive trait differences between these diverged species, meriting further investigation.  
 **SOMETHING ABOUTE THE GENETIC SNP DATA THAT I DONT HAVE.**
 
-We produced F~2~ progeny to decouple leaf shape from genetic host genetics and found that the FEF communities are significantly correlated with leaf lobe index (LBI). The capacity of the F2 progeny to host distinct FEF communities regardless of the genetic background provides strong evidence in support of the LBI functioning as an environmental filter. This adds to the suite of leaf functional traits that have been found to structure FEF communities [@tellezTraits2022; reviewed in gonzalez-teuber2021; @gonzalez-teuber2020]. The F2 progeny exhibited a higher number of unique ASVs compared to parental lines, suggesting that hybridization may increase the potential for novel FEF interactions (Fig. S2). The core taxa found in all samples includes *Vishiniacozyma victoriae* which has been shown to provide cold tolerance to their hosts [@vujanovic2021; @buzzini2018]. Expanding the breadth of associated FEF taxa could be a strategy for increasing hybrid fitness in the face of environmental stressors. We do not have the data to support this claim, but it is a potential avenue for future research.
+We produced F~2~ progeny to decouple leaf shape from genetic host genetics and found that the FEF communities are significantly correlated with leaf lobe index (LBI). The capacity of the F2 progeny to host distinct FEF communities regardless of the genetic background provides strong evidence in support of the LBI functioning as an environmental filter. This adds to the suite of leaf functional traits that have been found to structure FEF communities [@tellezTraits2022; reviewed in gonzalez-teuber2021; @gonzalez-teuber2020]. The F2 progeny exhibited a higher number of unique ASVs compared to parental lines, suggesting that hybridization may increase the potential for novel FEF interactions (Fig. 2). The core taxa found in all samples includes *Vishiniacozyma victoriae* which has been shown to provide cold tolerance to their hosts [@vujanovic2021; @buzzini2018]. Expanding the breadth of associated FEF taxa could be a strategy for increasing hybrid fitness in the face of environmental stressors. We do not have the data to support this claim, but it is a potential avenue for future research.
 
 
 # Conclusions
@@ -431,7 +436,7 @@ theme_lfdiv_continuous <- theme_classic(base_size = 16) +
 #| fig-width: 6
 #| fig-height: 8
 #| label: rabun_barplot
-#| fig-cap: "Relative abundance of fungal phyla in raw (A) and rarefied (B) data, by species and elevation category."
+#| fig-cap: "Relative abundance of fungal phyla in rarefied data, by species and elevation category."
 
 
 #Barplots with microeco
@@ -446,19 +451,19 @@ ps_clean_3@sam_data <- plant_traits |>
 
 
 # Raw data
-micro_psclean <- phyloseq2meco(ps_clean_3) # First convert phyloseq to meco
+#micro_psclean <- phyloseq2meco(ps_clean_3) # First convert phyloseq to meco
 
 
-t1 <- trans_abund$new(dataset = micro_psclean, taxrank = "Phylum", ntaxa = 8)
-
-t1gg <- t1$plot_bar(others_color = "grey70", facet = c("Habitat", "Genotype"), xtext_keep = FALSE, legend_text_italic = FALSE, color_values = RColorBrewer::brewer.pal(8, "Set3"))
-t1gg <- t1gg + 
-  ggtitle("Un-rarified data") +
-  theme(legend.title = element_text(face = "bold"),
-         plot.title = element_text(face = "bold", size = 14),
-         strip.text = element_text(face = "bold", size = 12),
-         panel.border = element_rect(linetype = "blank", fill = NA),
-         axis.text.x = element_blank())
+# t1 <- trans_abund$new(dataset = micro_psclean, taxrank = "Phylum", ntaxa = 8)
+# 
+# t1gg <- t1$plot_bar(others_color = "grey70", facet = c("Habitat", "Genotype"), xtext_keep = FALSE, legend_text_italic = FALSE, color_values = RColorBrewer::brewer.pal(8, "Set3"))
+# t1gg <- t1gg + 
+#   ggtitle("Un-rarified data") +
+#   theme(legend.title = element_text(face = "bold"),
+#          plot.title = element_text(face = "bold", size = 14),
+#          strip.text = element_text(face = "bold", size = 12),
+#          panel.border = element_rect(linetype = "blank", fill = NA),
+#          axis.text.x = element_blank())
 
 #t1gg
 
@@ -468,26 +473,25 @@ micro_rarefied_ps <- phyloseq2meco(rarefied_phyloseq) # First convert phyloseq t
 r1 <- trans_abund$new(dataset = micro_rarefied_ps, taxrank = "Phylum", ntaxa = 8)
 r1gg <- r1$plot_bar(others_color = "grey70", facet = c("Habitat", "Genotype"), xtext_keep = FALSE, legend_text_italic = FALSE, color_values = RColorBrewer::brewer.pal(8, "Set3"))
 r1gg <- r1gg + 
-  ggtitle("Rarified data") +
+  #ggtitle("Rarified data") +
   theme(legend.title = element_text(face = "bold"),
          plot.title = element_text(face = "bold", size = 14),
          strip.text = element_text(face = "bold", size = 12),
          panel.border = element_rect(linetype = "blank", fill = NA),
          axis.text.x = element_blank())
-#r1gg
-ggsave(file.path(path, "figures/figure_rarefied_only.png") , plot = r1gg, dpi=300, units=c("mm"), width=300, height=250)
+r1gg
+ggsave(file.path(path, "figures/figursye1_rarefied_only.png") , plot = r1gg, dpi=300, units=c("mm"), width=300, height=250)
 
-# Arrange plots
-ra_plots <- ggarrange(t1gg, "", r1gg,
-                          nrow = 3, ncol = 1,
-                      heights = c(1, 0.1, 1),
-                          common.legend = TRUE, legend = "bottom",
-                          labels = c("A", "B"))
-ra_plots
-
-ggsave(file.path(path, "figures/figure1.png") , plot = ra_plots, dpi=300, units=c("mm"), width=200, height=250)
+# # Arrange plots
+# ra_plots <- ggarrange(t1gg, "", r1gg,
+#                           nrow = 3, ncol = 1,
+#                       heights = c(1, 0.1, 1),
+#                           common.legend = TRUE, legend = "bottom",
+#                           labels = c("A", "B"))
+# ra_plots
+# 
+# ggsave(file.path(path, "figures/figure1.png") , plot = ra_plots, dpi=300, units=c("mm"), width=200, height=250)
 ```
-
 
 ## Figure 2
 
@@ -495,11 +499,108 @@ ggsave(file.path(path, "figures/figure1.png") , plot = ra_plots, dpi=300, units=
 #| echo: false
 #| eval: true
 #| tidy: true
+#| message: false
+#| fig-height: 5
+#| fig-width: 6.5
+#| label: venn_diagrams
+#| fig-cap: "Venn diagrams of present and absense of ASVs among cross-types and habitat type in un-rarified data and rarified data. A-B) Represent the overlap of ASVs habitat types and C-D) in gentoypes. Number of ASVs are represented the count and in parentheses as a ratio shared between cross-type and habitat type."
+
+micro_psclean <- phyloseq2meco(ps_clean_3) # First convert phyloseq to meco
+
+# un-rarified data
+# Per site
+# dataset1 <- micro_psclean$merge_samples(use_group = "Habitat")
+# # create trans_venn object
+# v1 <-
+#   trans_venn$new(dataset1, ratio = "numratio") # Percentage represent ratio of shared ASVs
+# v1gg <-
+#   v1$plot_venn() + #https://r-charts.com/color-palettes/#discrete
+#   ggtitle("Un-rarified data") +
+#   theme(plot.title = element_text(
+#     face = "bold",
+#     size = 16,
+#     hjust = 0.5,
+#     vjust = 0.5
+#   ))
+# 
+# 
+# # Per genotype
+# dataset2 <- micro_psclean$merge_samples(use_group = "Genotype")
+# v2 <- trans_venn$new(dataset2, ratio = "numratio") 
+# #v2$plot_venn()
+
+# rarified data
+micro_rarefied_ps <- phyloseq2meco(rarefied_phyloseq) # First convert phyloseq to meco
+# Per site
+dataset3 <- micro_rarefied_ps$merge_samples(use_group = "Habitat") 
+# create trans_venn object
+v3 <- trans_venn$new(dataset3, ratio = "numratio")
+v3gg <- v3$plot_venn() +
+  #ggtitle("Rarified data") +
+  theme(plot.title = element_text(
+    face = "bold",
+    size = 16,
+    hjust = 0.5,
+    vjust = 0.5
+  ))
+
+
+# Per genotype
+dataset4 <- micro_rarefied_ps$merge_samples(use_group = "Genotype")
+v4 <- trans_venn$new(dataset4, ratio = "numratio")
+v4gg <- v4$plot_venn()
+  
+
+# Arrange plots
+venn_plots <- ggarrange(
+  v3gg,
+  v4gg,
+  ncol = 2,
+  nrow = 1,
+  common.legend = TRUE,
+  heights = c(1, 1),
+  legend = "bottom",
+  labels = c("A", "B")
+)
+
+venn_plots
+                                        
+# joined plots
+
+
+# venn_plots <-
+#   ggarrange(
+#     v1gg,
+#     v3gg,
+#     "", # Fake plot to create space
+#     "",
+#     v2$plot_venn(),
+#     v4$plot_venn(),
+#     ncol = 2,
+#     nrow = 3,
+#     common.legend = TRUE,
+#     heights = c(1, 0.1, 1),
+#     legend = "bottom",
+#     labels = c("A", "B","", "", "C", "D")
+#   )
+# 
+# venn_plots
+
+# Save
+ggsave(filename = file.path(path, "figures/figure2.png"), plot = venn_plots, dpi=300, units=c("mm"), width=300, height=300)
+```
+
+## Figure 3
+
+```{r, figure3}
+#| echo: false
+#| eval: true
+#| tidy: true
 #| warning: false
 #| fig-width: 6
 #| fig-height: 6
 #| label: boxplot_hill_orders
-#| fig-cap: "Alpha diversity mean comparisons by genotype and beta diversity mean comparisons by habitat type. Alpha diversity mean comparisons; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2) per host genotype. A-C) Red filled boxplots correspond to F2YW, orange filled to G (*M. guttatus*), yellow to L (*M. laciniatus*), and teal to F2WY genotype. Beta diversity mean comparions; D) Observed ASV richness (𝑞 = 0); E) Shannon's entropy (𝑞 = 1); and F) Inverse Simpson's index (𝑞 = 2)per habitat type. D-F) Light teal filled boxplot corresponds to Meadow 1, purple to Meadow 2, and light maroon to Granite 1. Open shapes represent: squares (F2YW), circles (G), triangles (L), and crosses (F2WY).  Significance levels are represented by *ns* (not significant) and asterisks [*p* < 0.05 (\\*), *p* < 0.01 (\\**), *p* < 0.001 (\\***), and *p* < 0.0001 (\\****)]."
+#| fig-cap: "Alpha diversity mean comparisons by cross-type and beta diversity mean comparisons by habitat type. Alpha diversity mean comparisons; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2) per host cross-type. A-C) Red filled boxplots correspond to F2YW, orange filled to G (*M. guttatus*), yellow to L (*M. laciniatus*), and teal to F2WY cross-type. Beta diversity mean comparions; D) Observed ASV richness (𝑞 = 0); E) Shannon's entropy (𝑞 = 1); and F) Inverse Simpson's index (𝑞 = 2)per habitat type. D-F) Light teal filled boxplot corresponds to Meadow 1, purple to Meadow 2, and light maroon to Granite 1. Open shapes represent: squares (F2YW), circles (G), triangles (L), and crosses (F2WY).  Significance levels are represented by *ns* (not significant) and asterisks [*p* < 0.05 (\\*), *p* < 0.01 (\\**), *p* < 0.001 (\\***), and *p* < 0.0001 (\\****)]."
 
 ############################################
 #### Alpha diversity ####
@@ -790,34 +891,34 @@ alpha_beta_diversity <- ggarrange(hill_numbers_species, "", hill_beta,
 
 alpha_beta_diversity
 
-ggsave(filename = file.path(path, "figures/figure2.png"), plot = alpha_beta_diversity, dpi=300, units=c("mm"), width=300, height=275)
+ggsave(filename = file.path(path, "figures/figure3.png"), plot = alpha_beta_diversity, dpi=300, units=c("mm"), width=300, height=275)
 
 
 # Alpha and beta diversity plots used in defense talk
-defense_diversity <-
-  ggarrange(
-    "",
-    "",
-    hill1_species,
-    hill1_beta,
-    nrow = 2,
-    ncol = 2,
-    heights = c(0.1, 1),
-    common.legend = FALSE,
-    legend = "bottom",
-    labels = c("Alpha diversity", "Beta diversity", "", "")
-  )
-defense_diversity
-
-ggsave(filename = file.path(path, "figures/defense_diversity.png"), plot = defense_diversity, dpi=300, units=c("mm"), width=275, height=225)
+# defense_diversity <-
+#   ggarrange(
+#     "",
+#     "",
+#     hill1_species,
+#     hill1_beta,
+#     nrow = 2,
+#     ncol = 2,
+#     heights = c(0.1, 1),
+#     common.legend = FALSE,
+#     legend = "bottom",
+#     labels = c("Alpha diversity", "Beta diversity", "", "")
+#   )
+# defense_diversity
+# 
+# ggsave(filename = file.path(path, "figures/defense_diversity.png"), plot = defense_diversity, dpi=300, units=c("mm"), width=275, height=225)
 
 ```
 
 
 
-## Figure 3
+## Figure 4
 
-```{r, figure3}
+```{r, figure4}
 #| echo: false
 #| eval: true
 #| tidy: true
@@ -1170,20 +1271,25 @@ double_dbrda <- ggarrange(
 
 double_dbrda
 #Save the plot
-#ggsave(file.path(path, "figures/figure3.png"), plot = double_dbrda, dpi=300, units=c("mm"), width=200, height=250)
+ggsave(file.path(path, "figures/figure4.png"), plot = double_dbrda, dpi=300, units=c("mm"), width=200, height=250)
 ```
 
+## Figure 5
 
-## Figure 4 > 5
+Hybrid dbRDA
 
-```{r, figure4}
+
+
+## Figure 6
+
+```{r, figure6}
 #| echo: false
 #| eval: true
 #| tidy: true
 #| fig-width: 6
 #| fig-height: 6
 #| label: lbi_boxplot
-#| fig-cap: "Change in log-transformed leaf lobe index (LBI) by genotype and habitat. A) Compares logLBI means by species and habitat category. The black line across violins represents the mean value. B) Change in logLPS per species as elevation increases. The black trend line represents the fitted model for all data points, see main text for R squared and *p* values. Significance levels are represented by *ns* (not significant) and asterisks [*p* < 0.05 (\\*), *p* < 0.01 (\\**), *p* < 0.001 (\\***), and *p* < 0.0001 (\\****)]."
+#| fig-cap: "Change in log-transformed leaf lobe index (LBI) by cross-type and habitat. A) Compares logLBI means by species and habitat category. The black line across violins represents the mean value. B) Change in logLPS per species as elevation increases. The black trend line represents the fitted model for all data points, see main text for R squared and *p* values. Significance levels are represented by *ns* (not significant) and asterisks [*p* < 0.05 (\\*), *p* < 0.01 (\\**), *p* < 0.001 (\\***), and *p* < 0.0001 (\\****)]."
 
 #ggpubr package used for comparisons tests
 lbi_compare_means <-
@@ -1318,7 +1424,7 @@ lbis <- ggarrange(
 )
 lbis
 
-ggsave(filename = file.path(path, "figures/figure4.png"), plot = lbis, dpi=300, units=c("mm"), width=275, height=225)
+ggsave(filename = file.path(path, "figures/figure6.png"), plot = lbis, dpi=300, units=c("mm"), width=275, height=225)
 ```
 
 
@@ -1494,9 +1600,9 @@ ggsave(filename = file.path(path, "figures/figure4.png"), plot = lbis, dpi=300, 
 :::
 
 
-## Figure S1 > S2
+## Figure S2
 
-```{r}
+```{r, supp_fig2}
 #| echo: false
 #| eval: true
 #| tidy: true
@@ -1504,9 +1610,8 @@ ggsave(filename = file.path(path, "figures/figure4.png"), plot = lbis, dpi=300, 
 #| fig-width: 6
 #| fig-height: 6
 #| label: trait_correlation
-#| fig-cap: "Summary tatistics of leaf lobe index (LBI) traits for each genotype."
+#| fig-cap: "Summary tatistics of leaf lobe index (LBI) traits for each cross-type."
 
-#micro_psclean <- phyloseq2meco(ps_clean_3) # First convert phyloseq to meco
 
 t4 <- trans_env$new(dataset = micro_psclean, env_cols = c(12)) # 12 is the index for logLBI
 
@@ -1532,91 +1637,11 @@ t4gg <-
   ))
 t4gg
 
-ggplot2::ggsave(file.path(path, "figures/supp_fig1.png") , plot = t4gg, dpi=300, units=c("mm"), width=300, height=300)
+ggplot2::ggsave(file.path(path, "figures/supp_fig2.png") , plot = t4gg, dpi=300, units=c("mm"), width=300, height=300)
 ```
 
-## Figure S2 > S3
 
-```{r, supp_fig2}
-#| echo: false
-#| eval: true
-#| tidy: true
-#| message: false
-#| fig-height: 6
-#| fig-width: 6
-#| label: venn_diagrams
-#| fig-cap: "Venn diagrams of present and absense of ASVs among genotypes and habitat type in un-rarified data and rarified data. A-B) Represent the overlap of ASVs habitat types and C-D) in gentoypes. Number of ASVs are represented the count and in parentheses as a ratio shared between genotype and habitat type."
-
-library("paletteer")
-# un-rarified data
-# Per site
-dataset1 <- micro_psclean$merge_samples(use_group = "Habitat")
-# create trans_venn object
-v1 <-
-  trans_venn$new(dataset1, ratio = "numratio") # Percentage represent ratio of shared ASVs
-v1gg <-
-  v1$plot_venn() + #https://r-charts.com/color-palettes/#discrete
-  ggtitle("Un-rarified data") +
-  theme(plot.title = element_text(
-    face = "bold",
-    size = 16,
-    hjust = 0.5,
-    vjust = 0.5
-  ))
-
-
-# Per genotype
-dataset2 <- micro_psclean$merge_samples(use_group = "Genotype")
-v2 <- trans_venn$new(dataset2, ratio = "numratio") 
-#v2$plot_venn()
-
-# rarified data
-#micro_rarefied_ps <- phyloseq2meco(rarefied_phyloseq) # First convert phyloseq to meco
-# Per site
-dataset3 <- micro_rarefied_ps$merge_samples(use_group = "Habitat") 
-# create trans_venn object
-v3 <- trans_venn$new(dataset3, ratio = "numratio")
-v3gg <- v3$plot_venn() +
-  ggtitle("Rarified data") +
-  theme(plot.title = element_text(
-    face = "bold",
-    size = 16,
-    hjust = 0.5,
-    vjust = 0.5
-  ))
-
-# Per genotype
-dataset4 <- micro_rarefied_ps$merge_samples(use_group = "Genotype")
-v4 <- trans_venn$new(dataset4, ratio = "numratio")
-#v4$plot_venn()
-
-                                        
-# joined plots
-
-
-venn_plots <-
-  ggarrange(
-    v1gg,
-    v3gg,
-    "", # Fake plot to create space
-    "",
-    v2$plot_venn(),
-    v4$plot_venn(),
-    ncol = 2,
-    nrow = 3,
-    common.legend = TRUE,
-    heights = c(1, 0.1, 1),
-    legend = "bottom",
-    labels = c("A", "B","", "", "C", "D")
-  )
-
-venn_plots
-
-# Save
-ggsave(filename = file.path(path, "figures/supp_fig2.png"), plot = venn_plots, dpi=300, units=c("mm"), width=300, height=300)
-```
-
-## Figure S3 > S4
+## Figure S3
 
 ```{r, supp_fig3}
 #| echo: false
@@ -1626,7 +1651,7 @@ ggsave(filename = file.path(path, "figures/supp_fig2.png"), plot = venn_plots, d
 #| fig-width: 6
 #| fig-height: 6
 #| label: heatmap
-#| fig-cap: "Heatmap of the top 10 most abundant genera in the dataset. The heatmap is faceted by habitat type and genotype."
+#| fig-cap: "Heatmap of the top 10 most abundant genera in the dataset. The heatmap is faceted by habitat type and cross-type."
 
 # Plot with micro_psclean
 t2 <- trans_abund$new(dataset = micro_psclean, taxrank = "Genus", ntaxa = 10) # 12 is the index for logLBI
@@ -1683,7 +1708,7 @@ heatplots
 ggplot2::ggsave(filename = file.path(path, "figures/supp_fig3.png"), plot = heatplots, dpi=300, units=c("mm"), width=300, height=250)
 ```
 
-## Figure S4 > S5
+## Figure S4
 
 ```{r, supp_fig4}
 
@@ -1692,7 +1717,7 @@ ggplot2::ggsave(filename = file.path(path, "figures/supp_fig3.png"), plot = heat
 #| tidy: true
 #| warning: false
 #| label: boxplot_hill_orders
-#| fig-cap: "Alpha diversity mean comparisons in genotypes facetted habitat types. Alpha diversity means comparisons; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2) per host species. A-C) Red filled boxplots correspond to F2YW, orange filled to G (*M. guttatus*), yellow to L (*M. laciniatus*), and teal to F2WY genotype. Beta diversity mean comparions; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2)per elevation category. D-F) Light teal filled boxplot corresponds to Meadow 1, purple to Meadow 2, and light maroon to Granite 1. Open shapes represent: squares (F2YW), circles (G), triangles (L), and crosses (F2WY).  Significance levels are represented by *ns* (not significant) and asterisks [*p* < 0.05 (\\*), *p* < 0.01 (\\**), *p* < 0.001 (\\***), and *p* < 0.0001 (\\****)]."
+#| fig-cap: "Alpha diversity mean comparisons in cross-types facetted habitat types. Alpha diversity means comparisons; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2) per host species. A-C) Red filled boxplots correspond to F2YW, orange filled to G (*M. guttatus*), yellow to L (*M. laciniatus*), and teal to F2WY cross-type. Beta diversity mean comparions; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2)per elevation category. D-F) Light teal filled boxplot corresponds to Meadow 1, purple to Meadow 2, and light maroon to Granite 1. Open shapes represent: squares (F2YW), circles (G), triangles (L), and crosses (F2WY).  Significance levels are represented by *ns* (not significant) and asterisks [*p* < 0.05 (\\*), *p* < 0.01 (\\**), *p* < 0.001 (\\***), and *p* < 0.0001 (\\****)]."
 
 ############################################
 #### Alpha diversity ####
@@ -1860,7 +1885,7 @@ ggsave(filename = file.path(path, "figures/supp_fig4.png"), plot = supp_fig4, dp
 <!-- #| tidy: true -->
 <!-- #| warning: false -->
 <!-- #| label: boxplot_hill_orders -->
-<!-- #| fig-cap: "Alpha and beta diversity means comparisons in genotypes by habitat types. Alpha diversity means comparisons; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2) per host species. A-C) Red filled boxplots correspond to F2YW, orange filled to G (*M. guttatus*), yellow to L (*M. laciniatus*), and teal to F2WY genotype. Beta diversity mean comparions; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2)per elevation category. D-F) Light teal filled boxplot corresponds to Meadow 1, purple to Meadow 2, and light maroon to Granite 1. Open shapes represent: squares (F2YW), circles (G), triangles (L), and crosses (F2WY).  Significance levels are represented by *ns* (not significant) and asterisks [*p* < 0.05 (\\*), *p* < 0.01 (\\**), *p* < 0.001 (\\***), and *p* < 0.0001 (\\****)]." -->
+<!-- #| fig-cap: "Alpha and beta diversity means comparisons in cross-types by habitat types. Alpha diversity means comparisons; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2) per host species. A-C) Red filled boxplots correspond to F2YW, orange filled to G (*M. guttatus*), yellow to L (*M. laciniatus*), and teal to F2WY cross-type. Beta diversity mean comparions; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2)per elevation category. D-F) Light teal filled boxplot corresponds to Meadow 1, purple to Meadow 2, and light maroon to Granite 1. Open shapes represent: squares (F2YW), circles (G), triangles (L), and crosses (F2WY).  Significance levels are represented by *ns* (not significant) and asterisks [*p* < 0.05 (\\*), *p* < 0.01 (\\**), *p* < 0.001 (\\***), and *p* < 0.0001 (\\****)]." -->
 <!-- ################################# -->
 <!-- #### Beta diversity #### -->
 <!-- #### Across sites #### -->
@@ -2030,7 +2055,7 @@ table1 <- metagMisc::phyloseq_to_df(ps_clean_3) |>
   filter(OTU %in% core_tax) |>
   mutate(across(Kingdom:Species, ~ str_remove(., "^.*?(_|-)."))) |>
   select(OTU, Kingdom:Species) |>
-  knitr::kable(caption = "Table 1: Core taxa members in the dataset.")
+  knitr::kable(caption = "Table 1: Core taxa members detected in unrarified data at a 1% threshold and 50% prevalence in samples.")
 table1
 
 #save_kable(file.path(path, "tables/supp_table1.txt"), table1)
@@ -2052,7 +2077,7 @@ phyloseq_ntaxa_by_tax(
           Phylum = str_remove(Phylum, "^.*?(_|-).")) |>
   group_by(Genotype, Phylum) |>
   summarise("Ocurrance in samples" = n()) |>
-  knitr::kable(caption = "Table 2: Prevalence of phyla in samples per genotype.")
+  knitr::kable(caption = "Table 2: Prevalence of phyla in samples per cross-type.")
 ```
 
 <!-- ## Table 3 -->
