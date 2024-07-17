@@ -2965,7 +2965,7 @@ dbrda_traits <- left_join(dbrda_traits, mean_bray, by = c("X"= "Unique_ID"))
 # GLMs with Beta Diversity
 
 b1 <- glm(
-  mean_bray ~ Habitat + logLBI,
+  mean_bray ~ Habitat * Genotype + logLBI,
   data = dbrda_traits,
   family = gaussian
 ) # Gaussian/Normal distribution
@@ -2973,7 +2973,7 @@ plot(b1)
 anova(b1)
 
 # Model with intercept only
-B0 <- lm(mean_bray ~ 1, data = dbrda_traits_imp, na.action = na.exclude)
+B0 <- lm(mean_bray ~ 1, data = dbrda_traits, na.action = na.exclude)
 anova(B0)
 AIC(B0)
 plot(B0)
@@ -2983,8 +2983,8 @@ plot(B0)
 # B1 Model with Elevation, Species and Site
 ################################################
 B1 <- lm(
-  mean_bray ~ Elevation_m + Species + Site + logACI + logLT + logLPS + logLMA + logLBI,
-  data = dbrda_traits_imp,
+  mean_bray ~ Habitat * Genotype + logLBI,
+  data = dbrda_traits,
   na.action = na.exclude
 )
 anova(B1)
@@ -3002,7 +3002,7 @@ hist(B1_fitted)
 # predicted vs. actual values
 plot(
   x = predict(B1),
-  y = dbrda_traits_imp$mean_bray,
+  y = dbrda_traits$mean_bray,
   xlab = 'Predicted Values',
   ylab = 'Actual Values',
   main = 'B1 Predicted vs. Actual Values'
@@ -3025,8 +3025,8 @@ B1AIC$anova
 # B2 Model with Species and Site
 ################################################
 B2 <- lm(
-  mean_bray ~ Species + Site + logACI + logLT + logLPS + logLMA + logLBI,
-  data = dbrda_traits_imp,
+  mean_bray ~ Habitat + Genotype + logLBI,
+  data = dbrda_traits,
   na.action = na.exclude
 )
 
@@ -3045,7 +3045,7 @@ hist(B2_fitted)
 # predicted vs. actual values
 plot(
   x = predict(B2),
-  y = dbrda_traits_imp$mean_bray,
+  y = dbrda_traits$mean_bray,
   xlab = 'Predicted Values',
   ylab = 'Actual Values',
   main = 'B2 Predicted vs. Actual Values'
@@ -3072,13 +3072,13 @@ Starting with fixed terms selected above.
 ################################################
 #B3
 B3 <- lme(
-  mean_bray ~ Species + logACI + logLT + logLPS + logLMA + logLBI,
+  mean_bray ~ Habitat * Genotype + logLBI,
   random = ~ 1 | Site,
   method = "ML",
-  data = na.omit(dbrda_traits_imp)) 
+  data = na.omit(dbrda_traits)) 
 
 Anova(B3, type = 3)
-AIC(B3) #  -13522.89 Increased AIC score compared to B1 and B2.
+AIC(B3) #  -32948.55
 
 # Residuals histograms and plots ####
 B3_resid <- resid(B3, type = "response")
@@ -3091,7 +3091,7 @@ hist(B3_fitted)
 # Plots
 plot(
   x = predict(B3),
-  y = dbrda_traits_imp$mean_bray,
+  y = dbrda_traits$mean_bray,
   xlab = 'Predicted Values',
   ylab = 'Actual Values',
   main = 'B3 Predicted vs. Actual Values'
@@ -3108,19 +3108,18 @@ B3drop <- drop1(B3, . ~ ., test = "Chisq", trace = TRUE)
 # No stepwise term deletion or dropping of terms.
 ```
 
-The GLMMs with "ML" methods and "Site" as a random effects has a greater AIC value than B1 model. The stepwise selection eliminated "Elevation" as a fixed term in the model. The final model is `mean_bray ~ Species + Site`. There could be some variance structure that needs to be modeled. We will still keep "Elevation" while we focus in nestedness in the variance structure. Let's see. 
 
 ```{r, random_effects2}
 # B5 
 B4 <- lme(
-  mean_bray ~ logACI + logLT + logLPS + logLMA + logLBI,
+  mean_bray ~ Genotype + logLBI,
   random = ~ 1 |
-    Site / Species,
+    Habitat,
   method = "ML",
-  data = na.omit(dbrda_traits_imp)
+  data = na.omit(dbrda_traits)
 )
 Anova(B4, type = 3)
-AIC(B4) # -13717.34 is a higher AIC score than B3.
+AIC(B4) # -32499.53 is a higher AIC score than B3.
 
 # Residuals histograms and plots ####
 B4_resid <- resid(B4, type = "response")
@@ -3133,7 +3132,7 @@ hist(B4_fitted)
 # Plots
 plot(
   x = predict(B4),
-  y = dbrda_traits_imp$mean_bray,
+  y = dbrda_traits$mean_bray,
   xlab = 'Predicted Values',
   ylab = 'Actual Values',
   main = 'B4 Predicted vs. Actual Values'
@@ -3152,9 +3151,6 @@ drop1(B4, . ~ ., test = "Chisq", trace = TRUE)
 
 # logLT and logLBI eliminated from the model.
 ```
-The B4AIC model has a lower AIC score. We seem to have hit a good model. The fixed terms are `mean_bray ~ logACI + logLPS + logLMA`. The delta AIC is ~2.5. I say we keep the terms since it is not a huge improvement and model random effects. Let's take that an model random effects taking into account variance structure. 
-
-I will keep `Species` as a fixed term. Only `Site` as random effect. Maybe `Sampling_date` could be a random effect.
 
 
 #### REML modelling
@@ -3165,30 +3161,30 @@ Using Restricted Maximum Likelihood (REML) to model. Maximum likelihood tends to
 # REML
 # B1REM All fixed terms
 B1REM <- lme(
-  mean_bray ~ Elevation_m +  Species + logACI + logLT + logLPS + logLMA + logLBI,
+  mean_bray ~ Genotype + logLBI,
   random = ~ 1 |
-    Site,
+    Habitat,
   method = "REML",
-  data = na.omit(dbrda_traits_imp))
+  data = na.omit(dbrda_traits))
 
 Anova(B1REM, type = 3)
-AIC(B1REM) # -13437.7 This is a higher score than B4AIC.
+AIC(B1REM) #-32453.26 This is a higher score
 
 
 B1_gls <- gls(
-  mean_bray ~ Elevation_m +  Species + logACI + logLT + logLPS + logLMA + logLBI,
+  mean_bray ~ Habitat * Genotype + logLBI,
   method = "REML",
-  data = na.omit(dbrda_traits_imp)
+  data = na.omit(dbrda_traits)
 )
 
 anova(B1_gls, type = "marginal")
 #Anova(B1_gls, type = 3)
-AIC(B1_gls) # -11858 is a higher AIC score. Site as a random effect is important.
+AIC(B1_gls) # -32820.01 is a lower AIC score. Site as a random effect is NOT important.
 
 plot_model(B1REM, type = "diag")
 
 # Model comparison
-model.sel(B1, B2, B3, B4, B4AIC, B1REM, B1_gls)[, c("df", "logLik", "AICc", "delta")]
+model.sel(B1, B2, B3, B4,B1REM, B1_gls)[, c("df", "logLik", "AICc", "delta")]
 
 # Model B1 and B2 are the best models. B1 has a lower AIC score.
 ```
@@ -3244,7 +3240,6 @@ plot_model(B3REM, type = "diag")
 #drop1(B3REM, . ~ ., test = "Chisq", trace = TRUE)
 ```
 
-The B3REM model has the lowest AIC score yet. The the fixed terms are `mean_bray ~ Elvation + Species + logACI + logLT + logLPS + logLMA + logLBI,` with a variance structure `weights = varIdent(form = ~ 1 | Site)`. The random effects are nested `random = 1 | Site`. It seems to be a good fit for the data. Now I eliminate `Elevation` and model with the remaining fixed terms ` Species + logACI + logLT + logLPS + logLMA + logLBI`.
 
 ```{r, reml_models3}
 # Modelling variance structure better
