@@ -4,7 +4,7 @@
 #SBATCH --job-name MIM3_dbRDA_model
 #SBATCH --error /lustre/project/svanbael/bolivar/Mimulus_sequences/mim3_bioinformatics/MIM3_dbRDA_models.error     
 #SBATCH --output /lustre/project/svanbael/bolivar/Mimulus_sequences/mim3_bioinformatics/MIM3_dbRDA_models.output  
-#SBATCH --time=23:00:00
+#SBATCH --time=0-23:00:00
 #SBATCH --mem=256000 #Up to 256000, the maximum increases queue time
 #SBATCH --nodes=2               # One is enough. When running MPIs, anywhere from 2-4 should be good.
 #SBATCH --ntasks-per-node=1    # Number of Tasks per Node (MPI processes)

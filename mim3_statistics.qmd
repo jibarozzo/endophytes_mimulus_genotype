@@ -1825,13 +1825,14 @@ m2_hell <-
   )
 saveRDS(m2_hell, file = "clean_data/statistics/m2_hell.rds")
 
+
 #Anovas for m2
 #Margins
 set.seed(123)
 anova_m2_hell_margin <- anova.cca(m2_hell,
                                   by = "margin",
                                   permutations = 999,
-                                  parallel = 10)
+                                  parallel = 20)
 saveRDS(anova_m2_hell_margin, file = "clean_data/statistics/anova_m2_hell_margin.rds")
 anova_m2_hell_margin <- readRDS("clean_data/statistics/anova_m2_hell_margin.rds")
 
@@ -1840,7 +1841,7 @@ set.seed(123)
 anova_m2_hell_terms <- anova.cca(m2_hell,
                                  by = "terms",
                                  permutations = 999,
-                                 parallel = 10)
+                                 parallel = 20)
 saveRDS(anova_m2_hell_terms, file = "clean_data/statistics/anova_m2_hell_terms.rds")
 anova_m2_hell_terms <- readRDS("clean_data/statistics/anova_m2_hell_terms.rds")
 
@@ -1894,8 +1895,8 @@ beta_dis1 <-
     type = "median",
     sqrt.dist = FALSE
   )
-save(beta_dis1, file = "clean_data/statistics/beta_dis1.rda")
-load("clean_data/statistics/beta_dis1.rda")
+saveRDS(beta_dis1, file = "clean_data/statistics/beta_dis1.rds")
+
 
 ## Permutest
 ## Margin
@@ -1986,7 +1987,7 @@ TukeyHSD(beta_dis3)
 set.seed(123)
 beta_perm3_margin <-
     permutest(beta_dis3,
-              parallel = 10,
+              parallel = 20,
               permutations = 999,
               by = "margin")
 saveRDS(beta_perm3_margin, file = "clean_data/statistics/beta_perm3_margin.rds")
@@ -1995,7 +1996,7 @@ saveRDS(beta_perm3_margin, file = "clean_data/statistics/beta_perm3_margin.rds")
 set.seed(123)
 beta_perm3_terms <-
     permutest(beta_dis3,
-              parallel = 10,
+              parallel = 20,
               permutations = 999,
               by = "terms")
 saveRDS(beta_perm3_margin, file = "clean_data/statistics/beta_perm3_terms.rds")
@@ -2015,7 +2016,7 @@ saveRDS(beta_dis4, file = "clean_data/statistics/beta_dis4.rds")
 set.seed(123)
 beta_perm4_margin <-
     permutest(beta_dis4,
-              parallel = 10,
+              parallel = 20,
               permutations = 999,
               by = "margin")
 saveRDS(beta_perm4_margin, file = "clean_data/statistics/beta_perm4_margin.rds")
@@ -2024,7 +2025,7 @@ saveRDS(beta_perm4_margin, file = "clean_data/statistics/beta_perm4_margin.rds")
 set.seed(123)
 beta_perm4_margin <-
     permutest(beta_dis4,
-              parallel = 10,
+              parallel = 20,
               permutations = 999,
               by = "terms")
 saveRDS(beta_perm4_terms, file = "clean_data/statistics/beta_perm4_terms.rds")
@@ -2044,7 +2045,7 @@ saveRDS(beta_dis5, file = "clean_data/statistics/beta_dis5.rds")
 set.seed(123)
 beta_perm5_margin <-
     permutest(beta_dis5,
-              parallel = 10,
+              parallel = 20,
               permutations = 999,
               by = "margin")
 saveRDS(beta_perm5_margin, file = "clean_data/statistics/beta_perm5_margin.rds")
@@ -2054,7 +2055,7 @@ beta_perm5
 set.seed(123)
 beta_perm5_terms <-
     permutest(beta_dis5,
-              parallel = 10,
+              parallel = 20,
               permutations = 999,
               by = "terms")
 saveRDS(beta_perm5_terms, file = "clean_data/statistics/beta_perm5_terms.rds")
@@ -2125,7 +2126,7 @@ m2_hybrids_hell <-
         parallel = 20,
         na.action = na.omit
     )
-save(m2_hybrids_hell, file = "clean_data/statistics/m2_hybrids_hell.rda")
+saveRDS(m2_hybrids_hell, file = "clean_data/statistics/m2_hybrids_hell.rds")
 
 #Anovas for m2
 ## Margin
@@ -2134,7 +2135,7 @@ anova_m2_hybrids_margin <- anova.cca(
     m2_hybrids_hell,
     by = "margin",
     permutations = 999,
-    parallel = 10
+    parallel = 20
 )
 saveRDS(anova_m2_hybrids_hell_margin, file = "clean_data/statistics/anova_m2_hybrids_margin.rds")
 
@@ -2144,7 +2145,7 @@ anova_m2_hybrids_terms <- anova.cca(
     m2_hybrids_hell,
     by = "terms",
     permutations = 999,
-    parallel = 10
+    parallel = 20
 )
 saveRDS(anova_m2_hybrids_terms, file = "clean_data/statistics/anova_m2_hybrids_terms.rds")
 
@@ -2152,7 +2153,7 @@ saveRDS(anova_m2_hybrids_terms, file = "clean_data/statistics/anova_m2_hybrids_t
 # m3 hybrids
 m3_hybrids_hell <-
   dbrda(
-    dbrda_bybrids_matrix ~ logLBI + Habitat * Genotype,
+    dbrda_hybrids_matrix ~ logLBI + Habitat * Genotype,
     distance = "bray",
     dfun = vegdist,
     data = dbrda_traits,
@@ -2167,7 +2168,7 @@ set.seed(123)
 anova_m3_hybrids_margin <- anova.cca(m3_hell,
                                   by = "margin",
                                   permutations = 999,
-                                  parallel = 10)
+                                  parallel = 20)
 saveRDS(anova_m3_hybrids_margin, file = "clean_data/statistics/anova_m3_hybrids_margin.rds")
 
 #Terms
@@ -2175,7 +2176,7 @@ set.seed(123)
 anova_m3_hybrids_term <- anova.cca(m3_hell,
                                 by = "terms",
                                 permutations = 999,
-                                parallel = 10)
+                                parallel = 20)
 saveRDS(anova_m3_hybrids_term, file = "clean_data/statistics/anova_m3_hybrids_term.rds")
 
 
@@ -2200,7 +2201,7 @@ saveRDS(beta_hybrids_dis1, file = "clean_data/statistics/beta_hybrids_dis1.rds")
 set.seed(123)
 beta_hybrids_perm1_margin <-
     permutest(beta_hybrids_dis1,
-              parallel = 10,
+              parallel = 20,
               permutations = 999,
               by = "margin")
 saveRDS(beta_hybrids_perm1_margin, file = "clean_data/statistics/beta_hybrids_perm1_margin.rds")
@@ -2212,7 +2213,7 @@ TukeyHSD(beta_hybrids_dis1_margin)
 set.seed(123)
 beta_hybrids_perm1_terms <-
     permutest(beta_hybrids_dis1,
-              parallel = 10,
+              parallel = 20,
               permutations = 999,
               by = "terms")
 saveRDS(beta_hybrids_perm1_terms, file = "clean_data/statistics/beta_hybrids_perm1_terms.rds")
@@ -2232,7 +2233,7 @@ saveRDS(beta_hybrids_dis2, file = "clean_data/statistics/beta_hybrids_dis2.rds")
 set.seed(123)
 beta_hybrids_perm2_margin <-
     permutest(beta_dis2,
-              parallel = 10,
+              parallel = 20,
               permutations = 999,
               by = "margin")
 saveRDS(beta_hybrids_perm2_margin, file = "clean_data/statistics/beta_hybrids_perm2_margin.rds")
@@ -2241,7 +2242,7 @@ saveRDS(beta_hybrids_perm2_margin, file = "clean_data/statistics/beta_hybrids_pe
 set.seed(123)
 beta_hybrids_perm2_terms <-
     permutest(beta_dis2,
-              parallel = 10,
+              parallel = 20,
               permutations = 999,
               by = "terms")
 saveRDS(beta_hybrids_perm2_terms, file = "clean_data/statistics/beta_hybrids_perm2_terms.rds")
@@ -2261,7 +2262,7 @@ saveRDS(beta_hybrids_dis3, file = "clean_data/statistics/beta_hybrids_dis3.rds")
 set.seed(123)
 beta_hybrids_perm3_margin <-
     permutest(beta_dis3,
-              parallel = 10,
+              parallel = 20,
               permutations = 999,
               by = "margin")
 saveRDS(beta_hybrids_perm3_margin, file = "clean_data/statistics/beta_hybrids_perm3_margin.rds")
@@ -2270,7 +2271,7 @@ saveRDS(beta_hybrids_perm3_margin, file = "clean_data/statistics/beta_hybrids_pe
 set.seed(123)
 beta_hybrids_perm3_terms <-
     permutest(beta_dis3,
-              parallel = 10,
+              parallel = 20,
               permutations = 999,
               by = "terms")
 saveRDS(beta_hybrids_perm3_terms, file = "clean_data/statistics/beta_hybrids_perm3_terms.rds")
@@ -2926,7 +2927,6 @@ perma3 <- adonis2(dbrda_hell_matrix ~ logACI + logLT + logLPS + logLMA +
                  na.action = na.omit, 
                  strata = NULL)
 print(perma3)
-
 ```
 
 ### SIMPER
@@ -2950,6 +2950,7 @@ mean_bray <- vegdist(dbrda_hell_matrix, method = "bray") |>
   as.matrix() |>
   as.data.frame()
 saveRDS(mean_bray, file = "clean_data/statistics/mean_bray.rds")
+mean_bray <- readRDS("clean_data/statistics/mean_bray.rds")
 
 mean_bray <- rownames_to_column(mean_bray, var = "Unique_ID") |>
   mutate(mean_bray = rowMeans(mean_bray)) |>
@@ -2963,7 +2964,6 @@ dbrda_traits <- left_join(dbrda_traits, mean_bray, by = c("X"= "Unique_ID"))
 #### Selecting fixed terms
 ```{r, glm}
 # GLMs with Beta Diversity
-
 b1 <- glm(
   mean_bray ~ Habitat * Genotype + logLBI,
   data = dbrda_traits,
@@ -2971,6 +2971,7 @@ b1 <- glm(
 ) # Gaussian/Normal distribution
 plot(b1)
 anova(b1)
+AIC(b1)
 
 # Model with intercept only
 B0 <- lm(mean_bray ~ 1, data = dbrda_traits, na.action = na.exclude)
@@ -2980,15 +2981,17 @@ plot(B0)
 
 
 ################################################
-# B1 Model with Elevation, Species and Site
+# B1 Model with Habitat and Genotype
 ################################################
+# All data points
 B1 <- lm(
   mean_bray ~ Habitat * Genotype + logLBI,
   data = dbrda_traits,
   na.action = na.exclude
 )
 anova(B1)
-AIC(B1) # -13617.24
+AIC(B1) # -32950.55
+
 
 # Model validation
 # Residuals
@@ -3022,7 +3025,7 @@ B1AIC$anova
 
 
 ################################################
-# B2 Model with Species and Site
+# B2 Model
 ################################################
 B2 <- lm(
   mean_bray ~ Habitat + Genotype + logLBI,
@@ -3059,7 +3062,7 @@ B2AIC$anova
 # No fixed term removed.
 ```
 
-B1 and B2 models have the same AIC score but they do not have the same fixed terms. I believe this is due to the minimal effect that Elevation has on the model (Estimates).
+B1 and B2 models have about the same AIC score (-66k). B1 includes the interaction of `Habitat` and `Genotype`, while B2 does not.
 
 
 #### Modelling random effects with "ML" method
@@ -3107,7 +3110,7 @@ B3drop <- drop1(B3, . ~ ., test = "Chisq", trace = TRUE)
 
 # No stepwise term deletion or dropping of terms.
 ```
-
+ Modelling using maximum likelihood estimation increases AIC by 2 pts.
 
 ```{r, random_effects2}
 # B5 
@@ -3149,7 +3152,7 @@ B4AIC <- stepAIC(update(B4, . ~ ., -1),
 B4AIC$anova
 drop1(B4, . ~ ., test = "Chisq", trace = TRUE)
 
-# logLT and logLBI eliminated from the model.
+# NOthing eliminated.
 ```
 
 
@@ -3168,7 +3171,7 @@ B1REM <- lme(
   data = na.omit(dbrda_traits))
 
 Anova(B1REM, type = 3)
-AIC(B1REM) #-32453.26 This is a higher score
+AIC(B1REM) #-32453.26 This is a higher score than ML models
 
 
 B1_gls <- gls(
@@ -3186,10 +3189,8 @@ plot_model(B1REM, type = "diag")
 # Model comparison
 model.sel(B1, B2, B3, B4,B1REM, B1_gls)[, c("df", "logLik", "AICc", "delta")]
 
-# Model B1 and B2 are the best models. B1 has a lower AIC score.
+# Model B1 and B3 are the best models. B1 has a lower AIC score.
 ```
-
-The REML model with Elevation and Species as fixed terms has a higher AIC score than the `gls` model without random effects. Site as a random effect is important. Now, playing around with the method, I observed that "ML" models the data better than "REML". The AIC scores are lower.
 
 A brief online search explain these differences. REML is better at estimating random effect variance components, while ML is better at estimating fixed effects. Because we have a nested structure in this experiment we will continue with REML. 
 *"When there is no model comparison, the difference between restricted (or residual) maximum likelihood (REML) and maximum likelihood (ML) is that, REML can give you unbiased estimates of the variance parameters."*
@@ -3204,13 +3205,13 @@ ctrl2 <- lmeControl(opt = "nlminb")
 
 #B3REM
 B3REM <- lme(
-  mean_bray ~ Elevation_m + Species + logACI + logLT + logLPS + logLMA + logLBI,
-  weights = varIdent(form = ~ 1 | Site),
+  mean_bray ~ Genotype + logLBI,
+  weights = varIdent(form = ~ 1 | Habitat),
   random = ~ 1 |
-    Site,
+    Habitat,
   method = "REML",
   control = ctrl,
-  data = na.omit(dbrda_traits_imp)
+  data = na.omit(dbrda_traits)
 )
 
 Anova(B3REM, type = 3)
@@ -3228,16 +3229,13 @@ hist(B3REM_fitted)
 plot(B3REM)
 plot(
   x = predict(B3REM),
-  y = dbrda_traits_imp$mean_bray,
+  y = dbrda_traits$mean_bray,
   xlab = 'Predicted Values',
   ylab = 'Actual Values',
   main = 'Predicted vs. Actual Values'
 )
 abline(a = 0, b = 1)
 plot_model(B3REM, type = "diag")
-
-# Stepwise selection of terms
-#drop1(B3REM, . ~ ., test = "Chisq", trace = TRUE)
 ```
 
 
@@ -3245,18 +3243,18 @@ plot_model(B3REM, type = "diag")
 # Modelling variance structure better
 # B4REM
 B4REM <- lme(
-  mean_bray ~ Species + logACI + logLT + logLPS + logLMA + logLBI,
-  weights = varIdent(form = ~ 1 | Site),
+  mean_bray ~ Genotype * logLBI,
+  weights = varIdent(form = ~ 1 | Habitat),
   random = ~ 1 |
-    Site,
+    Habitat,
   method = "REML",
   control = ctrl,
-  data = na.omit(dbrda_traits_imp)
+  data = na.omit(dbrda_traits)
 )
 
-anova(B4REM) # Adding Species as a random effect DECREASES AIC score.
+anova(B4REM)
 Anova(B4REM, type = 3)
-AIC(B4REM) # -10690.23 the lowest AIC score
+AIC(B4REM) # -34253.34 this is greater than B3REM
 
 # Residuals histograms and plots ####
 B4REM_resid <- resid(B4REM, type = "response")
@@ -3271,42 +3269,218 @@ plot(B4REM)
 plot_model(B4REM, type = "diag")
 
 # B5REM
-B5REM <- lme(
-  mean_bray ~ logACI + logLT + logLMA + logLBI,
-  weights = varComb(varIdent(form = ~ 1 | Site), varIdent(form = ~ 1 | Species)),
-  random = ~ 1 |
-    Site/Species,
-  method = "REML",
-  control = ctrl,
-  data = na.omit(dbrda_traits_imp)
-)
-
-Anova(B5REM, type = 3)
-AIC(B5REM) # -16603.6 the lowest AIC score
-
-# Residuals histograms and plots ####
-B5REM_resid <- resid(B5REM, type = "response")
-B5REM_fitted <- fitted(B5REM)
-
-# Histograms
-hist(B5REM_resid)
-hist(B5REM_fitted)
-
-# Plots
-plot(B5REM)
-plot_model(B5REM, type = "diag")
+# B5REM <- lme(
+#   mean_bray ~ logACI + logLT + logLMA + logLBI,
+#   weights = varComb(varIdent(form = ~ 1 | Site), varIdent(form = ~ 1 | Species)),
+#   random = ~ 1 |
+#     Site/Species,
+#   method = "REML",
+#   control = ctrl,
+#   data = na.omit(dbrda_traits_imp)
+# )
+# 
+# Anova(B5REM, type = 3)
+# AIC(B5REM) # -16603.6 the lowest AIC score
+# 
+# # Residuals histograms and plots ####
+# B5REM_resid <- resid(B5REM, type = "response")
+# B5REM_fitted <- fitted(B5REM)
+# 
+# # Histograms
+# hist(B5REM_resid)
+# hist(B5REM_fitted)
+# 
+# # Plots
+# plot(B5REM)
+# plot_model(B5REM, type = "diag")
 ```
 
+One of the big issues is outliers. I need to identify outliers and decide if it's worth cutting from data set. 
+
+#### Outliers
+The `lobLBI` has many outliers in the ~0 range compared to the rest of the data. It looks almost binomial, either close to -1 or 0. I will remove these outliers and re-run the models with the remaining data.
+
+```{r}
+hist(dbrda_traits$logLBI) # 0.5 seems like a good cut off. 
+no_outliers_dbrda_traits <- dbrda_traits %>%
+  filter(logLBI < -0.5) # Removing outliers.
+```
+
+#### Modelling without outliers
+```{r}
+
+# Model with intercept only
+N00 <- lm(mean_bray ~ 1, data = no_outliers_dbrda_traits, na.action = na.exclude)
+anova(N00)
+AIC(N00) #-24280.93 Greater AIC
+plot(B0)
+
+# Model N0
+N0 <- lm(
+  mean_bray ~ Habitat + Genotype + logLBI,
+         data = no_outliers_dbrda_traits)
+anova(N0)
+AIC(N0) # -25094.5 Lower AIC
+
+plot(N0)
+plot_model(N0, type = "diag")
+
+#Model N1
+# GLMs with Beta Diversity
+N1 <- glm(
+  mean_bray ~ Habitat * Genotype * logLBI,
+  data = no_outliers_dbrda_traits,
+  family = gaussian(link = "identity")
+) # Gaussian/Normal distribution
+plot(N1)
+anova(N1)
+AIC(N1) # -26086.71 Lower AIC
+
+
+# N2 (same as N0)
+N2 <- lm(
+  mean_bray ~ Habitat + Genotype + logLBI,
+  data = no_outliers_dbrda_traits,
+  na.action = na.exclude
+)
+
+anova(N2)
+Anova(N2, type = 3)
+AIC(N2) #-25094.5
+
+# Residuals
+N2_resid <- resid(N2, type = "response")
+N2_fitted <- fitted(N2)
+
+#Histograms
+hist(N2_resid)
+hist(N2_fitted)
+
+# predicted vs. actual values
+plot(
+  x = predict(N2),
+  y = no_outliers_dbrda_traits$mean_bray,
+  xlab = 'Predicted Values',
+  ylab = 'Actual Values',
+  main = 'N2 Predicted vs. Actual Values'
+)
+abline(a = 0, b = 1)
+
+plot_model(N2, type = "diag")
+
+# Stepwise selection of linear model 
+N2AIC <- stepAIC(update(N2, . ~ .), trace = TRUE, direction = "both", k = 2)
+N2AIC$anova
+```
+
+No single term deletions in stepwise selection. 
+
+```{r}
+#N3
+N3 <- lme(
+  mean_bray ~ Genotype + logLBI,
+  random = ~ 1 | Habitat,
+  method = "ML",
+  data = no_outliers_dbrda_traits)
+
+Anova(N3, type = 3)
+AIC(N3) #  -25073.77 is a HIGHER AIC score than N2
+
+# Residuals histograms and plots ####
+N3_resid <- resid(N3, type = "response")
+N3_fitted <- fitted(N3)
+
+# Histograms
+hist(N3_resid)
+hist(N3_fitted)
+
+# Plots
+plot(
+  x = predict(N3),
+  y = no_outliers_dbrda_traits$mean_bray,
+  xlab = 'Predicted Values',
+  ylab = 'Actual Values',
+  main = 'N3 Predicted vs. Actual Values'
+)
+abline(a = 0, b = 1)
+
+plot_model(N3, type = "diag")
+
+# Stepwise selection of terms
+N3AIC <- stepAIC(update(N3, . ~ ., -1), direction = "both", k = 2)
+N3AIC$anova
+N3drop <- drop1(N3, . ~ ., test = "Chisq", trace = TRUE)
+
+# N4_gls
+# N4_gls <- gls(
+#   mean_bray ~ Habitat * Genotype + logLBI,
+#   method = "REML",
+#   data = na.omit(no_outliers_dbrda_traits)
+# )
+
+# N4_gls did not work. It reached singularity.
+# Error in glsEstimate(glsSt, control = glsEstControl) : 
+#   computed "gls" fit is singular, rank 11
+
+
+N4 <- lme(
+  mean_bray ~ Genotype + logLBI,
+  weights = varIdent(form = ~ 1 | Habitat),
+  random = ~ 1 |
+    Habitat,
+  method = "ML",
+  data = no_outliers_dbrda_traits
+)
+
+Anova(N4, type = 3)
+AIC(N4) # -25381.63 is a lower AIC score than N3
+
+
+# N5
+N5 <- lme(mean_bray ~ Genotype * logLBI,
+          weights = varIdent(form = ~ 1 | Habitat),
+          random = ~ 1 | Habitat,
+          method = "REML",
+          data = no_outliers_dbrda_traits
+        )
+anova(N5)
+AIC(N5) # -25333.75 is Higher than N4
+
+plot_model(N5, type = "diag")
+```
+
+
+<!-- #### Modelling by habitat -->
+<!-- ```{r} -->
+<!-- # By Habitat -->
+<!-- B1_habitat <- dbrda_traits %>% -->
+<!--   nest(data = -Habitat) %>% -->
+<!--   mutate(model = map(data, ~ lm(mean_bray ~ Genotype * logLBI, data = ., na.action = na.exclude)), tidied = map(model, tidy)) %>% -->
+<!--     unnest(tidied) -->
+<!-- AIC(B1_habitat$model[[1]]) #-12406.4 -->
+
+<!-- # by Genotype/crosstype -->
+<!-- B1_genotype <- dbrda_traits %>% -->
+<!--   nest(data = -Genotype) %>% -->
+<!--   mutate(model = map(data, ~ lm(mean_bray ~ Habitat + logLBI, data = .)), tidied = map(model, tidy)) %>% -->
+<!--   unnest(tidied) -->
+
+<!-- AIC(B1_genotype$model[[1]]) #-14580.2 -->
+<!-- # B1_habitat_df <- rowwise(B1_habitat) %>% do(tidy(.$model)) %>% -->
+<!-- #   mutate(Habitat = B1_habitat$Habitat) %>% -->
+<!-- #   as.data.frame() -->
+<!-- #    -->
+<!-- ``` -->
 #### Model comparisons
 
 ```{r}
 # Saving model objects
-save(B1, B2, B3, B4, B4AIC, B1REM, B3REM, B4REM, B5REM, file = "clean_data/statistics/glmm_models.rda")
+save(N1, N2, N3, N4, N4, file = "clean_data/statistics/glmm_models.rda")
 
 load("clean_data/statistics/glmm_models.rda")
 
 #Model comparison and selection
-model.sel(B1, B2, B3, B1REM, B3REM, B4AIC, B4REM, B5REM)[, c("df", "logLik", "AICc", "delta")]
+model.sel(N1, N2, N3, N4, N5)[, c("df", "logLik", "AICc", "delta")]
 ```
 
 
