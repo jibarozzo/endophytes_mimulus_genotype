@@ -265,7 +265,14 @@ source("functions/alpha_rfy.R")
 source("functions/pval_format.R")
 
 # Comparisons
-my_comparisons <- list(c("F2LG", "L"), c("F2LG", "G"), c("F2GL", "L"), c("F2GL", "G"), c("G", "L"), c("F2GL", "F2LG"))
+my_comparisons <- list(
+  c("F2LG", "L"),
+  c("F2LG", "G"),
+  c("F2GL", "L"),
+  c("F2GL", "G"),
+  c("G", "L"),
+  c("F2GL", "F2LG")
+)
 my_comparisons2 <- list(c("CF", "LM"), c("CF", "OPN"), c("LM", "OPN"))
 
 # List of ASV samples

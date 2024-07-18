@@ -214,15 +214,14 @@ source(file.path(path, "functions/alpha_rfy.R"))
 source(file.path(path, "functions/pval_format.R"))
 
 # Comparisons
-my_comparisons <-
-  list(
-    c("F2WY", "L"),
-    c("F2WY", "G"),
-    c("F2YW", "L"),
-    c("F2YW", "G"),
-    c("G", "L"),
-    c("F2YW", "F2WY")
-  )
+my_comparisons <- list(
+  c("F2LG", "L"),
+  c("F2LG", "G"),
+  c("F2GL", "L"),
+  c("F2GL", "G"),
+  c("G", "L"),
+  c("F2GL", "F2LG")
+)
 my_comparisons2 <-
   list(c("Meadow 2", "Meadow 1"), c("Meadow 2", "Granite 1"), c("Meadow 1", "Granite 1"))
 
@@ -251,7 +250,7 @@ In this study, we asked: 1) How do FEF communities differ in sympatric populatio
 
 The reciprocal transplant was conducted in Yosemite National Park, CA, USA from May to July 2021. It involved arranging 24 individuals into 25 randomized blocks in an 8 x 15 cm formation with a separation of 2.5 cm. Our study closely replicated experiments carried out in the years 2013 and 2019 by Ferris and Willis [-@ferris2018] as well as Tataru et al., [-@tataru2023]. The experiment utilized four different study sites: two meadows where native *M. guttatus* grows near a standing seep (Little Meadow "Meadow 1" [37.767781, -119.772720; elevation: 2013 m a.s.l.], Crane Flat "Meadow 2" [37.755968, -119.803031; elevation: 1879 m a.s.l.) and two granite outcrops hosting native *M.laciniatus* (Olmstead Point "Granite 1" [37.810700, -119485200; elevation: 2572 m a.s.l.), Yosemite Creek "Granite 2" [37843702, -119573120; elevation: 2424 m a.s.l.]).
 
-The reciprocal transplants used generations of hybrids created from inbred *M. guttatus* (YVO 18; 37.723366, -119.746433; elevation: 1645 m a.s.l.) and *M. laciniatus* lines (WLF 47; 37.841533, -119.59385; elevation: 2436 m a.s.l.). Parental lines were locally adapted to moist seep/meadow and granite outcrops, respectively, not the experimental sites. Hybrids were created by crossing the parental inbred lines to generate F1 hybrids, which were then self-fertilized to generate F~2~ seeds used in this study. Plant breeding was conducted in the greenhouse at Tulane University (New Orleans, LA, USA). We incorporated both reciprocal hybrid crosses: F~2~ WLF 47 maternal x YVO 18 paternal (F~2~WY) and F~2~ YVO 18 maternal x WLF 47 paternal (F~2~YW). Each block was composed of 6 of each reciprocal F~2~ hybrid and 6 of each parent, totaling 150 of each parental line and cross-type per habitat (i.e., meadow and granite) (150 × 4  = 600) and 2,400 overall experimental plants (600 × 4 = 2400) (Fig. S1).
+The reciprocal transplants used generations of hybrids created from inbred *M. guttatus* (YVO 18; 37.723366, -119.746433; elevation: 1645 m a.s.l.) and *M. laciniatus* lines (WLF 47; 37.841533, -119.59385; elevation: 2436 m a.s.l.). Parental lines were locally adapted to moist seep/meadow and granite outcrops, respectively, not the experimental sites. Hybrids were created by crossing the parental inbred lines to generate F1 hybrids, which were then self-fertilized to generate F~2~ seeds used in this study. Plant breeding was conducted in the greenhouse at Tulane University (New Orleans, LA, USA). We incorporated both reciprocal hybrid crosses: F~2~ WLF 47 maternal x YVO 18 paternal (F~2~LG) and F~2~ YVO 18 maternal x WLF 47 paternal (F~2~GL). Each block was composed of 6 of each reciprocal F~2~ hybrid and 6 of each parent, totaling 150 of each parental line and cross-type per habitat (i.e., meadow and granite) (150 × 4  = 600) and 2,400 overall experimental plants (600 × 4 = 2400) (Fig. S1).
 
 ### Seed preparation and germination
 
@@ -335,11 +334,11 @@ The following section reports on results from the rarefied data sets.
 
 Alpha diversity was significantly different between all parental lines and hybrid crosses, with the exception of the Hill order 2 (𝑞 = 2, *p* \> .05) comparison of F2WY and G parental line (Fig. 3C). The parental lines had significantly greater levels observed richness (𝑞 = 0, *p* \< .001, Fig. 3A) when compared to their F~2~ progeny when accounting for all habitat types. Only F2YW had significant differences (*p* \< .001) in observed richness at all habitats. For F2YW and F2WY, we saw significant differences Hill order 1 and 2 (𝑞 = 1, and 𝑞 = 2) when comparing Meadow 1 and Meadow 2 (*p* \< .001), and Granite 1 to Meadow 2 (*p* \< .001). Additionally, F2WY cross-type also had significant differences for these Hill orders when comparing Meadow 1 and Granite 1 (*p* \< .05). We observed a similar pattern in beta diversity, habitats showed significant differences from one another (Fig. 3D - 3F). Meadow 2 has consistently greater levels of beta diversity for all Hill orders, while Granite 1 has the lowest observed richness (𝑞 = 0), but not Hill order 1 or 2 (Fig. 3D - 3F).
 
-To further understand beta diversity and FEF community composition we performed two distance-based Redundancy Analysis (dbRDA) modelling the relationship between FEF communities, leaf shape, cross-type, and habitat type: the fist accounting for individuals from parental lines and hybrids, and a second only with hybrids. The best fit model accounting all individuals and cross-types revealed that 15.72% of the overall variance in FEF communities was accounted for by log-transformed LBI, cross-type, and habitat type, the constraining variables. The first axis (dbRDA1) explained 52.9% and the second axis (dbRDA2) explained 36.4% of the constrained variance (Fig. 4). We saw that Granite 1 and lobLBI, are opposite to Meadow 1 along dbRDA1.  When we visualize the ellipses for cross-types, we observed highly overlapping FEF communities in F~2~YW and F~2~WY cross-types (Fig. 4A), as well less overlap in groupings of G and L parantal lines. In contrast, we note clear and little to non-overlapping FEF communities when results are visualized by habitat type (Fig. 4B). The marginal significance of constraining variables after permutational ANOVA revealed that all variables where significant at ⍺ = 0.05 but varied in their explanatory power (Table 3). We saw evidence for strong habitat type effects on FEF communities.
+To further understand beta diversity and FEF community composition we performed two distance-based Redundancy Analysis (dbRDA) modelling the relationship between FEF communities, leaf shape, cross-type, and habitat type: the fist accounting for individuals from parental lines and hybrids, and a second only with hybrids. The best fit model accounting all individuals and cross-types revealed that 15.72% of the overall variance in FEF communities was accounted for by log-transformed LBI, cross-type, and habitat type, the constraining variables. The first axis (dbRDA1) explained 52.9% and the second axis (dbRDA2) explained 36.4% of the constrained variance (Fig. 4). We saw that Granite 1 and lobLBI, are opposite to Meadow 1 along dbRDA1.  When we visualize the ellipses for cross-types, we observed highly overlapping FEF communities in F~2~GL and F~2~LG cross-types (Fig. 4A), as well less overlap in groupings of G and L parental lines. In contrast, we note clear and little to non-overlapping FEF communities when results are visualized by habitat type (Fig. 4B). The marginal significance of constraining variables after permutational ANOVA revealed that all variables where significant at ⍺ = 0.05 but varied in their explanatory power (Table 3). We saw evidence for strong habitat type effects on FEF communities.
 
 We performed permutational analysis of multivariate dispersion (PERMDISP) to test for homogeneity of variances of FEF communities from clustered in the dbRDA analyses. We found homogeneous variance of FEF communities across for all parental lines and crosses (*F*~3, 14096~= 46.28, *p* \=.001). The post-hoc Tukey's test revealed that all parental lines and crosses comparisons were significant different at ⍺ = 0.05. We also detected significant differences in FEF communities by habitat type (*F*~2, 14097~= 2472.5, *p* \= .001). Our post-hoc Tukey's test showed that FEF communities from all habitat types had significant differences in the dispersion of variance at ⍺ = 0.05.
 
-To understand how leaf shape influences FEF communities, we measured LBI and observed significant differences in G and L parental lines in Meadow 1(*p* \=.05, Fig. 6A), but not Meadow 2 and Granite 1, an unexpected result since L parental line is locally adapted to granite habitat. The F~2~WY and F~2~YW progeny only had significant differences when compared to each other, and F~2~WY when compared to G in Meadow 2. In Granite 1, we saw the F~2~ progeny had significant differences compared to parental lines (*p* \=.05, Fig 6A), but not when compared to each other (Fig. 6A). The LBI differences across habitat types were significant for the F~2~ progeny (*p* \=.05), parental lines did not differ significantly in LBI across habitats (Fig. 6B). 
+To understand how leaf shape influences FEF communities, we measured LBI and observed significant differences in G and L parental lines in Meadow 1(*p* \=.05, Fig. 6A), but not Meadow 2 and Granite 1, an unexpected result since L parental line is locally adapted to granite habitat. The F~2~LG and F~2~GL progeny only had significant differences when compared to each other, and F~2~LG when compared to G in Meadow 2. In Granite 1, we saw the F~2~ progeny had significant differences compared to parental lines (*p* \=.05, Fig 6A), but not when compared to each other (Fig. 6A). The LBI differences across habitat types were significant for the F~2~ progeny (*p* \=.05), parental lines did not differ significantly in LBI across habitats (Fig. 6B). 
 <!-- **SNPs results coming here soon!** -->
 
 
@@ -383,45 +382,61 @@ The authors declare no competing interests.
 #ggplot themes
 # Theme for leaf trait and diversity plots: discrete
 theme_lfspp_discrete <-      theme_classic(base_size = 16) +
-  theme(legend.title = element_text(face = "bold"),
-        strip.text = element_text(face = "bold"),
-        panel.border = element_rect(linetype = "blank", fill = NA),
-        #legend.text = element_text(face = "italic"), #Make legend text italic
-        plot.caption = element_markdown(size = 12),
-        axis.text.x = element_blank(), 
-        axis.title.y = element_text(size = 10))
+  theme(
+    legend.title = element_text(face = "bold"),
+    strip.text = element_text(face = "bold"),
+    panel.border = element_rect(linetype = "blank", fill = NA),
+    #legend.text = element_text(face = "italic"), #Make legend text italic
+    legend.text = element_markdown(),
+    plot.caption = element_markdown(size = 12),
+    axis.text.x = element_blank(),
+    axis.title.y = element_text(size = 10)
+  )
 
 # Theme for leaf trait plots: continuous
 theme_lfspp_continuous <- theme_classic(base_size = 16) +
-  theme(legend.title = element_text(face = "bold"),
-        panel.border = element_rect(linetype = "blank", fill = NA),
-        legend.text = element_text(face = "italic"), #Make legend text italic
-        axis.text.x = element_text(size = 14),
-        legend.position = "bottom")
+  theme(
+    legend.title = element_text(face = "bold"),
+    panel.border = element_rect(linetype = "blank", fill = NA),
+    legend.text = element_text(face = "italic"),
+    #Make legend text italic
+    axis.text.x = element_text(size = 14),
+    legend.position = "bottom"
+  )
 
 # Theme for species by diversity  plots: discrete
 theme_sppdiv_discrete <-    theme_classic(base_size = 16) +
-   theme(legend.title = element_text(face = "bold"),
-         strip.text = element_text(face = "bold", size = 14),
-         panel.border = element_rect(linetype = "blank", fill = NA),
-         #legend.text = element_text(face = "italic", size = 12), #Make legend text italic
-         axis.text.x.bottom = element_blank(),
-         axis.title.x = element_blank())
+  theme(
+    legend.title = element_text(face = "bold"),
+    strip.text = element_text(face = "bold", size = 14),
+    panel.border = element_rect(linetype = "blank", fill = NA),
+    #legend.text = element_text(face = "italic", size = 12), #Make legend text italic
+    legend.text = element_markdown(),
+    axis.text.x.bottom = element_blank(),
+    axis.title.x = element_blank()
+  )
+
 
 theme_div_discrete <-    theme_classic(base_size = 16) +
-   theme(legend.title = element_text(face = "bold"),
-         strip.text = element_text(face = "bold", size = 14),
-         panel.border = element_rect(linetype = "blank", fill = NA),
-         axis.text.x.bottom = element_blank(),
-         axis.title.x = element_blank())
+  theme(
+    legend.title = element_text(face = "bold"),
+    strip.text = element_text(face = "bold", size = 14),
+    panel.border = element_rect(linetype = "blank", fill = NA),
+    legend.text = element_markdown(),
+    axis.text.x.bottom = element_blank(),
+    axis.title.x = element_blank()
+  )
 
 # Theme for leaf trait and diversity  plots: continuous
 theme_lfdiv_continuous <- theme_classic(base_size = 16) +
-   theme(legend.title = element_text(face = "bold"),
-         strip.text = element_text(face = "bold.italic", size = 14),
-         panel.border = element_rect(linetype = "blank", fill = NA),
-        legend.text = element_text(face = "italic"), #Make legend text italic
-         axis.text.x = element_text(size = 14))
+  theme(
+    legend.title = element_text(face = "bold"),
+    strip.text = element_text(face = "bold.italic", size = 14),
+    panel.border = element_rect(linetype = "blank", fill = NA),
+    legend.text = element_text(face = "italic"),
+    #Make legend text italic
+    axis.text.x = element_text(size = 14)
+  )
 ```
 
 ## Figure 1
@@ -505,7 +520,7 @@ ggsave(file.path(path, "figures/figursye1_rarefied_only.png") , plot = r1gg, dpi
 #| label: venn_diagrams
 #| fig-cap: "Venn diagrams of present and absense of ASVs among cross-types and habitat type in un-rarified data and rarified data. A-B) Represent the overlap of ASVs habitat types and C-D) in gentoypes. Number of ASVs are represented the count and in parentheses as a ratio shared between cross-type and habitat type."
 
-micro_psclean <- phyloseq2meco(ps_clean_3) # First convert phyloseq to meco
+#micro_psclean <- phyloseq2meco(ps_clean_3) # First convert phyloseq to meco
 
 # un-rarified data
 # Per site
@@ -600,7 +615,7 @@ ggsave(filename = file.path(path, "figures/figure2.png"), plot = venn_plots, dpi
 #| fig-width: 6
 #| fig-height: 6
 #| label: boxplot_hill_orders
-#| fig-cap: "Alpha diversity mean comparisons by cross-type and beta diversity mean comparisons by habitat type. Alpha diversity mean comparisons; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2) per host cross-type. A-C) Red filled boxplots correspond to F2YW, orange filled to G (*M. guttatus*), yellow to L (*M. laciniatus*), and teal to F2WY cross-type. Beta diversity mean comparions; D) Observed ASV richness (𝑞 = 0); E) Shannon's entropy (𝑞 = 1); and F) Inverse Simpson's index (𝑞 = 2)per habitat type. D-F) Light teal filled boxplot corresponds to Meadow 1, purple to Meadow 2, and light maroon to Granite 1. Open shapes represent: squares (F2YW), circles (G), triangles (L), and crosses (F2WY).  Significance levels are represented by *ns* (not significant) and asterisks [*p* < 0.05 (\\*), *p* < 0.01 (\\**), *p* < 0.001 (\\***), and *p* < 0.0001 (\\****)]."
+#| fig-cap: "Alpha diversity mean comparisons by cross-type and beta diversity mean comparisons by habitat type. Alpha diversity mean comparisons; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2) per host cross-type. A-C) Red filled boxplots correspond to F~2~GL, orange filled to G (*M. guttatus*), yellow to L (*M. laciniatus*), and teal to F~2~LG cross-type. Beta diversity mean comparions; D) Observed ASV richness (𝑞 = 0); E) Shannon's entropy (𝑞 = 1); and F) Inverse Simpson's index (𝑞 = 2)per habitat type. D-F) Light teal filled boxplot corresponds to Meadow 1, purple to Meadow 2, and light maroon to Granite 1. Open shapes represent: squares (F~2~GL), circles (G), triangles (L), and crosses (F~2~LG).  Significance levels are represented by *ns* (not significant) and asterisks [*p* < 0.05 (\\*), *p* < 0.01 (\\**), *p* < 0.001 (\\***), and *p* < 0.0001 (\\****)]."
 
 ############################################
 #### Alpha diversity ####
@@ -611,8 +626,8 @@ ggsave(filename = file.path(path, "figures/figure2.png"), plot = venn_plots, dpi
 #Legend title label
 legend_title <- "Species"
 # Species labels
-labels_list <- c("M. laciniatus", "M. nasutus", "M. guttatus")
-names(labels_list) <- c("L", "N", "G")
+labels_list <- c("F~2~GL", "G", "L", "F~2~LG")
+names(labels_list) <- c("F2GL", "G", "L", "F2LG")
 #############################
 
 # Plot
@@ -625,14 +640,16 @@ hill0_species <- ggplot(data = plant_traits_rfy,
     position = position_jitter(w = 0.2)
   ) +
   geom_boxplot(aes(color = Genotype), alpha = 0.5, outlier.alpha = 0.0) +
-  scale_color_manual(values = met.brewer(
+  scale_color_manual(labels = labels_list,
+    values = met.brewer(
       "Johnson",
       n = 4,
       type = "discrete",
       direction = 1
     )
   ) +
-  scale_fill_manual(values = met.brewer(
+  scale_fill_manual(labels = labels_list,
+    values = met.brewer(
     "Johnson",
     n = 4,
     type = "discrete",
@@ -661,7 +678,7 @@ hill1_species <- ggplot(data = plant_traits_rfy,
     position = position_jitter(w = 0.2)
   ) +
   geom_boxplot(aes(color = Genotype), alpha = 0.5, outlier.alpha = 0.0) +
-  scale_color_manual(labels = c("F2xGL", "G", "L", "F2xLG"),
+  scale_color_manual(labels = labels_list,
     values = met.brewer(
       "Johnson",
       n = 4,
@@ -669,7 +686,7 @@ hill1_species <- ggplot(data = plant_traits_rfy,
       direction = 1
     )
   ) +
-  scale_fill_manual(labels = c("F2xGL", "G", "L", "F2xLG"),
+  scale_fill_manual(labels = labels_list,
     values = met.brewer(
     "Johnson",
     n = 4,
@@ -698,21 +715,16 @@ hill2_species <- ggplot(data = plant_traits_rfy,
     position = position_jitter(w = 0.2)
   ) +
   geom_boxplot(aes(color = Genotype), alpha = 0.5, outlier.alpha = 0.0) +
-  # geom_crossbar(stat="summary",
-  #               fun = median,
-  #               fun.max = median,
-  #               fun.min = median,
-  #               fatten = 2,
-  #               width = 0.8,
-  #               color="black") +
-  scale_color_manual(values = met.brewer(labels = c("F2xGL", "G", "L", "F2xLG"),
+  scale_color_manual(labels = labels_list,
+    values = met.brewer(
       "Johnson",
       n = 4,
       type = "discrete",
       direction = 1
     )
   ) +
-  scale_fill_manual(values = met.brewer(labels = c("F2xGL", "G", "L", "F2xLG"),
+  scale_fill_manual(labels = labels_list,
+    values = met.brewer(
     "Johnson",
     n = 4,
     type = "discrete",
@@ -748,8 +760,8 @@ hill_numbers_species <- ggarrange(hill0_species, hill1_species, hill2_species,
 #Legend title label
 legend_title <- "Species"
 # Species labels
-labels_list <- c("M. laciniatus", "M. nasutus", "M. guttatus")
-names(labels_list) <- c("L", "N", "G")
+labels_list <- c("F~2~GL", "G", "L", "F~2~LG")
+names(labels_list) <- c("F2GL", "G", "L", "F2LG")
 #############################
 
 # Observed richness
@@ -763,15 +775,15 @@ hill0_beta <-
     position = position_jitter(w = 0.2)
   )+
   geom_boxplot(aes(color = Habitat), alpha = 0.5, outlier.alpha = 0.0) +
-  scale_color_manual(
-    values = met.brewer(labels = c("F2xGL", "G", "L", "F2xLG"),
+  scale_color_manual(labels = labels_list,
+    values = met.brewer(
      "Tsimshian",
       n = 4,
       type = "discrete",
       direction = -1
     )
   ) +
-  scale_shape_manual(labels = c("F2xGL", "G", "L", "F2xLG"),
+  scale_shape_manual(labels = labels_list,
     values = c(21:24),
   ) +
   theme_div_discrete +
@@ -846,7 +858,7 @@ hill2_beta <- ggplot(plant_traits_rfy, aes(x = Habitat, y = hill_2)) +
       direction = -1
     )
   ) +
-   scale_fill_manual(labels = c("F2xGL", "G", "L", "F2xLG"),
+   scale_fill_manual(labels = labels_list,
     values = met.brewer(
       "Tsimshian",
       n = 4,
@@ -1323,11 +1335,20 @@ errbar_lims <- group_by(leaf_traits, Genotype) |>
                         upper = mean + (2*se), lower = mean - (2*se))
 
 # Comparisons and labels
-my_comparisons <- list(c("F2WY", "L"), c("F2WY", "G"), c("F2YW", "L"), c("F2YW", "G"), c("G", "L"), c("F2YW", "F2WY"))
+my_comparisons <- list(
+  c("F2LG", "L"),
+  c("F2LG", "G"),
+  c("F2GL", "L"),
+  c("F2GL", "G"),
+  c("G", "L"),
+  c("F2GL", "F2LG")
+)
 my_comparisons2 <-
-  list(c("Meadow 2", "Meadow 1"), c("Meadow 2", "Granite 1"), c("Meadow ", "Granite 1"))
-labels_list <- c("F2xGL", "G", "L", "F2xLG")
-names(labels_list) <- c("F2WY", "G", "L", "F2YW")
+  list(c("Meadow 2", "Meadow 1"),
+       c("Meadow 2", "Granite 1"),
+       c("Meadow ", "Granite 1"))
+labels_list <- c("F~2~GL", "G", "L", "F~2~LG")
+names(labels_list) <- c("F2GL", "G", "L", "F2LG")
 
 lbi_genotype <- ggplot(plant_traits, aes(y = logLBI, x = Genotype)) +
   geom_point(
@@ -1337,7 +1358,7 @@ lbi_genotype <- ggplot(plant_traits, aes(y = logLBI, x = Genotype)) +
     position = position_jitter(w = 0.2)
   ) +
   geom_boxplot(aes(color = Genotype), alpha = 0.5, outlier.alpha = 0.0) +
-  scale_color_manual(labels = c("F2xGL", "G", "L", "F2xLG"),
+  scale_color_manual(labels = labels_list,
     values = met.brewer(
       "Johnson",
       n = 4,
@@ -1345,7 +1366,7 @@ lbi_genotype <- ggplot(plant_traits, aes(y = logLBI, x = Genotype)) +
       direction = 1
     )
   ) +
-  scale_fill_manual(labels = c("F2xGL", "G", "L", "F2xLG"),
+  scale_fill_manual(labels = labels_list,
     values = met.brewer(
     "Johnson",
     n = 4,
@@ -1875,6 +1896,82 @@ supp_fig4 <- ggarrange(hill0_species,"", hill1_species,"", hill2_species,
 supp_fig4
 ggsave(filename = file.path(path, "figures/supp_fig4.png"), plot = supp_fig4, dpi=300, units=c("mm"), width=250, height=275)
 
+```
+
+
+## Figure S5
+
+```{r, supp_fig5}
+#| echo: false
+#| eval: true
+#| tidy: true
+#| fig-width: 6
+#| fig-height: 6
+#| fig-caption: "Maps of reciprocal transplant sites in Yosemite National Park. A) Map of the Sierra Nevada region showing the location of the three species sampled"
+
+# Map of sampling sites
+
+#register_google(key ='SECRET_KEY', write = TRUE)
+
+locations <- data.frame(
+  Site = c("Meadow 1", "Meadow 2", "Granite 1", "Granite 2"),
+  Latitude = c(37.767781, 37.755968, 37.810700, 37.843702),
+  Longitude = c(-119.772720, -119.803031, -119.485200, -119.573120)
+)
+
+
+
+map_latlong <- read_excel("field_data/Mimulus_CH2_Field_Survey.xlsx", sheet = "clean_site_lat_long")
+
+map_latlong <- plant_traits |>
+  select(Site, Species, Longitude, Latitude, Elevation_m) |>
+  filter(!Site == "FVWB" & !Site == "LYFB" & !Site == "TRTB")
+
+mappops <- get_map(
+  location = c(
+    lon =
+      mean(map_latlong$Longitude),
+    lat =
+      mean(map_latlong$Latitude)
+  ),
+  zoom = 9,
+  maptype = "terrain",
+  scale = 4
+)
+map <- ggmap(mappops, extent = "device", darken = 0) +
+  geom_point(
+    data = map_latlong,
+    aes(x
+        = Longitude, y = Latitude, fill =
+          Site),
+    size = 2,
+    shape = 21,
+  ) +
+   theme_classic(base_size = 16) +
+   theme(legend.title = element_text(face = "bold"),
+         legend.text = element_text(size = 10), 
+         panel.border = element_rect(linetype = "blank", fill = NA), 
+         axis.text.x = element_text(size = 10), 
+         axis.text.y = element_text(size = 10)) +
+  ylab("Latitude") +
+  xlab("Longitude") +
+  annotation_north_arrow(
+    location = "bl",
+    which_north = "true",
+    height = unit(0.7, "cm"),
+    width = unit(0.7, "cm"),
+  )
+
+plot(map)
+#ggsave(
+#   "figures/map.png",
+#   plot = map,
+#   units = "in",
+#   width = 6,
+#   height = 6,
+#   dpi = 600
+# )
+#|
 ```
 
 <!-- ## Figure S5 -->
