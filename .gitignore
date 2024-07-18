@@ -19,6 +19,9 @@
 # RStudio files
 .Rproj.user/
 
+# R Environmet
+.Renviron
+
 # Directories with big files
 preprocess/derepFs_8859_v2.rds
 preprocess/derepRs_8859_v2.rds
