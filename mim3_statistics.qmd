@@ -1872,7 +1872,7 @@ anova_m2_hell_terms <- anova.cca(m2_hell,
                                  permutations = 999,
                                  parallel = 20)
 saveRDS(anova_m2_hell_terms, file = "clean_data/statistics/anova_m2_hell_terms.rds")
-anova_m2_hell_terms <- readRDS("clean_data/statistics/anova_m2_hell_terms.rds")
+anova_m2_hell_terms <- readRDS("clean_data/statistics/anova_m2_hell_term.rds")
 
 # Model with interactions between site/habitat and genotype
 m3_hell <-
@@ -1885,6 +1885,7 @@ m3_hell <-
     na.action = na.omit
   )
 saveRDS(m3_hell, file = "clean_data/statistics/m3_hell.rds")
+m3_hell <- readRDS("clean_data/statistics/m3_hell.rds")
 
 #Anovas for m3
 #Margins
@@ -1926,13 +1927,12 @@ beta_dis1 <-
   )
 saveRDS(beta_dis1, file = "clean_data/statistics/beta_dis1.rds")
 
-
 ## Permutest
 ## Margin
 set.seed(123)
 beta_perm1_margin <-
   permutest(beta_dis1,
-            parallel = 8,
+            parallel = 10,
             permutations = 999,
             by = "margin")
 saveRDS(beta_perm1_margin, file = "clean_data/statistics/beta_perm1_margin.rds")
@@ -1945,7 +1945,7 @@ TukeyHSD(beta_dis1)
 set.seed(123)
 beta_perm1_terms <-
   permutest(beta_dis1,
-            parallel = 8,
+            parallel = 10,
             permutations = 999,
             by = "terms")
 saveRDS(beta_perm1_terms, file = "clean_data/statistics/beta_perm1_terms.rds")
@@ -1962,18 +1962,17 @@ beta_dis2 <- betadisper(
   type = "median",
   sqrt.dist = FALSE
 )
-save(beta_dis2, file = "clean_data/statistics/beta_dis2.rda")
-load("clean_data/statistics/beta_dis2.rda")
+saveRDS(beta_dis2, file = "clean_data/statistics/beta_dis2.rds")
 
 ## Permutest
 ## Margin
 set.seed(123)
 beta_perm2_margin <-
   permutest(beta_dis2,
-            parallel = 8,
+            parallel = 10,
             permutations = 999,
             by = "margin")
-saveRDS(beta_perm2_margin, file = "clean_data/statistics/beta_perm2_margin.rds")
+saveRDS(beta_perm2, file = "clean_data/statistics/beta_perm2_margin.rds")
 beta_perm2_margin <- readRDS("clean_data/statistics/beta_perm2_margin.rds")
 
 anova(beta_dis2_margin)
@@ -1983,7 +1982,7 @@ TukeyHSD(beta_dis2_margin)
 set.seed(123)
 beta_perm2_terms <-
   permutest(beta_dis2,
-            parallel = 8,
+            parallel = 10,
             permutations = 999,
             by = "terms")
 saveRDS(beta_perm2_terms, file = "clean_data/statistics/beta_perm2_terms.rds")
@@ -2006,6 +2005,7 @@ beta_dis3 <-
     type = "median",
     sqrt.dist = FALSE
   )
+load("clean_data/statistics/beta_dis3.rda")
 saveRDS(beta_dis3, file = "clean_data/statistics/beta_dis3.rds")
 
 anova(beta_dis3)
@@ -2016,7 +2016,7 @@ TukeyHSD(beta_dis3)
 set.seed(123)
 beta_perm3_margin <-
     permutest(beta_dis3,
-              parallel = 20,
+              parallel = 10,
               permutations = 999,
               by = "margin")
 saveRDS(beta_perm3_margin, file = "clean_data/statistics/beta_perm3_margin.rds")
@@ -2025,7 +2025,7 @@ saveRDS(beta_perm3_margin, file = "clean_data/statistics/beta_perm3_margin.rds")
 set.seed(123)
 beta_perm3_terms <-
     permutest(beta_dis3,
-              parallel = 20,
+              parallel = 10,
               permutations = 999,
               by = "terms")
 saveRDS(beta_perm3_margin, file = "clean_data/statistics/beta_perm3_terms.rds")
@@ -2045,7 +2045,7 @@ saveRDS(beta_dis4, file = "clean_data/statistics/beta_dis4.rds")
 set.seed(123)
 beta_perm4_margin <-
     permutest(beta_dis4,
-              parallel = 20,
+              parallel = 10,
               permutations = 999,
               by = "margin")
 saveRDS(beta_perm4_margin, file = "clean_data/statistics/beta_perm4_margin.rds")
@@ -2054,7 +2054,7 @@ saveRDS(beta_perm4_margin, file = "clean_data/statistics/beta_perm4_margin.rds")
 set.seed(123)
 beta_perm4_margin <-
     permutest(beta_dis4,
-              parallel = 20,
+              parallel = 10,
               permutations = 999,
               by = "terms")
 saveRDS(beta_perm4_terms, file = "clean_data/statistics/beta_perm4_terms.rds")
@@ -2074,7 +2074,7 @@ saveRDS(beta_dis5, file = "clean_data/statistics/beta_dis5.rds")
 set.seed(123)
 beta_perm5_margin <-
     permutest(beta_dis5,
-              parallel = 20,
+              parallel = 10,
               permutations = 999,
               by = "margin")
 saveRDS(beta_perm5_margin, file = "clean_data/statistics/beta_perm5_margin.rds")
@@ -2084,7 +2084,7 @@ beta_perm5
 set.seed(123)
 beta_perm5_terms <-
     permutest(beta_dis5,
-              parallel = 20,
+              parallel = 10,
               permutations = 999,
               by = "terms")
 saveRDS(beta_perm5_terms, file = "clean_data/statistics/beta_perm5_terms.rds")
@@ -2166,7 +2166,7 @@ anova_m2_hybrids_margin <- anova.cca(
     permutations = 999,
     parallel = 20
 )
-saveRDS(anova_m2_hybrids_hell_margin, file = "clean_data/statistics/anova_m2_hybrids_margin.rds")
+saveRDS(anova_m2_hybrids_margin, file = "clean_data/statistics/anova_m2_hybrids_margin.rds")
 
 ## Terms
 set.seed(123)
@@ -2189,7 +2189,7 @@ m3_hybrids_hell <-
     parallel = 20,
     na.action = na.omit
   )
-saveRDS(m3_hell, file = "clean_data/statistics/m3_hybrids_hell.rds")
+saveRDS(m3_hybrids_hell, file = "clean_data/statistics/m3_hybrids_hell.rds")
 
 #Anovas for m3_hybrids
 #Margins
@@ -2230,7 +2230,7 @@ saveRDS(beta_hybrids_dis1, file = "clean_data/statistics/beta_hybrids_dis1.rds")
 set.seed(123)
 beta_hybrids_perm1_margin <-
     permutest(beta_hybrids_dis1,
-              parallel = 20,
+              parallel = 10,
               permutations = 999,
               by = "margin")
 saveRDS(beta_hybrids_perm1_margin, file = "clean_data/statistics/beta_hybrids_perm1_margin.rds")
@@ -2242,7 +2242,7 @@ TukeyHSD(beta_hybrids_dis1_margin)
 set.seed(123)
 beta_hybrids_perm1_terms <-
     permutest(beta_hybrids_dis1,
-              parallel = 20,
+              parallel = 10,
               permutations = 999,
               by = "terms")
 saveRDS(beta_hybrids_perm1_terms, file = "clean_data/statistics/beta_hybrids_perm1_terms.rds")
@@ -2262,7 +2262,7 @@ saveRDS(beta_hybrids_dis2, file = "clean_data/statistics/beta_hybrids_dis2.rds")
 set.seed(123)
 beta_hybrids_perm2_margin <-
     permutest(beta_dis2,
-              parallel = 20,
+              parallel = 10,
               permutations = 999,
               by = "margin")
 saveRDS(beta_hybrids_perm2_margin, file = "clean_data/statistics/beta_hybrids_perm2_margin.rds")
@@ -2271,7 +2271,7 @@ saveRDS(beta_hybrids_perm2_margin, file = "clean_data/statistics/beta_hybrids_pe
 set.seed(123)
 beta_hybrids_perm2_terms <-
     permutest(beta_dis2,
-              parallel = 20,
+              parallel = 10,
               permutations = 999,
               by = "terms")
 saveRDS(beta_hybrids_perm2_terms, file = "clean_data/statistics/beta_hybrids_perm2_terms.rds")
@@ -2291,7 +2291,7 @@ saveRDS(beta_hybrids_dis3, file = "clean_data/statistics/beta_hybrids_dis3.rds")
 set.seed(123)
 beta_hybrids_perm3_margin <-
     permutest(beta_dis3,
-              parallel = 20,
+              parallel = 10,
               permutations = 999,
               by = "margin")
 saveRDS(beta_hybrids_perm3_margin, file = "clean_data/statistics/beta_hybrids_perm3_margin.rds")
@@ -2300,7 +2300,7 @@ saveRDS(beta_hybrids_perm3_margin, file = "clean_data/statistics/beta_hybrids_pe
 set.seed(123)
 beta_hybrids_perm3_terms <-
     permutest(beta_dis3,
-              parallel = 20,
+              parallel = 10,
               permutations = 999,
               by = "terms")
 saveRDS(beta_hybrids_perm3_terms, file = "clean_data/statistics/beta_hybrids_perm3_terms.rds")
