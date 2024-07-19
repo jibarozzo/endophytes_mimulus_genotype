@@ -1861,7 +1861,7 @@ set.seed(123)
 anova_m2_hell_margin <- anova.cca(m2_hell,
                                   by = "margin",
                                   permutations = 999,
-                                  parallel = 20)
+                                  parallel = 10)
 saveRDS(anova_m2_hell_margin, file = "clean_data/statistics/anova_m2_hell_margin.rds")
 anova_m2_hell_margin <- readRDS("clean_data/statistics/anova_m2_hell_margin.rds")
 
@@ -1870,7 +1870,7 @@ set.seed(123)
 anova_m2_hell_terms <- anova.cca(m2_hell,
                                  by = "terms",
                                  permutations = 999,
-                                 parallel = 20)
+                                 parallel = 10)
 saveRDS(anova_m2_hell_terms, file = "clean_data/statistics/anova_m2_hell_terms.rds")
 anova_m2_hell_terms <- readRDS("clean_data/statistics/anova_m2_hell_term.rds")
 
@@ -1893,7 +1893,7 @@ set.seed(123)
 anova_m3_hell_margin <- anova.cca(m3_hell,
                                   by = "margin",
                                   permutations = 999,
-                                  parallel = 20)
+                                  parallel = 10)
 saveRDS(anova_m3_hell_margin, file = "clean_data/statistics/anova_m3_hell_margin.rds")
 anova_m3_hell_margin <- readRDS("clean_data/statistics/anova_m3_hell_margin.rds")
 
@@ -1902,7 +1902,7 @@ set.seed(123)
 anova_m3_hell_term <- anova.cca(m3_hell,
                                 by = "terms",
                                 permutations = 999,
-                                parallel = 20)
+                                parallel = 10)
 saveRDS(anova_m3_hell_term, file = "clean_data/statistics/anova_m3_hell_term.rds")
 anova_m3_hell_term <- readRDS("clean_data/statistics/anova_m3_hell_term.rds")
 
@@ -2197,7 +2197,7 @@ set.seed(123)
 anova_m3_hybrids_margin <- anova.cca(m3_hell,
                                   by = "margin",
                                   permutations = 999,
-                                  parallel = 20)
+                                  parallel = 10)
 saveRDS(anova_m3_hybrids_margin, file = "clean_data/statistics/anova_m3_hybrids_margin.rds")
 
 #Terms
@@ -2205,7 +2205,7 @@ set.seed(123)
 anova_m3_hybrids_term <- anova.cca(m3_hell,
                                 by = "terms",
                                 permutations = 999,
-                                parallel = 20)
+                                parallel = 10)
 saveRDS(anova_m3_hybrids_term, file = "clean_data/statistics/anova_m3_hybrids_term.rds")
 
 
@@ -2319,7 +2319,7 @@ load("clean_data/statistics/m2_hell.rda")
 final_model <- m2_hell
 
 names(final_model)
-B <- summary(final_model)
+finalm_summary <- summary(final_model)
 
 
 # Extracting scores for the plot
@@ -2451,13 +2451,13 @@ full_final_model <- ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
   ) +
   xlab(label = paste(
     "dbRDA1 (",
-    round(B$concont$importance[2, 1] * 100, digits = 1),
+    round(finalm_summary$concont$importance[2, 1] * 100, digits = 1),
     "%)",
     sep = ""
   )) +
   ylab(label = paste(
     "dbRDA2 (",
-    round(B$concont$importance[2, 2] * 100, digits = 1),
+    round(finalm_summary$concont$importance[2, 2] * 100, digits = 1),
     "%)",
     sep = ""
   )) +
@@ -2513,14 +2513,14 @@ ggsave(
 #### Full model with interactions ####
 ######################################
 load("clean_data/statistics/m3_hell.rda")
-final_model <- m3_hell
+final_inter_model <- m3_hell
 
-names(final_model)
-B <- summary(final_model)
+names(final_inter_model)
+final_inter_summary <- summary(final_inter_model)
 
 
 # Extracting scores for the plot
-ordination_scores <- as.data.frame(vegan::scores(final_model)$sites)
+ordination_scores <- as.data.frame(vegan::scores(final_inter_model)$sites)
 
 # Extracting names for the plot
 ordination_names <- rownames(ordination_scores)
@@ -2535,7 +2535,7 @@ dbrda_df <- plant_traits_rfy
 merged_data <- right_join(ordination_scores, dbrda_df, by = c("Unique_ID" = "X"))
 
 # Extracting scores for arrows
-arrow_scores <- as.data.frame(vegan::scores(final_model, display = "bp"))
+arrow_scores <- as.data.frame(vegan::scores(final_inter_model, display = "bp"))
 
 # Define the arrow aesthetic mapping
 arrow_map <- aes(xend = (dbRDA1*2), yend = (dbRDA2*2), x = 0, y = 0, shape = NULL, color = NULL, fill = NULL)
@@ -2553,7 +2553,7 @@ A4.sub4 <- arrow_scores[4,] #logLBI
 # A4.sub6 <- arrow_scores[6,] #LT.
 
 # dbRDA plot based on species
-full_final_model <-
+full_final_inter_model <-
   ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
   geom_point(
     data = merged_data,
@@ -2686,13 +2686,13 @@ full_final_model <-
   ) +
   xlab(label = paste(
     "dbRDA1 (",
-    round(B$concont$importance[2, 1] * 100, digits = 1),
+    round(final_inter_summary$concont$importance[2, 1] * 100, digits = 1),
     "%)",
     sep = ""
   )) +
   ylab(label = paste(
     "dbRDA2 (",
-    round(B$concont$importance[2, 2] * 100, digits = 1),
+    round(final_inter_summary$concont$importance[2, 2] * 100, digits = 1),
     "%)",
     sep = ""
   )) +
@@ -2720,8 +2720,8 @@ full_final_model <-
 
      
 # Rearranging the order of layers so arrows are above the points.
-# full_final_model$layers <- c(full_final_model$layers,full_final_model$layers[[2]], full_final_model$layers[[5]], full_final_model$layers[[6]], full_final_model$layers[[7]], full_final_model$layers[[8]], full_final_model$layers[[9]], full_final_model$layers[[10]], full_final_model$layers[[11]])
-full_final_model
+# full_final_inter_model$layers <- c(full_final_inter_model$layers,full_final_inter_model$layers[[2]], full_final_inter_model$layers[[5]], full_final_inter_model$layers[[6]], full_final_inter_model$layers[[7]], full_final_inter_model$layers[[8]], full_final_inter_model$layers[[9]], full_final_inter_model$layers[[10]], full_final_inter_model$layers[[11]])
+full_final_inter_model
 
 # Saving by layers for PowerPoint presentation
 
@@ -2740,14 +2740,14 @@ full_final_model
 
 ```{r, hybrid_model}
 load("clean_data/statistics/m2_hybrids_hell.rda")
-final_model <- m2_hybrids_hell
+hybrid_model <- m2_hybrids_hell
 
-names(final_model)
-B <- summary(final_model)
-vegan::scores(final_model)
+names(hybrid_model)
+B <- summary(hybrid_model)
+vegan::scores(hybrid_model)
 
 # Extracting scores for the plot
-ordination_scores <- as.data.frame(vegan::scores(final_model)$sites)
+ordination_scores <- as.data.frame(vegan::scores(hybrid_model)$sites)
 
 # Extracting names for the plot
 ordination_names <- rownames(ordination_scores)
@@ -2764,7 +2764,7 @@ dbrda_df <- plant_traits_rfy |>
 merged_data <- right_join(ordination_scores, dbrda_df, by = c("Unique_ID" = "X"))
 
 # Extracting scores for arrows
-arrow_scores <- as.data.frame(vegan::scores(final_model, display = "bp"))
+arrow_scores <- as.data.frame(vegan::scores(hybrid_model, display = "bp"))
 
 # Define the arrow aesthetic mapping
 arrow_map <- aes(
@@ -2799,7 +2799,7 @@ A4.sub4 <- arrow_scores[4, ] #logLBI
 # A4.sub6 <- arrow_scores[6,] #LT.
 
 # dbRDA plot based on species
-hybrid_final_model <- ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
+hybrid_model <- ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
   geom_point(
     data = merged_data,
     aes(color = Genotype, shape = Site),
@@ -2897,20 +2897,20 @@ hybrid_final_model <- ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
 
 
 # Rearranging the order of layers so arrows are above the points.
-hybrid_final_model$layers
-hybrid_final_model$layers <- c(
-  hybrid_final_model$layers,
-  hybrid_final_model$layers[[2]],
-  hybrid_final_model$layers[[5]],
-  hybrid_final_model$layers[[6]],
-  hybrid_final_model$layers[[7]],
-  hybrid_final_model$layers[[8]],
-  hybrid_final_model$layers[[9]],
-  hybrid_final_model$layers[[10]]
+hybrid_model$layers
+hybrid_model$layers <- c(
+  hybrid_model$layers,
+  hybrid_model$layers[[2]],
+  hybrid_model$layers[[5]],
+  hybrid_model$layers[[6]],
+  hybrid_model$layers[[7]],
+  hybrid_model$layers[[8]],
+  hybrid_model$layers[[9]],
+  hybrid_model$layers[[10]]
 )
-hybrid_final_model
+hybrid_model
 
-#ggsave(filename=file.path(path, "figures/dbRDA_hybrid model.png"), plot = hybrid_final_model, dpi=600, units=c("mm"), width=150, height=150)
+#ggsave(filename=file.path(path, "figures/dbRDA_hybrid model.png"), plot = hybrid_model, dpi=600, units=c("mm"), width=150, height=150)
 ```
 
 ### PERMANOVA

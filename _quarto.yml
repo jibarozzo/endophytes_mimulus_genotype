@@ -23,5 +23,4 @@ format:
   docx:
     reference-doc: custom-reference-doc.docx
     number-sections: true
-   #linestretch: 2.0
     citation-package: biblatex

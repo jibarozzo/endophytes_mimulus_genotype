@@ -110,7 +110,7 @@ dbrda_traits <- readRDS("clean_data/statistics/dbrda_traits.rds")
 # anova_m2_hell_margin <- anova.cca(m2_hell,
 #                                   by = "margin",
 #                                   permutations = 999,
-#                                   parallel = 20)
+#                                   parallel = 10)
 # saveRDS(anova_m2_hell_margin, file = "clean_data/statistics/anova_m2_hell_margin.rds")
 # anova_m2_hell_margin <- readRDS("clean_data/statistics/anova_m2_hell_margin.rds")
 # 
@@ -119,7 +119,7 @@ dbrda_traits <- readRDS("clean_data/statistics/dbrda_traits.rds")
 # anova_m2_hell_terms <- anova.cca(m2_hell,
 #                                  by = "terms",
 #                                  permutations = 999,
-#                                  parallel = 20)
+#                                  parallel = 10)
 # saveRDS(anova_m2_hell_terms, file = "clean_data/statistics/anova_m2_hell_terms.rds")
 # anova_m2_hell_terms <- readRDS("clean_data/statistics/anova_m2_hell_term.rds")
 
@@ -142,7 +142,7 @@ set.seed(123)
 anova_m3_hell_margin <- anova.cca(m3_hell,
                                   by = "margin",
                                   permutations = 999,
-                                  parallel = 20)
+                                  parallel = 10)
 saveRDS(anova_m3_hell_margin, file = "clean_data/statistics/anova_m3_hell_margin.rds")
 anova_m3_hell_margin <- readRDS("clean_data/statistics/anova_m3_hell_margin.rds")
 
@@ -151,7 +151,7 @@ set.seed(123)
 anova_m3_hell_term <- anova.cca(m3_hell,
                                 by = "terms",
                                 permutations = 999,
-                                parallel = 20)
+                                parallel = 10)
 saveRDS(anova_m3_hell_term, file = "clean_data/statistics/anova_m3_hell_term.rds")
 anova_m3_hell_term <- readRDS("clean_data/statistics/anova_m3_hell_term.rds")
 
@@ -429,7 +429,7 @@ set.seed(123)
 anova_m3_hybrids_margin <- anova.cca(m3_hell,
                                      by = "margin",
                                      permutations = 999,
-                                     parallel = 20)
+                                     parallel = 10)
 saveRDS(anova_m3_hybrids_margin, file = "clean_data/statistics/anova_m3_hybrids_margin.rds")
 
 #Terms
@@ -437,7 +437,7 @@ set.seed(123)
 anova_m3_hybrids_term <- anova.cca(m3_hell,
                                    by = "terms",
                                    permutations = 999,
-                                   parallel = 20)
+                                   parallel = 10)
 saveRDS(anova_m3_hybrids_term, file = "clean_data/statistics/anova_m3_hybrids_term.rds")
 
 
