@@ -106,6 +106,7 @@ library("indicspecies")
 library("ggtext")
 library("ggpmisc")
 library("MetBrewer")
+library("ggrepel")
 
 # Tables
 library("huxtable")
@@ -328,7 +329,7 @@ Next, we computed alpha diversity per sample as Hill orders -observed richness (
 
 For beta diversity analyses, we performed a Hellinger transformation on the rarefied abundance matrices and calculated a Bray-Curtis dissimilarity matrix for each, then we applied a distance-based Redundancy Analysis (dbRDA) on dissimilarities to statistically compare similarities within each host species per site [@anderson2017; @legendre1999; @mcardle2001].
 
-Our dbRDA model consisted of terms logLBI, cross-type, and habitat type. The leaf shape data was not randomized or sub-sampled to match rarefied dataset, the original values applied to all 50 rarefied matrices. To select the best model, we evaluated the marginal significance of constraining variables after 999 permutations with function `anova.cca` [@legendre2011; @legendre2012; @oksanen2022]. We evaluated the homogeneous dispersion of variances with a permutational analysis of multivariate dispersion (PERMDISP) using the `betadisper` with parameter `type = "median"`, and `permutest` functions from `vegan`, the latter with 999 permutations [@oksanen2022]. We used a post-hoc Tukey's test to compare the differences in the dispersion of the FEF communities among cross-types and habitat types.
+Our dbRDA model consisted of terms logLBI, cross-type, and habitat type. The leaf shape data was not randomized or sub-sampled to match rarefied dataset, the original values applied to all 50 rarefied matrices. To select the best model, we evaluated the marginal and sequential significance of the constraining variables after 999 permutations with function `anova.cca` [@legendre2011; @legendre2012; @oksanen2022]. We evaluated the homogeneous dispersion of variances with a permutational analysis of multivariate dispersion (PERMDISP) using the `betadisper` with parameter `type = "median"`, and `permutest` functions from `vegan`, the latter with 999 permutations [@oksanen2022]. We used a post-hoc Tukey's test to compare the differences in the dispersion of the FEF communities among cross-types and habitat types.
 <!-- We used the `simper` function from `vegan` to discriminate which species contribute the most to compositional differences between groups [@oksanen2022]. -->
 <!-- To determine if there is a significant correlation of core FEF community with cross-type and habitat type, we conducted an indicators species analyses (ISA) using the `multipatt` function from the `indicspecies` package [@decaceres2009]. -->
 
@@ -356,19 +357,20 @@ In the rarified data set we comprised of 282 samples were we observed that 202 (
 <!-- The small differences in shared and unique ASVs provides confidence that the rarified data accurately represents the underlying dynamics of the system (Fig. 1 - 2 and Fig. S2).  -->
 The following section reports on results from the rarefied data sets.
 
-Alpha diversity was significantly different between all parental lines and hybrid crosses, with the exception of the Hill order 2 (𝑞 = 2, *p* \> .05) comparison of F~2~LG and G parental line (Fig. 3C). The parental lines had significantly greater levels observed richness (𝑞 = 0, *p* \< .001, Fig. 3A) when compared to their F~2~ progeny when accounting for all habitat types. Only F~2~GL had significant differences (*p* \< .001) in observed richness at all habitats. For F~2~GL and F~2~LG, we saw significant differences Hill order 1 and 2 (𝑞 = 1, and 𝑞 = 2) when comparing Meadow 1 and Meadow 2 (*p* \< .001), and Granite 1 to Meadow 2 (*p* \< .001). Additionally, F2WY cross-type also had significant differences for these Hill orders when comparing Meadow 1 and Granite 1 (*p* \< .05). We observed a similar pattern in beta diversity, habitats showed significant differences from one another (Fig. 3D - 3F). Meadow 2 has consistently greater levels of beta diversity for all Hill orders, while Granite 1 has the lowest observed richness (𝑞 = 0), but not Hill order 1 or 2 (Fig. 3D - 3F). Individuals from Granite 2 are not included in the analysis due 100% mortality after one week of planting at site (Fig. S4).
+Alpha diversity was significantly different between all parental lines and hybrid crosses, with the exception of the Hill order 2 (𝑞 = 2, *p* \> .05) comparison of F~2~LG and G parental line (Fig. 3C). The parental lines had significantly greater levels observed richness (𝑞 = 0, *p* \< .001, Fig. 3A) when compared to their F~2~ progeny when accounting for all habitat types. Only F~2~GL had significant differences (*p* \< .001) in observed richness at all habitats. For F~2~GL and F~2~LG, we saw significant differences Hill order 1 and 2 (𝑞 = 1, and 𝑞 = 2) when comparing Meadow 1 and Meadow 2 (*p* \< .001), and Granite 1 to Meadow 2 (*p* \< .001). Additionally, F~2~LG cross-type also had significant differences for these Hill orders when comparing Meadow 1 and Granite 1 (*p* \< .05). We observed a similar pattern in beta diversity, habitats showed significant differences from one another (Fig. 3D - 3F). Meadow 2 has consistently greater levels of beta diversity for all Hill orders, while Granite 1 has the lowest observed richness (𝑞 = 0), but not Hill order 1 or 2 (Fig. 3D - 3F). Individuals from Granite 2 are not included in the analysis due 100% mortality after one week of planting at site (Fig. S4).
 
-To further understand beta diversity and FEF community composition we performed two distance-based Redundancy Analysis (dbRDA) modeling the relationship between FEF communities, leaf shape, cross-type, and habitat type: the first accounting for individuals from parental lines and hybrids, and a second only with hybrids. The best fit model with all individuals and cross-types revealed that 15.72% of the overall variance in FEF communities was accounted for by log-transformed LBI, cross-type, and habitat type, the constraining variables. The first axis (dbRDA1) explained 52.9% and the second axis (dbRDA2) explained 36.4% of the constrained variance (Fig. 4). We saw that Granite 1 and lobLBI, are opposite to Meadow 1 along dbRDA1. When we visualized the ellipses for cross-types, we observed highly overlapping FEF communities in F~2~GL and F~2~LG cross-types (Fig. 4A), as well less overlap in groupings of G and L parental lines. In contrast, we note clear and little to non-overlapping FEF communities when results are visualized by habitat type (Fig. 4B). The marginal significance of constraining variables after permutational ANOVA revealed that all variables where significant at ⍺ = 0.05 but varied in their explanatory power (Table 3). We saw evidence for strong habitat type effects on FEF communities. The dbRDA for hybrids revealed that 0.01% of the overall constrained variance was explained by log-transformed LBI, cross-type and habitat type. Of that constrainied variance, 
+To further understand beta diversity and FEF community composition we performed two distance-based Redundancy Analysis (dbRDA) modeling the relationship between FEF communities, leaf shape, cross-type, and habitat type: the first accounting for individuals from parental lines and hybrids, and a second only with hybrids. The best fit model with all individuals and cross-types revealed that 18.71% of the overall variance in FEF communities was accounted for by log-transformed LBI, cross-type, and habitat type, the constraining variables. The first axis (dbRDA1) explained 45.3% and the second axis (dbRDA2) explained 31.5% of the constrained variance (Fig. 4). 
+<!-- We saw that Granite 1 and lobLBI, are opposite to Meadow 1 along dbRDA1. When we visualized the ellipses for cross-types, we observed highly overlapping FEF communities in F~2~GL and F~2~LG cross-types (Fig. 4A), as well less overlap in groupings of G and L parental lines.  -->
+In contrast, we note clear and little to non-overlapping FEF communities when results are visualized by habitat type (Fig. 4B). The marginal significance of constraining variables after permutational ANOVA revealed that all variables where significant at ⍺ = 0.05 but varied in their explanatory power (Table S3). We saw evidence for strong habitat type effects on FEF communities. The dbRDA for hybrids revealed that 0.01% of the overall constrained variance was explained by log-transformed LBI, cross-type and habitat type. The constrained variance was explained by dbRDA axis 1 (65.5%) and axis2 (19.7%) (Fig. 5 and Table S3).
 
-We performed permutational analysis of multivariate dispersion (PERMDISP) to test for homogeneity of variances of FEF communities from clustered in the dbRDA analyses. We found homogeneous variance of FEF communities across for all parental lines and crosses (*F*~3, 14096~= 46.28, *p* \=.001). The post-hoc Tukey's test revealed that all parental lines and cross-type comparisons were significantly different at ⍺ = 0.05. We also detected significant differences in FEF communities by habitat type (*F*~2, 14097~= 2472.5, *p* \= .001). Our post-hoc Tukey's test showed that FEF communities from all habitat types had significant differences in the dispersion of variance at ⍺ = 0.05.
+We performed permutational analysis of multivariate dispersion (PERMDISP) to test for homogeneity of variances of FEF communities from clustered in the dbRDA analyses. We found homogeneous variance of FEF communities across for all parental lines and crosses (*F*~3, 14096~= 46.28, *p* \=.001). The post-hoc Tukey's test revealed that all parental lines and cross-type comparisons were significantly different at ⍺ = 0.05. We also detected significant differences in FEF communities by habitat type (*F*~2, 14097~= 2472.5, *p* \= .001), as well as the interaction between habitat and cross types (*F*~2, 14088~= 471.6, *p* \= .001 ). Our post-hoc Tukey's test showed that FEF communities from all habitat types had significant differences in the dispersion of variance at ⍺ = 0.05, meanwhile the interaction between habitat and cross-type showed more nuances for certain combinations, yet significant differences for most in the dispersion of variance at ⍺ = 0.05 (Table S4). For our model with only hybrid crosses, we found that homogeneity of variances of FEF communities were not significantly different between cross-types (*F*~1, 11548~= 0.034, *p* \= .85). The post-hoc Tukey's test revealed that F~2~LG and F~2~GL had no differences in the dispersion of variance at ⍺ = 0.05.
 
-To understand how leaf shape influences FEF communities, we measured LBI and observed significant differences in G and L parental lines in Meadow 1(*p* \=.05, Fig. 6A), but not Meadow 2 and Granite 1, an unexpected result since L parental line is locally adapted to granite habitat. The F~2~LG and F~2~GL progeny only had significant differences when compared to each other, and F~2~LG when compared to G in Meadow 2. In Granite 1, we saw the F~2~ progeny had significant differences compared to parental lines (*p* \=.05, Fig 6A), but not when compared to each other (Fig. 6A). The LBI differences across habitat types were significant for the F~2~ progeny (*p* \=.05), parental lines did not differ significantly in LBI across habitats (Fig. 6B). 
-<!-- **SNPs results coming here soon!** -->
-
+To understand how leaf shape influences FEF communities, we measured LBI and compared means with a Wilcoxon rank sum tests. Once we adjusted for multiple comparison, revealed no significant differences in parental lines and cross types across all habitat types at ⍺ = 0.05 (Fig. 6A). Meadow 1 and 2 did not differ significantly in LBI, while Granite 1 had greater LBI compared to Meadow 1 and 2. (*p* \<.001, Fig. 6B).<!-- but not Meadow 2 and Granite 1, an unexpected result since L parental line is locally adapted to granite habitat. The F~2~LG and F~2~GL progeny only had significant differences when compared to each other, and F~2~LG when compared to G in Meadow 2. In Granite 1, we saw the F~2~ progeny had significant differences compared to parental lines (*p* \=.05, Fig 6A), but not when compared to each other (Fig. 6A). The LBI differences across habitat types were significant for the F~2~ progeny (*p* \=.05), parental lines did not differ significantly in LBI across habitats (Fig. 6B).  -->
+<!-- <!-- **SNPs results coming here soon!** --> -->
 
 # Discussion
 
-Our study provides a comprehensive analysis of the FEF communities associated with *Mimulus* spp. leaf tissue and the underlying genetic dynamics. We found that FEF diversity and community composition are significantly different between cross-types. These findings bring attention to symbiotic relationships in *Mimulus* that may be evolutionary adaptive. Fungal community differences between habitat types maybe due to distinct species pool regardless of habitat similarity (e.g.,, meadows). Our results suggest host cross-type and habitat type are significant predictors of FEF colonization, with varying degrees of impact. Granite 1 had lower ASV richness than Meadow 1-2, but increased Hill orders 1 and 2 compared to Meadow 1. This is not surprising, given the strong abiotic differences (i.e. soil moisture) meadow and granite habitats experience throughout the growing season [@ferris2018; @tataru2023] that could explain the need for allocating a greater effective number of species[@chao2014]. The differences between the meadow habitat could be explained by their recent fire history, Meadow 1 burned in 2013 during the Rim Fire, which could have caused a shift in the local flora and evapotranspirations rates experienced at the site leading to changes in and FEF pool [@bowman2021; @nationalparkservice2023; @giauque2016]. Meadow 1 is generally drier and shrubbier than Meadow 2, which did not burn in 2013. These potential sources of variation merit further investigation.   
+Our study provides a comprehensive analysis of the FEF communities associated with *Mimulus* spp. leaf tissue and the underlying genetic dynamics. We found that FEF diversity and community composition are significantly different between cross-types. These findings bring attention to symbiotic relationships in *Mimulus* that may be evolutionary adaptive. Fungal community differences between habitat types maybe due to distinct species pool regardless of habitat similarity (e.g.,, meadows). Our results suggest host cross-type and habitat type are significant predictors of FEF colonization, with varying degrees of impact. Granite 1 had lower ASV richness than Meadow 1-2, but increased Hill orders 1 and 2 compared to Meadow 1. This is not surprising, given the strong abiotic differences (i.e. soil moisture) meadow and granite habitats experience throughout the growing season [@ferris2018; @tataru2023] that could explain the need for allocating a greater effective number of species[@chao2014]. The differences between the meadow habitat could be explained by their recent fire history, Meadow 1 burned in 2013 during the Rim Fire, which could have caused a shift in the local flora and evapo-transpiration rates experienced at the sites leading to changes in and FEF pool [@bowman2021; @nationalparkservice2023; @giauque2016]. Meadow 1 is generally drier and shrubbier than Meadow 2, which did not burn in 2013. These potential sources of variation merit further investigation.   
 
 Exploring the FEF community of *Mimulus* in a reciprocal transplant experiment allowed us to delineate how cross-type by environment interactions shape these communities.  The constrained ordination analyses revealed a clear clustering by habitat type along both dbRDA axes (Fig. 4B), while  cross-types showed less distinct clustering (Fig. 4A). The *Mimulus* parental lines hosted distinct FEF communities and differed significantly in alpha diversity levels regardless habitat. Bowsher et al., found a similar effect of environment and host identity when comparing the bacterial rhizosphere community of locally adapted *M. guttatus* ecotypes [-@bowsher2020]. Similarly, in a greenhouse experiment McIntosh et al., [-@mcintosh2024] found that site, soil origin, and *M. guttatus* plant ecotypes (annual and perennial) were the most important factors determining the structure of root associated fungal communities. Despite experimental plants performing poorly when interacting with *Mimulus guttatus*-derived biota, McIntosh et al., [-@mcintosh2024] find that AMF communities were strongly differentiated in common garden conditions. While their results are focused on the root microbiota and under greenhouse, we consider, that our results show that the differences in FEF communities between *M. guttatus* and *M. laciniatus* add to the adaptive trait differences between these diverged species, meriting further investigation.  
 
@@ -939,6 +941,7 @@ hill2_beta <- ggplot(plant_traits_rfy, aes(x = Habitat, y = hill_2)) +
                outlier.alpha = 0.0) +
   scale_color_manual(values = met.brewer(
     "Tsimshian",
+    
     n = 4,
     type = "discrete",
     direction = -1
@@ -1035,7 +1038,7 @@ names(labels_list) <- c("F2GL", "G", "L", "F2LG")
 
 # dbRDA using Elevation as continuous variable
 #logACI + logLT + logLPS + logLMA +
-final_model <- readRDS("clean_data/statistics/m2_hell.rds")
+#final_model <- readRDS("clean_data/statistics/m3_hell.rds")
 
 
 # names(final_model)
@@ -1082,7 +1085,7 @@ arrowhead = arrow(length = unit(0.02, "npc"))
 
 #subset A4 for labeling
 arrow_scores <- arrow_scores[order(rownames(arrow_scores)), ]
-A4 <- lapply(1:6, function(i)
+A4 <- lapply(1:12, function(i)
   arrow_scores[i, ])
 
 # A4.sub1 <- arrow_scores[1,] #Elevation
@@ -1092,6 +1095,7 @@ A4.sub4 <- arrow_scores[4,] #logLBI
 # A4.sub5 <- arrow_scores[5,] #LPS
 # A4.sub6 <- arrow_scores[6,] #LT.
 
+
 # dbRDA plot based on species
 full_final_model <- ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
   geom_point(
@@ -1100,6 +1104,19 @@ full_final_model <- ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
     size = rel(4),
     alpha = 0.2,
     stroke = 1
+  ) +
+  stat_ellipse(
+    aes(color = Genotype),
+    geom = "path",
+    linewidth = 1.7,
+    position = "identity",
+    type = "t",
+    linetype = 1,
+    level = 0.95,
+    segments = 51,
+    na.rm = FALSE,
+    show.legend = NA,
+    inherit.aes = TRUE
   ) +
   geom_segment(
     arrow_map,
@@ -1114,61 +1131,141 @@ full_final_model <- ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
   geom_hline(yintercept = 0,
              color = "grey30",
              linetype = "dashed") + # plot horizontal line
-  geom_text(
+  geom_text_repel(
     label_map,
     size = rel(4),
     data = A4[[1]],
     fontface = "bold",
     show.legend = FALSE,
     label = c("F2LG"),
-    hjust = 1.2
+    alpha = 0.7,
+    nudge_x = 0.15,
+    nudge_y = -0.0,
+    min.segment.length = Inf
   ) +
-  geom_text(
+  geom_text_repel(
     label_map,
     size = rel(4),
     data = A4[[2]],
     fontface = "bold",
     show.legend = FALSE,
     label = c("G"),
-    vjust = 1.3
+    alpha = 0.7,
+    nudge_x = -0.1,
+    nudge_y = -0.06,
+    min.segment.length = Inf
   ) +
-  geom_text(
+  geom_text_repel(
     label_map,
     size = rel(4),
     data = A4[[3]],
     fontface = "bold",
     show.legend = FALSE,
     label = c("L"),
-    vjust = -0.6
+    alpha = 0.7,
+    nudge_x = -0.1,
+    nudge_y = 0.1,
+    min.segment.length = Inf
   ) +
-  geom_text(
+  geom_text_repel(
     label_map,
     size = rel(4),
     data = A4[[4]],
     fontface = "bold",
     show.legend = FALSE,
-    label = c("logLBI"),
-    vjust = -0.3,
-    hjust = 0.1
+    label = c("Granite 1"),
+    nudge_x = -0.3,
+    nudge_y = 0.1,
+    min.segment.length = Inf
   ) +
-  geom_text(
+  geom_text_repel(
     label_map,
     size = rel(4),
     data = A4[[5]],
     fontface = "bold",
     show.legend = FALSE,
-    label = c("Meadow 1"),
-    hjust = -0.2
+    label = c("G1:F2LG"),
+    nudge_x = 0.3,
+    min.segment.length = Inf
   ) +
-  geom_text(
+  geom_text_repel(
     label_map,
     size = rel(4),
     data = A4[[6]],
     fontface = "bold",
     show.legend = FALSE,
-    label = c("Granite 1"),
-    vjust = -0.3,
-    hjust = 1.2
+    label = c("G1:G"),
+    alpha = 0.7,
+    nudge_x = 0.0,
+    nudge_y = 0.1,
+    min.segment.length = Inf
+  ) +
+  geom_text_repel(
+    label_map,
+    size = rel(4),
+    data = A4[[7]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("G1:L"),
+    alpha = 0.7,
+    nudge_x = 0.1,
+    nudge_y = -0.05,
+    min.segment.length = Inf
+  ) +
+  geom_text_repel(
+    label_map,
+    size = rel(4),
+    data = A4[[8]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("Meadow 2"),
+    nudge_y = -0.1,
+    min.segment.length = Inf
+  ) +
+  geom_text_repel(
+    label_map,
+    size = rel(4),
+    data = A4[[9]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("M2:F2LG"),
+    nudge_x = 0.2,
+    nudge_y = -0.1,
+    min.segment.length = Inf
+  ) +
+  geom_text_repel(
+    label_map,
+    size = rel(4),
+    data = A4[[10]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("M2:G"),
+    alpha = 0.7,
+    nudge_x = -0.1,
+    nudge_y = -0.12,
+    min.segment.length = Inf
+  ) +
+  geom_text_repel(
+    label_map,
+    size = rel(4),
+    data = A4[[11]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("M2:L"),
+    alpha = 0.7,
+    nudge_x = -0.1,
+    min.segment.length = Inf
+  ) +
+  geom_text_repel(
+    label_map,
+    size = rel(4),
+    data = A4[[12]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("logLBI"),
+    nudge_x = 0.35,
+    nudge_y = 0.05,
+    min.segment.length = Inf
   ) +
   xlab(label = paste(
     "dbRDA1 (",
@@ -1192,19 +1289,6 @@ full_final_model <- ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
     )
   ) +
   scale_shape_manual(values = c(0:3)) +
-  stat_ellipse(
-    aes(color = Genotype),
-    geom = "path",
-    linewidth = 1.7,
-    position = "identity",
-    type = "t",
-    linetype = 1,
-    level = 0.95,
-    segments = 51,
-    na.rm = FALSE,
-    show.legend = NA,
-    inherit.aes = TRUE
-  ) +
   theme_classic(base_size = 16) +
   theme(
     legend.title = element_text(face = "bold"),
@@ -1219,20 +1303,7 @@ full_final_model <- ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
     shape = guide_legend(title = "Habitat", override.aes = list(size = 4, alpha = 1))
   )
 
-
-
-# Rearranging the order of layers so arrows are above the points.
-full_final_model$layers <- c(
-  full_final_model$layers,
-  full_final_model$layers[[2]],
-  full_final_model$layers[[5]],
-  full_final_model$layers[[6]],
-  full_final_model$layers[[7]],
-  full_final_model$layers[[8]],
-  full_final_model$layers[[9]],
-  full_final_model$layers[[10]]
-)
-#full_final_model
+full_final_model
 
 #ggsave(filename=file.path(path, "figures/dbRDA_full_model.png"), plot = full_final_model, dpi=600, units=c("mm"), width=150, height=150)
 
@@ -1249,6 +1320,19 @@ full_site_model <-  ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
     alpha = 0.2,
     stroke = 1
   ) +
+  stat_ellipse(
+    aes(color = Habitat),
+    geom = "path",
+    linewidth = 1.7,
+    position = "identity",
+    type = "t",
+    linetype = 1,
+    level = 0.95,
+    segments = 51,
+    na.rm = FALSE,
+    show.legend = NA,
+    inherit.aes = TRUE
+  ) +
   geom_segment(
     arrow_map,
     size = rel(.8),
@@ -1262,61 +1346,141 @@ full_site_model <-  ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
   geom_hline(yintercept = 0,
              color = "grey30",
              linetype = "dashed") + # plot horizontal line
-  geom_text(
+  geom_text_repel(
     label_map,
     size = rel(4),
     data = A4[[1]],
     fontface = "bold",
     show.legend = FALSE,
     label = c("F2LG"),
-    hjust = 1.2
+    alpha = 0.7,
+    nudge_x = 0.15,
+    nudge_y = -0.0,
+    min.segment.length = Inf
   ) +
-  geom_text(
+  geom_text_repel(
     label_map,
     size = rel(4),
     data = A4[[2]],
     fontface = "bold",
     show.legend = FALSE,
     label = c("G"),
-    vjust = 1.3
+    alpha = 0.7,
+    nudge_x = -0.1,
+    nudge_y = -0.06,
+    min.segment.length = Inf
   ) +
-  geom_text(
+  geom_text_repel(
     label_map,
     size = rel(4),
     data = A4[[3]],
     fontface = "bold",
     show.legend = FALSE,
     label = c("L"),
-    vjust = -0.6
+    alpha = 0.7,
+    nudge_x = -0.1,
+    nudge_y = 0.1,
+    min.segment.length = Inf
   ) +
-  geom_text(
+  geom_text_repel(
     label_map,
     size = rel(4),
     data = A4[[4]],
     fontface = "bold",
     show.legend = FALSE,
-    label = c("logLBI"),
-    vjust = -0.3,
-    hjust = 0.1
+    label = c("Granite 1"),
+    nudge_x = -0.3,
+    nudge_y = 0.1,
+    min.segment.length = Inf
   ) +
-  geom_text(
+  geom_text_repel(
     label_map,
     size = rel(4),
     data = A4[[5]],
     fontface = "bold",
     show.legend = FALSE,
-    label = c("Meadow 1"),
-    hjust = -0.2
+    label = c("G1:F2LG"),
+    nudge_x = 0.3,
+    min.segment.length = Inf
   ) +
-  geom_text(
+  geom_text_repel(
     label_map,
     size = rel(4),
     data = A4[[6]],
     fontface = "bold",
     show.legend = FALSE,
-    label = c("Granite1"),
-    vjust = -0.3,
-    hjust = 1.2
+    label = c("G1:G"),
+    alpha = 0.7,
+    nudge_x = 0.0,
+    nudge_y = 0.1,
+    min.segment.length = Inf
+  ) +
+  geom_text_repel(
+    label_map,
+    size = rel(4),
+    data = A4[[7]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("G1:L"),
+    alpha = 0.7,
+    nudge_x = 0.1,
+    nudge_y = -0.05,
+    min.segment.length = Inf
+  ) +
+  geom_text_repel(
+    label_map,
+    size = rel(4),
+    data = A4[[8]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("Meadow 2"),
+    nudge_y = -0.1,
+    min.segment.length = Inf
+  ) +
+  geom_text_repel(
+    label_map,
+    size = rel(4),
+    data = A4[[9]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("M2:F2LG"),
+    nudge_x = 0.2,
+    nudge_y = -0.1,
+    min.segment.length = Inf
+  ) +
+  geom_text_repel(
+    label_map,
+    size = rel(4),
+    data = A4[[10]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("M2:G"),
+    alpha = 0.7,
+    nudge_x = -0.1,
+    nudge_y = -0.12,
+    min.segment.length = Inf
+  ) +
+  geom_text_repel(
+    label_map,
+    size = rel(4),
+    data = A4[[11]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("M2:L"),
+    alpha = 0.7,
+    nudge_x = -0.1,
+    min.segment.length = Inf
+  ) +
+  geom_text_repel(
+    label_map,
+    size = rel(4),
+    data = A4[[12]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("logLBI"),
+    nudge_x = 0.35,
+    nudge_y = 0.05,
+    min.segment.length = Inf
   ) +
   xlab(label = paste(
     "dbRDA1 (",
@@ -1338,40 +1502,23 @@ full_site_model <-  ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
   )) +
   scale_shape_manual(labels = c("F~2~GL", "G", "L", "F~2~LG"),
                      values = c(0:3)) +
-  stat_ellipse(
-    aes(color = Habitat),
-    geom = "path",
-    linewidth = 1.3,
-    position = "identity",
-    type = "t",
-    linetype = 1,
-    level = 0.95,
-    segments = 51,
-    na.rm = FALSE,
-    show.legend = NA,
-    inherit.aes = TRUE
-  ) +
-  theme_classic(base_size = 16) +
-  theme(legend.title = element_markdown(face = "bold"),
-        legend.text = element_markdown()) +
   scale_x_continuous(limits = c(-2.4, 3), breaks = c(-2:3)) +
+  theme_classic(base_size = 12) +
+  theme(
+    legend.title = element_text(face = "bold"),
+    legend.text = element_markdown(),
+    legend.position = "right",
+    plot.caption = element_markdown(),
+    plot.caption.position = "plot",
+    strip.text = element_text(face = "bold")
+  ) +
+  labs(caption = "PERMDISP: *F*<sub>1, 14088</sub> = 471.62, *p* = .001") +
   guides(
     color = guide_legend(title = "Habitat"),
     shape = guide_legend(title = "Crosstype", override.aes = list(size = 4, alpha = 1))
   )
 
-# Rearranging the order of layers so arrows are above the points.
-full_site_model$layers <- c(
-  full_site_model$layers,
-  full_site_model$layers[[2]],
-  full_site_model$layers[[5]],
-  full_site_model$layers[[6]],
-  full_site_model$layers[[7]],
-  full_site_model$layers[[8]],
-  full_site_model$layers[[9]],
-  full_site_model$layers[[10]]
-)
-#full_site_model
+full_site_model
 
 # Joining plots
 double_dbrda <- ggarrange(
@@ -1483,6 +1630,19 @@ hybrid_model_plot <- ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
     alpha = 0.2,
     stroke = 1
   ) +
+  stat_ellipse(
+    aes(color = Genotype),
+    geom = "path",
+    linewidth = 1.7,
+    position = "identity",
+    type = "t",
+    linetype = 1,
+    level = 0.95,
+    segments = 51,
+    na.rm = FALSE,
+    show.legend = NA,
+    inherit.aes = TRUE
+  ) +
   geom_segment(
     arrow_map,
     size = rel(.8),
@@ -1547,19 +1707,6 @@ hybrid_model_plot <- ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
   )) +
   scale_color_manual(labels = labels_list, values = c("#a00e00",  "#0086a8")) +
   scale_shape_manual(values = c(0:3), labels = habitat_labels) +
-  stat_ellipse(
-    aes(color = Genotype),
-    geom = "path",
-    linewidth = 1.7,
-    position = "identity",
-    type = "t",
-    linetype = 1,
-    level = 0.95,
-    segments = 51,
-    na.rm = FALSE,
-    show.legend = NA,
-    inherit.aes = TRUE
-  ) +
   theme_classic(base_size = 12) +
   theme(
     legend.title = element_text(face = "bold"),
@@ -1576,18 +1723,6 @@ hybrid_model_plot <- ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
   )
 
 
-# Rearranging the order of layers so arrows are above the points.
-#hybrid_model_plot$layers
-# hybrid_model_plot$layers <- c(
-#   hybrid_model_plot$layers,
-#   hybrid_model_plot$layers[[2]],
-#   hybrid_model_plot$layers[[5]],
-#   hybrid_model_plot$layers[[6]],
-#   hybrid_model_plot$layers[[7]],
-#   hybrid_model_plot$layers[[8]],
-#   hybrid_model_plot$layers[[9]],
-#   hybrid_model_plot$layers[[10]]
-# )
 hybrid_model_plot
 
 ggsave(
@@ -1764,7 +1899,6 @@ lbi_site <- ggplot(plant_traits, aes(y = logLBI, x = Habitat)) +
     hide.ns = TRUE,
     y.position = c(0.2, 0.5), #Because we have only 2 significant comparisons, y = 0.2, 0.5
     label = "p.adj.signif"
-    
   ) 
   # stat_compare_means(comparisons = my_comparisons2,
   #                    method = "wilcox.test",
@@ -1813,53 +1947,12 @@ ggsave(
 
 
 
-<!-- # Supplementary Material -->
-<!-- ## Figure S1 -->
+# Supplementary Material
+## Figure S1
 
-<!-- ::: {#fig-S1} -->
-<!-- ![Greenhouse cross-type design and reciprocal transplant design. Greenhouse hybrid crosses from parental lines in dashed line box. Reciprocal transplant design at each site in solid line boxes and ovals. Red squares represent F~2~GL hybrid cross. Light blue represents F~2~LG hybrid cross. Yellow represents *M. laciniatus* parental line, and organge representes *M. guttatus* parental line.  ](figures/supp_fig1_diagram.png){width="6in"} -->
-<!-- ::: -->
-
-
-<!-- <!-- ## Figure S2 --> -->
-
-<!-- <!-- ```{r, supp_fig2} --> -->
-<!-- <!-- #| echo: false --> -->
-<!-- <!-- #| eval: true --> -->
-<!-- <!-- #| tidy: true --> -->
-<!-- <!-- #| message: false --> -->
-<!-- <!-- #| fig-width: 6 --> -->
-<!-- <!-- #| fig-height: 6 --> -->
-<!-- <!-- #| label: trait_correlation --> -->
-<!-- <!-- #| fig-cap: "Summary statistics of leaf lobe index (LBI) traits for each cross-type." --> -->
-
-
-<!-- <!-- t4 <- trans_env$new(dataset = micro_psclean, env_cols = c(12)) # 12 is the index for logLBI --> -->
-
-<!-- <!-- t4gg <- --> -->
-<!-- <!--   t4$cal_autocor(group = c("Genotype"), --> -->
-<!-- <!--                  upper = list(continuous = GGally::wrap("cor", method = "spearman"))) + --> -->
-<!-- <!--   theme( --> -->
-<!-- <!--     legend.title = element_text(face = "bold"), --> -->
-<!-- <!--     strip.text = element_text(face = "bold", size = 12), --> -->
-<!-- <!--     panel.border = element_rect(linetype = "blank", fill = NA) --> -->
-<!-- <!--   ) + --> -->
-<!-- <!--   scale_fill_manual(values = met.brewer( --> -->
-<!-- <!--     "Johnson", --> -->
-<!-- <!--     n = 4, --> -->
-<!-- <!--     type = "discrete", --> -->
-<!-- <!--     direction = c(-1) --> -->
-<!-- <!--   )) + --> -->
-<!-- <!--   scale_color_manual(values = met.brewer( --> -->
-<!-- <!--     "Johnson", --> -->
-<!-- <!--     n = 4, --> -->
-<!-- <!--     type = "discrete", --> -->
-<!-- <!--     direction = c(-1) --> -->
-<!-- <!--   )) --> -->
-<!-- <!-- t4gg --> -->
-
-<!-- <!-- ggplot2::ggsave(file.path(path, "figures/supp_fig2.png") , plot = t4gg, dpi=300, units=c("mm"), width=300, height=300) --> -->
-<!-- <!-- ``` --> -->
+::: {#fig-S1}
+![Greenhouse cross-type design and reciprocal transplant design. Greenhouse hybrid crosses from parental lines in dashed line box. Reciprocal transplant design at each site in solid line boxes and ovals. Red squares represent F~2~GL hybrid cross. Light blue represents F~2~LG hybrid cross. Yellow represents *M. laciniatus* parental line, and organge representes *M. guttatus* parental line.  ](figures/supp_fig1_diagram.png){width="6in"}
+:::
 
 
 <!-- ## Figure S2 -->
@@ -1871,81 +1964,387 @@ ggsave(
 <!-- #| message: false -->
 <!-- #| fig-width: 6 -->
 <!-- #| fig-height: 6 -->
-<!-- #| label: heatmap -->
-<!-- #| fig-cap: "Heatmap of the top 10 most abundant genera in the dataset. The heatmap is faceted by habitat type and cross-type." -->
+<!-- #| label: trait_correlation -->
+<!-- #| fig-cap: "Summary statistics of leaf lobe index (LBI) traits for each cross-type." -->
 
-<!-- # Plot with micro_psclean -->
-<!-- t2 <- trans_abund$new(dataset = micro_psclean, taxrank = "Genus", ntaxa = 10) # 12 is the index for logLBI -->
-<!-- t2gg <- -->
-<!--   t2$plot_heatmap( -->
-<!--     facet = c("Habitat", "Genotype"), -->
-<!--     xtext_keep = FALSE, -->
-<!--     withmargin = FALSE -->
+
+<!-- t4 <- trans_env$new(dataset = micro_psclean, env_cols = c(12)) # 12 is the index for logLBI -->
+
+<!-- t4gg <- -->
+<!--   t4$cal_autocor(group = c("Genotype"), -->
+<!--                  upper = list(continuous = GGally::wrap("cor", method = "spearman"))) + -->
+<!--   theme( -->
+<!--     legend.title = element_text(face = "bold"), -->
+<!--     strip.text = element_text(face = "bold", size = 12), -->
+<!--     panel.border = element_rect(linetype = "blank", fill = NA) -->
 <!--   ) + -->
-<!--   ggtitle("Un-rarified data") +  -->
-<!--   theme( -->
-<!--     legend.title = element_text(face = "bold"), -->
-<!--     strip.text = element_text(face = "bold", size = 12), -->
-<!--     panel.border = element_rect(linetype = "blank", fill = NA), -->
-<!--     axis.text.x = element_blank() -->
-<!--   ) -->
-<!-- #facet_nested(~factor(Site, levels =  c('LM', 'CF', 'OPN')),  nest_line = element_line(linetype = 2)) -->
+<!--   scale_fill_manual(values = met.brewer( -->
+<!--     "Johnson", -->
+<!--     n = 4, -->
+<!--     type = "discrete", -->
+<!--     direction = c(-1) -->
+<!--   )) + -->
+<!--   scale_color_manual(values = met.brewer( -->
+<!--     "Johnson", -->
+<!--     n = 4, -->
+<!--     type = "discrete", -->
+<!--     direction = c(-1) -->
+<!--   )) -->
+<!-- t4gg -->
 
-<!-- #t2gg -->
-
-
-
-
-<!-- r2 <- -->
-<!--   trans_abund$new(dataset = micro_rarefied_ps, -->
-<!--                   taxrank = "Genus", -->
-<!--                   ntaxa = 10) -->
-<!-- r2gg <- -->
-<!--   r2$plot_heatmap( -->
-<!--     facet = c("Habitat", "Genotype"), -->
-<!--     xtext_keep = FALSE, -->
-<!--     withmargin = FALSE -->
-<!--   ) +  -->
-<!--   ggtitle("Rarified data") + -->
-<!--   theme( -->
-<!--     legend.title = element_text(face = "bold"), -->
-<!--     strip.text = element_text(face = "bold", size = 12), -->
-<!--     panel.border = element_rect(linetype = "blank", fill = NA), -->
-<!--     axis.text.x = element_blank() -->
-<!--   ) -->
-
-<!-- #r2gg -->
-<!-- ggsave(filename = file.path(path, "figures/supp_fig3_rarefied_only.png"), plot = r2gg, dpi=300, units=c("mm"), width=300, height=250) -->
-
-<!-- # Joined heatplots -->
-<!-- heatplots <- ggarrange(t2gg, r2gg, ncol = 1, nrow = 2,  -->
-<!--                            common.legend = TRUE,  -->
-<!--                            legend = "bottom", -->
-<!--                            labels = c("A", "B"), -->
-<!--                            heights = c(1, 1)) -->
-<!-- heatplots -->
-
-<!-- # Save the plot -->
-<!-- ggplot2::ggsave(filename = file.path(path, "figures/supp_fig2.png"), plot = heatplots, dpi=300, units=c("mm"), width=300, height=250) -->
+<!-- ggplot2::ggsave(file.path(path, "figures/supp_fig2.png") , plot = t4gg, dpi=300, units=c("mm"), width=300, height=300) -->
 <!-- ``` -->
 
-<!-- ## Figure S3 -->
 
-<!-- ```{r, supp_fig3} -->
+## Figure S2
 
+```{r, supp_fig2}
+#| echo: false
+#| eval: true
+#| tidy: true
+#| message: false
+#| fig-width: 6
+#| fig-height: 6
+#| label: heatmap
+#| fig-cap: "Heatmap of the top 10 most abundant genera in the dataset. The heatmap is faceted by habitat type and cross-type."
+
+# Plot with micro_psclean
+t2 <- trans_abund$new(dataset = micro_psclean, taxrank = "Genus", ntaxa = 10) # 12 is the index for logLBI
+t2gg <-
+  t2$plot_heatmap(
+    facet = c("Habitat", "Genotype"),
+    xtext_keep = FALSE,
+    withmargin = FALSE
+  ) +
+  ggtitle("Un-rarified data") +
+  theme(
+    legend.title = element_text(face = "bold"),
+    strip.text = element_text(face = "bold", size = 12),
+    panel.border = element_rect(linetype = "blank", fill = NA),
+    axis.text.x = element_blank()
+  )
+#facet_nested(~factor(Site, levels =  c('LM', 'CF', 'OPN')),  nest_line = element_line(linetype = 2))
+
+#t2gg
+
+
+
+
+r2 <-
+  trans_abund$new(dataset = micro_rarefied_ps,
+                  taxrank = "Genus",
+                  ntaxa = 10)
+r2gg <-
+  r2$plot_heatmap(
+    facet = c("Habitat", "Genotype"),
+    xtext_keep = FALSE,
+    withmargin = FALSE
+  ) +
+  ggtitle("Rarified data") +
+  theme(
+    legend.title = element_text(face = "bold"),
+    strip.text = element_text(face = "bold", size = 12),
+    panel.border = element_rect(linetype = "blank", fill = NA),
+    axis.text.x = element_blank()
+  )
+
+#r2gg
+ggsave(filename = file.path(path, "figures/supp_fig3_rarefied_only.png"), plot = r2gg, dpi=300, units=c("mm"), width=300, height=250)
+
+# Joined heatplots
+heatplots <- ggarrange(t2gg, r2gg, ncol = 1, nrow = 2,
+                           common.legend = TRUE,
+                           legend = "bottom",
+                           labels = c("A", "B"),
+                           heights = c(1, 1))
+heatplots
+
+# Save the plot
+ggplot2::ggsave(filename = file.path(path, "figures/supp_fig2.png"), plot = heatplots, dpi=300, units=c("mm"), width=300, height=250)
+```
+
+## Figure S3
+
+```{r, supp_fig3}
+
+#| echo: false
+#| eval: true
+#| tidy: true
+#| message: false
+#| fig-width: 6
+#| fig-height: 6
+#| label: boxplot_hill_orders
+#| fig-cap: "Alpha diversity mean comparisons in cross-types facetted habitat types. Alpha diversity means comparisons; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2) per host species. A-C) Red filled boxplots correspond to F2YW, orange filled to G (*M. guttatus*), yellow to L (*M. laciniatus*), and teal to F2WY cross-type. Beta diversity mean comparions; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2)per elevation category. D-F) Light teal filled boxplot corresponds to Meadow 1, purple to Meadow 2, and light maroon to Granite 1. Open shapes represent: squares (F2YW), circles (G), triangles (L), and crosses (F2WY).  Significance levels are represented by *ns* (not significant) and asterisks [*p* < .05 (\\*), *p* < .01 (\\*\\*), *p* < .001 (\\*\\*\\*), and *p* < .0001 (\\*\\*\\*\\*)]."
+
+############################################
+#### Alpha diversity ####
+#### At the species level ####
+############################################
+
+########## Labels ###########
+#Legend title label
+legend_title <- "Species"
+# Species labels
+labels_list <- c("M. laciniatus", "M. nasutus", "M. guttatus")
+names(labels_list) <- c("L", "N", "G")
+#############################
+# compare_means(hill_2 ~ Site,
+#          data = plant_traits,
+#          group.by = "Genotype",
+#          method = "wilcox.test",
+#          p.adjust.method = "BH",
+#   paired = FALSE,
+#   alternative = "two.sided",
+#   mu = 0,
+#   var.equal = FALSE,
+#   conf.level = 0.95)
+
+
+
+# Plot
+hill0_species <-ggplot(data = plant_traits_rfy,
+                        aes(x = Genotype, y = Observed)) +
+  geom_point(
+    aes(color = Genotype),
+    alpha = 0.2,
+    size = 1.7,
+    position = position_jitter(w = 0.2)
+  ) +
+  geom_boxplot(aes(color = Genotype), alpha = 0.5, outlier.alpha = 0.0) +
+  scale_color_manual(values = met.brewer(
+      "Johnson",
+      n = 4,
+      type = "discrete",
+      direction = 1
+    )
+  ) +
+  scale_fill_manual(values = met.brewer(
+    "Johnson",
+    n = 4,
+    type = "discrete",
+    direction = 1
+  )) +
+  theme_div_discrete +
+  theme_classic(base_size = 16) +
+   theme(legend.title = element_text(face = "bold"),
+         strip.text = element_text(face = "bold", size = 14),
+         panel.border = element_rect(linetype = "blank", fill = NA),
+         axis.text.x = element_blank()) +
+  labs(y =  "\U1D492 = 0", x = "", col = "") +
+  guides(color = guide_legend(title = "Genotype")) +
+  facet_grid(~Habitat) +
+  stat_compare_means(comparisons = my_comparisons,
+                     method = "wilcox.test",
+                     label = "p.signif")
+
+#hill0_species
+
+
+# Hill number 1
+# Shannon diversity or hill number 1
+# Plot
+hill1_species <- ggplot(data = plant_traits_rfy,
+                        aes(x = Genotype, y = hill_1)) +
+  geom_point(
+    aes(color = Genotype),
+    alpha = 0.2,
+    size = 1.7,
+    position = position_jitter(w = 0.2)
+  ) +
+  geom_boxplot(aes(color = Genotype), alpha = 0.5, outlier.alpha = 0.0) +
+  scale_color_manual(values = met.brewer(
+      "Johnson",
+      n = 4,
+      type = "discrete",
+      direction = 1
+    )
+  ) +
+  scale_fill_manual(values = met.brewer(
+    "Johnson",
+    n = 4,
+    type = "discrete",
+    direction = 1
+  )) +
+  #scale_color_manual(aes(color = "black")) +
+  theme_sppdiv_discrete +
+  theme(strip.text = element_blank()) +
+  labs(y =  "\U1D492 = 1", x = "", col = "") +
+  guides(color = guide_legend(title = "Genotype")) +
+  facet_grid(~Habitat) +
+  stat_compare_means(comparisons = my_comparisons,
+                     method = "wilcox.test",
+                     label = "p.signif")
+
+#hill1_species
+
+
+# Hill number 2
+# Inverse Simpson diversity or hill number 2
+hill2_species <- ggplot(data = plant_traits_rfy,
+                        aes(x = Genotype, y = hill_2)) +
+  geom_point(
+    aes(color = Genotype),
+    alpha = 0.2,
+    size = 1.7,
+    position = position_jitter(w = 0.2)
+  ) +
+  geom_boxplot(aes(color = Genotype), alpha = 0.5, outlier.alpha = 0.0) +
+  # geom_crossbar(stat="summary",
+  #               fun = median,
+  #               fun.max = median,
+  #               fun.min = median,
+  #               fatten = 2,
+  #               width = 0.8,
+  #               color="black") +
+  scale_color_manual(values = met.brewer(
+      "Johnson",
+      n = 4,
+      type = "discrete",
+      direction = 1
+    )
+  ) +
+  scale_fill_manual(values = met.brewer(
+    "Johnson",
+    n = 4,
+    type = "discrete",
+    direction = 1
+  )) +
+  #scale_color_manual(aes(color = "black")) +
+  theme_sppdiv_discrete +
+  theme(strip.text = element_blank()) +
+  labs(y =  "\U1D492 = 2", x = "", col = "") +
+  guides(color = guide_legend(title = "Genotype")) +
+  facet_grid(~Site) +
+  stat_compare_means(comparisons = my_comparisons,
+                     method = "wilcox.test",
+                     label = "p.signif")
+
+#hill2_species
+
+# Joined plots
+supp_fig4 <- ggarrange(hill0_species,"", hill1_species,"", hill2_species,
+                                  nrow = 5, ncol = 1,
+                       heights = c(1, 0.1, 1, 0.1, 1),
+                                  common.legend = TRUE,
+                                  labels = c("A","", "B","", "C"),
+                                  legend = "bottom")
+
+supp_fig4
+ggsave(filename = file.path(path, "figures/supp_fig3.png"), plot = supp_fig4, dpi=300, units=c("mm"), width=250, height=275)
+
+```
+
+
+## Figure S4
+
+```{r, supp_fig4}
+#| echo: false
+#| eval: true
+#| tidy: true
+#| fig-width: 6
+#| fig-height: 6
+#| fig-caption: "Map of reciprocal transplant sites in Yosemite National Park. Sampling sites are color-coded by habitat type. Granite 1 (green), Meadow 1 (purple), and Meadow 2 (teal). Granite 2 (open-crossed circle) was not sampled."
+
+# Map of sampling sites
+#https://irma.nps.gov/DataStore/Reference/Profile/2301294
+#https://catalog.data.gov/dataset/yosemite-national-park-tract-and-boundary-data-c453b
+
+#GOOGLE_SECRET <- Sys.getenv("GGMAP_GOOGLE_API_KEY")
+#register_google(key ='GOOGLE_SECRET', write = TRUE)
+
+map_latlong <- data.frame(
+  Habitat = c("Meadow 1", "Meadow 2", "Granite 1"), #, "Granite 2"),
+  Latitude = c(37.767781, 37.755968, 37.810700), #, 37.843702),
+  Longitude = c(-119.772720, -119.803031, -119.485200) #, -119.573120)
+)
+
+granite2 <- data.frame(
+  Habitat = c("Granite 2"),
+  Latitude = c(37.843702),
+  Longitude = c(-119.573120)
+)
+
+mappops <- get_map(
+  location = c(
+    lon =
+      mean(map_latlong$Longitude),
+    lat =
+      mean(map_latlong$Latitude)
+  ),
+  zoom = 10,
+  maptype = "terrain",
+  scale = 4
+)
+#nc <- sf::st_read("/home/baponte/Boxx/Dissertation/Mimulus/GPS_data/YOSE/yose_boundary.shp", quiet = TRUE) Attempt at doing it over a shapefile
+
+map <- ggmap(mappops, extent = "device", darken = c(0.3, "white")) +
+  coord_sf(
+    xlim = c(-119.9, -119.4),
+    ylim = c(37.6, 37.9),
+    crs = 4326,
+    expand = TRUE
+  ) +
+  geom_point(
+    data = map_latlong,
+    aes(x
+        = Longitude, y = Latitude, fill =
+          Habitat),
+    size = 4,
+    shape = 21,
+    alpha = 0.75
+  ) +
+  geom_point(
+    data = granite2,
+        aes(x
+        = Longitude, y = Latitude, fill =
+          Habitat),
+    size = 4,
+    shape = 13,
+    alpha = 0.75
+  ) +
+  scale_fill_manual(values = c("#318f49","black", "#473d7d", "#0cb4bb")) +
+  theme_classic(base_size = 12) +
+  theme(
+    legend.title = element_text(face = "bold"),
+    legend.text = element_text(size = 10),
+    panel.border = element_rect(linetype = "blank", fill = NA),
+    axis.text.x = element_text(size = 10),
+    axis.text.y = element_text(size = 10)
+  ) +
+  ylab("Latitude") +
+  xlab("Longitude") +
+  annotation_north_arrow(
+    location = "tr",
+    which_north = "true",
+    height = unit(0.7, "cm"),
+    width = unit(0.7, "cm"),
+  )
+
+
+plot(map)
+ggsave(
+  "figures/supp_fig4.png",
+  plot = map,
+  units = "in",
+  width = 6,
+  height = 6,
+  dpi = 600
+)
+```
+
+<!-- ## Figure S5 -->
+
+<!-- ```{r, supp_fig5} -->
 <!-- #| echo: false -->
 <!-- #| eval: true -->
 <!-- #| tidy: true -->
-<!-- #| message: false -->
-<!-- #| fig-width: 6 -->
-<!-- #| fig-height: 6 -->
+<!-- #| warning: false -->
 <!-- #| label: boxplot_hill_orders -->
-<!-- #| fig-cap: "Alpha diversity mean comparisons in cross-types facetted habitat types. Alpha diversity means comparisons; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2) per host species. A-C) Red filled boxplots correspond to F2YW, orange filled to G (*M. guttatus*), yellow to L (*M. laciniatus*), and teal to F2WY cross-type. Beta diversity mean comparions; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2)per elevation category. D-F) Light teal filled boxplot corresponds to Meadow 1, purple to Meadow 2, and light maroon to Granite 1. Open shapes represent: squares (F2YW), circles (G), triangles (L), and crosses (F2WY).  Significance levels are represented by *ns* (not significant) and asterisks [*p* < .05 (\\*), *p* < .01 (\\*\\*), *p* < .001 (\\*\\*\\*), and *p* < .0001 (\\*\\*\\*\\*)]." -->
-
-<!-- ############################################ -->
-<!-- #### Alpha diversity #### -->
-<!-- #### At the species level #### -->
-<!-- ############################################ -->
+<!-- #| fig-cap: "Alpha and beta diversity means comparisons in cross-types by habitat types. Alpha diversity means comparisons; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2) per host species. A-C) Red filled boxplots correspond to F2YW, orange filled to G (*M. guttatus*), yellow to L (*M. laciniatus*), and teal to F2WY cross-type. Beta diversity mean comparions; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2)per elevation category. D-F) Light teal filled boxplot corresponds to Meadow 1, purple to Meadow 2, and light maroon to Granite 1. Open shapes represent: squares (F2YW), circles (G), triangles (L), and crosses (F2WY).  Significance levels are represented by *ns* (not significant) and asterisks [*p* < 0.05 (\\*), *p* < 0.01 (\\**), *p* < 0.001 (\\***), and *p* < 0.0001 (\\****)]." -->
+<!-- ################################# -->
+<!-- #### Beta diversity #### -->
+<!-- #### Across sites #### -->
+<!-- ################################# -->
 
 <!-- ########## Labels ########### -->
 <!-- #Legend title label -->
@@ -1954,459 +2353,201 @@ ggsave(
 <!-- labels_list <- c("M. laciniatus", "M. nasutus", "M. guttatus") -->
 <!-- names(labels_list) <- c("L", "N", "G") -->
 <!-- ############################# -->
-<!-- # compare_means(hill_2 ~ Site, -->
-<!-- #          data = plant_traits, -->
-<!-- #          group.by = "Genotype", -->
-<!-- #          method = "wilcox.test", -->
-<!-- #          p.adjust.method = "BH", -->
-<!-- #   paired = FALSE, -->
-<!-- #   alternative = "two.sided",  -->
-<!-- #   mu = 0,  -->
-<!-- #   var.equal = FALSE, -->
-<!-- #   conf.level = 0.95) -->
 
-
-
-<!-- # Plot -->
-<!-- hill0_species <-ggplot(data = plant_traits_rfy, -->
-<!--                         aes(x = Genotype, y = Observed)) + -->
+<!-- # Observed richness -->
+<!-- # Hill number 0 -->
+<!-- hill0_beta <- -->
+<!--   ggplot(plant_traits_rfy, aes(x = Habitat, y = Observed)) + -->
 <!--   geom_point( -->
-<!--     aes(color = Genotype), -->
-<!--     alpha = 0.2, -->
+<!--     aes(shape = Genotype, color = Habitat), -->
+<!--     alpha = 0.5, -->
 <!--     size = 1.7, -->
 <!--     position = position_jitter(w = 0.2) -->
-<!--   ) + -->
-<!--   geom_boxplot(aes(color = Genotype), alpha = 0.5, outlier.alpha = 0.0) + -->
-<!--   scale_color_manual(values = met.brewer( -->
-<!--       "Johnson", -->
+<!--   )+ -->
+<!--   geom_boxplot(aes(color = Habitat), alpha = 0.5, outlier.alpha = 0.0) + -->
+<!--   scale_color_manual( -->
+<!--     labels = c('Crane Flat', 'Little Meadow', 'Olmstead Point'), -->
+<!--     values = met.brewer( -->
+<!--      "Tsimshian", -->
 <!--       n = 4, -->
 <!--       type = "discrete", -->
-<!--       direction = 1 -->
+<!--       direction = -1 -->
 <!--     ) -->
 <!--   ) + -->
-<!--   scale_fill_manual(values = met.brewer( -->
-<!--     "Johnson", -->
-<!--     n = 4, -->
-<!--     type = "discrete", -->
-<!--     direction = 1 -->
-<!--   )) + -->
+<!--   scale_shape_manual( -->
+<!--     values = c(21:24), -->
+<!--   ) + -->
 <!--   theme_div_discrete + -->
-<!--   theme_classic(base_size = 16) + -->
-<!--    theme(legend.title = element_text(face = "bold"), -->
-<!--          strip.text = element_text(face = "bold", size = 14), -->
-<!--          panel.border = element_rect(linetype = "blank", fill = NA),  -->
-<!--          axis.text.x = element_blank()) + -->
-<!--   labs(y =  "\U1D492 = 0", x = "", col = "") + -->
-<!--   guides(color = guide_legend(title = "Genotype")) + -->
-<!--   facet_grid(~Habitat) + -->
-<!--   stat_compare_means(comparisons = my_comparisons, -->
+<!--   scale_x_discrete(labels = c('', '', '', '')) + -->
+<!--   stat_compare_means(comparisons = my_comparisons2, -->
 <!--                      method = "wilcox.test", -->
-<!--                      label = "p.signif") -->
+<!--                      label = "p.signif") + -->
+<!--   labs(y = "\U1D492 = 0", x = "") + -->
+<!--   facet_grid(~Site) + -->
+<!--   guides(fill = guide_legend(title = "Habitat"), -->
+<!--          shape = guide_legend(title = "Genotype")) -->
 
-<!-- #hill0_species -->
+<!-- #hill0_beta -->
+
 
 
 <!-- # Hill number 1 -->
 <!-- # Shannon diversity or hill number 1 -->
-<!-- # Plot -->
-<!-- hill1_species <- ggplot(data = plant_traits_rfy, -->
-<!--                         aes(x = Genotype, y = hill_1)) + -->
+<!-- hill1_beta <- ggplot(plant_traits_rfy, aes(x = Habitat, y = hill_1)) + -->
 <!--   geom_point( -->
-<!--     aes(color = Genotype), -->
-<!--     alpha = 0.2, -->
+<!--     aes(shape = Genotype, color = Habitat), -->
+<!--     alpha = 0.5, -->
 <!--     size = 1.7, -->
 <!--     position = position_jitter(w = 0.2) -->
-<!--   ) + -->
-<!--   geom_boxplot(aes(color = Genotype), alpha = 0.5, outlier.alpha = 0.0) + -->
-<!--   scale_color_manual(values = met.brewer( -->
-<!--       "Johnson", -->
+<!--   )+ -->
+<!--   geom_boxplot(aes(color = Habitat), alpha = 0.5, outlier.alpha = 0.0) + -->
+<!--   scale_color_manual( -->
+<!--     labels = c('Crane Flat', 'Little Meadow', 'Olmstead Point'), -->
+<!--     values = met.brewer( -->
+<!--       "Tsimshian", -->
 <!--       n = 4, -->
 <!--       type = "discrete", -->
-<!--       direction = 1 -->
+<!--       direction = -1 -->
 <!--     ) -->
 <!--   ) + -->
-<!--   scale_fill_manual(values = met.brewer( -->
-<!--     "Johnson", -->
-<!--     n = 4, -->
-<!--     type = "discrete", -->
-<!--     direction = 1 -->
-<!--   )) + -->
-<!--   #scale_color_manual(aes(color = "black")) + -->
-<!--   theme_sppdiv_discrete + -->
-<!--   theme(strip.text = element_blank()) + -->
-<!--   labs(y =  "\U1D492 = 1", x = "", col = "") + -->
-<!--   guides(color = guide_legend(title = "Genotype")) + -->
-<!--   facet_grid(~Habitat) + -->
-<!--   stat_compare_means(comparisons = my_comparisons, -->
+<!--   scale_shape_manual( -->
+<!--     values = c(21:24), -->
+<!--   ) + -->
+<!--   theme_div_discrete + -->
+<!--   scale_x_discrete(labels = c('', '', '', '')) + -->
+<!--   stat_compare_means(comparisons = my_comparisons2, -->
 <!--                      method = "wilcox.test", -->
-<!--                      label = "p.signif") -->
+<!--                      label = "p.signif") + -->
+<!--   labs(y = "\U1D492 = 1", x = "") + -->
+<!--   guides(fill = guide_legend(title = "Habitat"), -->
+<!--          shape = guide_legend(title = "Genotype")) + -->
+<!--     facet_grid(~Site)  -->
 
-<!-- #hill1_species -->
+<!-- #hill1_beta -->
 
 
 <!-- # Hill number 2 -->
 <!-- # Inverse Simpson diversity or hill number 2 -->
-<!-- hill2_species <- ggplot(data = plant_traits_rfy, -->
-<!--                         aes(x = Genotype, y = hill_2)) + -->
+
+<!-- hill2_beta <- ggplot(plant_traits_rfy, aes(x = Habitat, y = hill_2)) + -->
 <!--   geom_point( -->
-<!--     aes(color = Genotype), -->
-<!--     alpha = 0.2, -->
+<!--     aes(shape = Genotype, color = Habitat), -->
+<!--     alpha = 0.5, -->
 <!--     size = 1.7, -->
 <!--     position = position_jitter(w = 0.2) -->
 <!--   ) + -->
-<!--   geom_boxplot(aes(color = Genotype), alpha = 0.5, outlier.alpha = 0.0) + -->
+<!--   geom_boxplot(aes(color = Habitat), alpha = 0.5, outlier.alpha = 0.0) + -->
 <!--   # geom_crossbar(stat="summary", -->
-<!--   #               fun = median, -->
-<!--   #               fun.max = median, -->
-<!--   #               fun.min = median, -->
+<!--   #               fun = mean, -->
+<!--   #               fun.max = mean, -->
+<!--   #               fun.min = mean, -->
 <!--   #               fatten = 2, -->
-<!--   #               width = 0.8, -->
+<!--   #               width = 0.5, -->
 <!--   #               color="black") + -->
-<!--   scale_color_manual(values = met.brewer( -->
-<!--       "Johnson", -->
+<!--   scale_color_manual( -->
+<!--     labels = c('Crane Flat', 'Little Meadow', 'Olmstead Point'), -->
+<!--     values = met.brewer( -->
+<!--       "Tsimshian", -->
 <!--       n = 4, -->
 <!--       type = "discrete", -->
-<!--       direction = 1 -->
+<!--       direction = -1 -->
 <!--     ) -->
 <!--   ) + -->
-<!--   scale_fill_manual(values = met.brewer( -->
-<!--     "Johnson", -->
-<!--     n = 4, -->
-<!--     type = "discrete", -->
-<!--     direction = 1 -->
-<!--   )) + -->
-<!--   #scale_color_manual(aes(color = "black")) + -->
-<!--   theme_sppdiv_discrete + -->
-<!--   theme(strip.text = element_blank()) + -->
-<!--   labs(y =  "\U1D492 = 2", x = "", col = "") + -->
-<!--   guides(color = guide_legend(title = "Genotype")) + -->
-<!--   facet_grid(~Site) + -->
-<!--   stat_compare_means(comparisons = my_comparisons, -->
+<!--    scale_fill_manual( -->
+<!--     #labels = c('Crane Flat', 'Little Meadow', 'Olmstead Point'), -->
+<!--     values = met.brewer( -->
+<!--       "Tsimshian", -->
+<!--       n = 4, -->
+<!--       type = "discrete", -->
+<!--       direction = -1 -->
+<!--     ) -->
+<!--   ) + -->
+<!--   scale_shape_manual( -->
+<!--     values = c(0:3), -->
+<!--   ) + -->
+<!--   theme_div_discrete + -->
+<!--   scale_x_discrete(labels = c('', '', '', '')) + -->
+<!--   stat_compare_means(comparisons = my_comparisons2, -->
 <!--                      method = "wilcox.test", -->
-<!--                      label = "p.signif") -->
+<!--                      label = "p.signif") + -->
+<!--   labs(y = "\U1D492 = 2", x = "") + -->
+<!--   guides(fill = guide_legend(title = "Habitat"), -->
+<!--          shape = guide_legend(title = "Genotype", alpha = 1)) + -->
+<!--   facet_grid(~Site) -->
 
-<!-- #hill2_species -->
 
-<!-- # Joined plots -->
-<!-- supp_fig4 <- ggarrange(hill0_species,"", hill1_species,"", hill2_species,  -->
-<!--                                   nrow = 5, ncol = 1, -->
-<!--                        heights = c(1, 0.1, 1, 0.1, 1), -->
-<!--                                   common.legend = TRUE, -->
-<!--                                   labels = c("A","", "B","", "C"), -->
-<!--                                   legend = "bottom") -->
+<!-- #hill2_beta -->
 
-<!-- supp_fig4 -->
-<!-- ggsave(filename = file.path(path, "figures/supp_fig3.png"), plot = supp_fig4, dpi=300, units=c("mm"), width=250, height=275) -->
 
+<!-- # Joining plots -->
+<!-- hill_beta <- ggarrange(hill0_beta, hill1_beta, hill2_beta, -->
+<!--           nrow = 1, ncol = 3, -->
+<!--           common.legend = TRUE, -->
+<!--           legend = "bottom", -->
+<!--           labels = c("D", "E", "F")) -->
+
+<!-- supp_fig5 -->
+
+<!-- ggsave(filename = file.path(path, "figures/supp_fig5.png"), plot = supp_fig5, dpi=300, units=c("mm"), width=300, height=275) -->
 <!-- ``` -->
 
 
-<!-- ## Figure S4 -->
-
-<!-- ```{r, supp_fig4} -->
-<!-- #| echo: false -->
-<!-- #| eval: true -->
-<!-- #| tidy: true -->
-<!-- #| fig-width: 6 -->
-<!-- #| fig-height: 6 -->
-<!-- #| fig-caption: "Map of reciprocal transplant sites in Yosemite National Park. Sampling sites are color-coded by habitat type. Granite 1 (green), Meadow 1 (purple), and Meadow 2 (teal). Granite 2 (open-crossed circle) was not sampled." -->
-
-<!-- # Map of sampling sites -->
-<!-- #https://irma.nps.gov/DataStore/Reference/Profile/2301294 -->
-<!-- #https://catalog.data.gov/dataset/yosemite-national-park-tract-and-boundary-data-c453b -->
-
-<!-- #GOOGLE_SECRET <- Sys.getenv("GGMAP_GOOGLE_API_KEY") -->
-<!-- #register_google(key ='GOOGLE_SECRET', write = TRUE) -->
-
-<!-- map_latlong <- data.frame( -->
-<!--   Habitat = c("Meadow 1", "Meadow 2", "Granite 1"), #, "Granite 2"), -->
-<!--   Latitude = c(37.767781, 37.755968, 37.810700), #, 37.843702), -->
-<!--   Longitude = c(-119.772720, -119.803031, -119.485200) #, -119.573120) -->
-<!-- ) -->
-
-<!-- granite2 <- data.frame( -->
-<!--   Habitat = c("Granite 2"), -->
-<!--   Latitude = c(37.843702), -->
-<!--   Longitude = c(-119.573120) -->
-<!-- ) -->
-
-<!-- mappops <- get_map( -->
-<!--   location = c( -->
-<!--     lon = -->
-<!--       mean(map_latlong$Longitude), -->
-<!--     lat = -->
-<!--       mean(map_latlong$Latitude) -->
-<!--   ), -->
-<!--   zoom = 10, -->
-<!--   maptype = "terrain", -->
-<!--   scale = 4 -->
-<!-- ) -->
-<!-- #nc <- sf::st_read("/home/baponte/Boxx/Dissertation/Mimulus/GPS_data/YOSE/yose_boundary.shp", quiet = TRUE) Attempt at doing it over a shapefile -->
-
-<!-- map <- ggmap(mappops, extent = "device", darken = c(0.3, "white")) + -->
-<!--   coord_sf( -->
-<!--     xlim = c(-119.9, -119.4), -->
-<!--     ylim = c(37.6, 37.9), -->
-<!--     crs = 4326, -->
-<!--     expand = TRUE -->
-<!--   ) + -->
-<!--   geom_point( -->
-<!--     data = map_latlong, -->
-<!--     aes(x -->
-<!--         = Longitude, y = Latitude, fill = -->
-<!--           Habitat), -->
-<!--     size = 4, -->
-<!--     shape = 21, -->
-<!--     alpha = 0.75 -->
-<!--   ) + -->
-<!--   geom_point( -->
-<!--     data = granite2, -->
-<!--         aes(x -->
-<!--         = Longitude, y = Latitude, fill = -->
-<!--           Habitat), -->
-<!--     size = 4, -->
-<!--     shape = 13, -->
-<!--     alpha = 0.75 -->
-<!--   ) + -->
-<!--   scale_fill_manual(values = c("#318f49","black", "#473d7d", "#0cb4bb")) + -->
-<!--   theme_classic(base_size = 12) + -->
-<!--   theme( -->
-<!--     legend.title = element_text(face = "bold"), -->
-<!--     legend.text = element_text(size = 10), -->
-<!--     panel.border = element_rect(linetype = "blank", fill = NA), -->
-<!--     axis.text.x = element_text(size = 10), -->
-<!--     axis.text.y = element_text(size = 10) -->
-<!--   ) + -->
-<!--   ylab("Latitude") + -->
-<!--   xlab("Longitude") + -->
-<!--   annotation_north_arrow( -->
-<!--     location = "tr", -->
-<!--     which_north = "true", -->
-<!--     height = unit(0.7, "cm"), -->
-<!--     width = unit(0.7, "cm"), -->
-<!--   ) -->
 
 
-<!-- plot(map) -->
-<!-- ggsave( -->
-<!--   "figures/supp_fig4.png", -->
-<!--   plot = map, -->
-<!--   units = "in", -->
-<!--   width = 6, -->
-<!--   height = 6, -->
-<!--   dpi = 600 -->
-<!-- ) -->
-<!-- ``` -->
+## Table 1
 
-<!-- <!-- ## Figure S5 --> -->
+```{r, supp_table1}
+#Sites and Species sampled
+core_tax <-
+  core_members(
+    ps_clean_3,
+    detection = 0.1 / 100,
+    prevalence = 50 / 100,
+    include.lowest = FALSE
+  )
 
-<!-- <!-- ```{r, supp_fig5} --> -->
-<!-- <!-- #| echo: false --> -->
-<!-- <!-- #| eval: true --> -->
-<!-- <!-- #| tidy: true --> -->
-<!-- <!-- #| warning: false --> -->
-<!-- <!-- #| label: boxplot_hill_orders --> -->
-<!-- <!-- #| fig-cap: "Alpha and beta diversity means comparisons in cross-types by habitat types. Alpha diversity means comparisons; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2) per host species. A-C) Red filled boxplots correspond to F2YW, orange filled to G (*M. guttatus*), yellow to L (*M. laciniatus*), and teal to F2WY cross-type. Beta diversity mean comparions; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2)per elevation category. D-F) Light teal filled boxplot corresponds to Meadow 1, purple to Meadow 2, and light maroon to Granite 1. Open shapes represent: squares (F2YW), circles (G), triangles (L), and crosses (F2WY).  Significance levels are represented by *ns* (not significant) and asterisks [*p* < 0.05 (\\*), *p* < 0.01 (\\**), *p* < 0.001 (\\***), and *p* < 0.0001 (\\****)]." --> -->
-<!-- <!-- ################################# --> -->
-<!-- <!-- #### Beta diversity #### --> -->
-<!-- <!-- #### Across sites #### --> -->
-<!-- <!-- ################################# --> -->
+supp_table1 <- metagMisc::phyloseq_to_df(ps_clean_3) |>
+  filter(OTU %in% core_tax) |>
+  mutate(across(Kingdom:Species, ~ str_remove(., "^.*?(_|-)."))) |>
+  select(OTU, Kingdom:Species) |>
+  knitr::kable(caption = "Table 1: Core taxa members detected in unrarified data at a 1% threshold and 50% prevalence in samples.")
+supp_table1
 
-<!-- <!-- ########## Labels ########### --> -->
-<!-- <!-- #Legend title label --> -->
-<!-- <!-- legend_title <- "Species" --> -->
-<!-- <!-- # Species labels --> -->
-<!-- <!-- labels_list <- c("M. laciniatus", "M. nasutus", "M. guttatus") --> -->
-<!-- <!-- names(labels_list) <- c("L", "N", "G") --> -->
-<!-- <!-- ############################# --> -->
+#save_kable(file.path(path, "tables/supp_table1.txt"), table1)
 
-<!-- <!-- # Observed richness --> -->
-<!-- <!-- # Hill number 0 --> -->
-<!-- <!-- hill0_beta <- --> -->
-<!-- <!--   ggplot(plant_traits_rfy, aes(x = Habitat, y = Observed)) + --> -->
-<!-- <!--   geom_point( --> -->
-<!-- <!--     aes(shape = Genotype, color = Habitat), --> -->
-<!-- <!--     alpha = 0.5, --> -->
-<!-- <!--     size = 1.7, --> -->
-<!-- <!--     position = position_jitter(w = 0.2) --> -->
-<!-- <!--   )+ --> -->
-<!-- <!--   geom_boxplot(aes(color = Habitat), alpha = 0.5, outlier.alpha = 0.0) + --> -->
-<!-- <!--   scale_color_manual( --> -->
-<!-- <!--     labels = c('Crane Flat', 'Little Meadow', 'Olmstead Point'), --> -->
-<!-- <!--     values = met.brewer( --> -->
-<!-- <!--      "Tsimshian", --> -->
-<!-- <!--       n = 4, --> -->
-<!-- <!--       type = "discrete", --> -->
-<!-- <!--       direction = -1 --> -->
-<!-- <!--     ) --> -->
-<!-- <!--   ) + --> -->
-<!-- <!--   scale_shape_manual( --> -->
-<!-- <!--     values = c(21:24), --> -->
-<!-- <!--   ) + --> -->
-<!-- <!--   theme_div_discrete + --> -->
-<!-- <!--   scale_x_discrete(labels = c('', '', '', '')) + --> -->
-<!-- <!--   stat_compare_means(comparisons = my_comparisons2, --> -->
-<!-- <!--                      method = "wilcox.test", --> -->
-<!-- <!--                      label = "p.signif") + --> -->
-<!-- <!--   labs(y = "\U1D492 = 0", x = "") + --> -->
-<!-- <!--   facet_grid(~Site) + --> -->
-<!-- <!--   guides(fill = guide_legend(title = "Habitat"), --> -->
-<!-- <!--          shape = guide_legend(title = "Genotype")) --> -->
+#The core taxa members are "ASV_1", "ASV_2", "ASV_3", "ASV_4", "ASV_5", "ASV_6", "ASV_7", "ASV_8", "ASV_9", "ASV_11", "ASV_12", "ASV_14", "ASV_16", "ASV_18", "ASV_19", "ASV_21", "ASV_23", "ASV_27". #Like in MIM2 project, we see *Cladosporium* spp. (ASV_1), *Vishniacozyma victoriae* (ASV_2), and *Cladosporium herbanum* (ASV_27) and.
+```
 
-<!-- <!-- #hill0_beta --> -->
+## Table 2
 
+```{r, supp_table}
+table2 <- phyloseq_ntaxa_by_tax(
+  ps_clean_3,
+  TaxRank = "Phylum",
+  relative = F,
+  add_meta_data = T
+) |>
+  as.data.frame() |>
+  mutate(sum = sum(N.OTU),
+         Phylum = str_remove(Phylum, "^.*?(_|-).")) |>
+  group_by(Genotype, Phylum) |>
+  summarise("Ocurrance in samples" = n()) |>
+  knitr::kable(caption = "Table 2: Prevalence of phyla in samples per cross-type.")
 
+table2
+```
 
-<!-- <!-- # Hill number 1 --> -->
-<!-- <!-- # Shannon diversity or hill number 1 --> -->
-<!-- <!-- hill1_beta <- ggplot(plant_traits_rfy, aes(x = Habitat, y = hill_1)) + --> -->
-<!-- <!--   geom_point( --> -->
-<!-- <!--     aes(shape = Genotype, color = Habitat), --> -->
-<!-- <!--     alpha = 0.5, --> -->
-<!-- <!--     size = 1.7, --> -->
-<!-- <!--     position = position_jitter(w = 0.2) --> -->
-<!-- <!--   )+ --> -->
-<!-- <!--   geom_boxplot(aes(color = Habitat), alpha = 0.5, outlier.alpha = 0.0) + --> -->
-<!-- <!--   scale_color_manual( --> -->
-<!-- <!--     labels = c('Crane Flat', 'Little Meadow', 'Olmstead Point'), --> -->
-<!-- <!--     values = met.brewer( --> -->
-<!-- <!--       "Tsimshian", --> -->
-<!-- <!--       n = 4, --> -->
-<!-- <!--       type = "discrete", --> -->
-<!-- <!--       direction = -1 --> -->
-<!-- <!--     ) --> -->
-<!-- <!--   ) + --> -->
-<!-- <!--   scale_shape_manual( --> -->
-<!-- <!--     values = c(21:24), --> -->
-<!-- <!--   ) + --> -->
-<!-- <!--   theme_div_discrete + --> -->
-<!-- <!--   scale_x_discrete(labels = c('', '', '', '')) + --> -->
-<!-- <!--   stat_compare_means(comparisons = my_comparisons2, --> -->
-<!-- <!--                      method = "wilcox.test", --> -->
-<!-- <!--                      label = "p.signif") + --> -->
-<!-- <!--   labs(y = "\U1D492 = 1", x = "") + --> -->
-<!-- <!--   guides(fill = guide_legend(title = "Habitat"), --> -->
-<!-- <!--          shape = guide_legend(title = "Genotype")) + --> -->
-<!-- <!--     facet_grid(~Site)  --> -->
+## Table 3
+```{r}
+#dbRDA table  (results are the same as adonis2 but without R2)
+#anova_m3_hell_margin <- readRDS("clean_data/statistics/anova_m3_hell_margin.rds")
+anova_m3_hell_term <- readRDS("clean_data/statistics/anova_m3_hell_term.rds")
+anova_table1 <- tidy(anova_m3_hell_term)
 
-<!-- <!-- #hill1_beta --> -->
-
-
-<!-- <!-- # Hill number 2 --> -->
-<!-- <!-- # Inverse Simpson diversity or hill number 2 --> -->
-
-<!-- <!-- hill2_beta <- ggplot(plant_traits_rfy, aes(x = Habitat, y = hill_2)) + --> -->
-<!-- <!--   geom_point( --> -->
-<!-- <!--     aes(shape = Genotype, color = Habitat), --> -->
-<!-- <!--     alpha = 0.5, --> -->
-<!-- <!--     size = 1.7, --> -->
-<!-- <!--     position = position_jitter(w = 0.2) --> -->
-<!-- <!--   ) + --> -->
-<!-- <!--   geom_boxplot(aes(color = Habitat), alpha = 0.5, outlier.alpha = 0.0) + --> -->
-<!-- <!--   # geom_crossbar(stat="summary", --> -->
-<!-- <!--   #               fun = mean, --> -->
-<!-- <!--   #               fun.max = mean, --> -->
-<!-- <!--   #               fun.min = mean, --> -->
-<!-- <!--   #               fatten = 2, --> -->
-<!-- <!--   #               width = 0.5, --> -->
-<!-- <!--   #               color="black") + --> -->
-<!-- <!--   scale_color_manual( --> -->
-<!-- <!--     labels = c('Crane Flat', 'Little Meadow', 'Olmstead Point'), --> -->
-<!-- <!--     values = met.brewer( --> -->
-<!-- <!--       "Tsimshian", --> -->
-<!-- <!--       n = 4, --> -->
-<!-- <!--       type = "discrete", --> -->
-<!-- <!--       direction = -1 --> -->
-<!-- <!--     ) --> -->
-<!-- <!--   ) + --> -->
-<!-- <!--    scale_fill_manual( --> -->
-<!-- <!--     #labels = c('Crane Flat', 'Little Meadow', 'Olmstead Point'), --> -->
-<!-- <!--     values = met.brewer( --> -->
-<!-- <!--       "Tsimshian", --> -->
-<!-- <!--       n = 4, --> -->
-<!-- <!--       type = "discrete", --> -->
-<!-- <!--       direction = -1 --> -->
-<!-- <!--     ) --> -->
-<!-- <!--   ) + --> -->
-<!-- <!--   scale_shape_manual( --> -->
-<!-- <!--     values = c(0:3), --> -->
-<!-- <!--   ) + --> -->
-<!-- <!--   theme_div_discrete + --> -->
-<!-- <!--   scale_x_discrete(labels = c('', '', '', '')) + --> -->
-<!-- <!--   stat_compare_means(comparisons = my_comparisons2, --> -->
-<!-- <!--                      method = "wilcox.test", --> -->
-<!-- <!--                      label = "p.signif") + --> -->
-<!-- <!--   labs(y = "\U1D492 = 2", x = "") + --> -->
-<!-- <!--   guides(fill = guide_legend(title = "Habitat"), --> -->
-<!-- <!--          shape = guide_legend(title = "Genotype", alpha = 1)) + --> -->
-<!-- <!--   facet_grid(~Site) --> -->
-
-
-<!-- <!-- #hill2_beta --> -->
-
-
-<!-- <!-- # Joining plots --> -->
-<!-- <!-- hill_beta <- ggarrange(hill0_beta, hill1_beta, hill2_beta, --> -->
-<!-- <!--           nrow = 1, ncol = 3, --> -->
-<!-- <!--           common.legend = TRUE, --> -->
-<!-- <!--           legend = "bottom", --> -->
-<!-- <!--           labels = c("D", "E", "F")) --> -->
-
-<!-- <!-- supp_fig5 --> -->
-
-<!-- <!-- ggsave(filename = file.path(path, "figures/supp_fig5.png"), plot = supp_fig5, dpi=300, units=c("mm"), width=300, height=275) --> -->
-<!-- <!-- ``` --> -->
-
-
-
-
-<!-- ## Table 1 -->
-
-<!-- ```{r, supp_table1} -->
-<!-- # Sites and Species sampled -->
-<!-- # core_tax <- -->
-<!-- #   core_members( -->
-<!-- #     ps_clean_3, -->
-<!-- #     detection = 0.1 / 100, -->
-<!-- #     prevalence = 50 / 100, -->
-<!-- #     include.lowest = FALSE -->
-<!-- #   ) -->
-<!-- #  -->
-<!-- # supp_table1 <- metagMisc::phyloseq_to_df(ps_clean_3) |> -->
-<!-- #   filter(OTU %in% core_tax) |> -->
-<!-- #   mutate(across(Kingdom:Species, ~ str_remove(., "^.*?(_|-)."))) |> -->
-<!-- #   select(OTU, Kingdom:Species) |> -->
-<!-- #   knitr::kable(caption = "Table 1: Core taxa members detected in unrarified data at a 1% threshold and 50% prevalence in samples.") -->
-<!-- #supp_table1 -->
-
-<!-- #save_kable(file.path(path, "tables/supp_table1.txt"), table1) -->
-
-<!-- #The core taxa members are "ASV_1", "ASV_2", "ASV_3", "ASV_4", "ASV_5", "ASV_6", "ASV_7", "ASV_8", "ASV_9", "ASV_11", "ASV_12", "ASV_14", "ASV_16", "ASV_18", "ASV_19", "ASV_21", "ASV_23", "ASV_27". #Like in MIM2 project, we see *Cladosporium* spp. (ASV_1), *Vishniacozyma victoriae* (ASV_2), and *Cladosporium herbanum* (ASV_27) and.  -->
-<!-- ``` -->
-
-<!-- ## Table 2 -->
-
-<!-- ```{r, supp_table} -->
-<!-- # table2 <- phyloseq_ntaxa_by_tax( -->
-<!-- #   ps_clean_3, -->
-<!-- #   TaxRank = "Phylum", -->
-<!-- #   relative = F, -->
-<!-- #   add_meta_data = T -->
-<!-- # ) |> -->
-<!-- #   as.data.frame() |> -->
-<!-- #   mutate(sum = sum(N.OTU), -->
-<!-- #          Phylum = str_remove(Phylum, "^.*?(_|-).")) |> -->
-<!-- #   group_by(Genotype, Phylum) |> -->
-<!-- #   summarise("Ocurrance in samples" = n()) |> -->
-<!-- #   knitr::kable(caption = "Table 2: Prevalence of phyla in samples per cross-type.") -->
-
-<!-- #table2 -->
-<!-- ``` -->
-
-<!-- <!-- ## Table 3 --> -->
-<!-- ```{r} -->
-<!-- #dbRDA table -->
-<!-- ``` -->
+huxtable(anova_table1) |>
+  set_caption("Table 3: ANOVA table for the dbRDA model with all cross-types.")
+knitr::kable(anova_table1, caption = "Table 3: ANOVA table for the dbRDA model with all cross-types.")
+```
 
 
 ## Supplementary methods

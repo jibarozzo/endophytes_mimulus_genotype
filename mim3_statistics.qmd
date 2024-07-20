@@ -1927,6 +1927,8 @@ beta_dis1 <-
   )
 saveRDS(beta_dis1, file = "clean_data/statistics/beta_dis1.rds")
 
+anova(beta_dis1)
+
 ## Permutest
 ## Margin
 set.seed(123)
@@ -1938,8 +1940,6 @@ beta_perm1_margin <-
 saveRDS(beta_perm1_margin, file = "clean_data/statistics/beta_perm1_margin.rds")
 beta_perm1_margin <- readRDS("clean_data/statistics/beta_perm1_margin.rds")
 
-anova(beta_dis1)
-TukeyHSD(beta_dis1)
 
 ## Terms
 set.seed(123)
@@ -2005,9 +2005,10 @@ beta_dis3 <-
     type = "median",
     sqrt.dist = FALSE
   )
-load("clean_data/statistics/beta_dis3.rda")
 saveRDS(beta_dis3, file = "clean_data/statistics/beta_dis3.rds")
+beta_dis3 <- readRDS("clean_data/statistics/beta_dis3.rds")
 
+boxplot(beta_dis3, main = "Boxplot of beta diversity by Genotype")
 anova(beta_dis3)
 TukeyHSD(beta_dis3)
 
@@ -2020,6 +2021,9 @@ beta_perm3_margin <-
               permutations = 999,
               by = "margin")
 saveRDS(beta_perm3_margin, file = "clean_data/statistics/beta_perm3_margin.rds")
+beta_perm3_margin <- readRDS("clean_data/statistics/beta_perm3_margin.rds")
+
+TukeyHSD(beta_perm3_margin)
 
 ## Terms
 set.seed(123)
@@ -2030,7 +2034,6 @@ beta_perm3_terms <-
               by = "terms")
 saveRDS(beta_perm3_margin, file = "clean_data/statistics/beta_perm3_terms.rds")
 
-
 # By Habitat
 set.seed(123)
 beta_dis4 <- betadisper(
@@ -2040,6 +2043,8 @@ beta_dis4 <- betadisper(
   sqrt.dist = FALSE
 )
 saveRDS(beta_dis4, file = "clean_data/statistics/beta_dis4.rds")
+beta_dis4 <- readRDS("clean_data/statistics/beta_dis4.rds")
+TukeyHSD(beta_dis4)
 
 ## Permutest
 set.seed(123)
@@ -2049,6 +2054,7 @@ beta_perm4_margin <-
               permutations = 999,
               by = "margin")
 saveRDS(beta_perm4_margin, file = "clean_data/statistics/beta_perm4_margin.rds")
+beta_perm4_margin <- readRDS("clean_data/statistics/beta_perm4_margin.rds")
 
 ## Terms
 set.seed(123)
@@ -2058,6 +2064,7 @@ beta_perm4_margin <-
               permutations = 999,
               by = "terms")
 saveRDS(beta_perm4_terms, file = "clean_data/statistics/beta_perm4_terms.rds")
+beta_perm4_terms <- readRDS("clean_data/statistics/beta_perm4_terms.rds")
 
 # By Habitat*Genotype
 set.seed(123)
@@ -2068,7 +2075,9 @@ beta_dis5 <- betadisper(
     sqrt.dist = FALSE
 )
 saveRDS(beta_dis5, file = "clean_data/statistics/beta_dis5.rds")
+beta_dis5 <- readRDS("clean_data/statistics/beta_dis5.rds")
 
+TukeyHSD(beta_dis5)
 ## Permutest
 ## Margin
 set.seed(123)
@@ -2078,7 +2087,8 @@ beta_perm5_margin <-
               permutations = 999,
               by = "margin")
 saveRDS(beta_perm5_margin, file = "clean_data/statistics/beta_perm5_margin.rds")
-beta_perm5
+beta_perm5_margin <- readRDS("clean_data/statistics/beta_perm5_margin.rds")
+TukeyHSD(beta_perm5_margin)
 
 ## Terms
 set.seed(123)
@@ -2089,7 +2099,7 @@ beta_perm5_terms <-
               by = "terms")
 saveRDS(beta_perm5_terms, file = "clean_data/statistics/beta_perm5_terms.rds")
 ```
-The groups interacting with the environment (Habitat_Genotype) show significant differences in multivariate dispersion (p \< 0.05). The PERMDISP analysis shows that the groups are significantly different in their multivariate dispersion.Group differences are due to dispersion differences between groups, not due to differences in the centroid of the groups.
+The groups interacting with the environment (Habitat_Genotype) show significant differences in multivariate dispersion (p \< 0.05). The PERMDISP analysis shows that the groups are significantly different in their multivariate dispersion.Group differences are due to dispersion differences between groups, not due to differences in the median of the groups.
 
 #### hybrids only
 ```{r}
@@ -2225,6 +2235,10 @@ beta_hybrids_dis1 <-
     )
 saveRDS(beta_hybrids_dis1, file = "clean_data/statistics/beta_hybrids_dis1.rds")
 beta_hybrids_dis1 <- readRDS("clean_data/statistics/beta_hybrids_dis1.rds")
+
+anova(beta_hybrids_dis1)
+TukeyHSD(beta_hybrids_dis1)
+
 
 ## Permutest
 ## Margin
