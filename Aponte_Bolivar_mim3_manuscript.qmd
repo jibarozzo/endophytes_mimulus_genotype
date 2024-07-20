@@ -56,7 +56,6 @@ format:
     reference-doc: custom-reference-doc.docx
     number-sections: true
     tbl-colwidths: true
-    #linestretch: 2.0
     citation-package: biblatex
 crossref:
   custom:
@@ -1026,7 +1025,7 @@ ggsave(filename = file.path(path, "figures/figure3.png"), plot = alpha_beta_dive
 #| fig-width: 6
 #| fig-height: 7
 #| label: dbrda_plot
-#| fig-cap: "FEF community composition association to all cross-types, habitat types, and leaf lobing index (LBI) in reciprocal transplant experiment. Distance-based Redundancy Analysis (dbRDA) plot of rarefied FEF community and leaf functional traits by species. A) Each cluster of points represents a rarefied FEF community sample from one host cross-type; red filled points correspond to F~2~GL (hybrid), orange to G (*M. guttatus* parental line), yellow to L (*M. laciniatus* parental line), and light blue point to F~2~LG (hybrid). Shapes correspond to habitat types:  open squares represent Meadow 1, opencircles Meadow 2, and open triangles Granite 1. B) Purple filled points correspond to Meadow 1 habitat, teal represents Meadow 2 and green Granite 1. Open shapes represent cross-types: open square F~2~GL (hybrid), open circles G (*M. guttatus* parental line), open triangles L (*M. laciniatus* parental line), and corsses F~2~LG (hybrid)Point shapes correspond to host species. Solid arrow lines represent significant associations (*p* < .01), while dashed lines represent non-significant associations. The length and direction of the arrows indicate the strength and direction of the association between the traits and the FEF community composition. The labels on the arrows correspond to the leaf functional traits, habitats and cross-types. Ellipses represent 95% confidence intervals. The plot is based on the Bray-Curtis dissimilarity matrix."
+#| fig-cap: "FEF community composition association to all cross-types, habitat types, and leaf lobing index (LBI) in reciprocal transplant experiment. Distance-based Redundancy Analysis (dbRDA) plot of rarefied FEF community and leaf functional traits by species. A) Each cluster of points represents a rarefied FEF community sample from one host cross-type; red filled points correspond to F~2~GL (hybrid), orange to G (*M. guttatus* parental line), yellow to L (*M. laciniatus* parental line), and light blue point to F~2~LG (hybrid). Shapes correspond to habitat types:  open squares represent Meadow 1, open circles Meadow 2, and open triangles Granite 1. B) Purple filled points correspond to Meadow 1 habitat, teal represents Meadow 2 and green Granite 1. Open shapes represent cross-types: open square F~2~GL (hybrid), open circles G (*M. guttatus* parental line), open triangles L (*M. laciniatus* parental line), and corsses F~2~LG (hybrid)Point shapes correspond to host species. Solid arrow lines represent significant associations (*p* < .01), while dashed lines represent non-significant associations. The length and direction of the arrows indicate the strength and direction of the association between the traits and the FEF community composition. The labels on the arrows correspond to the leaf functional traits, habitats and cross-types. Ellipses represent 95% confidence intervals. The plot is based on the Bray-Curtis dissimilarity matrix."
 
 ##########################
 ######## Labels ##########
@@ -1965,8 +1964,7 @@ anova_table1 <- tidy(anova_m3_hell_term) |>
   select(Term, Df, "Sum. of Sqs.", "F-value", "p-value")
 
 # Table
-flextable(anova_table1) |>
-  flextable::set_caption("Permutational ANOVA for the best-fit dbRDA model with all cross-types.") |>
+table1 <- flextable(anova_table1) |>
   flextable::set_table_properties(width = .5) |>
   flextable::set_table_properties(layout = "autofit") |>
   flextable::style(i = c(1:5),
@@ -1992,13 +1990,14 @@ flextable(anova_table1) |>
     cs.family = fontname,
     hansi.family = fontname,
     eastasia.family = fontname
-  )
+  )  |>
+  flextable::set_caption("Permutational ANOVA for the best-fit dbRDA model with all cross-types.")
   
-
+table1
   # add_footer_lines(
   #   value = as_paragraph("Significance levels are represented by asterisks [*p* < .05 (\\*), *p* < .01 (\\*\\*), *p* < .001 (\\*\\*\\*), and *p* < .0001 (\\*\\*\\*\\*)]. T statistics in brackets.")
   # )
-#knitr::knit_print(anova_table1)
+knitr::knit_print(table1)
 
 #knitr::kable(anova_table1, caption = "Table 3: ANOVA table for the dbRDA model with all cross-types.")
 ```
@@ -2024,8 +2023,8 @@ anova_table2 <- tidy(anova_m2_hybrids_margin) |>
   select(Term, Df, "Sum. of Sqs.", "F-value", "p-value")
 
 # Table
-flextable(anova_table2) |>
-  flextable::set_caption("Permutationa ANOVA for the best-fit dbRDA model with hybrid cross-types. Significance levels are represented by asterisks") |>
+
+table2 <- flextable(anova_table2) |>
   flextable::set_table_properties(width = .5) |>
   flextable::set_table_properties(layout = "autofit") |>
   flextable::style(i = c(1:4),
@@ -2051,9 +2050,10 @@ flextable(anova_table2) |>
     cs.family = fontname,
     hansi.family = fontname,
     eastasia.family = fontname
-  )
+  ) |>
+  flextable::set_caption("Permutationa ANOVA for the best-fit dbRDA model with hybrid cross-types. Significance levels are represented by asterisks")
   
-
+table2
   # add_footer_lines(
   #   value = as_paragraph("Significance levels are represented by asterisks [*p* < .05 (\\*), *p* < .01 (\\*\\*), *p* < .001 (\\*\\*\\*), and *p* < .0001 (\\*\\*\\*\\*)]. T statistics in brackets.")
   # )
@@ -2068,7 +2068,7 @@ flextable(anova_table2) |>
 ## Figure S1
 
 ::: {#suppfig-1}
-![Greenhouse cross-type design and reciprocal transplant design. Greenhouse hybrid crosses from parental lines in dashed line box. Reciprocal transplant design at each site in solid line boxes and ovals. Red squares represent F~2~GL hybrid cross. Light blue represents F~2~LG hybrid cross. Yellow represents *M. laciniatus* parental line, and organge representes *M. guttatus* parental line.](figures/supp_fig1_diagram.png){width="4.5in"}
+![Greenhouse cross-type design and reciprocal transplant design. Greenhouse hybrid crosses from parental lines in dashed line box. Reciprocal transplant design at each site in solid line boxes and ovals. Red squares represent F~2~GL hybrid cross. Light blue represents F~2~LG hybrid cross. Yellow represents *M. laciniatus* parental line, and orange represents *M. guttatus* parental line.](figures/supp_fig1_diagram.png){width="4.5in"}
 :::
 
 
@@ -2115,31 +2115,31 @@ flextable(anova_table2) |>
 
 ## Figure S2
 
-```{r, supp_fig2}
+```{r, suppfig-2}
 #| echo: false
 #| eval: true
 #| tidy: true
 #| message: false
 #| fig-width: 6
 #| fig-height: 6
-#| label: heatmap
+#| label: suppfig-2
 #| fig-cap: "Heatmap of the top 10 most abundant genera in the dataset. The heatmap is faceted by habitat type and cross-type."
 
 # Plot with micro_psclean
-t2 <- trans_abund$new(dataset = micro_psclean, taxrank = "Genus", ntaxa = 10) # 12 is the index for logLBI
-t2gg <-
-  t2$plot_heatmap(
-    facet = c("Habitat", "Genotype"),
-    xtext_keep = FALSE,
-    withmargin = FALSE
-  ) +
-  ggtitle("Un-rarified data") +
-  theme(
-    legend.title = element_text(face = "bold"),
-    strip.text = element_text(face = "bold", size = 12),
-    panel.border = element_rect(linetype = "blank", fill = NA),
-    axis.text.x = element_blank()
-  )
+# t2 <- trans_abund$new(dataset = micro_psclean, taxrank = "Genus", ntaxa = 10) # 12 is the index for logLBI
+# t2gg <-
+#   t2$plot_heatmap(
+#     facet = c("Habitat", "Genotype"),
+#     xtext_keep = FALSE,
+#     withmargin = FALSE
+#   ) +
+#   ggtitle("Un-rarified data") +
+#   theme(
+#     legend.title = element_text(face = "bold"),
+#     strip.text = element_text(face = "bold", size = 12),
+#     panel.border = element_rect(linetype = "blank", fill = NA),
+#     axis.text.x = element_blank()
+#  )
 #facet_nested(~factor(Site, levels =  c('LM', 'CF', 'OPN')),  nest_line = element_line(linetype = 2))
 
 #t2gg
@@ -2157,7 +2157,7 @@ r2gg <-
     xtext_keep = FALSE,
     withmargin = FALSE
   ) +
-  ggtitle("Rarified data") +
+  #ggtitle("Rarified data") +
   theme(
     legend.title = element_text(face = "bold"),
     strip.text = element_text(face = "bold", size = 12),
@@ -2165,24 +2165,24 @@ r2gg <-
     axis.text.x = element_blank()
   )
 
-#r2gg
+r2gg
 ggsave(filename = file.path(path, "figures/supp_fig3_rarefied_only.png"), plot = r2gg, dpi=300, units=c("mm"), width=300, height=250)
 
-# Joined heatplots
-heatplots <- ggarrange(t2gg, r2gg, ncol = 1, nrow = 2,
-                           common.legend = TRUE,
-                           legend = "bottom",
-                           labels = c("A", "B"),
-                           heights = c(1, 1))
-heatplots
+# # Joined heatplots
+# heatplots <- ggarrange(t2gg, r2gg, ncol = 1, nrow = 2,
+#                            common.legend = TRUE,
+#                            legend = "bottom",
+#                            labels = c("A", "B"),
+#                            heights = c(1, 1))
+# heatplots
 
 # Save the plot
-ggplot2::ggsave(filename = file.path(path, "figures/supp_fig2.png"), plot = heatplots, dpi=300, units=c("mm"), width=300, height=250)
+ggplot2::ggsave(filename = file.path(path, "figures/supp_fig2.png"), plot = r2gg, dpi=300, units=c("mm"), width=300, height=250)
 ```
 
 ## Figure S3
 
-```{r, supp_fig3}
+```{r, suppfig-3}
 
 #| echo: false
 #| eval: true
@@ -2190,8 +2190,8 @@ ggplot2::ggsave(filename = file.path(path, "figures/supp_fig2.png"), plot = heat
 #| message: false
 #| fig-width: 6
 #| fig-height: 6
-#| label: boxplot_hill_orders
-#| fig-cap: "Alpha diversity mean comparisons in cross-types facetted habitat types. Alpha diversity means comparisons; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2) per host species. A-C) Red filled boxplots correspond to F2YW, orange filled to G (*M. guttatus*), yellow to L (*M. laciniatus*), and teal to F2WY cross-type. Beta diversity mean comparions; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2)per elevation category. D-F) Light teal filled boxplot corresponds to Meadow 1, purple to Meadow 2, and light maroon to Granite 1. Open shapes represent: squares (F2YW), circles (G), triangles (L), and crosses (F2WY).  Significance levels are represented by *ns* (not significant) and asterisks [*p* < .05 (\\*), *p* < .01 (\\*\\*), *p* < .001 (\\*\\*\\*), and *p* < .0001 (\\*\\*\\*\\*)]."
+#| label: suppfig-3
+#| fig-cap: "Alpha diversity mean comparisons in cross-types facetted habitat types. Alpha diversity means comparisons: A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2) per host species. A-C) Red filled boxplots correspond to F~2~GL, orange filled to G (*M. guttatus*), yellow to L (*M. laciniatus*), and teal to F~2~LG cross-type. Beta diversity mean comparions; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2)per elevation category. D-F). Significance levels are represented by *ns* (not significant) and asterisks [*p* < .05 (\\*), *p* < .01 (\\*\\*), *p* < .001 (\\*\\*\\*), and *p* < .0001 (\\*\\*\\*\\*)]."
 
 ############################################
 #### Alpha diversity ####
@@ -2339,28 +2339,30 @@ hill2_species <- ggplot(data = plant_traits_rfy,
 #hill2_species
 
 # Joined plots
-supp_fig4 <- ggarrange(hill0_species,"", hill1_species,"", hill2_species,
+supp_fig3 <- ggarrange(hill0_species,"", hill1_species,"", hill2_species,
                                   nrow = 5, ncol = 1,
                        heights = c(1, 0.1, 1, 0.1, 1),
                                   common.legend = TRUE,
                                   labels = c("A","", "B","", "C"),
                                   legend = "bottom")
 
-supp_fig4
-ggsave(filename = file.path(path, "figures/supp_fig3.png"), plot = supp_fig4, dpi=300, units=c("mm"), width=250, height=275)
+supp_fig3
+
+ggsave(filename = file.path(path, "figures/supp_fig3.png"), plot = supp_fig3, dpi=300, units=c("mm"), width=250, height=275)
 
 ```
 
 
 ## Figure S4
 
-```{r, supp_fig4}
+```{r, suppfig-4}
 #| echo: false
 #| eval: true
 #| tidy: true
 #| fig-width: 6
 #| fig-height: 6
-#| fig-caption: "Map of reciprocal transplant sites in Yosemite National Park. Sampling sites are color-coded by habitat type. Granite 1 (green), Meadow 1 (purple), and Meadow 2 (teal). Granite 2 (open-crossed circle) was not sampled."
+#| label: suppfig-4
+#| fig-cap: "Map of reciprocal transplant sites in Yosemite National Park. Sampling sites are color-coded by habitat type. Granite 1 (green), Meadow 1 (purple), and Meadow 2 (teal). Granite 2 (open-crossed circle) was not sampled."
 
 # Map of sampling sites
 #https://irma.nps.gov/DataStore/Reference/Profile/2301294
@@ -2628,6 +2630,7 @@ supp_table1 <- metagMisc::phyloseq_to_df(ps_clean_3) |>
   mutate(across(Kingdom:Species, ~ str_remove(., "^.*?(_|-)."))) |>
   select(OTU, Kingdom:Species) |>
   knitr::kable(caption = "Table 1: Core taxa members detected in unrarified data at a 1% threshold and 50% prevalence in samples.")
+
 supp_table1
 
 #save_kable(file.path(path, "tables/supp_table1.txt"), table1)
@@ -2648,7 +2651,7 @@ supp_table2 <- phyloseq_ntaxa_by_tax(
   mutate(sum = sum(N.OTU),
          Phylum = str_remove(Phylum, "^.*?(_|-).")) |>
   group_by(Genotype, Phylum) |>
-  summarise("Ocurrance in samples" = n()) |>
+  summarise("Ocurrence in samples" = n()) |>
   knitr::kable(caption = "Table 2: Prevalence of phyla in samples per cross-type.")
 
 supp_table2
