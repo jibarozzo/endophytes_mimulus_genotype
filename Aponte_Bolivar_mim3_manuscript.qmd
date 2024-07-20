@@ -361,7 +361,7 @@ Alpha diversity was significantly different between all parental lines and hybri
 
 To further understand beta diversity and FEF community composition we performed two distance-based Redundancy Analysis (dbRDA) modeling the relationship between FEF communities, leaf shape, cross-type, and habitat type: the first accounting for individuals from parental lines and hybrids, and a second only with hybrids. The best fit model with all individuals and cross-types revealed that 18.71% of the overall variance in FEF communities was accounted for by log-transformed LBI, cross-type, and habitat type, the constraining variables. The first axis (dbRDA1) explained 45.3% and the second axis (dbRDA2) explained 31.5% of the constrained variance (Fig. 4). 
 <!-- We saw that Granite 1 and lobLBI, are opposite to Meadow 1 along dbRDA1. When we visualized the ellipses for cross-types, we observed highly overlapping FEF communities in F~2~GL and F~2~LG cross-types (Fig. 4A), as well less overlap in groupings of G and L parental lines.  -->
-In contrast, we note clear and little to non-overlapping FEF communities when results are visualized by habitat type (Fig. 4B). The marginal significance of constraining variables after permutational ANOVA revealed that all variables where significant at ⍺ = 0.05 but varied in their explanatory power (Table S3). We saw evidence for strong habitat type effects on FEF communities. The dbRDA for hybrids revealed that 0.01% of the overall constrained variance was explained by log-transformed LBI, cross-type and habitat type. The constrained variance was explained by dbRDA axis 1 (65.5%) and axis2 (19.7%) (Fig. 5 and Table S3).
+In contrast, we note clear and little to non-overlapping FEF communities when results are visualized by habitat type (Fig. 4B). The marginal significance of constraining variables after permutational ANOVA revealed that all variables where significant at ⍺ = 0.05 but varied in their explanatory power (Table 1). We saw evidence for strong habitat type effects on FEF communities. The dbRDA for hybrids revealed that 0.01% of the overall constrained variance was explained by log-transformed LBI, cross-type and habitat type. The constrained variance was explained by dbRDA axis 1 (65.5%) and axis2 (19.7%) (Fig. 5 and Table 2).
 
 We performed permutational analysis of multivariate dispersion (PERMDISP) to test for homogeneity of variances of FEF communities from clustered in the dbRDA analyses. We found homogeneous variance of FEF communities across for all parental lines and crosses (*F*~3, 14096~= 46.28, *p* \=.001). The post-hoc Tukey's test revealed that all parental lines and cross-type comparisons were significantly different at ⍺ = 0.05. We also detected significant differences in FEF communities by habitat type (*F*~2, 14097~= 2472.5, *p* \= .001), as well as the interaction between habitat and cross types (*F*~2, 14088~= 471.6, *p* \= .001 ). Our post-hoc Tukey's test showed that FEF communities from all habitat types had significant differences in the dispersion of variance at ⍺ = 0.05, meanwhile the interaction between habitat and cross-type showed more nuances for certain combinations, yet significant differences for most in the dispersion of variance at ⍺ = 0.05 (Table S4). For our model with only hybrid crosses, we found that homogeneity of variances of FEF communities were not significantly different between cross-types (*F*~1, 11548~= 0.034, *p* \= .85). The post-hoc Tukey's test revealed that F~2~LG and F~2~GL had no differences in the dispersion of variance at ⍺ = 0.05.
 
@@ -1038,7 +1038,7 @@ names(labels_list) <- c("F2GL", "G", "L", "F2LG")
 
 # dbRDA using Elevation as continuous variable
 #logACI + logLT + logLPS + logLMA +
-#final_model <- readRDS("clean_data/statistics/m3_hell.rds")
+final_model <- readRDS("clean_data/statistics/m3_hell.rds")
 
 
 # names(final_model)
@@ -1944,14 +1944,131 @@ ggsave(
 #   height = 225
 # )
 ```
+## Table 1
+```{r, table1}
+#| echo: false
+#| eval: true
+#| tidy: true
+#| tbl-cap: "Permutational ANOVA for the best-fit dbRDA model with all cross-types. Significance levels are represented by asterisks [*p* < .05 (\\*), *p* < .01 (\\*\\*), *p* < .001 (\\*\\*\\*), and *p* < .0001 (\\*\\*\\*\\*)]."
+#dbRDA table  (results from terms are the same as adonis2 but without R2)
+#anova_m3_hell_margin <- readRDS("clean_data/statistics/anova_m3_hell_margin.rds")
+anova_m3_hell_term <- readRDS("clean_data/statistics/anova_m3_hell_term.rds")
+anova_table1 <- tidy(anova_m3_hell_term) |>
+  as.data.frame() |>
+  mutate("p-value" = str_replace_all(p.value, "0.001", "***")) |>
+  rename(
+    Term = term,
+    "Sum. of Sqs." = SumOfSqs,
+    "F-value" = statistic,
+    "Df" = df
+  ) |> 
+  select(Term, Df, "Sum. of Sqs.", "F-value", "p-value")
 
+# Table
+flextable(anova_table1) |>
+  #flextable::set_caption("Table 3: ANOVA table for the dbRDA model with all cross-types.") |>
+  flextable::set_table_properties(width = .5) |>
+  flextable::set_table_properties(layout = "autofit") |>
+  flextable::style(i = c(1:5),
+                   j = 1,
+                   pr_t = fp_text(bold = FALSE)) |> 
+  flextable::bold(
+    i = c(1),
+    j = c(1:5),
+    bold= TRUE,
+    part = "header"
+  ) |>
+  flextable::italic(
+    i = c(5),
+    j = 1,
+    italic = TRUE,
+    part = "body"
+  ) |>
+  flextable::font(
+    i = NULL,
+    j = NULL,
+    fontname = "Tex Gyre Termes",
+    part = "all",
+    cs.family = fontname,
+    hansi.family = fontname,
+    eastasia.family = fontname
+  )
+  
+
+  # add_footer_lines(
+  #   value = as_paragraph("Significance levels are represented by asterisks [*p* < .05 (\\*), *p* < .01 (\\*\\*), *p* < .001 (\\*\\*\\*), and *p* < .0001 (\\*\\*\\*\\*)]. T statistics in brackets.")
+  # )
+knitr::knit_print(anova_table1)
+
+#knitr::kable(anova_table1, caption = "Table 3: ANOVA table for the dbRDA model with all cross-types.")
+```
+
+## Table 2
+```{r, table2}
+#| echo: false
+#| eval: true
+#| tidy: true
+#| tbl-cap: "Permutationa ANOVA for the best-fit dbRDA model with hybrid cross-types. Significance levels are represented by asterisks [*p* < .05 (\\*), *p* < .01 (\\*\\*), *p* < .001 (\\*\\*\\*), and *p* < .0001 (\\*\\*\\*\\*)]."
+
+#dbRDA table  (results from terms are the same as adonis2 but without R2)
+anova_m2_hybrids_margin <- readRDS("clean_data/statistics/anova_m2_hybrids_margin.rds")
+anova_table2 <- tidy(anova_m2_hybrids_margin) |>
+  as.data.frame() |>
+  mutate("p-value" = str_replace_all(p.value, "0.001", "***")) |>
+  rename(
+    Term = term,
+    "Sum. of Sqs." = SumOfSqs,
+    "F-value" = statistic,
+    "Df" = df
+  ) |> 
+  select(Term, Df, "Sum. of Sqs.", "F-value", "p-value")
+
+# Table
+flextable(anova_table2) |>
+  #flextable::set_caption("Table 3: ANOVA table for the dbRDA model with all cross-types.") |>
+  flextable::set_table_properties(width = .5) |>
+  flextable::set_table_properties(layout = "autofit") |>
+  flextable::style(i = c(1:4),
+                   j = 1,
+                   pr_t = fp_text(bold = FALSE)) |>
+  flextable::bold(
+    i = c(1),
+    j = c(1:5),
+    bold= TRUE,
+    part = "header"
+  ) |>
+  flextable::italic(
+    i = c(4),
+    j = 1,
+    italic = TRUE,
+    part = "body"
+  ) |>
+  flextable::font(
+    i = NULL,
+    j = NULL,
+    fontname = "Tex Gyre Termes",
+    part = "all",
+    cs.family = fontname,
+    hansi.family = fontname,
+    eastasia.family = fontname
+  )
+  
+
+  # add_footer_lines(
+  #   value = as_paragraph("Significance levels are represented by asterisks [*p* < .05 (\\*), *p* < .01 (\\*\\*), *p* < .001 (\\*\\*\\*), and *p* < .0001 (\\*\\*\\*\\*)]. T statistics in brackets.")
+  # )
+
+knitr::knit_print(anova_table2)
+
+#knitr::kable(anova_table1, caption = "Table 3: ANOVA table for the dbRDA model with all cross-types.")
+```
 
 
 # Supplementary Material
 ## Figure S1
 
-::: {#fig-S1}
-![Greenhouse cross-type design and reciprocal transplant design. Greenhouse hybrid crosses from parental lines in dashed line box. Reciprocal transplant design at each site in solid line boxes and ovals. Red squares represent F~2~GL hybrid cross. Light blue represents F~2~LG hybrid cross. Yellow represents *M. laciniatus* parental line, and organge representes *M. guttatus* parental line.  ](figures/supp_fig1_diagram.png){width="6in"}
+::: {#suppfig-S1}
+![Greenhouse cross-type design and reciprocal transplant design. Greenhouse hybrid crosses from parental lines in dashed line box. Reciprocal transplant design at each site in solid line boxes and ovals. Red squares represent F~2~GL hybrid cross. Light blue represents F~2~LG hybrid cross. Yellow represents *M. laciniatus* parental line, and organge representes *M. guttatus* parental line.](figures/supp_fig1_diagram.png){width="4.5in"}
 :::
 
 
@@ -2521,7 +2638,7 @@ supp_table1
 ## Table 2
 
 ```{r, supp_table}
-table2 <- phyloseq_ntaxa_by_tax(
+supp_table2 <- phyloseq_ntaxa_by_tax(
   ps_clean_3,
   TaxRank = "Phylum",
   relative = F,
@@ -2534,19 +2651,7 @@ table2 <- phyloseq_ntaxa_by_tax(
   summarise("Ocurrance in samples" = n()) |>
   knitr::kable(caption = "Table 2: Prevalence of phyla in samples per cross-type.")
 
-table2
-```
-
-## Table 3
-```{r}
-#dbRDA table  (results are the same as adonis2 but without R2)
-#anova_m3_hell_margin <- readRDS("clean_data/statistics/anova_m3_hell_margin.rds")
-anova_m3_hell_term <- readRDS("clean_data/statistics/anova_m3_hell_term.rds")
-anova_table1 <- tidy(anova_m3_hell_term)
-
-huxtable(anova_table1) |>
-  set_caption("Table 3: ANOVA table for the dbRDA model with all cross-types.")
-knitr::kable(anova_table1, caption = "Table 3: ANOVA table for the dbRDA model with all cross-types.")
+supp_table2
 ```
 
 

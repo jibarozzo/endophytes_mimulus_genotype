@@ -1818,6 +1818,7 @@ dbrda_traits <- rrfy_hell_matrix |>
         sep = "_",
         remove = FALSE) # To model interactions
 saveRDS(dbrda_traits, file = "clean_data/statistics/dbrda_traits.rds")
+dbrda_traits <- readRDS("clean_data/statistics/dbrda_traits.rds")
 
 # Model with intercept only ####
 # Using rrfy_hell_matrix as the distance matrix
@@ -2130,7 +2131,7 @@ dbrda_hybrids_traits <- rrfy_hell_matrix |>
         sep = "_",
         remove = FALSE) # To model interactions
 saveRDS(dbrda_hybrids_traits, file = "clean_data/statistics/dbrda_hybrids_traits.rds")
-#dbrda_hybrids_traits <- readRDS(file.path(path, "clean_data/statistics/dbrda_hybrids_traits.rds"))
+dbrda_hybrids_traits <- readRDS(file.path(path, "clean_data/statistics/dbrda_hybrids_traits.rds"))
 
 
 # Model with intercept only ####
@@ -2266,7 +2267,7 @@ saveRDS(beta_hybrids_perm1_terms, file = "clean_data/statistics/beta_hybrids_per
 set.seed(123)
 beta_hybrids_dis2 <- betadisper(
     vegdist(dbrda_hybrids_matrix, method = "bray"),
-    dbrda_traits$Habitat,
+    dbrda_hybrid_traits$Habitat,
     type = "median",
     sqrt.dist = FALSE
 )

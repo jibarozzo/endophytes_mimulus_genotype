@@ -124,207 +124,207 @@ dbrda_traits <- readRDS("clean_data/statistics/dbrda_traits.rds")
 # anova_m2_hell_terms <- readRDS("clean_data/statistics/anova_m2_hell_term.rds")
 
 # Model with interactions between site/habitat and genotype
-m3_hell <-
-    dbrda(
-        dbrda_hell_matrix ~ logLBI + Habitat * Genotype,
-        distance = "bray",
-        dfun = vegdist,
-        data = dbrda_traits,
-        parallel = 20,
-        na.action = na.omit
-    )
-saveRDS(m3_hell, file = "clean_data/statistics/m3_hell.rds")
-m3_hell <- readRDS("clean_data/statistics/m3_hell.rds")
-
-#Anovas for m3
-#Margins
-set.seed(123)
-anova_m3_hell_margin <- anova.cca(m3_hell,
-                                  by = "margin",
-                                  permutations = 999,
-                                  parallel = 10)
-saveRDS(anova_m3_hell_margin, file = "clean_data/statistics/anova_m3_hell_margin.rds")
-anova_m3_hell_margin <- readRDS("clean_data/statistics/anova_m3_hell_margin.rds")
-
-#Terms
-set.seed(123)
-anova_m3_hell_term <- anova.cca(m3_hell,
-                                by = "terms",
-                                permutations = 999,
-                                parallel = 10)
-saveRDS(anova_m3_hell_term, file = "clean_data/statistics/anova_m3_hell_term.rds")
-anova_m3_hell_term <- readRDS("clean_data/statistics/anova_m3_hell_term.rds")
-
-#################################
-#### PERMDISP ####
-#################################
-#Analysis of multivariate homogeneity of group dispersions.
-
-##################################
-#### m2_hell model #####
-##################################
-
-# By Genotype
-set.seed(123)
-beta_dis1 <-
-    betadisper(
-        vegdist(dbrda_hell_matrix, method = "bray"),
-        # Matrix of Hellinger transformed data rarefied
-        dbrda_traits$Genotype,
-        type = "median",
-        sqrt.dist = FALSE
-    )
-saveRDS(beta_dis1, file = "clean_data/statistics/beta_dis1.rds")
-
-## Permutest
-## Margin
-set.seed(123)
-beta_perm1_margin <-
-    permutest(beta_dis1,
-              parallel = 10,
-              permutations = 999,
-              by = "margin")
-saveRDS(beta_perm1_margin, file = "clean_data/statistics/beta_perm1_margin.rds")
-beta_perm1_margin <- readRDS("clean_data/statistics/beta_perm1_margin.rds")
-
-anova(beta_dis1)
-TukeyHSD(beta_dis1)
-
-## Terms
-set.seed(123)
-beta_perm1_terms <-
-    permutest(beta_dis1,
-              parallel = 10,
-              permutations = 999,
-              by = "terms")
-saveRDS(beta_perm1_terms, file = "clean_data/statistics/beta_perm1_terms.rds")
-beta_perm1_terms <- readRDS("clean_data/statistics/beta_perm1_terms.rds")
-
-
-# By Site
-set.seed(123)
-beta_dis2 <- betadisper(
-    vegdist(dbrda_hell_matrix, method = "bray"),
-    dbrda_traits$Site,
-    type = "median",
-    sqrt.dist = FALSE
-)
-saveRDS(beta_dis2, file = "clean_data/statistics/beta_dis2.rds")
-
-## Permutest
-## Margin
-set.seed(123)
-beta_perm2_margin <-
-    permutest(beta_dis2,
-              parallel = 10,
-              permutations = 999,
-              by = "margin")
-saveRDS(beta_perm2_margin, file = "clean_data/statistics/beta_perm2_margin.rds")
-beta_perm2_margin <- readRDS("clean_data/statistics/beta_perm2_margin.rds")
-
-
-## Terms
-set.seed(123)
-beta_perm2_terms <-
-    permutest(beta_dis2,
-              parallel = 10,
-              permutations = 999,
-              by = "terms")
-saveRDS(beta_perm2_terms, file = "clean_data/statistics/beta_perm2_terms.rds")
-beta_perm2_terms <- readRDS("clean_data/statistics/beta_perm2_terms.rds")
-
-
-##################################
-#### m3_hell model #####
-##################################
-
-# By Genotype
-set.seed(123)
-beta_dis3 <-
-    betadisper(
-        vegdist(dbrda_hell_matrix, method = "bray"),
-        # Matrix of Hellinger transformed data rarefied
-        dbrda_traits$Genotype,
-        type = "median",
-        sqrt.dist = FALSE
-    )
-saveRDS(beta_dis3, file = "clean_data/statistics/beta_dis3.rds")
-
-## Permutest
-## Margin
-set.seed(123)
-beta_perm3_margin <-
-    permutest(beta_dis3,
-              parallel = 10,
-              permutations = 999,
-              by = "margin")
-saveRDS(beta_perm3_margin, file = "clean_data/statistics/beta_perm3_margin.rds")
-
-## Terms
-set.seed(123)
-beta_perm3_terms <-
-    permutest(beta_dis3,
-              parallel = 10,
-              permutations = 999,
-              by = "terms")
-saveRDS(beta_perm3_margin, file = "clean_data/statistics/beta_perm3_terms.rds")
-
-# By Habitat
-set.seed(123)
-beta_dis4 <- betadisper(
-    vegdist(dbrda_hell_matrix, method = "bray"),
-    dbrda_traits$Habitat,
-    type = "median",
-    sqrt.dist = FALSE
-)
-saveRDS(beta_dis4, file = "clean_data/statistics/beta_dis4.rds")
-
-## Permutest
-set.seed(123)
-beta_perm4_margin <-
-    permutest(beta_dis4,
-              parallel = 10,
-              permutations = 999,
-              by = "margin")
-saveRDS(beta_perm4_margin, file = "clean_data/statistics/beta_perm4_margin.rds")
-
-## Terms
-set.seed(123)
-beta_perm4_margin <-
-    permutest(beta_dis4,
-              parallel = 10,
-              permutations = 999,
-              by = "terms")
-saveRDS(beta_perm4_terms, file = "clean_data/statistics/beta_perm4_terms.rds")
-
-# By Habitat*Genotype
-set.seed(123)
-beta_dis5 <- betadisper(
-    vegdist(dbrda_hell_matrix, method = "bray"),
-    dbrda_traits$Habitat_Genotype,
-    type = "median",
-    sqrt.dist = FALSE
-)
-saveRDS(beta_dis5, file = "clean_data/statistics/beta_dis5.rds")
-
-## Permutest
-## Margin
-set.seed(123)
-beta_perm5_margin <-
-    permutest(beta_dis5,
-              parallel = 10,
-              permutations = 999,
-              by = "margin")
-saveRDS(beta_perm5_margin, file = "clean_data/statistics/beta_perm5_margin.rds")
-
-## Terms
-set.seed(123)
-beta_perm5_terms <-
-    permutest(beta_dis5,
-              parallel = 10,
-              permutations = 999,
-              by = "terms")
-saveRDS(beta_perm5_terms, file = "clean_data/statistics/beta_perm5_terms.rds")
+# m3_hell <-
+#     dbrda(
+#         dbrda_hell_matrix ~ logLBI + Habitat * Genotype,
+#         distance = "bray",
+#         dfun = vegdist,
+#         data = dbrda_traits,
+#         parallel = 20,
+#         na.action = na.omit
+#     )
+# saveRDS(m3_hell, file = "clean_data/statistics/m3_hell.rds")
+# m3_hell <- readRDS("clean_data/statistics/m3_hell.rds")
+# 
+# #Anovas for m3
+# #Margins
+# set.seed(123)
+# anova_m3_hell_margin <- anova.cca(m3_hell,
+#                                   by = "margin",
+#                                   permutations = 999,
+#                                   parallel = 10)
+# saveRDS(anova_m3_hell_margin, file = "clean_data/statistics/anova_m3_hell_margin.rds")
+# anova_m3_hell_margin <- readRDS("clean_data/statistics/anova_m3_hell_margin.rds")
+# 
+# #Terms
+# set.seed(123)
+# anova_m3_hell_term <- anova.cca(m3_hell,
+#                                 by = "terms",
+#                                 permutations = 999,
+#                                 parallel = 10)
+# saveRDS(anova_m3_hell_term, file = "clean_data/statistics/anova_m3_hell_term.rds")
+# anova_m3_hell_term <- readRDS("clean_data/statistics/anova_m3_hell_term.rds")
+# 
+# #################################
+# #### PERMDISP ####
+# #################################
+# #Analysis of multivariate homogeneity of group dispersions.
+# 
+# ##################################
+# #### m2_hell model #####
+# ##################################
+# 
+# # By Genotype
+# set.seed(123)
+# beta_dis1 <-
+#     betadisper(
+#         vegdist(dbrda_hell_matrix, method = "bray"),
+#         # Matrix of Hellinger transformed data rarefied
+#         dbrda_traits$Genotype,
+#         type = "median",
+#         sqrt.dist = FALSE
+#     )
+# saveRDS(beta_dis1, file = "clean_data/statistics/beta_dis1.rds")
+# 
+# ## Permutest
+# ## Margin
+# set.seed(123)
+# beta_perm1_margin <-
+#     permutest(beta_dis1,
+#               parallel = 10,
+#               permutations = 999,
+#               by = "margin")
+# saveRDS(beta_perm1_margin, file = "clean_data/statistics/beta_perm1_margin.rds")
+# beta_perm1_margin <- readRDS("clean_data/statistics/beta_perm1_margin.rds")
+# 
+# anova(beta_dis1)
+# TukeyHSD(beta_dis1)
+# 
+# ## Terms
+# set.seed(123)
+# beta_perm1_terms <-
+#     permutest(beta_dis1,
+#               parallel = 10,
+#               permutations = 999,
+#               by = "terms")
+# saveRDS(beta_perm1_terms, file = "clean_data/statistics/beta_perm1_terms.rds")
+# beta_perm1_terms <- readRDS("clean_data/statistics/beta_perm1_terms.rds")
+# 
+# 
+# # By Site
+# set.seed(123)
+# beta_dis2 <- betadisper(
+#     vegdist(dbrda_hell_matrix, method = "bray"),
+#     dbrda_traits$Site,
+#     type = "median",
+#     sqrt.dist = FALSE
+# )
+# saveRDS(beta_dis2, file = "clean_data/statistics/beta_dis2.rds")
+# 
+# ## Permutest
+# ## Margin
+# set.seed(123)
+# beta_perm2_margin <-
+#     permutest(beta_dis2,
+#               parallel = 10,
+#               permutations = 999,
+#               by = "margin")
+# saveRDS(beta_perm2_margin, file = "clean_data/statistics/beta_perm2_margin.rds")
+# beta_perm2_margin <- readRDS("clean_data/statistics/beta_perm2_margin.rds")
+# 
+# 
+# ## Terms
+# set.seed(123)
+# beta_perm2_terms <-
+#     permutest(beta_dis2,
+#               parallel = 10,
+#               permutations = 999,
+#               by = "terms")
+# saveRDS(beta_perm2_terms, file = "clean_data/statistics/beta_perm2_terms.rds")
+# beta_perm2_terms <- readRDS("clean_data/statistics/beta_perm2_terms.rds")
+# 
+# 
+# ##################################
+# #### m3_hell model #####
+# ##################################
+# 
+# # By Genotype
+# set.seed(123)
+# beta_dis3 <-
+#     betadisper(
+#         vegdist(dbrda_hell_matrix, method = "bray"),
+#         # Matrix of Hellinger transformed data rarefied
+#         dbrda_traits$Genotype,
+#         type = "median",
+#         sqrt.dist = FALSE
+#     )
+# saveRDS(beta_dis3, file = "clean_data/statistics/beta_dis3.rds")
+# 
+# ## Permutest
+# ## Margin
+# set.seed(123)
+# beta_perm3_margin <-
+#     permutest(beta_dis3,
+#               parallel = 10,
+#               permutations = 999,
+#               by = "margin")
+# saveRDS(beta_perm3_margin, file = "clean_data/statistics/beta_perm3_margin.rds")
+# 
+# ## Terms
+# set.seed(123)
+# beta_perm3_terms <-
+#     permutest(beta_dis3,
+#               parallel = 10,
+#               permutations = 999,
+#               by = "terms")
+# saveRDS(beta_perm3_margin, file = "clean_data/statistics/beta_perm3_terms.rds")
+# 
+# # By Habitat
+# set.seed(123)
+# beta_dis4 <- betadisper(
+#     vegdist(dbrda_hell_matrix, method = "bray"),
+#     dbrda_traits$Habitat,
+#     type = "median",
+#     sqrt.dist = FALSE
+# )
+# saveRDS(beta_dis4, file = "clean_data/statistics/beta_dis4.rds")
+# 
+# ## Permutest
+# set.seed(123)
+# beta_perm4_margin <-
+#     permutest(beta_dis4,
+#               parallel = 10,
+#               permutations = 999,
+#               by = "margin")
+# saveRDS(beta_perm4_margin, file = "clean_data/statistics/beta_perm4_margin.rds")
+# 
+# ## Terms
+# set.seed(123)
+# beta_perm4_margin <-
+#     permutest(beta_dis4,
+#               parallel = 10,
+#               permutations = 999,
+#               by = "terms")
+# saveRDS(beta_perm4_terms, file = "clean_data/statistics/beta_perm4_terms.rds")
+# 
+# # By Habitat*Genotype
+# set.seed(123)
+# beta_dis5 <- betadisper(
+#     vegdist(dbrda_hell_matrix, method = "bray"),
+#     dbrda_traits$Habitat_Genotype,
+#     type = "median",
+#     sqrt.dist = FALSE
+# )
+# saveRDS(beta_dis5, file = "clean_data/statistics/beta_dis5.rds")
+# 
+# ## Permutest
+# ## Margin
+# set.seed(123)
+# beta_perm5_margin <-
+#     permutest(beta_dis5,
+#               parallel = 10,
+#               permutations = 999,
+#               by = "margin")
+# saveRDS(beta_perm5_margin, file = "clean_data/statistics/beta_perm5_margin.rds")
+# 
+# ## Terms
+# set.seed(123)
+# beta_perm5_terms <-
+#     permutest(beta_dis5,
+#               parallel = 10,
+#               permutations = 999,
+#               by = "terms")
+# saveRDS(beta_perm5_terms, file = "clean_data/statistics/beta_perm5_terms.rds")
 
 #################################################################
 #### dbRDA modelling for all samples: hybrids ONLY ####
@@ -341,7 +341,7 @@ saveRDS(beta_perm5_terms, file = "clean_data/statistics/beta_perm5_terms.rds")
 #     as.data.frame()
 # 
 # saveRDS(dbrda_hybrids_matrix, file = "clean_data/statistics/dbrda_hybrids_matrix.rds")
-dbrda_hybrids_matrix <- readRDS(file.path(path,"clean_data/statistics/dbrda_hybrids_matrix.rds"))
+dbrda_hybrids_matrix <- readRDS("clean_data/statistics/dbrda_hybrids_matrix.rds")
 
 
 # dbrda_hybrids_traits <- rrfy_hell_matrix |>
@@ -352,7 +352,7 @@ dbrda_hybrids_matrix <- readRDS(file.path(path,"clean_data/statistics/dbrda_hybr
 #           Genotype,
 #           sep = "_",
 #           remove = FALSE) # To model interactions
-dbrda_hybrids_traits <- readRDS(file.path(path, "clean_data/statistics/dbrda_hybrids_traits.rds"))
+dbrda_hybrids_traits <- readRDS("clean_data/statistics/dbrda_hybrids_traits.rds")
 
 
 # Model with intercept only ####
@@ -378,37 +378,37 @@ dbrda_hybrids_traits <- readRDS(file.path(path, "clean_data/statistics/dbrda_hyb
 # saveRDS(m1_hybrids_hell, file = "clean_data/statistics/m1_hybrids_hell.rds")
 
 # Model with species, site, leaf traits and elevation. ####
-m2_hybrids_hell <-
-    dbrda(
-        dbrda_hybrids_matrix ~ logLBI + Habitat + Genotype,
-        distance = "bray",
-        dfun = vegdist,
-        data = dbrda_hybrids_traits,
-        parallel = 20,
-        na.action = na.omit
-    )
-saveRDS(m2_hybrids_hell, file = "clean_data/statistics/m2_hybrids_hell.rds")
-
-#Anovas for m2
-## Margin
-set.seed(123)
-anova_m2_hybrids_margin <- anova.cca(
-    m2_hybrids_hell,
-    by = "margin",
-    permutations = 999,
-    parallel = 20
-)
-saveRDS(anova_m2_hybrids_hell_margin, file = "clean_data/statistics/anova_m2_hybrids_margin.rds")
-
-## Terms
-set.seed(123)
-anova_m2_hybrids_terms <- anova.cca(
-    m2_hybrids_hell,
-    by = "terms",
-    permutations = 999,
-    parallel = 20
-)
-saveRDS(anova_m2_hybrids_terms, file = "clean_data/statistics/anova_m2_hybrids_terms.rds")
+# m2_hybrids_hell <-
+#     dbrda(
+#         dbrda_hybrids_matrix ~ logLBI + Habitat + Genotype,
+#         distance = "bray",
+#         dfun = vegdist,
+#         data = dbrda_hybrids_traits,
+#         parallel = 20,
+#         na.action = na.omit
+#     )
+# saveRDS(m2_hybrids_hell, file = "clean_data/statistics/m2_hybrids_hell.rds")
+# 
+# #Anovas for m2
+# ## Margin
+# set.seed(123)
+# anova_m2_hybrids_margin <- anova.cca(
+#     m2_hybrids_hell,
+#     by = "margin",
+#     permutations = 999,
+#     parallel = 20
+# )
+# saveRDS(anova_m2_hybrids_hell_margin, file = "clean_data/statistics/anova_m2_hybrids_margin.rds")
+# 
+# ## Terms
+# set.seed(123)
+# anova_m2_hybrids_terms <- anova.cca(
+#     m2_hybrids_hell,
+#     by = "terms",
+#     permutations = 999,
+#     parallel = 20
+# )
+# saveRDS(anova_m2_hybrids_terms, file = "clean_data/statistics/anova_m2_hybrids_terms.rds")
 
 
 # m3 hybrids
@@ -417,7 +417,7 @@ m3_hybrids_hell <-
         dbrda_hybrids_matrix ~ logLBI + Habitat * Genotype,
         distance = "bray",
         dfun = vegdist,
-        data = dbrda_traits,
+        data = dbrda_hybrids_traits,
         parallel = 20,
         na.action = na.omit
     )
@@ -426,7 +426,7 @@ saveRDS(m3_hybrids_hell, file = "clean_data/statistics/m3_hybrids_hell.rds")
 #Anovas for m3_hybrids
 #Margins
 set.seed(123)
-anova_m3_hybrids_margin <- anova.cca(m3_hell,
+anova_m3_hybrids_margin <- anova.cca(m3_hybrids_hell,
                                      by = "margin",
                                      permutations = 999,
                                      parallel = 10)
@@ -434,7 +434,7 @@ saveRDS(anova_m3_hybrids_margin, file = "clean_data/statistics/anova_m3_hybrids_
 
 #Terms
 set.seed(123)
-anova_m3_hybrids_term <- anova.cca(m3_hell,
+anova_m3_hybrids_term <- anova.cca(m3_hybrids_hell,
                                    by = "terms",
                                    permutations = 999,
                                    parallel = 10)
@@ -480,7 +480,7 @@ saveRDS(beta_hybrids_perm1_terms, file = "clean_data/statistics/beta_hybrids_per
 set.seed(123)
 beta_hybrids_dis2 <- betadisper(
     vegdist(dbrda_hybrids_matrix, method = "bray"),
-    dbrda_traits$Habitat,
+    dbrda_hybrids_traits$Habitat,
     type = "median",
     sqrt.dist = FALSE
 )
@@ -509,7 +509,7 @@ saveRDS(beta_hybrids_perm2_terms, file = "clean_data/statistics/beta_hybrids_per
 set.seed(123)
 beta_hybrids_dis3 <- betadisper(
     vegdist(dbrda_hybrids_matrix, method = "bray"),
-    dbrda_traits$Habitat_Genotype,
+    dbrda_hybrids_traits$Habitat_Genotype,
     type = "median",
     sqrt.dist = FALSE
 )
