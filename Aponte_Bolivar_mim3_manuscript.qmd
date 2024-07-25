@@ -2,7 +2,7 @@
 title: "Yellow monkeyflower genotype and phenotype interactions with foliar fungal symbionts in common gardens"
 date: last-modified
 date-format: "MMMM D, YYYY"
-bibliography: references.bib
+bibliography: references.yaml
 csl: apa.csl
 author:
   - name: Bolívar Aponte Rolón
@@ -259,14 +259,16 @@ names_list <- colnames(ps_clean_3@otu_table) #List of samples
 
 # Introduction
 
-Evolutionary dynamics are significantly shaped by phenotypic plasticity and genetic adaptation, with both mechanisms playing crucial roles in facilitating plant survival and adaptation to a changing climate [@jump2005; @franks2014]. The effect of climate change on plastic and evolutionary responses is evident and accelerating [@franks2014; @ipcc2023]. While phenotypic plasticity and genetic adaptation are predicted to mitigate some of the effects of climate change, evidence supports that the rate of evolution may not keep pace, leading to the extinction of species [@urban2014]. The diversity and distribution of plants will be affected, resulting in "winners" and "losers" that are optimally or ill-adapted to an uncertain climate future [@pecl2017]. Local adaptation, genetic variation and phenotypic plasticity have been extensively studied in the context of spatial and temporal changes, but the role of symbiotic relationships in plant adaptation and phenotypic plasticity is less understood [@peay2016; @kivlin2022; @mojica2012; @hawkes2021]. Plants' ability to adapt to novel environments has been facilitated by their symbiotic relationships with fungi and bacteria [reviewed in @peay2016; @remy1994]. The potential for fungi to enhance plant fitness is vast, from colonization of land by plants in consort with arbuscular mycorrhizal root mutualists aiding in nutrient acquisition [peay2016; @remy1994], to the benefits fungal symbionts provide against pathogen resistance [@mejia2008; @estrada2013; @rasmussen2008; @clay1996], and stress tolerance [@peay2016; @giauque2019]. Nonetheless, the potential benefits are contingent on host plant identity, genetics, ecotypes, and the fungal functional guilds present [@kivlin2022; @kivlin2019; @mcintosh2024]. 
+Evolutionary dynamics are significantly shaped by phenotypic plasticity and genetic adaptation, with both mechanisms playing crucial roles in facilitating plant survival and adaptation to a changing climate [@jump2005; @franks2014]. The effect of climate change on plastic and evolutionary responses is evident and accelerating [@franks2014; @ipcc2023]. While phenotypic plasticity and genetic adaptation are predicted to mitigate some of the effects of climate change, evidence supports that the rate of evolution may not keep pace, leading to the extinction of species [@urban2014]. The diversity and distribution of plants will be affected, resulting in "winners" and "losers" that are optimally or ill-adapted to an uncertain climate future [@pecl2017]. Local adaptation, genetic variation and phenotypic plasticity have been extensively studied in the context of spatial and temporal changes, but the role of symbiotic relationships in plant adaptation and phenotypic plasticity is less understood [@peay2016; @kivlin2022; @mojica2012; @hawkes2021]. Plants' ability to adapt to novel environments has been facilitated by their symbiotic relationships with fungi and bacteria [reviewed in @peay2016; @remy1994]. The potential for fungi to enhance plant fitness is vast, from colonization of land by plants in consort with arbuscular mycorrhizal root mutualists aiding in nutrient acquisition [@peay2016; @remy1994], to the benefits fungal symbionts provide against pathogen resistance [@mejia2008; @estrada2013; @rasmussen2008; @clay1996], and stress tolerance [@peay2016; @giauque2019]. Nonetheless, the potential benefits are contingent on host plant identity, genetics, ecotypes, and the fungal functional guilds present [@kivlin2022; @kivlin2019; @mcintosh2024]. 
 
 The phyllosphere is comprised of bacterial and fungal symbionts on the surface and inside leaf tissue. Foliar endophytic fungi (FEF) refer to a diverse group that lives *within* leaves [@arnold2007]. They are mostly asymptomatic but are known to alter plants' response to stressful environments, such as drought [@giauque2019; @giauque2013; @aimone2023], herbivory [@mejia2008; @rocha2017; @albrectsen2010], and pathogen damage [@mejia2014; @busby2016; @rondot2019]. The phyllosphere and rhizosphere can effectively expand the host plants' phenotype through genetic and metabolic pathways [reviewed in @hawkes2021; @kaddes2019]. In turn, host phenotype and genetics shape the phyllosphere [@tellezTraits2022; @kivlin2022; @vanwallendael2022; @horton2014] to such degree that host genetics can predict rhizosphere communities [@horton2014; @deng2021]. The microbial composition of the phyllosphere can also be altered throughout the growing season due to host genetics [@vanwallendael2022]. A significant portion of our knowledge about the affinity of FEF communities to host genetics comes from studies focused on vertically transmitted endophytes (transferred from parent to offspring, e.g., *Epiclhöe* spp.) and horizontally transmitted endophytes (acquired from the environment, e.g., *Cladosporium* spp.) in grasses [@mathew2023; @song2016; @clay1996; @ranelli2015]. Concurrently, other studies focused on how leaf traits (e.g., leaf mass per area, leaf shape) along a growth versus persistence gradient in tropical trees can influence FEF colonization [@tellezTraits2022; @kitajima2013; @poorter2006; @wright2004]. This has enabled a deeper understanding of how leaf traits function as filters that can shape susceptibility to FEF colonization, but the role FEF plays in the local adaptation and phenotypic plasticity of their hosts is less clear [@cordovez2019] due to work on non-model systems. The ability to have a genetic adaptation or plastic response that increases the potential for establishing beneficial symbionts, above or below-ground, can be crucial for plant survival and adaptation to changing environments. Studying the interaction between plant genotype and phenotype with FEF communities is essential in the fields of ecology and evolutionary biology.
 
-The *Mimulus guttatus* species complex is an ideal system to study interactions between leaf phenotype, host genetics, and FEF communities [@twyford2015; @wu2008]. It comprises about a dozen closely related species [@coughlan2021; @wu2008], where two interfertile species, *M. guttatus* and *M. laciniatus*, exhibit strong differences in leaf morphology controlled by overlapping genetic regions, suggesting that large-effect loci underlie this trait [@ferris2015]. Additionally, the contrasting habitats of *M. guttatus* (moist seeps) and *M. laciniatus* (granite outcrops) throughout the Sierra Nevada mountain range in California provide an opportunity to explore the role of leaf phenotype and host genetics in conforming the diversity and structure of FEF communities [@tataru2023]. Through a genome-wide association study (GWAS), Deng et al., [-@deng2021] showed how the bacterial rhizosphere of *Sorghum bicolor* (L.) can be predicted based on host genetics. McIntosh et al., [-@mcintosh2024] found that coastal perennial and montane annual *M. guttatus* harbored distinct soil fungal communities, despite the absences of host local adaptation to underground conditions. This suggests that species divergence in life history and associated traits can shape responsiveness to microbial symbionts [@mcintosh2024]. The potential effects of FEF on *Mimulus* hosts have not been thoroughly investigated, despite the possibility that the microbiome-expanded phenotype may influence its response to selection pressures. No previous studies have considered
+The *Mimulus guttatus* species complex is an ideal system to study interactions between leaf phenotype, host genetics, and FEF communities [@twyford2015; @wu2008]. It comprises about a dozen closely related species [@coughlan2021; @wu2008], where two interfertile species, *M. guttatus* and *M. laciniatus*, exhibit strong differences in leaf morphology controlled by overlapping genetic regions, suggesting that large-effect loci underlie this trait [@ferris2015]. Additionally, the contrasting habitats of *M. guttatus* (moist seeps) and *M. laciniatus* (granite outcrops) throughout the Sierra Nevada Mountain range in California provide an opportunity to explore the role of leaf phenotype and host genetics in conforming the diversity and structure of FEF communities [@tataru2023]. Through a genome-wide association study (GWAS), Deng et al., [-@deng2021] showed how the bacterial rhizosphere of *Sorghum bicolor* (L.) can be predicted based on host genetics. McIntosh et al., [-@mcintosh2024] found that coastal perennial and montane annual *M. guttatus* harbored distinct soil fungal communities, despite the absences of host local adaptation to underground conditions. This suggests that species divergence in life history and associated traits can shape responsiveness to microbial symbionts [@mcintosh2024]. The potential effects of FEF on *Mimulus* hosts have not been thoroughly investigated, despite the possibility that the microbiome-expanded phenotype may influence its response to selection pressures. No previous studies have considered how
 host genetics and leaf shape influence FEF community composition in *Mimulus* spp. leaf tissue.
 
-In this study, we asked: 1) How do FEF communities differ in sympatric populations of *M. guttatus* and *M. laciniatus* grown in common gardens; 2) What is the role of leaf morphology in FEF colonization of *M. guttatus* and *M. laciniatus*? 3) Are there specific genetic loci associated with FEF communities in *Mimulus* spp.? To answer these questions we conducted a reciprocal transplant experiment in Yosemite National Park, CA, USA. We used locally adapted genotypes of *Mimulus guttatus* (syn. *Erythranthe guttata* (Fisch. ex DC.) G.L. Nesom) and *Mimulus laciniatus* (syn. *Erythranthe laciniata* (Fisch. ex DC.) G.L. Nesom) as parental lines and their F~2~ hybrids to understand the contributions of host plant genetics and phenotype, and the environment to FEF community composition. Crossing parental lines and generating F~2~ hybrids allowed us to decouple leaf shape from host genetics and understand the relative importance of each component in shaping FEF communities. We predicted genotypes adapted to their local environment would harbor greater levels of FEF abundance and diversity, as well as distinct community composition compared to non-locals. We also predicted that variation in leaf shape will affect microbial community composition in a segregating hybrid population. We expected that granite outcrop sites would have less FEF abundance and diversity than meadow sites due to the harsher environmental conditions.
+In this study, we asked: 1) How do FEF communities differ in sympatric populations of *M. guttatus* and *M. laciniatus* grown in common gardens; and 2) What is the role of leaf morphology in FEF colonization of *M. guttatus* and *M. laciniatus*?
+<!-- 3) Are there specific genetic loci associated with FEF communities in *Mimulus* spp.?  -->
+To answer these questions, we conducted a reciprocal transplant experiment in Yosemite National Park, CA, USA. We used locally adapted genotypes of *Mimulus guttatus* (syn. *Erythranthe guttata* (Fisch. ex DC.) G.L. Nesom) and *Mimulus laciniatus* (syn. *Erythranthe laciniata* (Fisch. ex DC.) G.L. Nesom) as parental lines and their F~2~ hybrids to understand the contributions of host plant genetics and phenotype, and the environment to FEF community composition. Crossing parental lines and generating F~2~ hybrids allowed us to decouple leaf shape from host genetics and understand the relative importance of each component in shaping FEF communities. We predicted genotypes adapted to their local environment would harbor greater levels of FEF abundance and diversity, as well as distinct community composition compared to non-locals. We also predicted that variation in leaf shape would affect microbial community composition in a segregating hybrid population. We expected that granite outcrop sites would have less FEF abundance and diversity than meadow sites due to the harsher environmental conditions.
 
 # Materials and Methods
 
@@ -274,24 +276,23 @@ In this study, we asked: 1) How do FEF communities differ in sympatric populatio
 
 The reciprocal transplant was conducted in Yosemite National Park, CA, USA from May to July 2021. It involved arranging 24 individuals into 25 randomized blocks in an 8 x 15 cm formation with a separation of 2.5 cm. Our study closely replicated experiments carried out in the years 2013 and 2019 by Ferris and Willis [-@ferris2018] as well as Tataru et al., [-@tataru2023]. The experiment utilized four different study sites: two meadows where native *M. guttatus* grows near a standing seep (Little Meadow "Meadow 1" [37.767781, -119.772720; elevation: 2013 m a.s.l.], Crane Flat "Meadow 2" [37.755968, -119.803031; elevation: 1879 m a.s.l.) and two granite outcrops hosting native *M.laciniatus* (Olmstead Point "Granite 1" [37.810700, -119485200; elevation: 2572 m a.s.l.), Yosemite Creek "Granite 2" [37843702, -119573120; elevation: 2424 m a.s.l.]).
 
-The reciprocal transplants used generations of hybrids created from inbred *M. guttatus* (YVO 18; 37.723366, -119.746433; elevation: 1645 m a.s.l.) and *M. laciniatus* lines (WLF 47; 37.841533, -119.59385; elevation: 2436 m a.s.l.). Parental lines were locally adapted to moist seep/meadow and granite outcrops, respectively, not the experimental sites. Hybrids were created by crossing the parental inbred lines to generate F1 hybrids, which were then self-fertilized to generate F~2~ seeds used in this study. Plant breeding was conducted in the greenhouse at Tulane University (New Orleans, LA, USA). We incorporated both reciprocal hybrid crosses: F~2~ WLF 47 maternal x YVO 18 paternal (F~2~LG) and F~2~ YVO 18 maternal x WLF 47 paternal (F~2~GL). Each block was composed of 6 of each reciprocal F~2~ hybrid and 6 of each parent, totaling 150 of each parental line and cross-type per habitat (i.e., meadow and granite) (150 × 4  = 600) and 2,400 overall experimental plants (600 × 4 = 2400) (Fig. S1).
+The reciprocal transplants used generations of hybrids created from inbred *M. guttatus* (YVO 18; 37.723366, -119.746433; elevation: 1645 m a.s.l.) and *M. laciniatus* lines (WLF 47; 37.841533, -119.59385; elevation: 2436 m a.s.l.). Parental lines were locally adapted to moist seep/meadow and granite outcrops, respectively, not the experimental sites. Hybrids were created by crossing the parental inbred lines to generate F~1~ hybrids, which were then self-fertilized to generate F~2~ seeds used in this study. Plant breeding was conducted in the greenhouse at Tulane University (New Orleans, LA, USA). We incorporated both reciprocal hybrid crosses: F~2~ WLF 47 maternal x YVO 18 paternal (F~2~LG) and F~2~ YVO 18 maternal x WLF 47 paternal (F~2~GL). Each block was composed of 6 of each reciprocal F~2~ hybrid and 6 of each parent, totaling 150 of each parental line and cross-type per habitat (i.e., meadow and granite) (150 × 4  = 600) and 2,400 overall experimental plants (600 × 4 = 2400) (Fig. S1).
 
 ### Seed preparation and germination
 
-We cold-stratified parental *M. laciniatus* and hybrid seeds at 4°C for 10 days and parental *M. guttatus* seeds at 4°C for 5 days to break dormancy and synchronize germination in soil (Sunshine Mix #4 Professional Growing Mix, Sun Gro). Then, we germinated seeds for one week in a greenhouse. Cold-stratification and germination was carried out at the University of California (UC) Davis. Following germination, cotyledons were carefully placed into the randomized block designs using forceps and placed wooden toothpicks to track individuals.
-We attributed mortality within the first week to transplant shock and dead germinates were replaced. 
+We cold-stratified parental *M. laciniatus* and hybrid seeds at 4°C for 10 days and parental *M. guttatus* seeds at 4°C for 5 days to break dormancy and synchronize germination in soil (Sunshine Mix #4 Professional Growing Mix, Sun Gro). Then, we germinated seeds for one week in a greenhouse. Cold-stratification and germination was carried out at the University of California (UC) Davis. Following germination, cotyledons were carefully placed into the randomized block designs using forceps and wooden toothpicks were inserted within 10 mm to track individuals. We attributed mortality within the first week to transplant shock and dead germinates were replaced. 
 
 ## Leaf shape measurement
 
-For each plant, we obtained measurements leaf lobe index (LBI) as our measure of leaf shape [@ferris2015]. After 6 - 7 weeks, we destructively sampled individuals from experimental blocks by uprooting and placing samples in zip-top plastic bags and preserving in ice chest until ready to process (~ 2-3 hrs). We ensured samples did not come into direct contact with ice by placing a barrier (e.g., towel) to avoid tissue damage. We prepared and preserved samples at the UC Merced Yosemite Field Station. Fist, we cleaned plants with tap water to remove all soil and debris remnants from the leaves and roots. We removed all healthy leaves (\~ 5 - 7) from the stems. We used a transparency film to hold the most notably lobed leaf in place and flatten, after which we took a digital photograph for further analysis. To calculate the LBI, we followed Ferris et al., [-@ferris2015]. Briefly, leaf lobing is calculated as the convex hull area minus the true leaf area divided by convex hull area of a digital photograph of a leaf in ImageJ [v1.52r; @schneider2012]. 
+For each plant, we obtained measurements of leaf lobe index (LBI) as our measure of leaf shape [@ferris2015]. After 6 - 7 weeks, we destructively sampled individuals from experimental blocks by uprooting and placing samples in zip-top plastic bags and preserving in ice chest until ready to process (~ 2-3 hrs). We ensured samples did not come into direct contact with ice by placing a barrier (e.g., towel) to avoid tissue damage. We prepared and preserved samples at the UC Merced Yosemite Field Station. Fist, we cleaned plants with tap water to remove all soil and debris remnants from the leaves and roots. We removed all healthy leaves (\~ 5 - 7) from the stems. We used a transparency film to hold the most notably lobed leaf in place and flattened, after which we took a digital photograph for further analysis. To calculate the LBI, we followed Ferris et al., [-@ferris2015]. Briefly, leaf lobing is calculated as the convex hull area minus the true leaf area divided by convex hull area of a digital photograph of a leaf in ImageJ [v1.52r; @schneider2012]. 
 
-We measured ACI content with ACM-200plus (Opti-Sciences Inc. Hudson, New Hampshire, U.S.A.) on haphazardly selected locations of the leaf surface (working from the petiole out to the leaf tip) [@tellezTraits2022]. The ACM-200 calculates an ACI value from the ratio of % transmittance at 931 nm/% transmittance at 525 nm [@opti-sciencesinc], effectively accounting for leaf thickness (LT). We measured LT (μm) with a Mitutoyo 7327 Micrometer Gauge (Mitutoyo, Takatsu-ku, Kawasaki, Japan) on haphazardly selected locations of the leaf lamina, taking care to avoid major and secondary veins. We used an Imada DST-11a digital force gauge (Imada Inc., Northbrook, IL, United States) to measure leaf punch strength (LPS), a measure of leaf toughness, on the lamina of each leaf selected, avoiding minor leaf veins when possible [@tellezTraits2022]. It functions by conducting punch-and-die tests with a sharp-edged cylindrical steel punch (2.0 mm diameter) and a steel die with a sharp-edged aperture of small clearance (0.05 mm). Once LPS was measured, we used a 4 mm diameter punch hole to puncture disks for LMA measurements. We collected one disk per leaf (see Supplementary material for details). The disk punches dried were shipped to Tulane University, New Orleans, LA, USA to dry at 60 ℃ for 48-72 hours before being weighed.
+We measured the anthocyanin content index (ACI) with an ACM-200plus (Opti-Sciences Inc. Hudson, New Hampshire, U.S.A.) on haphazardly selected locations of the leaf surface (working from the petiole out to the leaf tip) [@tellezTraits2022]. The ACM-200 calculates an ACI value from the ratio of % transmittance at 931 nm/% transmittance at 525 nm [@opti-sciencesinc], effectively accounting for leaf thickness (LT). We measured LT (μm) with a Mitutoyo 7327 Micrometer Gauge (Mitutoyo, Takatsu-ku, Kawasaki, Japan) on haphazardly selected locations of the leaf lamina, taking care to avoid major and secondary veins. We used an Imada DST-11a digital force gauge (Imada Inc., Northbrook, IL, United States) to measure leaf punch strength (LPS), a measure of leaf toughness, on the lamina of each leaf selected, avoiding minor leaf veins when possible [@tellezTraits2022]. It functions by conducting punch-and-die tests with a sharp-edged cylindrical steel punch (2.0 mm diameter) and a steel die with a sharp-edged aperture of small clearance (0.05 mm). Once LPS was measured, we used a 4 mm diameter punch hole to puncture disks for LMA measurements. We collected one disk per leaf (see Supplementary material for details). The disk punches were shipped to Tulane University, New Orleans, LA, USA to dry at 60 ℃ for 48-72 hours before being weighed.
 
 ## Molecular Work
 
 ### Tissue preservation
 
-After collecting the leaf shape measurements. We preserved the whole leaf lamina from plants due to their small size, in contrast to Arnold et al., [-@arnold2003] and Tellez et al., [-@tellezTraits2022]. Leaf lamina were sterilized with sequential washes in 95% EtOH (10 s), 0.5% sodium hypochlorite (NaOCl) (60 s), and 70% EtOH (60 s) and air dried under sterile conditions. The maximum amount of leaf lamina was preserved in sterile 2 mL tubes with \~ 1 mL CTAB solution (1 M Tris–HCl pH 8, 5 M NaCl, 0.5 M EDTA, and 20 g CTAB). The leaf tissue in CTAB solution was used for amplicon sequencing (described in detail below). All leaf tissue handling was performed in a sterile environment with an alcohol burner lamp inside a portable biosafety cabinet. All surfaces were previously sterilized sequentially with 0.5% NaOCl, 95% EtOH, and 70% EtOH. We surface sterilized surfaces and instruments in between sample handling to prevent cross contamination.
+After collecting the leaf shape measurements, we preserved the whole leaf lamina from plants due to their small size, in contrast to Arnold et al., [-@arnold2003] and Tellez et al., [-@tellezTraits2022]. Leaf lamina were sterilized with sequential washes in 95% EtOH (10 s), 0.5% sodium hypochlorite (NaOCl) (60 s), and 70% EtOH (60 s) and air dried under sterile conditions. The maximum amount of leaf lamina was preserved in sterile 2 mL tubes with \~ 1 mL CTAB solution (1 M Tris–HCl pH 8, 5 M NaCl, 0.5 M EDTA, and 20 g CTAB). The leaf tissue in CTAB solution was used for amplicon sequencing (described in detail below). All leaf tissue handling was performed in a sterile environment with an alcohol burner lamp inside a portable biosafety cabinet. All surfaces were previously sterilized sequentially with 0.5% NaOCl, 95% EtOH, and 70% EtOH. We sterilized preparation surfaces and instruments in between sample handling to prevent cross contamination.
 
 ### Amplicon sequencing
 
@@ -308,9 +309,7 @@ We stored leaf tissue in CTAB solution for 12 months at 20°C before extracting 
 ### Bioinformatic analyses
 
 #### ITS amplicons
-Similar to Chapter 2, we used FastQc v0.12.1 [ v0.12.1; @andrews2010] and MultiQC [@ewels2016] tools to assess the quality of the reads. A total of 20,685,544 total ITS1 reads yielded from 318 (including 31 controls) libraries sequenced in a single run. We modified the open-source DADA2 bioinformatic pipeline for our data set [@callahan2016]. Our initial quality assessment revealed that forward and reverse reads were of high quality. We filtered our reads for ambiguous calls before removing the adapters by using `filterAndTrim` function and argument `maxN = 0` from the `dada2` package [v1.28.0; @callahan2016]. We removed forward and reverse primer adapters (and their reverse compliments) and eliminated reads shorter than 10 bp using the `cutadapt` tool [v4.6, @martin2011]. Following this filtering process, we re-evaluated read quality and then applied stringent filter and truncation parameters based on maximum expected errors (maxEE) rather than read length [@edgar2015] to ensure  high-quality taxonomy assignment later on. For this we set set the arguments `trunQ = 2`, `maxEE = c(2,2)` for forward and reverse reads, and minimum read length of 50 bp with `minLen = 50` in the used the `filterAndTrim` function [@callahan2016]. After this filter, we dereplicated reads with the `derepFastq` function and merged pairs using `mergePairs` functions with an overlap of 12 bp, minimum. We then inferred composition of the samples with `dada` function, which applies the DADA algorithm [@callahan2016; @rosen2012]. We removed chimeras via the "consensus"method with the `removeBimeraDenovo` function and ultimately we used the `assignTaxonomy` function to assign taxonomy the amplicon sequence variants (ASV) referenced against the UNITE database [@abarenkov2023a]. After taxonomy assignment we used the `phyloseq` package [@mcmurdie2013] to create a phyloseq object for downstream analyses.
-
-We decontaminated ITS amplicons and performed all post-quality bioinformatic steps as described in Chapter 2.
+Like Chapter 2, we used FastQc v0.12.1 [v0.12.1; @andrews2010] and MultiQC [@ewels2016] tools to assess the quality of the reads. A total of 20,685,544 total ITS1 reads yielded from 318 (including 31 controls) libraries sequenced in a single run. We modified the open-source DADA2 bioinformatic pipeline for our data set [@callahan2016]. Our initial quality assessment revealed that forward and reverse reads were of high quality. We filtered our reads for ambiguous calls before removing the adapters by using `filterAndTrim` function and argument `maxN = 0` from the `dada2` package [v1.28.0; @callahan2016]. We removed forward and reverse primer adapters (and their reverse compliments) and eliminated reads shorter than 10 bp using the `cutadapt` tool [v4.6, @martin2011]. Following this filtering process, we re-evaluated read quality and then applied stringent filter and truncation parameters based on maximum expected errors (maxEE) rather than read length [@edgar2015] to ensure  high-quality taxonomy assignment later on. For this we set the arguments `trunQ = 2`, `maxEE = c(2,2)` for forward and reverse reads, and minimum read length of 50 bp with `minLen = 50` in the `filterAndTrim` function [@callahan2016]. After this filter, we dereplicated reads with the `derepFastq` function and merged pairs using `mergePairs` functions with an overlap of 12 bp, minimum. We then inferred composition of the samples with `dada` function, which applies the DADA algorithm [@callahan2016; @rosen2012]. We removed chimeras via the "consensus" method with the `removeBimeraDenovo` function and ultimately we used the `assignTaxonomy` function to assign taxonomy to the amplicon sequence variants (ASV) referenced against the UNITE database [@abarenkov2023a]. After taxonomy assignment we used the `phyloseq` package [@mcmurdie2013] to create a phyloseq object for downstream analyses. We decontaminated ITS amplicons and performed all post-quality bioinformatic steps as described in Chapter 2.
 <!-- We used the `decontam` package [v1.20.0; @davis2018] to statistically determine which ASVs are likely contaminants based on their frequency in our samples and remove them using `prune_taxa` function from the `phyloseq` package [v1.44.0; @mcmurdie2013]. After which, we calculated the average read count found in DNA and PCR extraction controls, considered to be laboratory contaminants, and subtracted that from the samples' read counts. We then used custom scripts to remove any ASV that represented less than 0.1% of the abundance per sample on the assumption that it originates from contamination throughout handling of samples in the DNA and PCR processes. We removed singleton ASVs with the `prune_taxa` function [@mcmurdie2013]. All post-quality control bioinformatic steps were performed in *R* [v.4.3.3; @rcoreteam2024]. -->
 
 <!-- #### Single Nucleotide Polymorphisms (SNPs) -->
@@ -324,11 +323,11 @@ We decontaminated ITS amplicons and performed all post-quality bioinformatic ste
 ### Community Diversity
 
 We standardized the libraries using repeated rarefaction, as described by Cameron et al., [-@cameron2021]. Following an assessment of Good's coverage and a qualitative evaluation of the libraries, we established a sequence depth of 1300 reads to ensure balanced coverage and sample breadth. This approach facilitated a proportional representation of observed sequences from host species and provided a robust characterization of random variation inherent in the rarefaction process [@cameron2021; @schloss2024]. Subsequently, we generated 50 rarefied abundance matrices without replacement utilizing the `mirl` function from the `mirlyn` package.
-Next, we computed alpha diversity per sample as Hill orders -observed richness (q = 0), exponentiated Shannon's entropy (q = 1), and Inverse Simpson's Diversity (q =2)— using our modified version of the `alphadivDF` function based on work by Cameron et al., [-@cameron2021; see custom script in Supplementary material] that wraps common diversity indices in `vegan` package utility functions [@oksanen2022]. .
+Next, we computed alpha diversity per sample as Hill orders -observed richness (q = 0), exponentiated Shannon's entropy (q = 1), and Inverse Simpson's Diversity (q =2) — using our modified version of the `alphadivDF` function based on work by Cameron et al., [-@cameron2021] (see custom script in Supplementary material) that wraps common diversity indices in `vegan` package utility functions [@oksanen2022].
 
 For beta diversity analyses, we performed a Hellinger transformation on the rarefied abundance matrices and calculated a Bray-Curtis dissimilarity matrix for each, then we applied a distance-based Redundancy Analysis (dbRDA) on dissimilarities to statistically compare similarities within each host species per site [@anderson2017; @legendre1999; @mcardle2001].
 
-Our dbRDA model consisted of terms logLBI, cross-type, and habitat type. The leaf shape data was not randomized or sub-sampled to match rarefied dataset, the original values applied to all 50 rarefied matrices. To select the best model, we evaluated the marginal and sequential significance of the constraining variables after 999 permutations with function `anova.cca` [@legendre2011; @legendre2012; @oksanen2022]. We evaluated the homogeneous dispersion of variances with a permutational analysis of multivariate dispersion (PERMDISP) using the `betadisper` with parameter `type = "median"`, and `permutest` functions from `vegan`, the latter with 999 permutations [@oksanen2022]. We used a post-hoc Tukey's test to compare the differences in the dispersion of the FEF communities among cross-types and habitat types.
+Our dbRDA model consisted of terms logLBI, cross-type, and habitat type. The leaf shape data was not randomized or sub-sampled to match the rarefied dataset, the original values applied to all 50 rarefied matrices. To select the best model, we evaluated the marginal and sequential significance of the constraining variables after 999 permutations with function `anova.cca` [@legendre2011; @legendre2012; @oksanen2022]. We evaluated the homogeneous dispersion of variances with a permutational analysis of multivariate dispersion (PERMDISP) using the `betadisper` with parameter `type = "median"`, and `permutest` functions from `vegan`, the latter with 999 permutations [@oksanen2022]. We used a post-hoc Tukey's test to compare the differences in the dispersion of the FEF communities among cross-types and habitat types.
 <!-- We used the `simper` function from `vegan` to discriminate which species contribute the most to compositional differences between groups [@oksanen2022]. -->
 <!-- To determine if there is a significant correlation of core FEF community with cross-type and habitat type, we conducted an indicators species analyses (ISA) using the `multipatt` function from the `indicspecies` package [@decaceres2009]. -->
 
@@ -340,41 +339,42 @@ Our dbRDA model consisted of terms logLBI, cross-type, and habitat type. The lea
 ### Leaf shape
 
 We checked for normality and homoscedasticity of the LBI measurements.
-We used Shapiro-Wilk and Fligner-Killen tests from the `stats` package [@rcoreteam2024] to check for normality and homoscedasticity, respectively. We established that the leaf lobe index data was not normally distributed and not homoscedastic and performed log-transformation. We then used non-parametric tests, the Wilcoxon Rank Sum test, to compare LBI means among cross-types. We used the `compare_means` and `stat_compare_means`functions from the `ggpubr` package [@kassambara2023] to perform these tests and properly visualize them. We adjusted *p* values to account for false discovery rates in multiple comparisons by using “BH” method [@benjamini1995].
+We used Shapiro-Wilk and Fligner-Killen tests from the `stats` package [@rcoreteam2024] to check for normality and homoscedasticity, respectively. We established that the leaf lobe index data was not normally distributed and not homoscedastic and performed log-transformation. We then used non-parametric tests, the Wilcoxon Rank Sum test, to compare LBI means among cross-types. We used the `compare_means` and `stat_compare_means` functions from the `ggpubr` package [@kassambara2023] to perform these tests and properly visualize them. We adjusted *p* values to account for false discovery rates in multiple comparisons by using “BH” method [@benjamini1995].
 
 All statistical analyses were performed in *R* programming language [v.4.3.3; @rcoreteam2024].
 We present FEF community data for 287 samples.
 <!-- and SNPs data for NNNN samples. -->
-We present the log-transformed LBI from and samples from the larger common garden described above (*n* = `r sum(!is.na(plant_traits$logLBI))`), which include samples with FEF community data (*n* = `r sum(!is.na(ps_clean_3@sam_data[["logLBI"]]))`). The FEF community data is presented at the plant/sample level (*n* = `r sum(!is.na(plant_traits$Observed))`).
+We present the log-transformed LBI samples from the larger common garden described above (*n* = `r sum(!is.na(plant_traits$logLBI))`), which include samples with FEF community data (*n* = `r sum(!is.na(ps_clean_3@sam_data[["logLBI"]]))`). The FEF community data is presented at the plant/sample level (*n* = `r sum(!is.na(plant_traits$Observed))`).
 
 # Results
 
 Our sequencing effort yielded 20,685,544 reads representing 1291 ASVs from 318 samples after processing through the DADA2 pipeline. The raw reads obtained were composed of 69.1% Ascomycota, 31% Basidiomycota, 0.05% Chytridiomycota, 0.01% Mortierellomycota, \<0.01% Glomeromycota, \<0.01% Rozellomycota, \<0.001% Aphelidiomycota, and 0.23% missed hits.
 Following decontamination and removal of singletons we obtained 20,157,032 reads representing 532 ASVs from 287 samples composed of 69.1% Ascomycota, 31% Basidiomycota, 0.05% Chytridiomycota, \<0.01% Mortierellomycota, 0.001% Glomeromycota, \<0.001% Rozellomycota, and 0.25% missed hits (Fig. 1A and Fig. 2). The presence of Ascomycota (100%) and Basidiomycota (99%) was prevalent in samples across all cross-types and habitat types in the un-rarefied data (Fig. 1A). This points to core taxa associated with *Mimulus* spp. We identified eighteen core taxa members at a 1% detection threshold and 50% prevalence in samples from the un-rarefied data (Table 1). 
 <!-- We found that 208 (39%) ASVs are shared across habitat types and 164 (31%) shared by cross-types in the un-rarified data (Fig. 2A - 2B).  -->
-In the rarified data set we comprised of 282 samples were we observed that 202 (38%) and 159 (30%) ASVs are shared across habitat types and cross-types, respectively (Fig. 2A - 2B). Within the ten most abundant genera, *Cladosporium*, *Vishiniacozyma*, and *Ramularia* are the most abundant across all samples (Fig. S2). 
+In the rarified data set, comprised of 282 samples, we observed that 202 (38%) and 159 (30%) ASVs were shared across habitat types and cross-types, respectively (Fig. 2A - 2B). Within the ten most abundant genera, *Cladosporium*, *Vishiniacozyma*, and *Ramularia* are the most abundant across all samples (Fig. S2). 
 <!-- The small differences in shared and unique ASVs provides confidence that the rarified data accurately represents the underlying dynamics of the system (Fig. 1 - 2 and Fig. S2).  -->
 The following section reports on results from the rarefied data sets.
 
-Alpha diversity was significantly different between all parental lines and hybrid crosses, with the exception of the Hill order 2 (𝑞 = 2, *p* \> .05) comparison of F~2~LG and G parental line (Fig. 3C). The parental lines had significantly greater levels observed richness (𝑞 = 0, *p* \< .001, Fig. 3A) when compared to their F~2~ progeny when accounting for all habitat types. Only F~2~GL had significant differences (*p* \< .001) in observed richness at all habitats. For F~2~GL and F~2~LG, we saw significant differences Hill order 1 and 2 (𝑞 = 1, and 𝑞 = 2) when comparing Meadow 1 and Meadow 2 (*p* \< .001), and Granite 1 to Meadow 2 (*p* \< .001). Additionally, F~2~LG cross-type also had significant differences for these Hill orders when comparing Meadow 1 and Granite 1 (*p* \< .05). We observed a similar pattern in beta diversity, habitats showed significant differences from one another (Fig. 3D - 3F). Meadow 2 has consistently greater levels of beta diversity for all Hill orders, while Granite 1 has the lowest observed richness (𝑞 = 0), but not Hill order 1 or 2 (Fig. 3D - 3F). Individuals from Granite 2 are not included in the analysis due 100% mortality after one week of planting at site (Fig. S4).
+Alpha diversity was significantly different between all parental lines and hybrid crosses, with the exception of the Hill order 2 (𝑞 = 2, *p* \> .05) comparison of F~2~LG and G parental line (Fig. 3C). The parental lines had significantly greater levels of observed richness (𝑞 = 0, *p* \< .001, Fig. 3A) when compared to their F~2~ progeny when accounting for all habitat types. Only F~2~GL had significant differences (*p* \< .001) in observed richness at all habitats. For F~2~GL and F~2~LG, we saw significant differences in Hill order 1 and 2 (𝑞 = 1, and 𝑞 = 2) when comparing Meadow 1 and Meadow 2 (*p* \< .001), and Granite 1 to Meadow 2 (*p* \< .001). Additionally, F~2~LG cross-type also had significant differences for these Hill orders when comparing Meadow 1 and Granite 1 (*p* \< .05). We observed a similar pattern in beta diversity, where habitats showed significant differences from one another (Fig. 3D - 3F). Meadow 2 had consistently greater levels of beta diversity for all Hill orders, while Granite 1 had the lowest observed richness (𝑞 = 0), but not Hill order 1 or 2 (Fig. 3D - 3F). Individuals from Granite 2 were not included in the analysis due 100% mortality after one week of planting at site (Fig. S4).
 
-To further understand beta diversity and FEF community composition we performed two distance-based Redundancy Analysis (dbRDA) modeling the relationship between FEF communities, leaf shape, cross-type, and habitat type: the first accounting for individuals from parental lines and hybrids, and a second only with hybrids. The best fit model with all individuals and cross-types revealed that 18.71% of the overall variance in FEF communities was accounted for by log-transformed LBI, cross-type, and habitat type, the constraining variables. The first axis (dbRDA1) explained 45.3% and the second axis (dbRDA2) explained 31.5% of the constrained variance (Fig. 4). 
+To further understand beta diversity and FEF community composition we performed two distance-based Redundancy Analyses (dbRDA) modeling the relationship between FEF communities, leaf shape, cross-type, and habitat type: the first accounting for individuals from parental lines and hybrids, and a second only with hybrids. The best fit model with all individuals and cross-types revealed that 18.71% of the overall variance in FEF communities was accounted for by log-transformed LBI, cross-type, and habitat type, the constraining variables. The first axis (dbRDA1) explained 45.3% and the second axis (dbRDA2) explained 31.5% of the constrained variance (Fig. 4). 
 <!-- We saw that Granite 1 and lobLBI, are opposite to Meadow 1 along dbRDA1. When we visualized the ellipses for cross-types, we observed highly overlapping FEF communities in F~2~GL and F~2~LG cross-types (Fig. 4A), as well less overlap in groupings of G and L parental lines.  -->
-In contrast, we note clear and little to non-overlapping FEF communities when results are visualized by habitat type (Fig. 4B). The marginal significance of constraining variables after permutational ANOVA revealed that all variables where significant at ⍺ = 0.05 but varied in their explanatory power (Table 1). We saw evidence for strong habitat type effects on FEF communities. The dbRDA for hybrids revealed that 0.01% of the overall constrained variance was explained by log-transformed LBI, cross-type and habitat type. The constrained variance was explained by dbRDA axis 1 (65.5%) and axis2 (19.7%) (Fig. 5 and Table 2).
+In contrast, we note clear and little to non-overlapping FEF communities when results are visualized by habitat type (Fig. 4B). The marginal significance of constraining variables after permutational ANOVA revealed that all variables were significant at ⍺ = 0.05 but varied in their explanatory power (Table 1). We saw evidence for strong habitat type effects on FEF communities. The dbRDA for hybrids revealed that 0.01% of the overall constrained variance was explained by log-transformed LBI, cross-type and habitat type. The constrained variance was explained by dbRDA axis 1 (65.5%) and axis2 (19.7%) (Fig. 5 and Table 2).
 
-We performed permutational analysis of multivariate dispersion (PERMDISP) to test for homogeneity of variances of FEF communities from clustered in the dbRDA analyses. We found homogeneous variance of FEF communities across for all parental lines and crosses (*F*~3, 14096~= 46.28, *p* \=.001). The post-hoc Tukey's test revealed that all parental lines and cross-type comparisons were significantly different at ⍺ = 0.05. We also detected significant differences in FEF communities by habitat type (*F*~2, 14097~= 2472.5, *p* \= .001), as well as the interaction between habitat and cross types (*F*~2, 14088~= 471.6, *p* \= .001 ). Our post-hoc Tukey's test showed that FEF communities from all habitat types had significant differences in the dispersion of variance at ⍺ = 0.05, meanwhile the interaction between habitat and cross-type showed more nuances for certain combinations, yet significant differences for most in the dispersion of variance at ⍺ = 0.05 (Table S4). For our model with only hybrid crosses, we found that homogeneity of variances of FEF communities were not significantly different between cross-types (*F*~1, 11548~= 0.034, *p* \= .85). The post-hoc Tukey's test revealed that F~2~LG and F~2~GL had no differences in the dispersion of variance at ⍺ = 0.05.
+We performed permutational analysis of multivariate dispersion (PERMDISP) to test for homogeneity of variances of FEF communities from clusters in the dbRDA analyses. We found homogeneous variance of FEF communities across for all parental lines and crosses (*F*~3,~ ~14096~= 46.28, *p* \=.001). The post-hoc Tukey's test revealed that all parental lines and cross-type comparisons were significantly different at ⍺ = 0.05. We also detected significant differences in FEF communities by habitat type (*F*~2,~ ~14097~= 2472.5, *p* \= .001), as well as the interaction between habitat and cross types (*F*~2,~ ~14088~= 471.6, *p* \= .001 ). Our post-hoc Tukey's test showed that FEF communities from all habitat types had significant differences in the dispersion of variance at ⍺ = 0.05, meanwhile the interaction between habitat and cross-type showed more nuances for certain combinations, yet significant differences for most in the dispersion of variance at ⍺ = 0.05 (Table S4). For our model with only hybrid crosses, we found that homogeneity of variances of FEF communities were not significantly different between cross-types (*F*~1,~ ~11548~= 0.034, *p* \= .85). The post-hoc Tukey's test revealed that F~2~LG and F~2~GL had no differences in the dispersion of variance at ⍺ = 0.05.
 
-To understand how leaf shape influences FEF communities, we measured LBI and compared means with a Wilcoxon rank sum tests. Once we adjusted for multiple comparison, revealed no significant differences in parental lines and cross types across all habitat types at ⍺ = 0.05 (Fig. 6A). Meadow 1 and 2 did not differ significantly in LBI, while Granite 1 had greater LBI compared to Meadow 1 and 2. (*p* \<.001, Fig. 6B).<!-- but not Meadow 2 and Granite 1, an unexpected result since L parental line is locally adapted to granite habitat. The F~2~LG and F~2~GL progeny only had significant differences when compared to each other, and F~2~LG when compared to G in Meadow 2. In Granite 1, we saw the F~2~ progeny had significant differences compared to parental lines (*p* \=.05, Fig 6A), but not when compared to each other (Fig. 6A). The LBI differences across habitat types were significant for the F~2~ progeny (*p* \=.05), parental lines did not differ significantly in LBI across habitats (Fig. 6B).  -->
+Wilcoxon rank sum tests comparing log LBI means revealed no significant differences in parental lines and cross types across all habitat types at ⍺ = 0.05 (Fig. 6A). Meadow 1 and 2 did not differ significantly in LBI, while Granite 1 had greater LBI compared to Meadow 1 and 2. (*p* \<.001, Fig. 6B).
+<!-- but not Meadow 2 and Granite 1, an unexpected result since L parental line is locally adapted to granite habitat. The F~2~LG and F~2~GL progeny only had significant differences when compared to each other, and F~2~LG when compared to G in Meadow 2. In Granite 1, we saw the F~2~ progeny had significant differences compared to parental lines (*p* \=.05, Fig 6A), but not when compared to each other (Fig. 6A). The LBI differences across habitat types were significant for the F~2~ progeny (*p* \=.05), parental lines did not differ significantly in LBI across habitats (Fig. 6B).  -->
 <!-- <!-- **SNPs results coming here soon!** --> -->
 
 # Discussion
 
-Our study provides a comprehensive analysis of the FEF communities associated with *Mimulus* spp. leaf tissue and the underlying genetic dynamics. We found that FEF diversity and community composition are significantly different between cross-types. These findings bring attention to symbiotic relationships in *Mimulus* that may be evolutionary adaptive. Fungal community differences between habitat types maybe due to distinct species pool regardless of habitat similarity (e.g.,, meadows). Our results suggest host cross-type and habitat type are significant predictors of FEF colonization, with varying degrees of impact. Granite 1 had lower ASV richness than Meadow 1-2, but increased Hill orders 1 and 2 compared to Meadow 1. This is not surprising, given the strong abiotic differences (i.e. soil moisture) meadow and granite habitats experience throughout the growing season [@ferris2018; @tataru2023] that could explain the need for allocating a greater effective number of species[@chao2014]. The differences between the meadow habitat could be explained by their recent fire history, Meadow 1 burned in 2013 during the Rim Fire, which could have caused a shift in the local flora and evapo-transpiration rates experienced at the sites leading to changes in and FEF pool [@bowman2021; @nationalparkservice2023; @giauque2016]. Meadow 1 is generally drier and shrubbier than Meadow 2, which did not burn in 2013. These potential sources of variation merit further investigation.   
+Our study provides a comprehensive analysis of the FEF communities associated with *Mimulus* spp. leaf tissue and the underlying genetic dynamics. We found that FEF diversity and community composition were significantly different between cross-types. These findings bring attention to symbiotic relationships in *Mimulus* that may be evolutionary adaptive. Fungal community differences between habitat types maybe due to distinct species pools regardless of habitat similarity (e.g., meadows). Our results suggest host cross-type and habitat type are significant predictors of FEF colonization, with varying degrees of impact. Granite 1 had lower ASV richness than Meadow 1-2, but increased Hill orders 1 and 2 compared to Meadow 1. This is not surprising, given the strong abiotic differences (i.e., soil moisture) meadow and granite habitats experience throughout the growing season [@ferris2018; @tataru2023] that could explain the need for allocating a greater effective number of species [@chao2014]. The differences between the two meadow habitats could be explained by their recent fire history, Meadow 1 burned in 2013 during the Rim Fire, which could have caused a shift in the local flora and evapo-transpiration rates experienced at the sites leading to changes in the FEF pool [@bowman2021; @nationalparkservice2023; @giauque2016]. Meadow 1 is generally drier and shrubbier than Meadow 2, which did not burn in 2013. These potential sources of variation merit further investigation.   
 
-Exploring the FEF community of *Mimulus* in a reciprocal transplant experiment allowed us to delineate how cross-type by environment interactions shape these communities.  The constrained ordination analyses revealed a clear clustering by habitat type along both dbRDA axes (Fig. 4B), while  cross-types showed less distinct clustering (Fig. 4A). The *Mimulus* parental lines hosted distinct FEF communities and differed significantly in alpha diversity levels regardless habitat. Bowsher et al., found a similar effect of environment and host identity when comparing the bacterial rhizosphere community of locally adapted *M. guttatus* ecotypes [-@bowsher2020]. Similarly, in a greenhouse experiment McIntosh et al., [-@mcintosh2024] found that site, soil origin, and *M. guttatus* plant ecotypes (annual and perennial) were the most important factors determining the structure of root associated fungal communities. Despite experimental plants performing poorly when interacting with *Mimulus guttatus*-derived biota, McIntosh et al., [-@mcintosh2024] find that AMF communities were strongly differentiated in common garden conditions. While their results are focused on the root microbiota and under greenhouse, we consider, that our results show that the differences in FEF communities between *M. guttatus* and *M. laciniatus* add to the adaptive trait differences between these diverged species, meriting further investigation.  
+Exploring the FEF community of *Mimulus* in a reciprocal transplant experiment allowed us to delineate how cross-type by environment interactions shape these communities.  The constrained ordination analyses revealed a clear clustering by habitat type along both dbRDA axes (Fig. 4B), while  cross-types showed less distinct clustering (Fig. 4A). The *Mimulus* parental lines hosted distinct FEF communities and differed significantly in alpha diversity levels regardless of habitat. Bowsher et al,. [-@bowsher2020] found a similar effect of environment and host identity when comparing the bacterial rhizosphere community of locally adapted *M. guttatus* ecotypes. Similarly, in a greenhouse experiment McIntosh et al., [-@mcintosh2024] found that site, soil origin, and *M. guttatus* plant ecotypes (annual and perennial) were the most important factors determining the structure of root associated fungal communities. Despite experimental plants performing poorly when interacting with *Mimulus guttatus*-derived biota, McIntosh et al., [-@mcintosh2024] found that AMF communities were strongly differentiated in common garden conditions. While their results were focused on the root microbiota and under greenhouse conditions, our results show that the differences in FEF communities between *M. guttatus* and *M. laciniatus* add to the adaptive trait differences between these diverged species, meriting further investigation.  
 
 
-We produced F~2~ progeny to decouple leaf shape from genetic host genetics and found that the FEF communities are significantly correlated with leaf lobe index (LBI). The capacity of the F2 progeny to host distinct FEF communities regardless of the genetic background provides strong evidence in support of the LBI functioning as an environmental filter. This adds to the suite of leaf functional traits that have been found to structure FEF communities [@tellezTraits2022; reviewed in gonzalez-teuber2021; @gonzalez-teuber2020]. The F2 progeny exhibited a higher number of unique ASVs compared to parental lines, suggesting that hybridization may increase the potential for novel FEF interactions (Fig. 2). The core taxa found in all samples includes *Vishiniacozyma victoriae* which has been shown to provide cold tolerance to their hosts [@vujanovic2021; @buzzini2018]. Expanding the breadth of associated FEF taxa could be a strategy for increasing hybrid fitness in the face of environmental stressors. We do not have the data to support this claim, but it is a potential avenue for future research.
+We produced F~2~ progeny to decouple leaf shape from host genetics and found that the FEF communities were significantly correlated with leaf lobe index (LBI). The capacity of the F2 progeny to host distinct FEF communities regardless of the genetic background provides strong evidence in support of the LBI functioning as an environmental filter. This adds to the suite of leaf traits that have been found to structure FEF communities [@tellezTraits2022; reviewed in @gonzalez-teuber2021; @gonzalez-teuber2020]. The F~2~ progeny exhibited a higher number of unique ASVs compared to parental lines, suggesting that hybridization may increase the potential for novel FEF interactions (Fig. 2). The core taxa found in all samples includes *Vishiniacozyma victoriae* which has been shown to provide cold tolerance to their hosts [@vujanovic2021; @buzzini2018]. Expanding the breadth of associated FEF taxa could be a strategy for increasing hybrid fitness in the face of environmental stressors. We do not have the data to support this claim, but it is a potential avenue for future research.
 
 
 # Conclusions
@@ -404,65 +404,49 @@ The genomic data that support the findings of this study will be submitted to NC
 #| echo: false
 #| eval: true
 #| tidy: true
+#| warning: false
 
 #ggplot themes
 # Theme for leaf trait and diversity plots: discrete
-theme_lfspp_discrete <-      theme_classic(base_size = 16) +
-  theme(
-    legend.title = element_text(face = "bold"),
-    strip.text = element_text(face = "bold"),
-    panel.border = element_rect(linetype = "blank", fill = NA),
-    #legend.text = element_text(face = "italic"), #Make legend text italic
-    legend.text = element_markdown(),
-    plot.caption = element_markdown(size = 12),
-    axis.text.x = element_blank(),
-    axis.title.y = element_text(size = 12)
-  )
+theme_lfspp_discrete <-      theme_classic(base_size = 12) +
+  theme(legend.title = element_text(face = "bold"),
+        strip.text = element_text(face = "bold"),
+        panel.border = element_rect(linetype = "blank", fill = NA),
+        legend.text = element_markdown(size = 12), #Make legend text italic
+        axis.text.x = element_blank())
 
 # Theme for leaf trait plots: continuous
-theme_lfspp_continuous <- theme_classic(base_size = 16) +
-  theme(
-    legend.title = element_text(face = "bold"),
-    panel.border = element_rect(linetype = "blank", fill = NA),
-    legend.text = element_text(face = "italic"),
-    #Make legend text italic
-    axis.text.x = element_text(size = 14),
-    legend.position = "bottom"
-  )
+theme_lfspp_continuous <- theme_classic(base_size = 12) +
+  theme(legend.title = element_text(face = "bold"),
+        panel.border = element_rect(linetype = "blank", fill = NA),
+        legend.text = element_markdown(size = 12), #Make legend text italic
+        axis.text.x = element_text(size = 10),
+        legend.position = "bottom")
 
 # Theme for species by diversity  plots: discrete
-theme_sppdiv_discrete <-    theme_classic(base_size = 16) +
-  theme(
-    legend.title = element_text(face = "bold"),
-    strip.text = element_text(face = "bold", size = 14),
-    panel.border = element_rect(linetype = "blank", fill = NA),
-    #legend.text = element_text(face = "italic", size = 12), #Make legend text italic
-    legend.text = element_markdown(),
-    axis.text.x.bottom = element_blank(),
-    axis.title.x = element_blank()
-  )
+theme_sppdiv_discrete <-    theme_classic(base_size = 12) +
+   theme(legend.title = element_text(face = "bold"),
+         strip.text = element_text(face = "italic", size = 10),
+         panel.border = element_rect(linetype = "blank", fill = NA),
+         legend.text = element_markdown(size = 12), #Make legend text italic
+         axis.text.x.bottom = element_blank(),
+         axis.title.x = element_blank())
 
-
-theme_div_discrete <-    theme_classic(base_size = 16) +
-  theme(
-    legend.title = element_text(face = "bold"),
-    strip.text = element_text(face = "bold", size = 14),
-    panel.border = element_rect(linetype = "blank", fill = NA),
-    legend.text = element_markdown(),
-    axis.text.x.bottom = element_blank(),
-    axis.title.x = element_blank()
-  )
+# Theme for elevation plots: discrete
+theme_elevdiv_discrete <-    theme_classic(base_size = 12) +
+   theme(legend.title = element_text(face = "bold"),
+         strip.text = element_text(face = "italic", size = 10),
+         panel.border = element_rect(linetype = "blank", fill = NA),
+         axis.text.x.bottom = element_blank(),
+         axis.title.x = element_blank())
 
 # Theme for leaf trait and diversity  plots: continuous
-theme_lfdiv_continuous <- theme_classic(base_size = 16) +
-  theme(
-    legend.title = element_text(face = "bold"),
-    strip.text = element_text(face = "bold.italic", size = 14),
-    panel.border = element_rect(linetype = "blank", fill = NA),
-    legend.text = element_text(face = "italic"),
-    #Make legend text italic
-    axis.text.x = element_text(size = 14)
-  )
+theme_lfdiv_continuous <- theme_classic(base_size = 12) +
+   theme(legend.title = element_text(face = "bold"),
+         strip.text = element_text(face = "bold.italic", size = 10),
+         panel.border = element_rect(linetype = "blank", fill = NA),
+        legend.text = element_text(face = "italic"), #Make legend text italic
+         axis.text.x = element_text(size = 10))
 ```
 
 ## Figure 1
@@ -521,7 +505,7 @@ r1gg <- r1gg +
          panel.border = element_rect(linetype = "blank", fill = NA),
          axis.text.x = element_blank())
 r1gg
-ggsave(file.path(path, "figures/figure1_rarefied_only.png") , plot = r1gg, dpi=300, units=c("mm"), width=300, height=250)
+ggsave(file.path(path, "figures/figure1_rarefied_only.png") , plot = r1gg, dpi=300, units=c("mm"), width=300, height=300)
 
 # # Arrange plots
 # ra_plots <- ggarrange(t1gg, "", r1gg,
@@ -544,7 +528,7 @@ ggsave(file.path(path, "figures/figure1_rarefied_only.png") , plot = r1gg, dpi=3
 #| fig-height: 5
 #| fig-width: 6.5
 #| label: venn_diagrams
-#| fig-cap: "Venn diagrams of present and absence of ASVs among cross-types and habitat type in rarified data. A) Represent the overlap of ASVs habitat types and B) in cross-types. Number of ASVs are represented the count and in parentheses as a ratio shared between cross-type and habitat type."
+#| fig-cap: "Venn diagrams of presence and absence of ASVs among cross-types and habitat type in rarified data. A) Represents the overlap of ASVs habitat types and B) in genetic cross-types. Number of ASVs are represented as a count and in parentheses as a ratio shared between cross-type and habitat type."
 
 micro_psclean <- phyloseq2meco(ps_clean_3) # First convert phyloseq to meco
 
@@ -628,7 +612,7 @@ venn_plots
 # venn_plots
 
 # Save
-ggsave(filename = file.path(path, "figures/figure2.png"), plot = venn_plots, dpi=300, units=c("mm"), width=300, height=300)
+ggsave(filename = file.path(path, "figures/figure2.png"), plot = venn_plots, dpi=300, units=c("mm"), width=250, height=225)
 ```
 
 ## Figure 3
@@ -641,7 +625,7 @@ ggsave(filename = file.path(path, "figures/figure2.png"), plot = venn_plots, dpi
 #| fig-width: 6
 #| fig-height: 6
 #| label: boxplot_hill_orders
-#| fig-cap: "Alpha diversity mean comparisons by cross-type and beta diversity mean comparisons by habitat type. Alpha diversity mean comparisons; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2) per host cross-type. A-C) Red filled boxplots correspond to F~2~GL, orange filled to G (*M. guttatus*), yellow to L (*M. laciniatus*), and teal to F~2~LG cross-type. Beta diversity mean comparisons; D) Observed ASV richness (𝑞 = 0); E) Shannon's entropy (𝑞 = 1); and F) Inverse Simpson's index (𝑞 = 2)per habitat type. D-F) Purple lined boxplot and points corresponds to Meadow 1, teal to Meadow 2, and green to Granite 1. Open shapes represent: circles (F~2~GL), squares (G), diamonds (L), and triangles (F~2~LG).  Significance levels are represented by *ns* (not significant) and asterisks [*p* < .05 (\\*), *p* < .01 (\\*\\*), *p* < .001 (\\*\\*\\*), and *p* < .0001 (\\*\\*\\*\\*)]."
+#| fig-cap: "Alpha diversity mean comparisons by cross-type and beta diversity mean comparisons by habitat type. Alpha diversity mean comparisons; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2) per host cross-type. A-C) Red filled boxplots correspond to F~2~GL, orange filled to G (*M. guttatus*), yellow to L (*M. laciniatus*), and teal to F~2~LG cross-type. Beta diversity mean comparisons; D) Observed ASV richness (𝑞 = 0); E) Shannon's entropy (𝑞 = 1); and F) Inverse Simpson's index (𝑞 = 2) per habitat type. D-F) Purple lined boxplot and points corresponds to Meadow 1, teal to Meadow 2, and green to Granite 1. Open shapes represent circles (F~2~GL), squares (G), diamonds (L), and triangles (F~2~LG).  Significance levels are represented by *ns* (not significant) and asterisks [*p* < .05 (\\*), *p* < .01 (\\*\\*), *p* < .001 (\\*\\*\\*), and *p* < .0001 (\\*\\*\\*\\*)]."
 
 ############################################
 #### Alpha diversity ####
@@ -713,7 +697,7 @@ hill0_species <- ggplot(data = plant_traits_rfy,
     direction = 1
   )) +
   #scale_color_manual(aes(color = "black")) +
-  theme_div_discrete +
+  theme_sppdiv_discrete +
   labs(y =  "Beta diversity (\U1D492 = 0)", x = "", col = "") +
   guides(color = guide_legend(title = "Crosstype")) +
   stat_compare_means(comparisons = my_comparisons,
@@ -875,7 +859,7 @@ hill0_beta <-
     )
   ) +
   scale_shape_manual(labels = labels_list, values = c(21:24)) +
-  theme_div_discrete +
+  theme_sppdiv_discrete +
   scale_x_discrete(labels = c('', '', '', '')) +
   stat_compare_means(comparisons = my_comparisons2,
                      method = "wilcox.test",
@@ -911,7 +895,7 @@ hill1_beta <- ggplot(plant_traits_rfy, aes(x = Habitat, y = hill_1)) +
   # scale_shape_manual(labels = c("F2xGL", "G", "L", "F2xLG"),
   #   values = c(21:24),
   # ) +
-  theme_div_discrete +
+  theme_sppdiv_discrete +
   scale_x_discrete(labels = c('', '', '', '')) +
   stat_compare_means(comparisons = my_comparisons2,
                      method = "wilcox.test",
@@ -955,7 +939,7 @@ hill2_beta <- ggplot(plant_traits_rfy, aes(x = Habitat, y = hill_2)) +
     )
   ) +
   scale_shape_manual(values = c(0:3), ) +
-  theme_div_discrete +
+  theme_sppdiv_discrete +
   scale_x_discrete(labels = c('', '', '', '')) +
   stat_compare_means(comparisons = my_comparisons2,
                      method = "wilcox.test",
@@ -991,7 +975,7 @@ alpha_beta_diversity <- ggarrange(hill_numbers_species, "", hill_beta,
 
 alpha_beta_diversity
 
-ggsave(filename = file.path(path, "figures/figure3.png"), plot = alpha_beta_diversity, dpi=300, units=c("mm"), width=300, height=275)
+ggsave(filename = file.path(path, "figures/figure3.jpg"), plot = alpha_beta_diversity, dpi=300, units=c("mm"), width=300, height=275)
 
 
 # Alpha and beta diversity plots used in defense talk
@@ -1025,7 +1009,7 @@ ggsave(filename = file.path(path, "figures/figure3.png"), plot = alpha_beta_dive
 #| fig-width: 6
 #| fig-height: 7
 #| label: dbrda_plot
-#| fig-cap: "FEF community composition association to all cross-types, habitat types, and leaf lobing index (LBI) in reciprocal transplant experiment. Distance-based Redundancy Analysis (dbRDA) plot of rarefied FEF community and leaf functional traits by species. A) Each cluster of points represents a rarefied FEF community sample from one host cross-type; red filled points correspond to F~2~GL (hybrid), orange to G (*M. guttatus* parental line), yellow to L (*M. laciniatus* parental line), and light blue point to F~2~LG (hybrid). Shapes correspond to habitat types:  open squares represent Meadow 1, open circles Meadow 2, and open triangles Granite 1. B) Purple filled points correspond to Meadow 1 habitat, teal represents Meadow 2 and green Granite 1. Open shapes represent cross-types: open square F~2~GL (hybrid), open circles G (*M. guttatus* parental line), open triangles L (*M. laciniatus* parental line), and corsses F~2~LG (hybrid)Point shapes correspond to host species. Solid arrow lines represent significant associations (*p* < .01), while dashed lines represent non-significant associations. The length and direction of the arrows indicate the strength and direction of the association between the traits and the FEF community composition. The labels on the arrows correspond to the leaf functional traits, habitats and cross-types. Ellipses represent 95% confidence intervals. The plot is based on the Bray-Curtis dissimilarity matrix."
+#| fig-cap: "FEF community composition association to all cross-types, habitat types, and leaf lobing index (LBI) in reciprocal transplant experiment. Distance-based Redundancy Analysis (dbRDA) plot of rarefied FEF community and leaf functional traits by species. A) Each cluster of points represents a rarefied FEF community sample from one host cross-type; red filled points correspond to F~2~GL (hybrid), orange to G (*M. guttatus* parental line), yellow to L (*M. laciniatus* parental line), and light blue point to F~2~LG (hybrid). Shapes correspond to habitat types:  open squares represent Meadow 1, open circles Meadow 2, and open triangles Granite 1. B) Purple filled points correspond to Meadow 1 habitat, teal represents Meadow 2 and green Granite 1. Open shapes represent cross-types: open square F~2~GL (hybrid), open circles G (*M. guttatus* parental line), open triangles L (*M. laciniatus* parental line), and crosses F~2~LG (hybrid). Point shapes correspond to host species. Solid arrow lines represent significant associations (*p* < .01), while dashed lines represent non-significant associations. The length and direction of the arrows indicate the strength and direction of the association between the traits and the FEF community composition. The labels on the arrows correspond to the leaf functional traits, habitats and cross-types. Ellipses represent 95% confidence intervals. The plot is based on the Bray-Curtis dissimilarity matrix."
 
 ##########################
 ######## Labels ##########
@@ -1536,11 +1520,11 @@ double_dbrda <- ggarrange(
 double_dbrda
 #Save the plot
 ggsave(
-  file.path(path, "figures/figure4.png"),
+  file.path(path, "figures/figure4.jpg"),
   plot = double_dbrda,
   dpi = 300,
   units = c("mm"),
-  width = 200,
+  width = 250,
   height = 250
 )
 ```
@@ -1725,7 +1709,7 @@ hybrid_model_plot <- ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
 hybrid_model_plot
 
 ggsave(
-  filename = file.path(path, "figures/figure5.png"),
+  filename = file.path(path, "figures/figure5.jpg"),
   plot = hybrid_model_plot,
   dpi = 300,
   units = c("mm"),
@@ -1926,11 +1910,11 @@ lbis <- ggarrange(
 lbis
 
 ggsave(
-  filename = file.path(path, "figures/figure6.png"),
+  filename = file.path(path, "figures/figure6.jpg"),
   plot = lbis,
   dpi = 300,
   units = c("mm"),
-  width = 275,
+  width = 250,
   height = 225
 )
 
@@ -2123,7 +2107,7 @@ table2
 #| fig-width: 6
 #| fig-height: 6
 #| label: suppfig-2
-#| fig-cap: "Heatmap of the top 10 most abundant genera in the dataset. The heatmap is faceted by habitat type and cross-type."
+#| fig-cap: "Heatmap of the top 10 most abundant FEF genera in the dataset. The heatmap is faceted by habitat type and cross-type."
 
 # Plot with micro_psclean
 # t2 <- trans_abund$new(dataset = micro_psclean, taxrank = "Genus", ntaxa = 10) # 12 is the index for logLBI
@@ -2177,7 +2161,7 @@ ggsave(filename = file.path(path, "figures/supp_fig3_rarefied_only.png"), plot =
 # heatplots
 
 # Save the plot
-ggplot2::ggsave(filename = file.path(path, "figures/supp_fig2.png"), plot = r2gg, dpi=300, units=c("mm"), width=300, height=250)
+ggplot2::ggsave(filename = file.path(path, "figures/supp_fig2.jpg"), plot = r2gg, dpi=300, units=c("mm"), width=300, height=250)
 ```
 
 ## Figure S3
@@ -2191,7 +2175,7 @@ ggplot2::ggsave(filename = file.path(path, "figures/supp_fig2.png"), plot = r2gg
 #| fig-width: 6
 #| fig-height: 6
 #| label: suppfig-3
-#| fig-cap: "Alpha diversity mean comparisons in cross-types facetted habitat types. Alpha diversity means comparisons: A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2) per host species. A-C) Red filled boxplots correspond to F~2~GL, orange filled to G (*M. guttatus*), yellow to L (*M. laciniatus*), and teal to F~2~LG cross-type. Beta diversity mean comparions; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2)per elevation category. D-F). Significance levels are represented by *ns* (not significant) and asterisks [*p* < .05 (\\*), *p* < .01 (\\*\\*), *p* < .001 (\\*\\*\\*), and *p* < .0001 (\\*\\*\\*\\*)]."
+#| fig-cap: "Alpha diversity mean comparisons in cross-types facetted by habitat types. Alpha diversity means comparisons: A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2) per host species. A-C) Red filled boxplots correspond to F~2~GL, orange filled to G (*M. guttatus*), yellow to L (*M. laciniatus*), and teal to F~2~LG cross-type. Beta diversity mean comparisons; A) Observed ASV richness (𝑞 = 0); B) Shannon's entropy (𝑞 = 1); and C) Inverse Simpson's index (𝑞 = 2)per elevation category. D-F). Significance levels are represented by *ns* (not significant) and asterisks [*p* < .05 (\\*), *p* < .01 (\\*\\*), *p* < .001 (\\*\\*\\*), and *p* < .0001 (\\*\\*\\*\\*)]."
 
 ############################################
 #### Alpha diversity ####
@@ -2202,8 +2186,8 @@ ggplot2::ggsave(filename = file.path(path, "figures/supp_fig2.png"), plot = r2gg
 #Legend title label
 legend_title <- "Species"
 # Species labels
-labels_list <- c("M. laciniatus", "M. nasutus", "M. guttatus")
-names(labels_list) <- c("L", "N", "G")
+labels_list <- c("F~2~GL", "G", "L", "F~2~LG")
+names(labels_list) <- c("F2GL", "G", "L", "F2LG")
 #############################
 # compare_means(hill_2 ~ Site,
 #          data = plant_traits,
@@ -2241,7 +2225,7 @@ hill0_species <-ggplot(data = plant_traits_rfy,
     type = "discrete",
     direction = 1
   )) +
-  theme_div_discrete +
+  theme_sppdiv_discrete +
   theme_classic(base_size = 16) +
    theme(legend.title = element_text(face = "bold"),
          strip.text = element_text(face = "bold", size = 14),
@@ -2348,7 +2332,7 @@ supp_fig3 <- ggarrange(hill0_species,"", hill1_species,"", hill2_species,
 
 supp_fig3
 
-ggsave(filename = file.path(path, "figures/supp_fig3.png"), plot = supp_fig3, dpi=300, units=c("mm"), width=250, height=275)
+ggsave(filename = file.path(path, "figures/supp_fig3.jpg"), plot = supp_fig3, dpi=300, units=c("mm"), width=275, height=300)
 
 ```
 
@@ -2442,7 +2426,7 @@ map <- ggmap(mappops, extent = "device", darken = c(0.3, "white")) +
 
 plot(map)
 ggsave(
-  "figures/supp_fig4.png",
+  "figures/supp_fig4.jpg",
   plot = map,
   units = "in",
   width = 6,
@@ -2496,7 +2480,7 @@ ggsave(
 <!--   scale_shape_manual( -->
 <!--     values = c(21:24), -->
 <!--   ) + -->
-<!--   theme_div_discrete + -->
+<!--   theme_sppdiv_discrete + -->
 <!--   scale_x_discrete(labels = c('', '', '', '')) + -->
 <!--   stat_compare_means(comparisons = my_comparisons2, -->
 <!--                      method = "wilcox.test", -->
@@ -2532,7 +2516,7 @@ ggsave(
 <!--   scale_shape_manual( -->
 <!--     values = c(21:24), -->
 <!--   ) + -->
-<!--   theme_div_discrete + -->
+<!--   theme_sppdiv_discrete + -->
 <!--   scale_x_discrete(labels = c('', '', '', '')) + -->
 <!--   stat_compare_means(comparisons = my_comparisons2, -->
 <!--                      method = "wilcox.test", -->
@@ -2584,7 +2568,7 @@ ggsave(
 <!--   scale_shape_manual( -->
 <!--     values = c(0:3), -->
 <!--   ) + -->
-<!--   theme_div_discrete + -->
+<!--   theme_sppdiv_discrete + -->
 <!--   scale_x_discrete(labels = c('', '', '', '')) + -->
 <!--   stat_compare_means(comparisons = my_comparisons2, -->
 <!--                      method = "wilcox.test", -->
@@ -2668,7 +2652,7 @@ See [@gardes1993] and [@inbook] for more details.
 
 ### IDT BestRAD barcodes and *i5* custom oligos
 
-####BestRAD adaptors:
+#### BestRAD adaptors:
 Top oligo 
 Anatomy: biotin spacer SbfI barcode overhang 
 Sequence: /5Biosg/GTACGT CCTGCAGG NNNNNNN TGCA 
