@@ -9,31 +9,44 @@ output: html_document
 knitr::opts_chunk$set(out.width ='70%', fig_align = 'center', echo = TRUE, collapse = TRUE, eval=FALSE)
 ```
 
-##Potential Packages
+## Packages
 
 ```{r}
+# Core packages
 library("tidyverse")
 library("data.table")
 library("ggpubr")
 library("ggfortify")
-library("ggtext")
-library("ggpmisc")
-library("ggrepel")
-library("broom")
-library("MetBrewer")
 library("rstatix")
+library("broom")
 library("readxl")
 
-# Models
+# Linear Models
 library("car")
 library("nlme")
+library("MASS")
+library("MuMIn")
+library("sjPlot")
+library("class")
+#library("caret")
 
-# Diversity
+# Community Diversity
 library("vegan")
 library("hillR")
-library("iNEXT")
 library("geosphere")
 library("indicspecies")
+
+# ggplot2 extensions
+library("ggtext")
+library("ggpmisc")
+library("MetBrewer")
+
+# Tables
+library("huxtable")
+library("flextable")
+library("broom.mixed")
+library("officer")
+library("knitr")
 
 # Phyloseq friendly
 #Some of these are redundant and have conflicts, but have functions that I like better than others or compliment each other.
@@ -44,9 +57,13 @@ library("metagMisc") # Miscellaneous functions
 library("microbiome") # Expands phyloseq 
 library("mirlyn")
 
+# Parallel processing
 library("parallelly")
+
+# Misc
 library("conflicted")
 conflict_prefer("select", "dplyr")
+conflict_prefer("desc", "dplyr")
 conflict_prefer("filter", "dplyr")
 conflict_prefer("alpha", "ggplot2")
 ```
@@ -101,6 +118,10 @@ leaf_traits <-
     Habitat = case_match(Site, "LM" ~ "Meadow 1",
                          "CF" ~ "Meadow 2",
                          "OPN" ~ "Granite 1"),
+    Genotype = case_match(Genotype, "F2WY" ~ "F2LG",  # Re-coded on 07/17/2024 -BAR
+                          "F2YW" ~ "F2GL",
+                          "L" ~ "L",
+                          "G" ~ "G"),
     logLBI = log10(Leaf_Lobe_Index),
     logACI = log10(ACI),
     logLT = log10(Leaf_thickness),
@@ -158,7 +179,9 @@ plant_traits$Habitat <- factor(plant_traits$Habitat, levels = c("Meadow 1", "Mea
  saveRDS(plant_traits, file.path(path, "clean_data/statistics/plant_traits.rds"))
 ```
 
-Variables ACI and leaf toughness show up a logical. There must be a character or something in the raw data that is causing this. I will ignore this for now. 04/03/2024
+Variables ACI and leaf toughness show up a logical. There must be a character or something in the raw data that is causing this. I will ignore this for now. 04/03/2024.
+
+For purposes of ease fo plotting, the `Genotype` variable was recoded to `F2LG`, `F2GL`, `L`, and `G`. This is to make the plot labels more informative as to what species are being compared. The `Unique_ID` variable still retains the WY and YW nomenclature.
 
 ### Phyloseq, mirl, and meco objects
 
@@ -168,11 +191,25 @@ Variables ACI and leaf toughness show up a logical. There must be a character or
 ###################################
 #Phyloseq joins various objects that we have already prepare: taxonomic table, ASV table and our sample data. These are the data frames resulting from the phyloseq section in mim3_bioinformatics.qmd notebook.
 
-# Load Phyloseq object cleaned of singletons (231 ASVs)
+# Load Phyloseq object cleaned of singletons (532 ASVs)
+
+# Update of Genotype variable 07/17/2024 -BAR
+# ps_clean_3@sam_data <- plant_traits |>
+#   filter(Unique_ID %in% names_list) |> # names_list is from the ASV table/matrix
+#   as.data.frame() |>
+#   column_to_rownames(var = "Unique_ID") |>
+#   sample_data()
+# 
+# saveRDS(ps_clean_3, file.path(path, "clean_data/taxonomy/ASV_8859_v2_phyloseq_nonsingletons.rds"))
+
 ps_clean_3 <- readRDS(file.path(path, "clean_data/taxonomy/ASV_8859_v2_phyloseq_nonsingletons.rds"))
+
 #ps_clean_3_df  <- read.csv(file.path(path, "clean_data/taxonomy/ASV_8859_v2_phyloseq_nonsingletons.csv"))
 pseq_rrfa <- readRDS(file.path(path, "clean_data/statistics/pseq_rrfa.rds")) #Mirlyn object
 rarefied_phyloseq <- readRDS(file.path(path, "clean_data/statistics/rarefied_phyloseq.rds"))
+
+
+
 ```
 
 ### Leaf traits with community data
@@ -228,7 +265,14 @@ source("functions/alpha_rfy.R")
 source("functions/pval_format.R")
 
 # Comparisons
-my_comparisons <- list(c("F2WY", "L"), c("F2WY", "G"), c("F2YW", "L"), c("F2YW", "G"), c("G", "L"), c("F2YW", "F2WY"))
+my_comparisons <- list(
+  c("F2LG", "L"),
+  c("F2LG", "G"),
+  c("F2GL", "L"),
+  c("F2GL", "G"),
+  c("G", "L"),
+  c("F2GL", "F2LG")
+)
 my_comparisons2 <- list(c("CF", "LM"), c("CF", "OPN"), c("LM", "OPN"))
 
 # List of ASV samples
@@ -904,6 +948,7 @@ rare_abundance(
 )
 
 # Core taxa
+taxa <- readRDS(file.path(out_dir, "clean_data/taxonomy/assign_tax_8859_v2.rds"))
 core_tax <- core_members(rarefied_phyloseq, detection = 0.1/100, prevalence = 50/100, include.lowest = FALSE)
 
 rfy_core_filter <- list("ASV_1",  "ASV_2",  "ASV_3",  "ASV_4",  "ASV_5",  "ASV_6",  "ASV_7",  "ASV_8", "ASV_11", "ASV_12", "ASV_19", "ASV_21", "ASV_23")
@@ -948,7 +993,8 @@ rrfy_hell_matrix <- decostand(as.matrix(t(rep_otu_df(pseq_rrfa))), MARGIN = 1, m
 # Cleaning row names
 rrfy_hell_matrix <- as.data.frame(rrfy_hell_matrix) |>
   rownames_to_column(var = "X") |>
-  mutate(Unique_ID =  X, # Copyin column to new column 
+  mutate(Unique_ID =  X,
+         # Copying column to new column
          Unique_ID =  str_remove(Unique_ID, "^.*?(_|-)")) |>
   relocate(Unique_ID, .after = X) |>
   left_join(plant_traits |>
@@ -1758,60 +1804,67 @@ ant_arranged_with_caption
 # All samples
 dbrda_hell_matrix <- rrfy_hell_matrix |>
   column_to_rownames(var = "X") |>
-  select(-c(1, 2:16))
+  select(-c(1, 2:17))
+
 saveRDS(dbrda_hell_matrix, file = "clean_data/statistics/dbrda_hell_matrix.rds")
+dbrda_hell_matrix <- readRDS("clean_data/statistics/dbrda_hell_matrix.rds")
 
 
 dbrda_traits <- rrfy_hell_matrix |>
   select(X, Unique_ID, Site, Habitat, Genotype, logLBI) |>
-  unite(Habitat_Genotype, Habitat, Genotype, sep = "_", remove = FALSE) # To model interactions
+  unite(Habitat_Genotype,
+        Habitat,
+        Genotype,
+        sep = "_",
+        remove = FALSE) # To model interactions
 saveRDS(dbrda_traits, file = "clean_data/statistics/dbrda_traits.rds")
+dbrda_traits <- readRDS("clean_data/statistics/dbrda_traits.rds")
 
 # Model with intercept only ####
 # Using rrfy_hell_matrix as the distance matrix
 m0_hell <- dbrda(
-    dbrda_hell_matrix ~ 1,
-    distance = "bray",
-    dfun = vegdist,
-    data = dbrda_traits,
-    parallel = 8, #Passes parallelization to metaMDS function # Do not use when using Rmpi
-    na.action = na.omit
+  dbrda_hell_matrix ~ 1,
+  distance = "bray",
+  dfun = vegdist,
+  data = dbrda_traits,
+  parallel = 20,
+  #Passes parallelization to metaMDS function # Do not use when using Rmpi
+  na.action = na.omit
 ) #Model with intercept only.
-save(m0_hell, file = "clean_data/statistics/m0_hell.rda")
+saveRDS(m0_hell, file = "clean_data/statistics/m0_hell.rds")
 
 m1_hell <- dbrda(
-    dbrda_hell_matrix ~ .,
-    distance = "bray",
-    dfun = vegdist,
-    data = dbrda_traits,
-    parallel = 8,
-    na.action = na.omit
+  dbrda_hell_matrix ~ .,
+  distance = "bray",
+  dfun = vegdist,
+  data = dbrda_traits,
+  parallel = 20,
+  na.action = na.omit
 ) # Model with all explanatory variables.
-save(m1_hell, file = "clean_data/statistics/m1_hell.rda")
-
+saveRDS(m1_hell, file = "clean_data/statistics/m1_hell.rds")
 
 # Model with species, site, leaf traits and elevation. ####
 m2_hell <-
-    dbrda(
-        dbrda_hell_matrix ~ logLBI + Site + Genotype,
-        distance = "bray",
-        dfun = vegdist,
-        data = dbrda_traits,
-        parallel = 8,
-        na.action = na.omit
-    )
-save(m2_hell, file = "clean_data/statistics/m2_hell.rda")
-load("clean_data/statistics/m2_hell.rda")
+  dbrda(
+    dbrda_hell_matrix ~ logLBI + Habitat + Genotype,
+    distance = "bray",
+    dfun = vegdist,
+    data = dbrda_traits,
+    parallel = 20,
+    na.action = na.omit
+  )
+saveRDS(m2_hell, file = "clean_data/statistics/m2_hell.rds")
+
 
 #Anovas for m2
 #Margins
 set.seed(123)
 anova_m2_hell_margin <- anova.cca(m2_hell,
-                           by = "margin",
-                           permutations = 999,
-                           parallel = 10)
-save(anova_m2_hell, file = "clean_data/statistics/anova_m2_hell_margin.rda")
-load("clean_data/statistics/anova_m2_hell_margin.rda")
+                                  by = "margin",
+                                  permutations = 999,
+                                  parallel = 10)
+saveRDS(anova_m2_hell_margin, file = "clean_data/statistics/anova_m2_hell_margin.rds")
+anova_m2_hell_margin <- readRDS("clean_data/statistics/anova_m2_hell_margin.rds")
 
 #Terms
 set.seed(123)
@@ -1819,39 +1872,40 @@ anova_m2_hell_terms <- anova.cca(m2_hell,
                                  by = "terms",
                                  permutations = 999,
                                  parallel = 10)
-save(anova_m2_hell_term, file = "clean_data/statistics/anova_m2_hell_term.rda")
-
+saveRDS(anova_m2_hell_terms, file = "clean_data/statistics/anova_m2_hell_terms.rds")
+anova_m2_hell_terms <- readRDS("clean_data/statistics/anova_m2_hell_term.rds")
 
 # Model with interactions between site/habitat and genotype
 m3_hell <-
-    dbrda(
-        dbrda_hell_matrix ~ logLBI + Habitat * Genotype,
-        distance = "bray",
-        dfun = vegdist,
-        data = dbrda_traits,
-        parallel = 20,
-        na.action = na.omit
-    )
-save(m3_hell, file = "clean_data/statistics/m3_hell.rda")
+  dbrda(
+    dbrda_hell_matrix ~ logLBI + Habitat * Genotype,
+    distance = "bray",
+    dfun = vegdist,
+    data = dbrda_traits,
+    parallel = 20,
+    na.action = na.omit
+  )
+saveRDS(m3_hell, file = "clean_data/statistics/m3_hell.rds")
+m3_hell <- readRDS("clean_data/statistics/m3_hell.rds")
 
 #Anovas for m3
 #Margins
 set.seed(123)
 anova_m3_hell_margin <- anova.cca(m3_hell,
-                           by = "margin",
-                           permutations = 999,
-                           parallel = 20)
-save(anova_m3_hell_margin, file = "clean_data/statistics/anova_m3_hell_margin.rda")
-load("clean_data/statistics/anova_m3_hell_margin.rda")
+                                  by = "margin",
+                                  permutations = 999,
+                                  parallel = 10)
+saveRDS(anova_m3_hell_margin, file = "clean_data/statistics/anova_m3_hell_margin.rds")
+anova_m3_hell_margin <- readRDS("clean_data/statistics/anova_m3_hell_margin.rds")
 
 #Terms
 set.seed(123)
 anova_m3_hell_term <- anova.cca(m3_hell,
-                                 by = "terms",
-                                 permutations = 999,
-                                 parallel = 20)
-save(anova_m3_hell_term, file = "clean_data/statistics/anova_m3_hell_term.rda")
-load("clean_data/statistics/anova_m3_hell_term.rda")
+                                by = "terms",
+                                permutations = 999,
+                                parallel = 10)
+saveRDS(anova_m3_hell_term, file = "clean_data/statistics/anova_m3_hell_term.rds")
+anova_m3_hell_term <- readRDS("clean_data/statistics/anova_m3_hell_term.rds")
 
 #################################
 #### PERMDISP ####
@@ -1865,54 +1919,78 @@ load("clean_data/statistics/anova_m3_hell_term.rda")
 # By Genotype
 set.seed(123)
 beta_dis1 <-
-    betadisper(
-        vegdist(dbrda_hell_matrix, method = "bray"), # Matrix of Hellinger transformed data rarefied
-        dbrda_traits$Genotype,
-        type = "median",
-        sqrt.dist = FALSE
-    )
-save(beta_dis1, file = "clean_data/statistics/beta_dis1.rda")
-load("clean_data/statistics/beta_dis1.rda")
-
-## Permutest
-set.seed(123)
-beta_perm1 <-
-    permutest(beta_dis1,
-              parallel = 8,
-              permutations = 999,
-              by = "margin")
-save(beta_perm1, file = "clean_data/statistics/beta_perm1.rda")
-load("clean_data/statistics/beta_perm1.rda")
+  betadisper(
+    vegdist(dbrda_hell_matrix, method = "bray"),
+    # Matrix of Hellinger transformed data rarefied
+    dbrda_traits$Genotype,
+    type = "median",
+    sqrt.dist = FALSE
+  )
+saveRDS(beta_dis1, file = "clean_data/statistics/beta_dis1.rds")
 
 anova(beta_dis1)
-TukeyHSD(beta_dis1)
 
+## Permutest
+## Margin
+set.seed(123)
+beta_perm1_margin <-
+  permutest(beta_dis1,
+            parallel = 10,
+            permutations = 999,
+            by = "margin")
+saveRDS(beta_perm1_margin, file = "clean_data/statistics/beta_perm1_margin.rds")
+beta_perm1_margin <- readRDS("clean_data/statistics/beta_perm1_margin.rds")
+
+
+## Terms
+set.seed(123)
+beta_perm1_terms <-
+  permutest(beta_dis1,
+            parallel = 10,
+            permutations = 999,
+            by = "terms")
+saveRDS(beta_perm1_terms, file = "clean_data/statistics/beta_perm1_terms.rds")
+beta_perm1_terms <- readRDS("clean_data/statistics/beta_perm1_terms.rds")
+
+anova(beta_dis1_terms)
+TukeyHSD(beta_dis1_terms)
 
 # By Site
 set.seed(123)
 beta_dis2 <- betadisper(
-    vegdist(dbrda_hell_matrix, method = "bray"),
-    dbrda_traits$Site,
-    type = "median",
-    sqrt.dist = FALSE
+  vegdist(dbrda_hell_matrix, method = "bray"),
+  dbrda_traits$Site,
+  type = "median",
+  sqrt.dist = FALSE
 )
-save(beta_dis2, file = "clean_data/statistics/beta_dis2.rda")
-load("clean_data/statistics/beta_dis2.rda")
+saveRDS(beta_dis2, file = "clean_data/statistics/beta_dis2.rds")
 
 ## Permutest
+## Margin
 set.seed(123)
-beta_perm2 <-
-    permutest(beta_dis2,
-              parallel = 8,
-              permutations = 999,
-              by = "margin")
-save(beta_perm2, file = "clean_data/statistics/beta_perm2.rda")
-load("clean_data/statistics/beta_perm2.rda")
+beta_perm2_margin <-
+  permutest(beta_dis2,
+            parallel = 10,
+            permutations = 999,
+            by = "margin")
+saveRDS(beta_perm2, file = "clean_data/statistics/beta_perm2_margin.rds")
+beta_perm2_margin <- readRDS("clean_data/statistics/beta_perm2_margin.rds")
 
-anova(beta_dis2)
-TukeyHSD(beta_dis2)
+anova(beta_dis2_margin)
+TukeyHSD(beta_dis2_margin)
 
+## Terms
+set.seed(123)
+beta_perm2_terms <-
+  permutest(beta_dis2,
+            parallel = 10,
+            permutations = 999,
+            by = "terms")
+saveRDS(beta_perm2_terms, file = "clean_data/statistics/beta_perm2_terms.rds")
+beta_perm2_terms <- readRDS("clean_data/statistics/beta_perm2_terms.rds")
 
+anova(beta_dis2_terms)
+TukeyHSD(beta_dis2_terms)
 
 ##################################
 #### m3_hell model #####
@@ -1921,50 +1999,73 @@ TukeyHSD(beta_dis2)
 # By Genotype
 set.seed(123)
 beta_dis3 <-
-    betadisper(
-        vegdist(dbrda_hell_matrix, method = "bray"), # Matrix of Hellinger transformed data rarefied
-        dbrda_traits$Genotype,
-        type = "median",
-        sqrt.dist = FALSE
-    )
-save(beta_dis3, file = "clean_data/statistics/beta_dis3.rda")
-#load("clean_data/statistics/beta_dis3.rda")
+  betadisper(
+    vegdist(dbrda_hell_matrix, method = "bray"),
+    # Matrix of Hellinger transformed data rarefied
+    dbrda_traits$Genotype,
+    type = "median",
+    sqrt.dist = FALSE
+  )
+saveRDS(beta_dis3, file = "clean_data/statistics/beta_dis3.rds")
+beta_dis3 <- readRDS("clean_data/statistics/beta_dis3.rds")
+
+boxplot(beta_dis3, main = "Boxplot of beta diversity by Genotype")
+anova(beta_dis3)
+TukeyHSD(beta_dis3)
 
 ## Permutest
+## Margin
 set.seed(123)
-beta_perm3 <-
+beta_perm3_margin <-
     permutest(beta_dis3,
               parallel = 10,
               permutations = 999,
               by = "margin")
-save(beta_perm3, file = "clean_data/statistics/beta_perm3.rda")
-load("clean_data/statistics/beta_perm3.rda")
+saveRDS(beta_perm3_margin, file = "clean_data/statistics/beta_perm3_margin.rds")
+beta_perm3_margin <- readRDS("clean_data/statistics/beta_perm3_margin.rds")
 
-anova(beta_dis1)
-TukeyHSD(beta_dis1)
+TukeyHSD(beta_perm3_margin)
 
+## Terms
+set.seed(123)
+beta_perm3_terms <-
+    permutest(beta_dis3,
+              parallel = 10,
+              permutations = 999,
+              by = "terms")
+saveRDS(beta_perm3_margin, file = "clean_data/statistics/beta_perm3_terms.rds")
 
 # By Habitat
 set.seed(123)
 beta_dis4 <- betadisper(
-    vegdist(dbrda_hell_matrix, method = "bray"),
-    dbrda_traits$Habitat,
-    type = "median",
-    sqrt.dist = FALSE
+  vegdist(dbrda_hell_matrix, method = "bray"),
+  dbrda_traits$Habitat,
+  type = "median",
+  sqrt.dist = FALSE
 )
-save(beta_dis4, file = "clean_data/statistics/beta_dis4.rda")
-load("clean_data/statistics/beta_dis4.rda")
+saveRDS(beta_dis4, file = "clean_data/statistics/beta_dis4.rds")
+beta_dis4 <- readRDS("clean_data/statistics/beta_dis4.rds")
+TukeyHSD(beta_dis4)
 
 ## Permutest
 set.seed(123)
-beta_perm4 <-
+beta_perm4_margin <-
     permutest(beta_dis4,
               parallel = 10,
               permutations = 999,
               by = "margin")
-save(beta_perm4, file = "clean_data/statistics/beta_perm4.rda")
-load("clean_data/statistics/beta_perm4.rda")
+saveRDS(beta_perm4_margin, file = "clean_data/statistics/beta_perm4_margin.rds")
+beta_perm4_margin <- readRDS("clean_data/statistics/beta_perm4_margin.rds")
 
+## Terms
+set.seed(123)
+beta_perm4_margin <-
+    permutest(beta_dis4,
+              parallel = 10,
+              permutations = 999,
+              by = "terms")
+saveRDS(beta_perm4_terms, file = "clean_data/statistics/beta_perm4_terms.rds")
+beta_perm4_terms <- readRDS("clean_data/statistics/beta_perm4_terms.rds")
 
 # By Habitat*Genotype
 set.seed(123)
@@ -1974,23 +2075,34 @@ beta_dis5 <- betadisper(
     type = "median",
     sqrt.dist = FALSE
 )
-save(beta_dis5, file = "clean_data/statistics/beta_dis5.rda")
-load("clean_data/statistics/beta_dis5.rda")
-anova(beta_dis5)
+saveRDS(beta_dis5, file = "clean_data/statistics/beta_dis5.rds")
+beta_dis5 <- readRDS("clean_data/statistics/beta_dis5.rds")
+
+TukeyHSD(beta_dis5)
 ## Permutest
+## Margin
 set.seed(123)
-beta_perm5 <-
+beta_perm5_margin <-
     permutest(beta_dis5,
               parallel = 10,
               permutations = 999,
               by = "margin")
-save(beta_perm5, file = "clean_data/statistics/beta_perm5.rda")
-load("clean_data/statistics/beta_perm5.rda")
-beta_perm5
+saveRDS(beta_perm5_margin, file = "clean_data/statistics/beta_perm5_margin.rds")
+beta_perm5_margin <- readRDS("clean_data/statistics/beta_perm5_margin.rds")
+TukeyHSD(beta_perm5_margin)
+
+## Terms
+set.seed(123)
+beta_perm5_terms <-
+    permutest(beta_dis5,
+              parallel = 10,
+              permutations = 999,
+              by = "terms")
+saveRDS(beta_perm5_terms, file = "clean_data/statistics/beta_perm5_terms.rds")
 ```
-The groups interacting with the environment (Habitat_Genotype) show significant differences in multivariate dispersion (p \< 0.05). The PERMDISP analysis shows that the groups are significantly different in their multivariate dispersion.Group differences are due to dispersion differences between groups, not due to differences in the centroid of the groups.
+The groups interacting with the environment (Habitat_Genotype) show significant differences in multivariate dispersion (p \< 0.05). The PERMDISP analysis shows that the groups are significantly different in their multivariate dispersion.Group differences are due to dispersion differences between groups, not due to differences in the median of the groups.
 
-
+#### hybrids only
 ```{r}
 #################################################################
 #### dbRDA modelling for all samples: hybrids ONLY ####
@@ -1999,23 +2111,27 @@ The groups interacting with the environment (Habitat_Genotype) show significant 
 ##### Hellinger transformed rarefied data
 dbrda_hybrids_matrix <- rrfy_hell_matrix |>
   column_to_rownames(var = "X") |>
-  select(-c(1, 2:16)) |>
+  select(-c(1, 2:17)) |>
   t() |>
   as.data.frame() |>
   select(contains(c("F2WY", "F2YW"))) |>
   t() |>
   as.data.frame()
+
 saveRDS(dbrda_hybrids_matrix, file = "clean_data/statistics/dbrda_hybrids_matrix.rds")
-dbrda_hybrids_matrix <-
-  readRDS(file.path(path, "clean_data/statistics/dbrda_hybrids_matrix.rds"))
+dbrda_hybrids_matrix <- readRDS(file.path(path,"clean_data/statistics/dbrda_hybrids_matrix.rds"))
 
 
 dbrda_hybrids_traits <- rrfy_hell_matrix |>
-  select(X, Unique_ID, Site, Genotype, logLBI) |>
-  filter(X %in% rownames(dbrda_hybrids_matrix))
+  select(X, Unique_ID, Site, Habitat, Genotype, logLBI) |>
+  filter(X %in% rownames(dbrda_hybrids_matrix)) |>
+   unite(Habitat_Genotype,
+        Habitat,
+        Genotype,
+        sep = "_",
+        remove = FALSE) # To model interactions
 saveRDS(dbrda_hybrids_traits, file = "clean_data/statistics/dbrda_hybrids_traits.rds")
-dbrda_hybrids_traits <-
-  readRDS(file.path(path, "clean_data/statistics/dbrda_hybrids_traits.rds"))
+dbrda_hybrids_traits <- readRDS(file.path(path, "clean_data/statistics/dbrda_hybrids_traits.rds"))
 
 
 # Model with intercept only ####
@@ -2025,45 +2141,84 @@ m0_hybrids_hell <- dbrda(
     distance = "bray",
     dfun = vegdist,
     data = dbrda_hybrids_traits,
-    parallel = 8, #Passes parallelization to metaMDS function
+    parallel = 20, #Passes parallelization to metaMDS function
     na.action = na.omit
 ) #Model with intercept only.
-save(m0_hybrids_hell, file = "clean_data/statistics/m0_hybrids_hell.rda")
+saveRDS(m0_hybrids_hell, file = "clean_data/statistics/m0_hybrids_hell.rds")
 
 m1_hybrids_hell <- dbrda(
     dbrda_hybrids_matrix ~ .,
     distance = "bray",
     dfun = vegdist,
     data = dbrda_hybrids_traits,
-    parallel = 8,
+    parallel = 20,
     na.action = na.omit
 ) # Model with all explanatory variables.
-save(m1_hybrids_hell, file = "clean_data/statistics/m1_hybrids_hell.rda")
-
+saveRDS(m1_hybrids_hell, file = "clean_data/statistics/m1_hybrids_hell.rds")
 
 # Model with species, site, leaf traits and elevation. ####
 m2_hybrids_hell <-
     dbrda(
-        dbrda_hybrids_matrix ~ logLBI + Site + Genotype,
+        dbrda_hybrids_matrix ~ logLBI + Habitat + Genotype,
         distance = "bray",
         dfun = vegdist,
         data = dbrda_hybrids_traits,
-        #parallel = 8,
+        parallel = 20,
         na.action = na.omit
     )
-save(m2_hybrids_hell, file = "clean_data/statistics/m2_hybrids_hell.rda")
+saveRDS(m2_hybrids_hell, file = "clean_data/statistics/m2_hybrids_hell.rds")
 
 #Anovas for m2
+## Margin
 set.seed(123)
-anova_m2_hybrids_hell <- anova.cca(
+anova_m2_hybrids_margin <- anova.cca(
     m2_hybrids_hell,
     by = "margin",
     permutations = 999,
-    parallel = 8
+    parallel = 20
 )
-save(anova_m2_hybrids_hell, file = "clean_data/statistics/anova_m2_hybrids_hell.rda")
-load("clean_data/statistics/anova_m2_hybrids_hell.rda")
-anova_m2_hybrids_hell
+saveRDS(anova_m2_hybrids_margin, file = "clean_data/statistics/anova_m2_hybrids_margin.rds")
+
+## Terms
+set.seed(123)
+anova_m2_hybrids_terms <- anova.cca(
+    m2_hybrids_hell,
+    by = "terms",
+    permutations = 999,
+    parallel = 20
+)
+saveRDS(anova_m2_hybrids_terms, file = "clean_data/statistics/anova_m2_hybrids_terms.rds")
+
+
+# m3 hybrids
+m3_hybrids_hell <-
+  dbrda(
+    dbrda_hybrids_matrix ~ logLBI + Habitat * Genotype,
+    distance = "bray",
+    dfun = vegdist,
+    data = dbrda_traits,
+    parallel = 20,
+    na.action = na.omit
+  )
+saveRDS(m3_hybrids_hell, file = "clean_data/statistics/m3_hybrids_hell.rds")
+
+#Anovas for m3_hybrids
+#Margins
+set.seed(123)
+anova_m3_hybrids_margin <- anova.cca(m3_hell,
+                                  by = "margin",
+                                  permutations = 999,
+                                  parallel = 10)
+saveRDS(anova_m3_hybrids_margin, file = "clean_data/statistics/anova_m3_hybrids_margin.rds")
+
+#Terms
+set.seed(123)
+anova_m3_hybrids_term <- anova.cca(m3_hell,
+                                by = "terms",
+                                permutations = 999,
+                                parallel = 10)
+saveRDS(anova_m3_hybrids_term, file = "clean_data/statistics/anova_m3_hybrids_term.rds")
+
 
 
 ### PERMDISP
@@ -2079,40 +2234,92 @@ beta_hybrids_dis1 <-
         type = "median",
         sqrt.dist = FALSE
     )
-save(beta_hybrids_dis1, file = "clean_data/statistics/beta_hybrids_dis1.rda")
-load("clean_data/statistics/beta_hybrids_dis1.rda")
-
-## Permutest
-set.seed(123)
-beta_hybrids_perm1 <-
-    permutest(beta_hybrids_dis1,
-              parallel = 8,
-              permutations = 999,
-              by = "margin")
-save(beta_hybrids_perm1, file = "clean_data/statistics/beta_hybrids_perm1.rda")
-load("clean_data/statistics/beta_hybrids_perm1.rda")
+saveRDS(beta_hybrids_dis1, file = "clean_data/statistics/beta_hybrids_dis1.rds")
+beta_hybrids_dis1 <- readRDS("clean_data/statistics/beta_hybrids_dis1.rds")
 
 anova(beta_hybrids_dis1)
 TukeyHSD(beta_hybrids_dis1)
 
-# By Site
+
+## Permutest
+## Margin
+set.seed(123)
+beta_hybrids_perm1_margin <-
+    permutest(beta_hybrids_dis1,
+              parallel = 10,
+              permutations = 999,
+              by = "margin")
+saveRDS(beta_hybrids_perm1_margin, file = "clean_data/statistics/beta_hybrids_perm1_margin.rds")
+beta_hybrids_perm1_margin <- readRDS("clean_data/statistics/beta_hybrids_perm1_margin.rds")
+
+beta_hybrids_perm1_margin
+
+## Terms
+set.seed(123)
+beta_hybrids_perm1_terms <-
+    permutest(beta_hybrids_dis1,
+              parallel = 10,
+              permutations = 999,
+              by = "terms")
+saveRDS(beta_hybrids_perm1_terms, file = "clean_data/statistics/beta_hybrids_perm1_terms.rds")
+
+# By Habitat
 set.seed(123)
 beta_hybrids_dis2 <- betadisper(
-    vegdist(dbrda_hybrids__matrix, method = "bray"),
-    dbrda_traits$Site,
+    vegdist(dbrda_hybrids_matrix, method = "bray"),
+    dbrda_hybrid_traits$Habitat,
     type = "median",
     sqrt.dist = FALSE
 )
-save(beta_hybrids_dis2, file = "clean_data/statistics/beta_hybrids_dis2.rda")
+saveRDS(beta_hybrids_dis2, file = "clean_data/statistics/beta_hybrids_dis2.rds")
 
 ## Permutest
+## Margin
 set.seed(123)
-beta_hybrids_perm2 <-
+beta_hybrids_perm2_margin <-
     permutest(beta_dis2,
-              parallel = 8,
+              parallel = 10,
               permutations = 999,
               by = "margin")
-save(beta_hybrids_perm2, file = "clean_data/statistics/beta_hybrids_perm2.rda")
+saveRDS(beta_hybrids_perm2_margin, file = "clean_data/statistics/beta_hybrids_perm2_margin.rds")
+
+## Terms
+set.seed(123)
+beta_hybrids_perm2_terms <-
+    permutest(beta_dis2,
+              parallel = 10,
+              permutations = 999,
+              by = "terms")
+saveRDS(beta_hybrids_perm2_terms, file = "clean_data/statistics/beta_hybrids_perm2_terms.rds")
+
+# By Habitat*Genotype
+set.seed(123)
+beta_hybrids_dis3 <- betadisper(
+    vegdist(dbrda_hybrids_matrix, method = "bray"),
+    dbrda_traits$Habitat_Genotype,
+    type = "median",
+    sqrt.dist = FALSE
+)
+saveRDS(beta_hybrids_dis3, file = "clean_data/statistics/beta_hybrids_dis3.rds")
+
+## Permutest
+## Margin
+set.seed(123)
+beta_hybrids_perm3_margin <-
+    permutest(beta_dis3,
+              parallel = 10,
+              permutations = 999,
+              by = "margin")
+saveRDS(beta_hybrids_perm3_margin, file = "clean_data/statistics/beta_hybrids_perm3_margin.rds")
+
+## Terms
+set.seed(123)
+beta_hybrids_perm3_terms <-
+    permutest(beta_dis3,
+              parallel = 10,
+              permutations = 999,
+              by = "terms")
+saveRDS(beta_hybrids_perm3_terms, file = "clean_data/statistics/beta_hybrids_perm3_terms.rds")
 ```
 
 
@@ -2127,7 +2334,7 @@ load("clean_data/statistics/m2_hell.rda")
 final_model <- m2_hell
 
 names(final_model)
-B <- summary(final_model)
+finalm_summary <- summary(final_model)
 
 
 # Extracting scores for the plot
@@ -2140,7 +2347,7 @@ ordination_names <- rownames(ordination_scores)
 ordination_scores$Unique_ID <- rownames(ordination_scores)
 
 # Subset for the plot
-dbrda_df <- plant_traits_rfy 
+dbrda_df <- plant_traits_rfy
 
 # Merge scores with trait data
 merged_data <- right_join(ordination_scores, dbrda_df, by = c("Unique_ID" = "X"))
@@ -2149,71 +2356,186 @@ merged_data <- right_join(ordination_scores, dbrda_df, by = c("Unique_ID" = "X")
 arrow_scores <- as.data.frame(vegan::scores(final_model, display = "bp"))
 
 # Define the arrow aesthetic mapping
-arrow_map <- aes(xend = (dbRDA1*2), yend = (dbRDA2*2), x = 0, y = 0, shape = NULL, color = NULL, fill = NULL)
-label_map <- aes(x = 2*dbRDA1, y = 2*dbRDA2, label = row.names(arrow_scores), shape = NULL, color = NULL, fill = NULL)
+arrow_map <- aes(
+  xend = (dbRDA1 * 2),
+  yend = (dbRDA2 * 2),
+  x = 0,
+  y = 0,
+  shape = NULL,
+  color = NULL,
+  fill = NULL
+)
+label_map <- aes(
+  x = 2 * dbRDA1,
+  y = 2 * dbRDA2,
+  label = row.names(arrow_scores),
+  shape = NULL,
+  color = NULL,
+  fill = NULL
+)
 arrowhead = arrow(length = unit(0.02, "npc"))
 
 #subset A4 for labeling
 arrow_scores <- arrow_scores[order(rownames(arrow_scores)), ]
-A4 <- lapply(1:6, function(i) arrow_scores[i, ])
+A4 <- lapply(1:6, function(i)
+  arrow_scores[i, ])
 
 # A4.sub1 <- arrow_scores[1,] #Elevation
 # A4.sub2 <- arrow_scores[2,] #ACi
 # A4.sub3 <- arrow_scores[3,] #LBI
-A4.sub4 <- arrow_scores[4,] #logLBI
+A4.sub4 <- arrow_scores[4, ] #logLBI
 # A4.sub5 <- arrow_scores[5,] #LPS
 # A4.sub6 <- arrow_scores[6,] #LT.
 
 # dbRDA plot based on species
 full_final_model <- ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
-  geom_point(data = merged_data, aes(color = Genotype, shape= Site), size = rel(4), alpha = 0.2, stroke = 1) +
-  geom_segment(arrow_map, size = rel(.8), data = arrow_scores, color = "black", arrow = arrowhead) +
-  geom_vline(xintercept = 0, color = "grey30", linetype = "dashed") + # plot vertical line
-  geom_hline(yintercept = 0, color = "grey30", linetype = "dashed") + # plot horizontal line
-  geom_text(label_map, size = rel(4), data = A4[[1]], fontface = "bold", show.legend = FALSE, label = c("F2WY"), hjust = 1.2 ) +
-  geom_text(label_map, size = rel(4), data = A4[[2]], fontface = "bold", show.legend = FALSE, label = c("G"),  vjust = 1.3 ) +
-  geom_text(label_map, size = rel(4), data = A4[[3]], fontface = "bold", show.legend = FALSE, label = c("L"), vjust = -0.6) +
-  geom_text(label_map, size = rel(4), data = A4[[4]], fontface = "bold", show.legend = FALSE, label = c("logLBI"), hjust = -0.1 ) +
-  geom_text(label_map, size = rel(4), data = A4[[5]], fontface = "bold", show.legend = FALSE, label = c("LM"), hjust = -0.2 ) +
-  geom_text(label_map, size = rel(4), data = A4[[6]], fontface = "bold", show.legend = FALSE, label = c("OPN"), vjust = -0.3, hjust = 1.2 ) +
-  xlab(label = paste("dbRDA1 (", round(B$concont$importance[2,1]*100, digits = 1), "%)", sep="")) +
-  ylab(label = paste("dbRDA2 (", round(B$concont$importance[2,2]*100, digits = 1), "%)", sep="")) + 
-  scale_color_manual(values= met.brewer("Johnson", n = 4, type = "discrete", direction = 1)) +
-  scale_shape_manual(values=c(1:22)) +
-  stat_ellipse(aes(color = Genotype),
-               geom = "path",
-               linewidth = 1.7,
-               position = "identity",
-               type = "t", linetype = 1,
-               level = 0.95,
-               segments = 51,
-               na.rm = FALSE,
-               show.legend = NA, inherit.aes = TRUE) +
+  geom_point(
+    data = merged_data,
+    aes(color = Genotype, shape = Site),
+    size = rel(4),
+    alpha = 0.2,
+    stroke = 1
+  ) +
+  geom_segment(
+    arrow_map,
+    size = rel(.8),
+    data = arrow_scores,
+    color = "black",
+    arrow = arrowhead
+  ) +
+  geom_vline(xintercept = 0,
+             color = "grey30",
+             linetype = "dashed") + # plot vertical line
+  geom_hline(yintercept = 0,
+             color = "grey30",
+             linetype = "dashed") + # plot horizontal line
+  geom_text(
+    label_map,
+    size = rel(4),
+    data = A4[[1]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("F2WY"),
+    hjust = 1.2
+  ) +
+  geom_text(
+    label_map,
+    size = rel(4),
+    data = A4[[2]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("G"),
+    vjust = 1.3
+  ) +
+  geom_text(
+    label_map,
+    size = rel(4),
+    data = A4[[3]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("L"),
+    vjust = -0.6
+  ) +
+  geom_text(
+    label_map,
+    size = rel(4),
+    data = A4[[4]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("logLBI"),
+    hjust = -0.1
+  ) +
+  geom_text(
+    label_map,
+    size = rel(4),
+    data = A4[[5]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("LM"),
+    hjust = -0.2
+  ) +
+  geom_text(
+    label_map,
+    size = rel(4),
+    data = A4[[6]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("OPN"),
+    vjust = -0.3,
+    hjust = 1.2
+  ) +
+  xlab(label = paste(
+    "dbRDA1 (",
+    round(finalm_summary$concont$importance[2, 1] * 100, digits = 1),
+    "%)",
+    sep = ""
+  )) +
+  ylab(label = paste(
+    "dbRDA2 (",
+    round(finalm_summary$concont$importance[2, 2] * 100, digits = 1),
+    "%)",
+    sep = ""
+  )) +
+  scale_color_manual(values = met.brewer(
+    "Johnson",
+    n = 4,
+    type = "discrete",
+    direction = 1
+  )) +
+  scale_shape_manual(values = c(1:22)) +
+  stat_ellipse(
+    aes(color = Genotype),
+    geom = "path",
+    linewidth = 1.7,
+    position = "identity",
+    type = "t",
+    linetype = 1,
+    level = 0.95,
+    segments = 51,
+    na.rm = FALSE,
+    show.legend = NA,
+    inherit.aes = TRUE
+  ) +
   theme_classic(base_size = 16) +
   theme(legend.title = element_text(face = "bold")) +
-  guides(shape = guide_legend(ncol=2))
+  guides(shape = guide_legend(ncol = 2))
 
-     
+
 # Rearranging the order of layers so arrows are above the points.
 full_final_model$layers
-full_final_model$layers <- c(full_final_model$layers,full_final_model$layers[[2]], full_final_model$layers[[5]], full_final_model$layers[[6]], full_final_model$layers[[7]], full_final_model$layers[[8]], full_final_model$layers[[9]], full_final_model$layers[[10]])
+full_final_model$layers <- c(
+  full_final_model$layers,
+  full_final_model$layers[[2]],
+  full_final_model$layers[[5]],
+  full_final_model$layers[[6]],
+  full_final_model$layers[[7]],
+  full_final_model$layers[[8]],
+  full_final_model$layers[[9]],
+  full_final_model$layers[[10]]
+)
 full_final_model
 
-ggsave(filename=file.path(path, "figures/dbRDA_full_model.png"), plot = full_final_model, dpi=600, units=c("mm"), width=150, height=150)
-
+ggsave(
+  filename = file.path(path, "figures/dbRDA_full_model.png"),
+  plot = full_final_model,
+  dpi = 600,
+  units = c("mm"),
+  width = 150,
+  height = 150
+)
 
 ######################################
 #### Full model with interactions ####
 ######################################
 load("clean_data/statistics/m3_hell.rda")
-final_model <- m3_hell
+final_inter_model <- m3_hell
 
-names(final_model)
-B <- summary(final_model)
+names(final_inter_model)
+final_inter_summary <- summary(final_inter_model)
 
 
 # Extracting scores for the plot
-ordination_scores <- as.data.frame(vegan::scores(final_model)$sites)
+ordination_scores <- as.data.frame(vegan::scores(final_inter_model)$sites)
 
 # Extracting names for the plot
 ordination_names <- rownames(ordination_scores)
@@ -2228,7 +2550,7 @@ dbrda_df <- plant_traits_rfy
 merged_data <- right_join(ordination_scores, dbrda_df, by = c("Unique_ID" = "X"))
 
 # Extracting scores for arrows
-arrow_scores <- as.data.frame(vegan::scores(final_model, display = "bp"))
+arrow_scores <- as.data.frame(vegan::scores(final_inter_model, display = "bp"))
 
 # Define the arrow aesthetic mapping
 arrow_map <- aes(xend = (dbRDA1*2), yend = (dbRDA2*2), x = 0, y = 0, shape = NULL, color = NULL, fill = NULL)
@@ -2246,7 +2568,7 @@ A4.sub4 <- arrow_scores[4,] #logLBI
 # A4.sub6 <- arrow_scores[6,] #LT.
 
 # dbRDA plot based on species
-full_final_model <-
+full_final_inter_model <-
   ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
   geom_point(
     data = merged_data,
@@ -2379,13 +2701,13 @@ full_final_model <-
   ) +
   xlab(label = paste(
     "dbRDA1 (",
-    round(B$concont$importance[2, 1] * 100, digits = 1),
+    round(final_inter_summary$concont$importance[2, 1] * 100, digits = 1),
     "%)",
     sep = ""
   )) +
   ylab(label = paste(
     "dbRDA2 (",
-    round(B$concont$importance[2, 2] * 100, digits = 1),
+    round(final_inter_summary$concont$importance[2, 2] * 100, digits = 1),
     "%)",
     sep = ""
   )) +
@@ -2407,14 +2729,14 @@ full_final_model <-
     plot.caption = element_markdown(),
     strip.text = element_text(face = "bold")
   ) +
-  labs(caption = "PERMDISP: *F*<sub>11,14088</sub> = 471.62, *p* = .001") +
+  labs(caption = "PERMDISP: *F*<sub>11, 14088</sub> = 471.62, *p* = .001") +
   facet_wrap( ~ Habitat) +
   guides(shape = guide_legend(ncol = 1))
 
      
 # Rearranging the order of layers so arrows are above the points.
-# full_final_model$layers <- c(full_final_model$layers,full_final_model$layers[[2]], full_final_model$layers[[5]], full_final_model$layers[[6]], full_final_model$layers[[7]], full_final_model$layers[[8]], full_final_model$layers[[9]], full_final_model$layers[[10]], full_final_model$layers[[11]])
-full_final_model
+# full_final_inter_model$layers <- c(full_final_inter_model$layers,full_final_inter_model$layers[[2]], full_final_inter_model$layers[[5]], full_final_inter_model$layers[[6]], full_final_inter_model$layers[[7]], full_final_inter_model$layers[[8]], full_final_inter_model$layers[[9]], full_final_inter_model$layers[[10]], full_final_inter_model$layers[[11]])
+full_final_inter_model
 
 # Saving by layers for PowerPoint presentation
 
@@ -2433,14 +2755,14 @@ full_final_model
 
 ```{r, hybrid_model}
 load("clean_data/statistics/m2_hybrids_hell.rda")
-final_model <- m2_hybrids_hell
+hybrid_model <- m2_hybrids_hell
 
-names(final_model)
-B <- summary(final_model)
-vegan::scores(final_model)
+names(hybrid_model)
+B <- summary(hybrid_model)
+vegan::scores(hybrid_model)
 
 # Extracting scores for the plot
-ordination_scores <- as.data.frame(vegan::scores(final_model)$sites)
+ordination_scores <- as.data.frame(vegan::scores(hybrid_model)$sites)
 
 # Extracting names for the plot
 ordination_names <- rownames(ordination_scores)
@@ -2450,67 +2772,160 @@ ordination_scores$Unique_ID <- rownames(ordination_scores)
 
 # Subset for the plot
 dbrda_df <- plant_traits_rfy |>
-   filter(X %in% ordination_names,
-         Genotype == "F2WY" | Genotype == "F2YW") # Extra filtering to remove parentals
+  filter(X %in% ordination_names, Genotype == "F2WY" |
+           Genotype == "F2YW") # Extra filtering to remove parentals
 
 # Merge scores with trait data
 merged_data <- right_join(ordination_scores, dbrda_df, by = c("Unique_ID" = "X"))
 
 # Extracting scores for arrows
-arrow_scores <- as.data.frame(vegan::scores(final_model, display = "bp"))
+arrow_scores <- as.data.frame(vegan::scores(hybrid_model, display = "bp"))
 
 # Define the arrow aesthetic mapping
-arrow_map <- aes(xend = (dbRDA1*2), yend = (dbRDA2*2), x = 0, y = 0, shape = NULL, color = NULL, fill = NULL)
-label_map <- aes(x = 2*dbRDA1, y = 2*dbRDA2, label = row.names(arrow_scores), shape = NULL, color = NULL, fill = NULL)
+arrow_map <- aes(
+  xend = (dbRDA1 * 2),
+  yend = (dbRDA2 * 2),
+  x = 0,
+  y = 0,
+  shape = NULL,
+  color = NULL,
+  fill = NULL
+)
+label_map <- aes(
+  x = 2 * dbRDA1,
+  y = 2 * dbRDA2,
+  label = row.names(arrow_scores),
+  shape = NULL,
+  color = NULL,
+  fill = NULL
+)
 arrowhead = arrow(length = unit(0.02, "npc"))
 
 #subset A4 for labeling
 arrow_scores <- arrow_scores[order(rownames(arrow_scores)), ]
-A4 <- lapply(1:6, function(i) arrow_scores[i, ])
+A4 <- lapply(1:6, function(i)
+  arrow_scores[i, ])
 
 # A4.sub1 <- arrow_scores[1,] #Elevation
 # A4.sub2 <- arrow_scores[2,] #ACi
 # A4.sub3 <- arrow_scores[3,] #LBI
-A4.sub4 <- arrow_scores[4,] #logLBI
+A4.sub4 <- arrow_scores[4, ] #logLBI
 # A4.sub5 <- arrow_scores[5,] #LPS
 # A4.sub6 <- arrow_scores[6,] #LT.
 
 # dbRDA plot based on species
-hybrid_final_model <- ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
-  geom_point(data = merged_data, aes(color = Genotype, shape= Site), size = rel(4), alpha = 0.2, stroke = 1) +
-  geom_segment(arrow_map, size = rel(.8), data = arrow_scores, color = "black", arrow = arrowhead) +
-  geom_vline(xintercept = 0, color = "grey30", linetype = "dashed") + # plot vertical line
-  geom_hline(yintercept = 0, color = "grey30", linetype = "dashed") + # plot horizontal line
-  geom_text(label_map, size = rel(4), data = A4[[1]], fontface = "bold", show.legend = FALSE, label = c("F2WY"), hjust = 1.2 ) +
+hybrid_model <- ggplot(data = merged_data, aes(x = dbRDA1, y = dbRDA2)) +
+  geom_point(
+    data = merged_data,
+    aes(color = Genotype, shape = Site),
+    size = rel(4),
+    alpha = 0.2,
+    stroke = 1
+  ) +
+  geom_segment(
+    arrow_map,
+    size = rel(.8),
+    data = arrow_scores,
+    color = "black",
+    arrow = arrowhead
+  ) +
+  geom_vline(xintercept = 0,
+             color = "grey30",
+             linetype = "dashed") + # plot vertical line
+  geom_hline(yintercept = 0,
+             color = "grey30",
+             linetype = "dashed") + # plot horizontal line
+  geom_text(
+    label_map,
+    size = rel(4),
+    data = A4[[1]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("F2WY"),
+    hjust = 1.2
+  ) +
   # geom_text(label_map, size = rel(4), data = A4[[2]], fontface = "bold", show.legend = FALSE, label = c("G"),  vjust = 1.3 ) +
   # geom_text(label_map, size = rel(4), data = A4[[3]], fontface = "bold", show.legend = FALSE, label = c("L"), vjust = -0.6) +
-  geom_text(label_map, size = rel(4), data = A4[[4]], fontface = "bold", show.legend = FALSE, label = c("logLBI"), hjust = -0.1 ) +
-  geom_text(label_map, size = rel(4), data = A4[[5]], fontface = "bold", show.legend = FALSE, label = c("LM"), hjust = -0.2 ) +
-  geom_text(label_map, size = rel(4), data = A4[[6]], fontface = "bold", show.legend = FALSE, label = c("OPN"), vjust = -0.3, hjust = 1.2 ) +
-  xlab(label = paste("dbRDA1 (", round(B$concont$importance[2,1]*100, digits = 1), "%)", sep="")) +
-  ylab(label = paste("dbRDA2 (", round(B$concont$importance[2,2]*100, digits = 1), "%)", sep="")) + 
-  scale_color_manual(values= met.brewer("Johnson", n = 4, type = "discrete", direction = 1)) +
-  scale_shape_manual(values=c(1:22)) +
-  stat_ellipse(aes(color = Genotype),
-               geom = "path",
-               linewidth = 1.7,
-               position = "identity",
-               type = "t", linetype = 1,
-               level = 0.95,
-               segments = 51,
-               na.rm = FALSE,
-               show.legend = NA, inherit.aes = TRUE) +
+  geom_text(
+    label_map,
+    size = rel(4),
+    data = A4[[4]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("logLBI"),
+    hjust = -0.1
+  ) +
+  geom_text(
+    label_map,
+    size = rel(4),
+    data = A4[[5]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("LM"),
+    hjust = -0.2
+  ) +
+  geom_text(
+    label_map,
+    size = rel(4),
+    data = A4[[6]],
+    fontface = "bold",
+    show.legend = FALSE,
+    label = c("OPN"),
+    vjust = -0.3,
+    hjust = 1.2
+  ) +
+  xlab(label = paste(
+    "dbRDA1 (",
+    round(B$concont$importance[2, 1] * 100, digits = 1),
+    "%)",
+    sep = ""
+  )) +
+  ylab(label = paste(
+    "dbRDA2 (",
+    round(B$concont$importance[2, 2] * 100, digits = 1),
+    "%)",
+    sep = ""
+  )) +
+  scale_color_manual(values = met.brewer(
+    "Johnson",
+    n = 4,
+    type = "discrete",
+    direction = 1
+  )) +
+  scale_shape_manual(values = c(1:22)) +
+  stat_ellipse(
+    aes(color = Genotype),
+    geom = "path",
+    linewidth = 1.7,
+    position = "identity",
+    type = "t",
+    linetype = 1,
+    level = 0.95,
+    segments = 51,
+    na.rm = FALSE,
+    show.legend = NA,
+    inherit.aes = TRUE
+  ) +
   theme_classic(base_size = 16) +
   theme(legend.title = element_text(face = "bold")) +
-  guides(shape = guide_legend(ncol=2))
+  guides(shape = guide_legend(ncol = 2))
 
-     
+
 # Rearranging the order of layers so arrows are above the points.
-hybrid_final_model$layers
-hybrid_final_model$layers <- c(hybrid_final_model$layers,hybrid_final_model$layers[[2]], hybrid_final_model$layers[[5]], hybrid_final_model$layers[[6]], hybrid_final_model$layers[[7]], hybrid_final_model$layers[[8]], hybrid_final_model$layers[[9]], hybrid_final_model$layers[[10]])
-hybrid_final_model
+hybrid_model$layers
+hybrid_model$layers <- c(
+  hybrid_model$layers,
+  hybrid_model$layers[[2]],
+  hybrid_model$layers[[5]],
+  hybrid_model$layers[[6]],
+  hybrid_model$layers[[7]],
+  hybrid_model$layers[[8]],
+  hybrid_model$layers[[9]],
+  hybrid_model$layers[[10]]
+)
+hybrid_model
 
-#ggsave(filename=file.path(path, "figures/dbRDA_hybrid model.png"), plot = hybrid_final_model, dpi=600, units=c("mm"), width=150, height=150)
+#ggsave(filename=file.path(path, "figures/dbRDA_hybrid model.png"), plot = hybrid_model, dpi=600, units=c("mm"), width=150, height=150)
 ```
 
 ### PERMANOVA
@@ -2557,7 +2972,6 @@ perma3 <- adonis2(dbrda_hell_matrix ~ logACI + logLT + logLPS + logLMA +
                  na.action = na.omit, 
                  strata = NULL)
 print(perma3)
-
 ```
 
 ### SIMPER
@@ -2567,6 +2981,716 @@ Who contributes more to differences in the community composition?
 (sim <- with(dbrda_traits, simper(dbrda_hell_matrix, Species, permutations = 9999, parallel = 8)))
 summary(sim)
 ```
+
+## GLMMs
+
+### Beta Diversity
+
+using `dbrda_traits` dataset for GLMMs. It's a subset of the `rrfy_hell_matrix` (`plant_traits_rfy` + community matrix) dataset.
+```{r}
+# Bray-Curtis dissimilarity vs. Elevation
+
+# Mean-Bray-Curtis dissimilarity
+mean_bray <- vegdist(dbrda_hell_matrix, method = "bray") |>
+  as.matrix() |>
+  as.data.frame()
+saveRDS(mean_bray, file = "clean_data/statistics/mean_bray.rds")
+mean_bray <- readRDS("clean_data/statistics/mean_bray.rds")
+
+mean_bray <- rownames_to_column(mean_bray, var = "Unique_ID") |>
+  mutate(mean_bray = rowMeans(mean_bray)) |>
+  select(Unique_ID, mean_bray)
+
+# Joining to dbrda_traits to avoid duplicate DFs 
+dbrda_traits <- left_join(dbrda_traits, mean_bray, by = c("X"= "Unique_ID"))
+```
+
+
+#### Selecting fixed terms
+```{r, glm}
+# GLMs with Beta Diversity
+b1 <- glm(
+  mean_bray ~ Habitat * Genotype + logLBI,
+  data = dbrda_traits,
+  family = gaussian
+) # Gaussian/Normal distribution
+plot(b1)
+anova(b1)
+AIC(b1)
+
+# Model with intercept only
+B0 <- lm(mean_bray ~ 1, data = dbrda_traits, na.action = na.exclude)
+anova(B0)
+AIC(B0)
+plot(B0)
+
+
+################################################
+# B1 Model with Habitat and Genotype
+################################################
+# All data points
+B1 <- lm(
+  mean_bray ~ Habitat * Genotype + logLBI,
+  data = dbrda_traits,
+  na.action = na.exclude
+)
+anova(B1)
+AIC(B1) # -32950.55
+
+
+# Model validation
+# Residuals
+B1_resid <- resid(B1, type = "response")
+B1_fitted <- fitted(B1)
+
+#Histograms
+hist(B1_resid)
+hist(B1_fitted)
+
+# predicted vs. actual values
+plot(
+  x = predict(B1),
+  y = dbrda_traits$mean_bray,
+  xlab = 'Predicted Values',
+  ylab = 'Actual Values',
+  main = 'B1 Predicted vs. Actual Values'
+)
+abline(a = 0, b = 1)
+
+anova(B1, type="marginal")
+Anova(B1, type = 3)
+#drop1(B1, . ~ ., test = "F", trace = TRUE)
+
+# Stepwise selection of linear model (lm())
+B1AIC <- stepAIC(update(B1, . ~ .), direction = "both", k = 2)
+B1AIC$anova
+
+#Final Model:
+#mean_bray ~ Species + Site + logACI + logLT + logLPS + logLMA + logLBI
+
+
+################################################
+# B2 Model
+################################################
+B2 <- lm(
+  mean_bray ~ Habitat + Genotype + logLBI,
+  data = dbrda_traits,
+  na.action = na.exclude
+)
+
+anova(B2)
+Anova(B2, type = 3)
+AIC(B2) #-13617.24
+
+# Residuals
+B2_resid <- resid(B2, type = "response")
+B2_fitted <- fitted(B2)
+
+#Histograms
+hist(B2_resid)
+hist(B2_fitted)
+
+# predicted vs. actual values
+plot(
+  x = predict(B2),
+  y = dbrda_traits$mean_bray,
+  xlab = 'Predicted Values',
+  ylab = 'Actual Values',
+  main = 'B2 Predicted vs. Actual Values'
+)
+abline(a = 0, b = 1)
+
+# Stepwise selection of linear model 
+B2AIC <- stepAIC(update(B2, . ~ .), trace = TRUE, direction = "both", k = 2)
+B2AIC$anova
+
+# No fixed term removed.
+```
+
+B1 and B2 models have about the same AIC score (-66k). B1 includes the interaction of `Habitat` and `Genotype`, while B2 does not.
+
+
+#### Modelling random effects with "ML" method
+
+Starting with fixed terms selected above.
+
+```{r, random_effects}
+################################################
+# B3 Model with Species as fixed term and site as random effect
+################################################
+#B3
+B3 <- lme(
+  mean_bray ~ Habitat * Genotype + logLBI,
+  random = ~ 1 | Site,
+  method = "ML",
+  data = na.omit(dbrda_traits)) 
+
+Anova(B3, type = 3)
+AIC(B3) #  -32948.55
+
+# Residuals histograms and plots ####
+B3_resid <- resid(B3, type = "response")
+B3_fitted <- fitted(B3)
+
+# Histograms
+hist(B3_resid)
+hist(B3_fitted)
+
+# Plots
+plot(
+  x = predict(B3),
+  y = dbrda_traits$mean_bray,
+  xlab = 'Predicted Values',
+  ylab = 'Actual Values',
+  main = 'B3 Predicted vs. Actual Values'
+)
+abline(a = 0, b = 1)
+
+plot_model(B3, type = "diag")
+
+# Stepwise selection of terms
+B3AIC <- stepAIC(update(B3, . ~ ., -1), direction = "both", k = 2)
+B3AIC$anova
+B3drop <- drop1(B3, . ~ ., test = "Chisq", trace = TRUE)
+
+# No stepwise term deletion or dropping of terms.
+```
+ Modelling using maximum likelihood estimation increases AIC by 2 pts.
+
+```{r, random_effects2}
+# B5 
+B4 <- lme(
+  mean_bray ~ Genotype + logLBI,
+  random = ~ 1 |
+    Habitat,
+  method = "ML",
+  data = na.omit(dbrda_traits)
+)
+Anova(B4, type = 3)
+AIC(B4) # -32499.53 is a higher AIC score than B3.
+
+# Residuals histograms and plots ####
+B4_resid <- resid(B4, type = "response")
+B4_fitted <- fitted(B4)
+
+# Histograms
+hist(B4_resid)
+hist(B4_fitted)
+
+# Plots
+plot(
+  x = predict(B4),
+  y = dbrda_traits$mean_bray,
+  xlab = 'Predicted Values',
+  ylab = 'Actual Values',
+  main = 'B4 Predicted vs. Actual Values'
+)
+abline(a = 0, b = 1)
+
+plot_model(B4, type = "diag")
+
+# Stepwise selection of terms
+B4AIC <- stepAIC(update(B4, . ~ ., -1),
+                 trace = TRUE,
+                 direction = "both",
+                 k = 2)
+B4AIC$anova
+drop1(B4, . ~ ., test = "Chisq", trace = TRUE)
+
+# NOthing eliminated.
+```
+
+
+#### REML modelling
+
+Using Restricted Maximum Likelihood (REML) to model. Maximum likelihood tends to be biased with high dimensional data. No interactions yet, checking random effects. Cannot use `stepAIC` with `REML` models.
+
+```{r, reml_models}
+# REML
+# B1REM All fixed terms
+B1REM <- lme(
+  mean_bray ~ Genotype + logLBI,
+  random = ~ 1 |
+    Habitat,
+  method = "REML",
+  data = na.omit(dbrda_traits))
+
+Anova(B1REM, type = 3)
+AIC(B1REM) #-32453.26 This is a higher score than ML models
+
+
+B1_gls <- gls(
+  mean_bray ~ Habitat * Genotype + logLBI,
+  method = "REML",
+  data = na.omit(dbrda_traits)
+)
+
+anova(B1_gls, type = "marginal")
+#Anova(B1_gls, type = 3)
+AIC(B1_gls) # -32820.01 is a lower AIC score. Site as a random effect is NOT important.
+
+plot_model(B1REM, type = "diag")
+
+# Model comparison
+model.sel(B1, B2, B3, B4,B1REM, B1_gls)[, c("df", "logLik", "AICc", "delta")]
+
+# Model B1 and B3 are the best models. B1 has a lower AIC score.
+```
+
+A brief online search explain these differences. REML is better at estimating random effect variance components, while ML is better at estimating fixed effects. Because we have a nested structure in this experiment we will continue with REML. 
+*"When there is no model comparison, the difference between restricted (or residual) maximum likelihood (REML) and maximum likelihood (ML) is that, REML can give you unbiased estimates of the variance parameters."*
+https://stats.stackexchange.com/questions/91652/when-no-model-comparison-should-i-use-reml-vs-ml
+
+
+```{r, reml_models2}
+# Modelling variance structure.
+#Optimizers
+ctrl <- lmeControl(opt='optim')
+ctrl2 <- lmeControl(opt = "nlminb")
+
+#B3REM
+B3REM <- lme(
+  mean_bray ~ Genotype + logLBI,
+  weights = varIdent(form = ~ 1 | Habitat),
+  random = ~ 1 |
+    Habitat,
+  method = "REML",
+  control = ctrl,
+  data = na.omit(dbrda_traits)
+)
+
+Anova(B3REM, type = 3)
+AIC(B3REM) # -16249.18 is  a lower AIC score than B1REM
+
+# Residuals histograms and plots ####
+B3REM_resid <- resid(B3REM, type = "response")
+B3REM_fitted <- fitted(B3REM)
+
+# Histograms
+hist(B3REM_resid)
+hist(B3REM_fitted)
+
+# Plots
+plot(B3REM)
+plot(
+  x = predict(B3REM),
+  y = dbrda_traits$mean_bray,
+  xlab = 'Predicted Values',
+  ylab = 'Actual Values',
+  main = 'Predicted vs. Actual Values'
+)
+abline(a = 0, b = 1)
+plot_model(B3REM, type = "diag")
+```
+
+
+```{r, reml_models3}
+# Modelling variance structure better
+# B4REM
+B4REM <- lme(
+  mean_bray ~ Genotype * logLBI,
+  weights = varIdent(form = ~ 1 | Habitat),
+  random = ~ 1 |
+    Habitat,
+  method = "REML",
+  control = ctrl,
+  data = na.omit(dbrda_traits)
+)
+
+anova(B4REM)
+Anova(B4REM, type = 3)
+AIC(B4REM) # -34253.34 this is greater than B3REM
+
+# Residuals histograms and plots ####
+B4REM_resid <- resid(B4REM, type = "response")
+B4REM_fitted <- fitted(B4REM)
+
+# Histograms
+hist(B4REM_resid)
+hist(B4REM_fitted)
+
+# Plots
+plot(B4REM)
+plot_model(B4REM, type = "diag")
+
+# B5REM
+# B5REM <- lme(
+#   mean_bray ~ logACI + logLT + logLMA + logLBI,
+#   weights = varComb(varIdent(form = ~ 1 | Site), varIdent(form = ~ 1 | Species)),
+#   random = ~ 1 |
+#     Site/Species,
+#   method = "REML",
+#   control = ctrl,
+#   data = na.omit(dbrda_traits_imp)
+# )
+# 
+# Anova(B5REM, type = 3)
+# AIC(B5REM) # -16603.6 the lowest AIC score
+# 
+# # Residuals histograms and plots ####
+# B5REM_resid <- resid(B5REM, type = "response")
+# B5REM_fitted <- fitted(B5REM)
+# 
+# # Histograms
+# hist(B5REM_resid)
+# hist(B5REM_fitted)
+# 
+# # Plots
+# plot(B5REM)
+# plot_model(B5REM, type = "diag")
+```
+
+One of the big issues is outliers. I need to identify outliers and decide if it's worth cutting from data set. 
+
+#### Outliers
+The `lobLBI` has many outliers in the ~0 range compared to the rest of the data. It looks almost binomial, either close to -1 or 0. I will remove these outliers and re-run the models with the remaining data.
+
+```{r}
+hist(dbrda_traits$logLBI) # 0.5 seems like a good cut off. 
+no_outliers_dbrda_traits <- dbrda_traits %>%
+  filter(logLBI < -0.5) # Removing outliers.
+```
+
+#### Modelling without outliers
+```{r}
+
+# Model with intercept only
+N00 <- lm(mean_bray ~ 1, data = no_outliers_dbrda_traits, na.action = na.exclude)
+anova(N00)
+AIC(N00) #-24280.93 Greater AIC
+plot(B0)
+
+# Model N0
+N0 <- lm(
+  mean_bray ~ Habitat + Genotype + logLBI,
+         data = no_outliers_dbrda_traits)
+anova(N0)
+AIC(N0) # -25094.5 Lower AIC
+
+plot(N0)
+plot_model(N0, type = "diag")
+
+#Model N1
+# GLMs with Beta Diversity
+N1 <- glm(
+  mean_bray ~ Habitat * Genotype * logLBI,
+  data = no_outliers_dbrda_traits,
+  family = gaussian(link = "identity")
+) # Gaussian/Normal distribution
+plot(N1)
+anova(N1)
+AIC(N1) # -26086.71 Lower AIC
+
+
+# N2 (same as N0)
+N2 <- lm(
+  mean_bray ~ Habitat + Genotype + logLBI,
+  data = no_outliers_dbrda_traits,
+  na.action = na.exclude
+)
+
+anova(N2)
+Anova(N2, type = 3)
+AIC(N2) #-25094.5
+
+# Residuals
+N2_resid <- resid(N2, type = "response")
+N2_fitted <- fitted(N2)
+
+#Histograms
+hist(N2_resid)
+hist(N2_fitted)
+
+# predicted vs. actual values
+plot(
+  x = predict(N2),
+  y = no_outliers_dbrda_traits$mean_bray,
+  xlab = 'Predicted Values',
+  ylab = 'Actual Values',
+  main = 'N2 Predicted vs. Actual Values'
+)
+abline(a = 0, b = 1)
+
+plot_model(N2, type = "diag")
+
+# Stepwise selection of linear model 
+N2AIC <- stepAIC(update(N2, . ~ .), trace = TRUE, direction = "both", k = 2)
+N2AIC$anova
+```
+
+No single term deletions in stepwise selection. 
+
+```{r}
+#N3
+N3 <- lme(
+  mean_bray ~ Genotype + logLBI,
+  random = ~ 1 | Habitat,
+  method = "ML",
+  data = no_outliers_dbrda_traits)
+
+Anova(N3, type = 3)
+AIC(N3) #  -25073.77 is a HIGHER AIC score than N2
+
+# Residuals histograms and plots ####
+N3_resid <- resid(N3, type = "response")
+N3_fitted <- fitted(N3)
+
+# Histograms
+hist(N3_resid)
+hist(N3_fitted)
+
+# Plots
+plot(
+  x = predict(N3),
+  y = no_outliers_dbrda_traits$mean_bray,
+  xlab = 'Predicted Values',
+  ylab = 'Actual Values',
+  main = 'N3 Predicted vs. Actual Values'
+)
+abline(a = 0, b = 1)
+
+plot_model(N3, type = "diag")
+
+# Stepwise selection of terms
+N3AIC <- stepAIC(update(N3, . ~ ., -1), direction = "both", k = 2)
+N3AIC$anova
+N3drop <- drop1(N3, . ~ ., test = "Chisq", trace = TRUE)
+
+# N4_gls
+# N4_gls <- gls(
+#   mean_bray ~ Habitat * Genotype + logLBI,
+#   method = "REML",
+#   data = na.omit(no_outliers_dbrda_traits)
+# )
+
+# N4_gls did not work. It reached singularity.
+# Error in glsEstimate(glsSt, control = glsEstControl) : 
+#   computed "gls" fit is singular, rank 11
+
+
+N4 <- lme(
+  mean_bray ~ Genotype + logLBI,
+  weights = varIdent(form = ~ 1 | Habitat),
+  random = ~ 1 |
+    Habitat,
+  method = "ML",
+  data = no_outliers_dbrda_traits
+)
+
+Anova(N4, type = 3)
+AIC(N4) # -25381.63 is a lower AIC score than N3
+
+
+# N5
+N5 <- lme(mean_bray ~ Genotype * logLBI,
+          weights = varIdent(form = ~ 1 | Habitat),
+          random = ~ 1 | Habitat,
+          method = "REML",
+          data = no_outliers_dbrda_traits
+        )
+anova(N5)
+AIC(N5) # -25333.75 is Higher than N4
+
+plot_model(N5, type = "diag")
+```
+
+
+<!-- #### Modelling by habitat -->
+<!-- ```{r} -->
+<!-- # By Habitat -->
+<!-- B1_habitat <- dbrda_traits %>% -->
+<!--   nest(data = -Habitat) %>% -->
+<!--   mutate(model = map(data, ~ lm(mean_bray ~ Genotype * logLBI, data = ., na.action = na.exclude)), tidied = map(model, tidy)) %>% -->
+<!--     unnest(tidied) -->
+<!-- AIC(B1_habitat$model[[1]]) #-12406.4 -->
+
+<!-- # by Genotype/crosstype -->
+<!-- B1_genotype <- dbrda_traits %>% -->
+<!--   nest(data = -Genotype) %>% -->
+<!--   mutate(model = map(data, ~ lm(mean_bray ~ Habitat + logLBI, data = .)), tidied = map(model, tidy)) %>% -->
+<!--   unnest(tidied) -->
+
+<!-- AIC(B1_genotype$model[[1]]) #-14580.2 -->
+<!-- # B1_habitat_df <- rowwise(B1_habitat) %>% do(tidy(.$model)) %>% -->
+<!-- #   mutate(Habitat = B1_habitat$Habitat) %>% -->
+<!-- #   as.data.frame() -->
+<!-- #    -->
+<!-- ``` -->
+#### Model comparisons
+
+```{r}
+# Saving model objects
+save(N1, N2, N3, N4, N4, file = "clean_data/statistics/glmm_models.rda")
+
+load("clean_data/statistics/glmm_models.rda")
+
+#Model comparison and selection
+model.sel(N1, N2, N3, N4, N5)[, c("df", "logLik", "AICc", "delta")]
+```
+
+
+```{r, reml_models4}
+# Model estimate plot
+model_plots <- plot_models(
+  N1,
+  N2,
+  N3,
+  N4,
+  N5,
+  legend.title = "Models",
+  show.values = TRUE,
+  show.p = FALSE,
+  p.shape = TRUE,
+  dot.size = 5,
+  std.est = NULL
+)+
+  
+  #theme_classic(base_size = 16) +
+  ylim(-0.15, 0.15) +
+  geom_hline(yintercept = 0,
+             color = "grey30",
+             linetype = "dashed") # plot vertical line
+model_plots
+
+ggsave(file.path(path, "figures/model_plots.png"), plot = model_plots, dpi=300, units=c("mm"), width=300, height=300)
+```
+
+```{r}
+# Model table comparisons
+model_tables <- tab_model(
+  N1,
+  N2,
+  N3,
+  N4,
+  N5,
+  show.aic = TRUE,
+  show.intercept = TRUE,
+  show.df = FALSE,
+  show.ci = 0.95,
+  
+  title = "Generalized Linear Mixed Effects models for predicting FEF mean Beta diversity",
+  CSS = list(
+    css.depvarhead = 'font-weight:bold;',
+    css.centeralign = 'text-align: left;',
+    css.firsttablecol = 'font-weight: bold;',
+    css.summary = 'color: grey; font-weight: bold;',
+    p.style = "numeric_stars")
+    #file = file.path(path, "tables/model_tables.html")
+)
+
+
+model_tables
+
+
+# Huxtable
+table1 <- huxreg(
+  "Model 1" = N1,
+  "Model 2" = N2,
+  "Model 3" = N3,
+  "Model 4" = N4,
+  # coefs = c(
+  #   "Intercept" = "(Intercept)",
+  #   "M. nasutus" = "SpeciesM. nasutus",
+  #   "M. guttatus" = "SpeciesM. guttatus",
+  #   "Elevation" = "Elevation_m",
+  #   "ACI" = "logACI",
+  #   "LT" = "logLT",
+  #   "LPS" = "logLPS",
+  #   "LMA" = "logLMA",
+  #   "LBI" = "logLBI"
+  # ), 
+  error_pos = "right",
+  error_format = "({conf.low} - {conf.high} ) [{statistic}]",
+  number_format = "%.3f",
+  align = ".",
+  ci_level = 0.95,
+  stars = c(`***` = 0.001, `**` = 0.01, `*` = 0.05),
+  bold_signif = 0.05,
+  borders = 0.4,
+  outer_borders = 0.8,
+  note = "Significance levels are represented by asterisks [p < 0.05 (*), p < 0.01 (**), p < 0.001 (***), and p < 0.0001 (****)]. T statistics in brackets.",
+  statistics = c("N" = "nobs", "logLik", "AIC")
+) |>
+  insert_row("Predictors",
+             "Estimate",
+             "CI [t-statistic]",
+             "Estimate",
+             "CI [t-statistic]",
+             "Estimate",
+             "CI [t-statistic]",
+             "Estimate",
+             "CI [t-statistic]",
+             after = 1) |>
+  insert_row("Random effects", "", "", "", "", "", "", "", "", after = 11) |>
+  set_all_padding(10) |>
+  set_outer_padding(0) |>
+  set_bold(row = 1, col = everywhere) |>
+  #set_bottom_border(row = 1, col = everywhere) |>
+  set_width(1.1) |>
+  theme_article() |> #flextable::theme_apa() is good too.
+  huxtable::as_flextable(column_to_header = TRUE) |>
+  hline(12,
+        part = "all",
+        border = fp_border(
+          color = "black",
+          style = "solid",
+          width = 1
+        )) |> 
+  hline(15,
+        part = "all",
+        border = fp_border(
+          color = "black",
+          style = "solid",
+          width = 1.25
+        )) |>
+  hline(
+    i = 1,
+    j = c(2:9),
+    part = "body",
+    border = fp_border(
+      color = "black",
+      style = "solid",
+      width = 1
+    )
+  ) |>
+  flextable::align(
+    i = 1:14,
+    j = 2:9,
+    align = "center",
+    part = "body"
+  ) |>
+  flextable::style(i = c(1:16),
+                   j = 1,
+                   pr_t = fp_text(bold = FALSE)) |> 
+  flextable::italic(
+    i = c(4, 5, 12, 15),
+    j = 1,
+    italic = TRUE,
+    part = "body"
+  ) |>
+  flextable::bold(
+    i = c(2, 12),
+    j = 1,
+    bold = TRUE,
+    part = "body"
+  ) |>
+  flextable::set_caption("Generalized linear mixed models (GLMMs) for predicting mean Bray-Curtis dissimilarity") |>
+  flextable::font(
+    i = NULL,
+    j = NULL,
+    fontname = "Tex Gyre Termes",
+    part = "all",
+    cs.family = fontname,
+    hansi.family = fontname,
+    eastasia.family = fontname
+  )
+
+knitr::knit_print(table1)
+
+#save_as_docx(table1, path = "tables/model_comparison.docx")
+#save_as_image(table1, path = "tables/model_comparison.svg")
+```
+
 
 # Indicator species analysis
 
